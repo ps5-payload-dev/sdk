@@ -1,4 +1,4 @@
-# PS5 Payload SDK
+# ps5-payload-sdk
 This is an SDK for developing payloads targeted at exploited PS5s running an ELF
 loader, e.g., [ps5-payload-elfldr][elfldr], the [BD-J ps5-payload-loader][bdj],
 or the [webkit approached from Specter][webkit]. Several artifacts in this
@@ -11,13 +11,17 @@ install dependencies used by the SDK.
 john@localhost:ps5-payload-dev/sdk$ sudo apt-get install bash socat cmake pkg-config clang-15 lld-15
 ```
 
+## Quick-start
+**To download and install a binary distribution for GNU/Linux:**
+```console
+john@localhost:tmp$ wget https://github.com/ps5-payload-dev/sdk/releases/download/v0.11/ps5-payload-sdk.tar.gz
+john@localhost:tmp$ mkdir -p /opt/ps5-payload-sdk-0.11/
+john@localhost:tmp$ tar xvf ps5-payload-sdk.tar.gz -C /opt/ps5-payload-sdk-0.11/
+```
+
 ## Building
 ```console
 john@localhost:ps5-payload-dev/sdk$ make
-```
-
-## Installation
-```console
 john@localhost:ps5-payload-dev/sdk$ make DESTDIR=/opt/ps5-payload-sdk install
 ```
 
