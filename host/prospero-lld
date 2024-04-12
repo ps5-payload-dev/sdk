@@ -37,9 +37,8 @@ for LD in "${CANDIDATES[@]}"; do
 	     -z max-page-size=0x4000 \
 	     -T "${PS5_PAYLOAD_SDK}/ldscripts/elf_x86_64.x" \
 	     -L "${PS5_PAYLOAD_SDK}/sysroot/usr/lib" \
-	     $* \
-	     "${PS5_PAYLOAD_SDK}/sysroot/usr/lib/crt1.o" \
-	     -lSceLibcInternal "${LIBKERNEL}"
+	     -lScePosixForWebKit -lSceLibcInternal "${LIBKERNEL}" $* \
+	     "${PS5_PAYLOAD_SDK}/sysroot/usr/lib/crt1.o"
     fi
 done
 
