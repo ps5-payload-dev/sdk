@@ -366,6 +366,11 @@ dt_needed(const char* basename) {
 
   klog_printf("Unable to load '%s'\n", basename);
 
+  // FIXME: ignoring errors when loading libScePosixForWebKit
+  if(!strcmp(basename, "libScePosixForWebKit.so")) {
+    return 0;
+  }
+
   return -1;
 }
 
