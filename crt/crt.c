@@ -78,7 +78,6 @@ pre_init(payload_args_t *args) {
   int *__isthreaded;
   int error = 0;
 
-  payload_args = args;
   if(args->sceKernelDlsym(0x1, "getpid", &ptr_syscall)) {
     if((error=args->sceKernelDlsym(0x2001, "getpid", &ptr_syscall))) {
       return error;
@@ -112,17 +111,17 @@ pre_init(payload_args_t *args) {
  * Terminate the payload.
  **/
 static void
-terminate(payload_args_t *args) {
+terminate(void) {
   void (*exit)(int) = 0;
   long dummy;
 
   // we are running inside a hijacked process, just return
-  if(args->sceKernelDlsym(0x1, "sceKernelDlsym", &dummy)) {
+  if(payload_args->sceKernelDlsym(0x1, "sceKernelDlsym", &dummy)) {
     return;
   }
 
-  if(!args->sceKernelDlsym(0x2, "exit", &exit)) {
-    exit(*args->payloadout);
+  if(!payload_args->sceKernelDlsym(0x2, "exit", &exit)) {
+    exit(*payload_args->payloadout);
   }
 }
 
@@ -139,9 +138,10 @@ _start(payload_args_t *args, int argc, char* argv[], char* envp[]) {
     *bss = 0;
   }
 
+  payload_args = args;
   *args->payloadout = 0;
   if((*args->payloadout=pre_init(args))) {
-    terminate(args);
+    terminate();
     return;
   }
 
@@ -160,5 +160,5 @@ _start(payload_args_t *args, int argc, char* argv[], char* envp[]) {
     __fini_array_start[count-i-1]();
   }
 
-  terminate(args);
+  terminate();
 }
