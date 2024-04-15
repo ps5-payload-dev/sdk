@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
+#include "klog.h"
 #include "payload.h"
 
 
@@ -123,6 +124,23 @@ terminate(void) {
   if(!payload_args->sceKernelDlsym(0x2, "exit", &exit)) {
     exit(*payload_args->payloadout);
   }
+}
+
+
+/**
+ * Terminate the payload with an assertion printed to /dev/klog.
+ **/
+void
+__assert(const char *func, const char *file, int line, const char *expr) {
+  if(!func) {
+    klog_printf("Assertion failed: (%s), file %s, line %d\n",
+		expr, file, line);
+  } else {
+    klog_printf("Assertion failed: (%s), function %s, file %s, line %d\n",
+		expr, func, file, line);
+  }
+  *payload_args->payloadout = -1;
+  terminate();
 }
 
 
