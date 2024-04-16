@@ -298,9 +298,6 @@ rtld_open(const char* basename) {
     // sysmodules needs to be loaded internally first
     for(int i=0; i<sizeof(sysmodtab)/sizeof(sysmodtab[0]); i++) {
       if(!strcmp(basename, sysmodtab[i].name)) {
-	if(!sceSysmoduleLoadModuleInternal) {
-	  return 0;
-	}
 	if(sceSysmoduleLoadModuleInternal(sysmodtab[i].handle)) {
 	  klog_perror("sceSysmoduleLoadModuleInternal");
 	  return 0;
@@ -416,10 +413,16 @@ r_relative(Elf64_Rela* rela) {
   unsigned long val = (unsigned long)(__text_start + rela->r_addend);
   int pid = syscall(SYS_getpid);
 
+  // ELF loader allready applied relocation
+  if(*((unsigned long*)loc) == val) {
+      return 0;
+  }
+
   if(mdbg_copyin(pid, &val, loc, sizeof(val))) {
     klog_perror("mdbg_copyin");
     return -1;
   }
+
   return 0;
 }
 
@@ -498,6 +501,7 @@ __rtld_init(payload_args_t *args) {
   int pid = syscall(SYS_getpid);
   unsigned long rootdir = 0;
   unsigned char caps[16];
+  int handle = 0;
   int error = 0;
 
   // determine libkernel handle
@@ -571,13 +575,18 @@ __rtld_init(payload_args_t *args) {
     return -1;
   }
 
-  // load shared objects
-  if((libhead=rtld_open("libSceSysmodule.so"))) {
-    if((error=args->sceKernelDlsym(libhead->handle, "sceSysmoduleLoadModuleInternal",
-				   &sceSysmoduleLoadModuleInternal))) {
-      return error;
-    }
+  // load deps to sysmodule
+  if((handle=sceKernelLoadStartModule("/system/common/lib/libSceSysmodule.sprx",
+				      0, 0, 0, 0, 0)) <= 0) {
+    klog_puts("Unable to load libSceSysmodule.sprx");
+    return -1;
   }
+  if((error=args->sceKernelDlsym(handle, "sceSysmoduleLoadModuleInternal",
+				 &sceSysmoduleLoadModuleInternal))) {
+    klog_perror("Unable to resolve 'sceSysmoduleLoadModuleInternal'");
+    return error;
+  }
+
   error = rtld_load();
 
   // restore jail and caps
