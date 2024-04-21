@@ -42,5 +42,6 @@ install: elf_x86_64.x toolchain.cmake toolchain.mk toolchain.sh
 
 	cp -r include_bsd/. $(DESTDIR)/sysroot/usr/include
 	cp -r include_ps5/. $(DESTDIR)/sysroot/usr/include/ps5
+	cp -r include_khronos/. $(DESTDIR)/sysroot/usr/include
 
 	cp -r samples/. $(DESTDIR)/samples
