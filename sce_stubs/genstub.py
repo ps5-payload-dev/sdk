@@ -48,7 +48,7 @@ NID_DB = (os.path.dirname(__file__) or '.') + '/aerolib.csv'
 nid_map = {}
 with open(NID_DB) as f:
     for line in f.readlines():
-        nid, sym = line.split()
+        nid, sym = line.strip().split(' ', 1)
         nid_map[nid] = sym
 
 
