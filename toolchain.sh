@@ -34,6 +34,7 @@ export NM=llvm-nm
 export OBJCOPY=llvm-objcopy
 export RANLIB=llvm-ranlib
 export STRIP=llvm-strip
+export STRINGS=strings
 
 export CMAKE=${PS5_PAYLOAD_SDK}/bin/prospero-cmake
 export PKG_CONFIG=${PS5_PAYLOAD_SDK}/bin/prospero-pkg-config

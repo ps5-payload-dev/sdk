@@ -28,5 +28,6 @@ NM      := llvm-nm
 OBJCOPY := llvm-objcopy
 RANLIB  := llvm-ranlib
 STRIP   := llvm-strip
+STRINGS := strings
 
 PKG_CONFIG := $(PS5_PAYLOAD_SDK)/bin/prospero-pkg-config
