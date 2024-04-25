@@ -16,14 +16,14 @@
 
 DESTDIR ?= /opt/ps5-payload-sdk
 
-CCS := clang-17 clang-16 clang-15
+CCS := clang-18 clang-17 clang-16 clang-15
 CCS := $(foreach CC,$(CCS),$(if $(shell command -v $(CC) 2> /dev/null),$(CC)))
 CC  := $(firstword $(CCS))
 ifndef CC
     $(error No suitable compiler found)
 endif
 
-LDS := ld.lld-17 ld.lld-16 ld.lld-15
+LDS := ld.lld-18 ld.lld-17 ld.lld-16 ld.lld-15
 LDS := $(foreach LD,$(LDS),$(if $(shell command -v $(LD) 2> /dev/null),$(LD)))
 LD  := $(firstword $(LDS))
 ifndef CC
