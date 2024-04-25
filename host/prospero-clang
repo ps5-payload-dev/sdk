@@ -31,6 +31,7 @@ for CC in "${CANDIDATES[@]}"; do
     if [ -x "$(command -v $CC)" ]; then
 	exec $CC \
 	     -target x86_64-sie-ps5 \
+	     -isysroot ${PS5_PAYLOAD_SDK}/sysroot \
 	     -isystem ${PS5_PAYLOAD_SDK}/sysroot/usr/include \
 	     -fno-stack-protector -fno-plt \
 	     $*
