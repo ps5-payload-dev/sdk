@@ -19,6 +19,11 @@ DESTDIR ?= /opt/ps5-payload-sdk
 TOOLS   := prospero-clang \
 	   prospero-clang++ \
 	   prospero-lld \
+	   prospero-objcopy \
+	   prospero-ranlib \
+	   prospero-ar \
+	   prospero-nm \
+	   prospero-strip \
 	   prospero-pkg-config \
 	   prospero-cmake \
 	   prospero-deploy
