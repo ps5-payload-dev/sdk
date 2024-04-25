@@ -28,13 +28,13 @@ export CC=${PS5_PAYLOAD_SDK}/bin/prospero-clang
 export CXX=${PS5_PAYLOAD_SDK}/bin/prospero-clang++
 export AS=${PS5_PAYLOAD_SDK}/bin/prospero-clang
 export LD=${PS5_PAYLOAD_SDK}/bin/prospero-ldd
-
-export AR=llvm-ar
-export NM=llvm-nm
-export OBJCOPY=llvm-objcopy
-export RANLIB=llvm-ranlib
-export STRIP=llvm-strip
-export STRINGS=strings
-
+export AR=${PS5_PAYLOAD_SDK}/bin/prospero-ar
+export NM=${PS5_PAYLOAD_SDK}/bin/prospero-nm
+export OBJCOPY=${PS5_PAYLOAD_SDK}/bin/prospero-objcopy
+export RANLIB=${PS5_PAYLOAD_SDK}/bin/prospero-ranlib
+export STRIP=${PS5_PAYLOAD_SDK}/bin/prospero-strip
 export CMAKE=${PS5_PAYLOAD_SDK}/bin/prospero-cmake
 export PKG_CONFIG=${PS5_PAYLOAD_SDK}/bin/prospero-pkg-config
+
+export STRINGS=strings
+export MAKE=make

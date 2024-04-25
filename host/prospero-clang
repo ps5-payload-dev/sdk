@@ -19,7 +19,8 @@ PS5_PAYLOAD_SDK="${BASH_SOURCE[0]}"
 PS5_PAYLOAD_SDK="$(dirname "${PS5_PAYLOAD_SDK}")"
 PS5_PAYLOAD_SDK="${PS5_PAYLOAD_SDK}/.."
 
-CANDIDATES=("clang-17"
+CANDIDATES=("clang-18"
+	    "clang-17"
             "clang-16"
             "clang-15")
 

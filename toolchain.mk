@@ -18,16 +18,15 @@ PS5_PAYLOAD_SDK := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))..)
 PS5_SYSROOT     := $(PS5_PAYLOAD_SDK)/sysroot
 PS5_DEPLOY      := $(PS5_PAYLOAD_SDK)/bin/prospero-deploy
 
-CC  := $(PS5_PAYLOAD_SDK)/bin/prospero-clang
-CXX := $(PS5_PAYLOAD_SDK)/bin/prospero-clang++
-AS  := $(PS5_PAYLOAD_SDK)/bin/prospero-clang
-LD  := $(PS5_PAYLOAD_SDK)/bin/prospero-lld
-
-AR      := llvm-ar
-NM      := llvm-nm
-OBJCOPY := llvm-objcopy
-RANLIB  := llvm-ranlib
-STRIP   := llvm-strip
-STRINGS := strings
-
+CC         := $(PS5_PAYLOAD_SDK)/bin/prospero-clang
+CXX        := $(PS5_PAYLOAD_SDK)/bin/prospero-clang++
+AS         := $(PS5_PAYLOAD_SDK)/bin/prospero-clang
+LD         := $(PS5_PAYLOAD_SDK)/bin/prospero-lld
+AR         := $(PS5_PAYLOAD_SDK)/bin/prospero-ar
+NM         := $(PS5_PAYLOAD_SDK)/bin/prospero-nm
+OBJCOPY    := $(PS5_PAYLOAD_SDK)/bin/prospero-objcopy
+RANLIB     := $(PS5_PAYLOAD_SDK)/bin/prospero-ranlib
+STRIP      := $(PS5_PAYLOAD_SDK)/bin/prospero-strip
 PKG_CONFIG := $(PS5_PAYLOAD_SDK)/bin/prospero-pkg-config
+
+STRINGS := strings

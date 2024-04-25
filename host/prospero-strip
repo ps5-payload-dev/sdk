@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#   Copyright (C) 2023 John Törnblom
+#   Copyright (C) 2024 John Törnblom
 #
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -19,22 +19,14 @@ PS5_PAYLOAD_SDK="${BASH_SOURCE[0]}"
 PS5_PAYLOAD_SDK="$(dirname "${PS5_PAYLOAD_SDK}")"
 PS5_PAYLOAD_SDK="${PS5_PAYLOAD_SDK}/.."
 
-CANDIDATES=("clang++-18"
-	    "clang++-17"
-            "clang++-16"
-            "clang++-15")
+CANDIDATES=("llvm-strip-18"
+	    "llvm-strip-17"
+            "llvm-strip-16"
+            "llvm-strip-15")
 
-
-# ensure clang++ knows where prospero-lld is at
-export PATH=${PS5_PAYLOAD_SDK}/bin:$PATH
-
-for CXX in "${CANDIDATES[@]}"; do
-    if [ -x "$(command -v $CXX)" ]; then
-	exec $CXX \
-	     -target x86_64-sie-ps5 \
-	     -isystem ${PS5_PAYLOAD_SDK}/usr/include \
-	     -fno-stack-protector -fno-plt \
-	     $*
+for STRIP in "${CANDIDATES[@]}"; do
+    if [ -x "$(command -v $STRIP)" ]; then
+	exec $STRIP $*
     fi
 done
 
