@@ -32,7 +32,7 @@ for CXX in "${CANDIDATES[@]}"; do
     if [ -x "$(command -v $CXX)" ]; then
 	exec $CXX \
 	     -target x86_64-sie-ps5 \
-	     -isystem ${PS5_PAYLOAD_SDK}/usr/include \
+	     -isystem ${PS5_PAYLOAD_SDK}/sysroot/usr/include \
 	     -fno-stack-protector -fno-plt \
 	     $*
     fi
