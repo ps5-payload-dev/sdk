@@ -18,16 +18,24 @@
 PS5_PAYLOAD_SDK="${BASH_SOURCE[0]}"
 PS5_PAYLOAD_SDK="$(dirname "${PS5_PAYLOAD_SDK}")"
 PS5_PAYLOAD_SDK="${PS5_PAYLOAD_SDK}/.."
+PS5_PAYLOAD_SDK="$(realpath "${PS5_PAYLOAD_SDK}")"
 
-CANDIDATES=("llvm-ranlib-18"
-	    "llvm-ranlib-17"
-            "llvm-ranlib-16"
-            "llvm-ranlib-15")
+export PS5_PAYLOAD_SDK=${PS5_PAYLOAD_SDK}
+export PS5_SYSROOT=${PS5_PAYLOAD_SDK}/target
+export PS5_DEPLOY=${PS5_PAYLOAD_SDK}/bin/prospero-deploy
 
-for RANLIB in "${CANDIDATES[@]}"; do
-    if [ -x "$(command -v $RANLIB)" ]; then
-	exec $RANLIB $*
-    fi
-done
+export CC=${PS5_PAYLOAD_SDK}/bin/prospero-clang
+export CXX=${PS5_PAYLOAD_SDK}/bin/prospero-clang++
+export AS=${PS5_PAYLOAD_SDK}/bin/prospero-clang
+export LD=${PS5_PAYLOAD_SDK}/bin/prospero-ldd
+export CMAKE=${PS5_PAYLOAD_SDK}/bin/prospero-cmake
+export PKG_CONFIG=${PS5_PAYLOAD_SDK}/bin/prospero-pkg-config
 
-exit 1
+export AR=${PS5_PAYLOAD_SDK}/bin/llvm-ar
+export NM=${PS5_PAYLOAD_SDK}/bin/llvm-nm
+export OBJCOPY=${PS5_PAYLOAD_SDK}/bin/llvm-objcopy
+export RANLIB=${PS5_PAYLOAD_SDK}/bin/llvm-ranlib
+export STRIP=${PS5_PAYLOAD_SDK}/bin/llvm-strip
+
+export STRINGS=strings
+export MAKE=make

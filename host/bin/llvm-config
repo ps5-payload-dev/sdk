@@ -15,17 +15,19 @@
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
 
-PS5_PAYLOAD_SDK="${BASH_SOURCE[0]}"
-PS5_PAYLOAD_SDK="$(dirname "${PS5_PAYLOAD_SDK}")"
-PS5_PAYLOAD_SDK="${PS5_PAYLOAD_SDK}/.."
-
-export PKG_CONFIG_DIR=
-export PKG_CONFIG_SYSROOT_DIR=
-export PKG_CONFIG_LIBDIR=${PS5_PAYLOAD_SDK}/sysroot/usr/lib/pkgconfig
-export PKG_CONFIG_PATH=${PS5_PAYLOAD_SDK}/sysroot/usr/libdata/pkgconfig
-
-if [ -x "$(command -v pkg-config)" ]; then
-   exec pkg-config --static "$@"
+if [ -x "$(command -v "${LLVM_CONFIG}")" ]; then
+    exec "${LLVM_CONFIG}"
 fi
+
+CANDIDATES=("llvm-config-18"
+            "llvm-config-17"
+            "llvm-config-16"
+            "llvm-config-15")
+
+for LLVM_CONFIG in "${CANDIDATES[@]}"; do
+    if [ -x "$(command -v "${LLVM_CONFIG}")" ]; then
+	exec "${LLVM_CONFIG}" "$@"
+    fi
+done
 
 exit 1

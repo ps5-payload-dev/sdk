@@ -15,19 +15,28 @@
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
 
-PS5_PAYLOAD_SDK="${BASH_SOURCE[0]}"
-PS5_PAYLOAD_SDK="$(dirname "${PS5_PAYLOAD_SDK}")"
-PS5_PAYLOAD_SDK="${PS5_PAYLOAD_SDK}/.."
+SCRIPT_PATH="${BASH_SOURCE[0]}"
+SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
+SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
-CANDIDATES=("llvm-nm-18"
-	    "llvm-nm-17"
-            "llvm-nm-16"
-            "llvm-nm-15")
+PS5_PAYLOAD_SDK="${SCRIPT_DIR}/.."
 
-for NM in "${CANDIDATES[@]}"; do
-    if [ -x "$(command -v $NM)" ]; then
-	exec $NM $*
+LLVM_CONFIG="${SCRIPT_DIR}/llvm-config"
+LLVM_BINDIR=$("${LLVM_CONFIG}" --bindir)
+
+
+LIBKERNEL=-lkernel_web
+for ARG in "$@"; do
+    if [[ "$ARG" == "-lkernel" || "$ARG" == "-lkernel_sys" ]]; then
+	LIBKERNEL=$ARG
     fi
 done
 
-exit 1
+BIN_PATH="${LLVM_BINDIR}/ld.lld"
+exec "${BIN_PATH}" \
+     -pie \
+     -z max-page-size=0x4000 \
+     -T "${PS5_PAYLOAD_SDK}/ldscripts/elf_x86_64.x" \
+     -L "${PS5_PAYLOAD_SDK}/target/lib" \
+     -lScePosixForWebKit -lSceLibcInternal "${LIBKERNEL}" "$@" \
+     "${PS5_PAYLOAD_SDK}/target/lib/crt1.o"

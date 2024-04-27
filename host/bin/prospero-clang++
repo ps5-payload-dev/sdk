@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#   Copyright (C) 2023 John Törnblom
+#   Copyright (C) 2024 John Törnblom
 #
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -15,27 +15,17 @@
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
 
-PS5_PAYLOAD_SDK="${BASH_SOURCE[0]}"
-PS5_PAYLOAD_SDK="$(dirname "${PS5_PAYLOAD_SDK}")"
-PS5_PAYLOAD_SDK="${PS5_PAYLOAD_SDK}/.."
+SCRIPT_PATH="${BASH_SOURCE[0]}"
+SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
+SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
-CANDIDATES=("clang-18"
-	    "clang-17"
-            "clang-16"
-            "clang-15")
+PS5_PAYLOAD_SDK="${SCRIPT_DIR}/.."
 
-# ensure clang knows where prospero-lld is at
-export PATH=${PS5_PAYLOAD_SDK}/bin:$PATH
+# ensure clang++ knows where prospero-lld is at
+export PATH=${SCRIPT_DIR}:$PATH
 
-for CC in "${CANDIDATES[@]}"; do
-    if [ -x "$(command -v $CC)" ]; then
-	exec $CC \
-	     -target x86_64-sie-ps5 \
-	     -isysroot ${PS5_PAYLOAD_SDK}/sysroot \
-	     -isystem ${PS5_PAYLOAD_SDK}/sysroot/usr/include \
-	     -fno-stack-protector -fno-plt \
-	     $*
-    fi
-done
-
-exit 1
+exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang++" \
+     -target x86_64-sie-ps5 \
+     -isysroot "${PS5_PAYLOAD_SDK}" \
+     -fno-stack-protector -fno-plt \
+     "$@"

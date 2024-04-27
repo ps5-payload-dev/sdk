@@ -15,19 +15,15 @@
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
 
-PS5_PAYLOAD_SDK="${BASH_SOURCE[0]}"
-PS5_PAYLOAD_SDK="$(dirname "${PS5_PAYLOAD_SDK}")"
-PS5_PAYLOAD_SDK="${PS5_PAYLOAD_SDK}/.."
+SCRIPT_PATH="${BASH_SOURCE[0]}"
+SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
+SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
-CANDIDATES=("llvm-objcopy-18"
-	    "llvm-objcopy-17"
-            "llvm-objcopy-16"
-            "llvm-objcopy-15")
+PS5_PAYLOAD_SDK="${SCRIPT_DIR}/.."
 
-for OBJCOPY in "${CANDIDATES[@]}"; do
-    if [ -x "$(command -v $OBJCOPY)" ]; then
-	exec $OBJCOPY $*
-    fi
-done
+export PKG_CONFIG_DIR=
+export PKG_CONFIG_SYSROOT_DIR=${PS5_PAYLOAD_SDK}/target
+export PKG_CONFIG_LIBDIR=${PS5_PAYLOAD_SDK}/target/lib/pkgconfig
+export PKG_CONFIG_PATH=${PS5_PAYLOAD_SDK}/target/libdata/pkgconfig
 
-exit 1
+exec -a "${SCRIPT_NAME}" pkg-config --static "$@"

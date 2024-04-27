@@ -15,8 +15,18 @@
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
 
-PS5_PAYLOAD_SDK="${BASH_SOURCE[0]}"
-PS5_PAYLOAD_SDK="$(dirname "${PS5_PAYLOAD_SDK}")"
-PS5_PAYLOAD_SDK="${PS5_PAYLOAD_SDK}/.."
+SCRIPT_PATH="${BASH_SOURCE[0]}"
+SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
+SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
-exec cmake -DCMAKE_TOOLCHAIN_FILE=${PS5_PAYLOAD_SDK}/cmake/toolchain.cmake "$@"
+LLVM_CONFIG="${SCRIPT_DIR}/llvm-config"
+LLVM_BINDIR=$("${LLVM_CONFIG}" --bindir)
+
+BIN_PATH="${LLVM_BINDIR}/${SCRIPT_NAME}"
+if [ -f "${BIN_PATH}" ]; then
+    exec "${BIN_PATH}" "$@"
+fi
+
+BIN_NAME=$(echo $SCRIPT_NAME | rev | cut -d'-' -f1 | rev)
+BIN_PATH="${LLVM_BINDIR}/${BIN_NAME}"
+exec -a "${SCRIPT_NAME}" "${BIN_PATH}" "$@"

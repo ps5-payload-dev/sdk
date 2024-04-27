@@ -15,19 +15,12 @@
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
 
-PS5_PAYLOAD_SDK="${BASH_SOURCE[0]}"
-PS5_PAYLOAD_SDK="$(dirname "${PS5_PAYLOAD_SDK}")"
-PS5_PAYLOAD_SDK="${PS5_PAYLOAD_SDK}/.."
+SCRIPT_PATH="${BASH_SOURCE[0]}"
+SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
+SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
-CANDIDATES=("llvm-ar-18"
-	    "llvm-ar-17"
-            "llvm-ar-16"
-            "llvm-ar-15")
+PS5_PAYLOAD_SDK="${SCRIPT_DIR}/.."
+TOOLCHAIN="${SCRIPT_NAME::-6}"
 
-for AR in "${CANDIDATES[@]}"; do
-    if [ -x "$(command -v $AR)" ]; then
-	exec $AR $*
-    fi
-done
-
-exit 1
+exec cmake \
+  -DCMAKE_TOOLCHAIN_FILE="${SCRIPT_DIR}/../toolchain/${TOOLCHAIN}.cmake" "$@"

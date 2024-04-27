@@ -19,7 +19,7 @@ PS5_PORT ?= 9021
 PS5_URL  ?= http://192.168.1.1
 
 ifdef PS5_PAYLOAD_SDK
-    include $(PS5_PAYLOAD_SDK)/make/toolchain.mk
+    include $(PS5_PAYLOAD_SDK)/toolchain/prospero.mk
 else
     $(error PS5_PAYLOAD_SDK is undefined)
 endif

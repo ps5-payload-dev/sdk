@@ -15,19 +15,17 @@
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
 
-PS5_PAYLOAD_SDK="${BASH_SOURCE[0]}"
-PS5_PAYLOAD_SDK="$(dirname "${PS5_PAYLOAD_SDK}")"
-PS5_PAYLOAD_SDK="${PS5_PAYLOAD_SDK}/.."
+SCRIPT_PATH="${BASH_SOURCE[0]}"
+SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
+SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
-CANDIDATES=("llvm-strip-18"
-	    "llvm-strip-17"
-            "llvm-strip-16"
-            "llvm-strip-15")
+PS5_PAYLOAD_SDK="${SCRIPT_DIR}/.."
 
-for STRIP in "${CANDIDATES[@]}"; do
-    if [ -x "$(command -v $STRIP)" ]; then
-	exec $STRIP $*
-    fi
-done
+# ensure clang knows where prospero-lld is at
+export PATH=${SCRIPT_DIR}:$PATH
 
-exit 1
+exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang" \
+     -target x86_64-sie-ps5 \
+     -isysroot "${PS5_PAYLOAD_SDK}" \
+     -fno-stack-protector -fno-plt \
+     "$@"

@@ -16,22 +16,47 @@
 
 DESTDIR ?= /opt/ps5-payload-sdk
 
-TOOLS   := prospero-clang \
-	   prospero-clang++ \
-	   prospero-lld \
-	   prospero-objcopy \
-	   prospero-ranlib \
-	   prospero-ar \
-	   prospero-nm \
-	   prospero-strip \
-	   prospero-pkg-config \
-	   prospero-cmake \
-	   prospero-deploy
+TOOLCHAINS := toolchain/prospero.sh \
+              toolchain/prospero.mk \
+              toolchain/prospero.cmake
+
+TOOLS := bin/cmake-bin-wrapper \
+         bin/llvm-bin-wrapper \
+         bin/llvm-config \
+         bin/prospero-clang \
+         bin/prospero-clang++ \
+         bin/prospero-deploy \
+         bin/prospero-lld \
+         bin/prospero-pkg-config
+
+LDSCRIPTS := elf_x86_64.x
 
 all:
 
 clean:
 
-install: $(TOOLS)
+install: install-tools install-symlinks install-ldscripts install-toolchains
+
+install-ldscripts: $(LDSCRIPTS)
+	install -d $(DESTDIR)/ldscripts
+	install $^ $(DESTDIR)/ldscripts
+
+install-toolchains: $(TOOLCHAINS)
+	install -d $(DESTDIR)/toolchain
+	install $^ $(DESTDIR)/toolchain
+
+install-tools: $(TOOLS)
 	install -d $(DESTDIR)/bin
 	install $^ $(DESTDIR)/bin
+
+install-symlinks:
+	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/llvm-ar
+	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/llvm-nm
+	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/llvm-objcopy
+	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/llvm-ranlib
+	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/llvm-strip
+	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/clang
+	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/clang++
+	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/clang-cpp
+	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/ld.lld
+	ln -sf cmake-bin-wrapper $(DESTDIR)/bin/prospero-cmake

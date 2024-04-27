@@ -15,10 +15,14 @@
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
 
+SCRIPTDIR="${BASH_SOURCE[0]}"
+SCRIPTDIR="$(dirname "${SCRIPTDIR}")"
+
 export DESTDIR=$(mktemp -d)
 trap 'rm -rf -- "$DESTDIR"' EXIT
 
 make clean install || exit 1
+export PS5_PAYLOAD_SDK=$DESTDIR
 
 MAKE_SAMPLES=("arbitrary_syscall"
 	      "browser"
@@ -33,15 +37,15 @@ MAKE_SAMPLES=("arbitrary_syscall"
 CMAKE_SAMPLES=("hello_cmake"
 	      )
 
-export PS5_PAYLOAD_SDK=$DESTDIR
+source $PS5_PAYLOAD_SDK/toolchain/prospero.sh
 
 for SAMPLE in "${MAKE_SAMPLES[@]}"; do
-    make -C samples/$SAMPLE clean all || exit 1
+    ${MAKE} -C $PS5_PAYLOAD_SDK/samples/$SAMPLE clean all || exit 1
 done
 
 for SAMPLE in "${CMAKE_SAMPLES[@]}"; do
-    cmake -B $DESTDIR/build/$SAMPLE \
-	  -DCMAKE_TOOLCHAIN_FILE=$PS5_PAYLOAD_SDK/cmake/toolchain.cmake \
-	  samples/$SAMPLE || exit 1
-    make  -C $DESTDIR/build/$SAMPLE clean all || exit 1
+    ${CMAKE} \
+	-B $PS5_PAYLOAD_SDK/build/$SAMPLE \
+	-S $SCRIPTDIR/samples/$SAMPLE || exit 1
+    ${MAKE} -C $PS5_PAYLOAD_SDK/build/$SAMPLE clean all
 done

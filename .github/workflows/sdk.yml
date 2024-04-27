@@ -1,4 +1,4 @@
-name: Build SDK
+name: CI
 
 on:
   push:
@@ -23,40 +23,24 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Setup SDK
+    - name: Setup
       run: |
         sudo apt update
-        sudo apt install bash cmake clang-15 lld-15
-        make
-        make DESTDIR=${{ runner.tool_cache }}/ps5-payload-sdk install
-        echo PS5_PAYLOAD_SDK=${{ runner.tool_cache }}/ps5-payload-sdk >> $GITHUB_ENV
-        echo PS5_HOST=ps5 >> $GITHUB_ENV
-        echo PS5_PORT=9020 >> $GITHUB_ENV
-        tar -zcf ps5-payload-sdk.tar.gz -C ${{ runner.tool_cache }}/ps5-payload-sdk .
+        sudo apt install bash socat cmake pkg-config clang-15 lld-15
 
     - name: Build
       run: |
-        make -C samples/arbitrary_syscall
-        make -C samples/browser
-        make -C samples/hello_sprx
-        make -C samples/hello_stdio
-        make -C samples/hello_world
-        make -C samples/hwinfo
-        make -C samples/list_files
-        make -C samples/mntinfo
-        make -C samples/ps
-        bash samples/hello_cmake/build.sh
+        make
+        make DESTDIR=${{ runner.tool_cache }}/ps5-payload-sdk install
+        tar -zcf ps5-payload-sdk.tar.gz -C ${{ runner.tool_cache }}/ps5-payload-sdk .
 
-    - name: Upload SDK
+    - name: Test
+      run: bash ci.sh
+
+    - name: Upload
       uses: actions/upload-artifact@v3
       with:
         name: SDK
         path: ./ps5-payload-sdk.tar.gz
         if-no-files-found: error
 
-    - name: Upload payload
-      uses: actions/upload-artifact@v3
-      with:
-        name: Payload binaries
-        path: ./**/*.elf
-        if-no-files-found: error

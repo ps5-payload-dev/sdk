@@ -18,7 +18,7 @@ MAKE    ?= make
 DESTDIR ?= /opt/ps5-payload-sdk
 
 TOPTARGETS := all clean install
-SUBDIRS    := crt sce_stubs host
+SUBDIRS    := crt sce_stubs include host
 
 $(TOPTARGETS): $(SUBDIRS)
 
@@ -27,21 +27,5 @@ $(SUBDIRS):
 
 .PHONY: $(TOPTARGETS) $(SUBDIRS)
 
-install: elf_x86_64.x toolchain.cmake toolchain.mk toolchain.sh
-	install -d $(DESTDIR)/ldscripts
-	install elf_x86_64.x $(DESTDIR)/ldscripts
-
-	install -d $(DESTDIR)/cmake
-	install toolchain.cmake $(DESTDIR)/cmake
-
-	install -d $(DESTDIR)/make
-	install toolchain.mk $(DESTDIR)/make
-
-	install -d $(DESTDIR)/shell
-	install toolchain.sh $(DESTDIR)/shell
-
-	cp -r include_bsd/. $(DESTDIR)/sysroot/usr/include
-	cp -r include_ps5/. $(DESTDIR)/sysroot/usr/include/ps5
-	cp -r include_khronos/. $(DESTDIR)/sysroot/usr/include
-
+install:
 	cp -r samples/. $(DESTDIR)/samples

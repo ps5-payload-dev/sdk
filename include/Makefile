@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 #   Copyright (C) 2023 John Törnblom
 #
 # This file is free software; you can redistribute it and/or modify it
@@ -15,28 +14,14 @@
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
 
-PS5_PAYLOAD_SDK="${BASH_SOURCE[0]}"
-PS5_PAYLOAD_SDK="$(dirname "${PS5_PAYLOAD_SDK}")"
-PS5_PAYLOAD_SDK="${PS5_PAYLOAD_SDK}/.."
+DESTDIR ?= /opt/ps5-payload-sdk
 
-CANDIDATES=("clang++-18"
-	    "clang++-17"
-            "clang++-16"
-            "clang++-15")
+all:
 
+clean:
 
-# ensure clang++ knows where prospero-lld is at
-export PATH=${PS5_PAYLOAD_SDK}/bin:$PATH
-
-for CXX in "${CANDIDATES[@]}"; do
-    if [ -x "$(command -v $CXX)" ]; then
-	exec $CXX \
-	     -target x86_64-sie-ps5 \
-	     -isysroot ${PS5_PAYLOAD_SDK}/sysroot \
-	     -isystem ${PS5_PAYLOAD_SDK}/sysroot/usr/include \
-	     -fno-stack-protector -fno-plt \
-	     $*
-    fi
-done
-
-exit 1
+install:
+	install -d $(DESTDIR)/target
+	cp -r freebsd/. $(DESTDIR)/target/include
+	cp -r khronos/. $(DESTDIR)/target/include
+	cp -r ps5/. $(DESTDIR)/target/include/ps5

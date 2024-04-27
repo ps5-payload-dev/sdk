@@ -15,18 +15,18 @@
 # <http://www.gnu.org/licenses/>.
 
 PS5_PAYLOAD_SDK := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))..)
-PS5_SYSROOT     := $(PS5_PAYLOAD_SDK)/sysroot
+PS5_SYSROOT     := $(PS5_PAYLOAD_SDK)/target
 PS5_DEPLOY      := $(PS5_PAYLOAD_SDK)/bin/prospero-deploy
 
+AS         := $(PS5_PAYLOAD_SDK)/bin/prospero-clang
 CC         := $(PS5_PAYLOAD_SDK)/bin/prospero-clang
 CXX        := $(PS5_PAYLOAD_SDK)/bin/prospero-clang++
-AS         := $(PS5_PAYLOAD_SDK)/bin/prospero-clang
 LD         := $(PS5_PAYLOAD_SDK)/bin/prospero-lld
-AR         := $(PS5_PAYLOAD_SDK)/bin/prospero-ar
-NM         := $(PS5_PAYLOAD_SDK)/bin/prospero-nm
-OBJCOPY    := $(PS5_PAYLOAD_SDK)/bin/prospero-objcopy
-RANLIB     := $(PS5_PAYLOAD_SDK)/bin/prospero-ranlib
-STRIP      := $(PS5_PAYLOAD_SDK)/bin/prospero-strip
 PKG_CONFIG := $(PS5_PAYLOAD_SDK)/bin/prospero-pkg-config
+AR         := $(PS5_PAYLOAD_SDK)/bin/llvm-ar
+NM         := $(PS5_PAYLOAD_SDK)/bin/llvm-nm
+OBJCOPY    := $(PS5_PAYLOAD_SDK)/bin/llvm-objcopy
+RANLIB     := $(PS5_PAYLOAD_SDK)/bin/llvm-ranlib
+STRIP      := $(PS5_PAYLOAD_SDK)/bin/llvm-strip
 
 STRINGS := strings
