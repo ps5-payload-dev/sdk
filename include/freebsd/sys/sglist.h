@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/sglist.h 300337 2016-05-20 23:28:43Z jhb $
+ * $FreeBSD: releng/11.1/sys/sys/sglist.h 300337 2016-05-20 23:28:43Z jhb $
  */
 
 /*

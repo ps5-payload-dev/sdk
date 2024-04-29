@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)mount.h	8.21 (Berkeley) 5/20/95
- * $FreeBSD: releng/11.0/sys/sys/mount.h 302388 2016-07-07 09:03:57Z trasz $
+ * $FreeBSD: releng/11.1/sys/sys/mount.h 311957 2017-01-12 01:09:15Z kib $
  */
 
 #ifndef _SYS_MOUNT_H_
@@ -366,7 +366,8 @@ void          __mnt_vnode_markerfree_active(struct vnode **mvp, struct mount *);
 #define	MNTK_SUSPEND	0x08000000	/* request write suspension */
 #define	MNTK_SUSPEND2	0x04000000	/* block secondary writes */
 #define	MNTK_SUSPENDED	0x10000000	/* write operations are suspended */
-#define	MNTK_UNUSED1	0x20000000
+#define	MNTK_NULL_NOCACHE	0x20000000 /* auto disable cache for nullfs
+					      mounts over this fs */
 #define MNTK_LOOKUP_SHARED	0x40000000 /* FS supports shared lock lookups */
 #define	MNTK_NOKNOTE	0x80000000	/* Don't send KNOTEs from VOP hooks */
 
@@ -592,6 +593,7 @@ struct uio;
 
 #ifdef MALLOC_DECLARE
 MALLOC_DECLARE(M_MOUNT);
+MALLOC_DECLARE(M_STATFS);
 #endif
 extern int maxvfsconf;		/* highest defined filesystem type */
 

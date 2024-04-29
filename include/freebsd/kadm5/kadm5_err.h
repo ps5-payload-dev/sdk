@@ -1,4 +1,4 @@
-/* Generated from /usr/src/kerberos5/lib/libkadm5clnt/../../../crypto/heimdal/lib/kadm5/kadm5_err.et */
+/* Generated from /usr/src/crypto/heimdal/lib/kadm5/kadm5_err.et */
 /* $Id$ */
 
 #ifndef __kadm5_err_h__

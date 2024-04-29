@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/fs/nfs/nfsrvstate.h 298788 2016-04-29 16:07:25Z pfg $
+ * $FreeBSD: releng/11.1/sys/fs/nfs/nfsrvstate.h 298788 2016-04-29 16:07:25Z pfg $
  */
 
 #ifndef _NFS_NFSRVSTATE_H_

@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/acl.h 287445 2015-09-04 00:14:20Z delphij $
+ * $FreeBSD: releng/11.1/sys/sys/acl.h 287445 2015-09-04 00:14:20Z delphij $
  */
 /* 
  * Developed by the TrustedBSD Project.

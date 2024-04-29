@@ -31,7 +31,7 @@
  */
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: releng/11.0/sys/netinet/sctp_asconf.h 237715 2012-06-28 16:01:08Z tuexen $");
+__FBSDID("$FreeBSD: releng/11.1/sys/netinet/sctp_asconf.h 310218 2016-12-18 13:00:11Z tuexen $");
 
 #ifndef _NETINET_SCTP_ASCONF_H_
 #define _NETINET_SCTP_ASCONF_H_
@@ -90,7 +90,6 @@ sctp_asconf_send_nat_state_update(struct sctp_tcb *stcb,
 
 extern int
     sctp_is_addr_pending(struct sctp_tcb *, struct sctp_ifa *);
-
 #endif				/* _KERNEL */
 
 #endif				/* !_NETINET_SCTP_ASCONF_H_ */

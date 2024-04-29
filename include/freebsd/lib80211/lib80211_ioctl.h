@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/lib/lib80211/lib80211_ioctl.h 291464 2015-11-30 04:41:50Z adrian $
+ * $FreeBSD: releng/11.1/lib/lib80211/lib80211_ioctl.h 291464 2015-11-30 04:41:50Z adrian $
  */
 
 /*-

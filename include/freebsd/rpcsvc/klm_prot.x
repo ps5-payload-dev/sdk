@@ -44,7 +44,7 @@
 %/*static char sccsid[] = "from: @(#)klm_prot.x	2.1 88/08/01 4.0 RPCSRC";*/
 %#endif /* not lint */
 %#include <sys/cdefs.h>
-%__FBSDID("$FreeBSD: releng/11.0/include/rpcsvc/klm_prot.x 298849 2016-04-30 14:43:42Z pfg $");
+%__FBSDID("$FreeBSD: releng/11.1/include/rpcsvc/klm_prot.x 298849 2016-04-30 14:43:42Z pfg $");
 #endif
 
 const	LM_MAXSTRLEN = 1024;

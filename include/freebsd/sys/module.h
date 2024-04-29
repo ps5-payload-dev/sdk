@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/module.h 298023 2016-04-15 02:36:14Z ngie $
+ * $FreeBSD: releng/11.1/sys/sys/module.h 298023 2016-04-15 02:36:14Z ngie $
  */
 
 #ifndef _SYS_MODULE_H_

@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	from: @(#)npx.h	5.3 (Berkeley) 1/18/91
- * $FreeBSD: releng/11.0/sys/amd64/include/fpu.h 271192 2014-09-06 15:23:28Z jhb $
+ * $FreeBSD: releng/11.1/sys/amd64/include/fpu.h 306314 2016-09-25 17:24:10Z kib $
  */
 
 /*
@@ -86,6 +86,7 @@ void	fpu_save_area_reset(struct savefpu *fsa);
 #define	FPU_KERN_NORMAL	0x0000
 #define	FPU_KERN_NOWAIT	0x0001
 #define	FPU_KERN_KTHR	0x0002
+#define	FPU_KERN_NOCTX	0x0004
 
 #endif
 

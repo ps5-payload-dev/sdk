@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)kvm.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: releng/11.0/lib/libkvm/kvm.h 298840 2016-04-30 09:21:13Z ngie $
+ * $FreeBSD: releng/11.1/lib/libkvm/kvm.h 312252 2017-01-16 03:48:52Z pfg $
  */
 
 #ifndef _KVM_H_
@@ -66,11 +66,11 @@ struct proc;
 
 struct kvm_swap {
 	char	ksw_devname[32];
-	int	ksw_used;
-	int	ksw_total;
+	u_int	ksw_used;
+	u_int	ksw_total;
 	int	ksw_flags;
-	int	ksw_reserved1;
-	int	ksw_reserved2;
+	u_int	ksw_reserved1;
+	u_int	ksw_reserved2;
 };
 
 #define SWIF_DEV_PREFIX	0x0002

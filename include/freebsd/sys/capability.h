@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/capability.h 263252 2014-03-16 21:05:00Z rwatson $
+ * $FreeBSD: releng/11.1/sys/sys/capability.h 263252 2014-03-16 21:05:00Z rwatson $
  */
 
 /*

@@ -1,4 +1,4 @@
-/* Generated from /usr/src/kerberos5/lib/libasn1/../../../crypto/heimdal/lib/asn1/cms.asn1 */
+/* Generated from /usr/src/crypto/heimdal/lib/asn1/cms.asn1 */
 /* Do not edit */
 
 #ifndef __cms_asn1_h__

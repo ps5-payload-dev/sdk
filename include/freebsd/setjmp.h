@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)setjmp.h	8.2 (Berkeley) 1/21/94
- * $FreeBSD: releng/11.0/include/setjmp.h 265878 2014-05-11 13:48:21Z jilles $
+ * $FreeBSD: releng/11.1/include/setjmp.h 265878 2014-05-11 13:48:21Z jilles $
  */
 
 #ifndef _SETJMP_H_

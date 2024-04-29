@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/ufs/ufs/extattr.h 262678 2014-03-02 02:52:34Z pfg $
+ * $FreeBSD: releng/11.1/sys/ufs/ufs/extattr.h 306553 2016-10-01 09:19:43Z kib $
  */
 /*
  * Developed by the TrustedBSD Project.
@@ -132,6 +132,10 @@ struct ufs_extattr_per_mount {
 	struct ucred	*uepm_ucred;
 	int	uepm_flags;
 };
+
+struct vop_getextattr_args;
+struct vop_deleteextattr_args;
+struct vop_setextattr_args;
 
 void	ufs_extattr_uepm_init(struct ufs_extattr_per_mount *uepm);
 void	ufs_extattr_uepm_destroy(struct ufs_extattr_per_mount *uepm);

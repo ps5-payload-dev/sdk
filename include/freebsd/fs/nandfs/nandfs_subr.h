@@ -25,7 +25,7 @@
  *
  * From: NetBSD: nilfs_subr.h,v 1.1 2009/07/18 16:31:42 reinoud
  *
- * $FreeBSD: releng/11.0/sys/fs/nandfs/nandfs_subr.h 298806 2016-04-29 20:51:24Z pfg $
+ * $FreeBSD: releng/11.1/sys/fs/nandfs/nandfs_subr.h 298806 2016-04-29 20:51:24Z pfg $
  */
 
 #ifndef _FS_NANDFS_NANDFS_SUBR_H_

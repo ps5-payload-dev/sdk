@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/netinet/ip_dummynet.h 300779 2016-05-26 21:40:13Z truckman $
+ * $FreeBSD: releng/11.1/sys/netinet/ip_dummynet.h 300779 2016-05-26 21:40:13Z truckman $
  */
 
 #ifndef _IP_DUMMYNET_H

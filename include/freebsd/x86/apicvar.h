@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/x86/include/apicvar.h 301015 2016-05-31 04:47:53Z sephe $
+ * $FreeBSD: releng/11.1/sys/x86/include/apicvar.h 316831 2017-04-14 14:01:35Z avg $
  */
 
 #ifndef _X86_APICVAR_H_
@@ -206,6 +206,7 @@ struct apic_ops {
 	void	(*create)(u_int, int);
 	void	(*init)(vm_paddr_t);
 	void	(*xapic_mode)(void);
+	bool	(*is_x2apic)(void);
 	void	(*setup)(int);
 	void	(*dump)(const char *);
 	void	(*disable)(void);
@@ -230,6 +231,9 @@ struct apic_ops {
 
 	/* CMC */
 	void	(*enable_cmc)(void);
+
+	/* AMD ELVT */
+	int	(*enable_mca_elvt)(void);
 
 	/* IPI */
 	void	(*ipi_raw)(register_t, u_int);
@@ -266,6 +270,13 @@ lapic_xapic_mode(void)
 {
 
 	apic_ops.xapic_mode();
+}
+
+static inline bool
+lapic_is_x2apic(void)
+{
+
+	return (apic_ops.is_x2apic());
 }
 
 static inline void
@@ -386,6 +397,13 @@ lapic_enable_cmc(void)
 {
 
 	apic_ops.enable_cmc();
+}
+
+static inline int
+lapic_enable_mca_elvt(void)
+{
+
+	return (apic_ops.enable_mca_elvt());
 }
 
 static inline void

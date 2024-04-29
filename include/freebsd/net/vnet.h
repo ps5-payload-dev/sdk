@@ -32,7 +32,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/net/vnet.h 302054 2016-06-21 13:48:49Z bz $
+ * $FreeBSD: releng/11.1/sys/net/vnet.h 302054 2016-06-21 13:48:49Z bz $
  */
 
 /*-

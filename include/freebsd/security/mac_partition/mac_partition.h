@@ -31,7 +31,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/security/mac_partition/mac_partition.h 126097 2004-02-22 00:33:12Z rwatson $
+ * $FreeBSD: releng/11.1/sys/security/mac_partition/mac_partition.h 126097 2004-02-22 00:33:12Z rwatson $
  */
 
 /*

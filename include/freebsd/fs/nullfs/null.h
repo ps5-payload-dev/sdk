@@ -31,7 +31,7 @@
  *
  *	@(#)null.h	8.3 (Berkeley) 8/20/94
  *
- * $FreeBSD: releng/11.0/sys/fs/nullfs/null.h 250505 2013-05-11 11:17:44Z kib $
+ * $FreeBSD: releng/11.1/sys/fs/nullfs/null.h 250505 2013-05-11 11:17:44Z kib $
  */
 
 #ifndef	FS_NULL_H

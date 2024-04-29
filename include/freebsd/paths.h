@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)paths.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: releng/11.0/include/paths.h 297205 2016-03-23 04:18:57Z imp $
+ * $FreeBSD: releng/11.1/include/paths.h 312381 2017-01-18 14:13:28Z avg $
  */
 
 #ifndef _PATHS_H_
@@ -99,6 +99,7 @@
 #define	_PATH_VARDB	"/var/db/"
 #define	_PATH_VARRUN	"/var/run/"
 #define	_PATH_VARTMP	"/var/tmp/"
+#define	_PATH_DEVVMM	"/dev/vmm/"
 #define	_PATH_YP	"/var/yp/"
 #define	_PATH_UUCPLOCK	"/var/spool/lock/"
 

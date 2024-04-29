@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)callout.h	8.2 (Berkeley) 1/21/94
- * $FreeBSD: releng/11.0/sys/sys/callout.h 302350 2016-07-05 18:47:17Z glebius $
+ * $FreeBSD: releng/11.1/sys/sys/callout.h 304882 2016-08-27 09:11:57Z kib $
  */
 
 #ifndef _SYS_CALLOUT_H_
@@ -57,6 +57,7 @@
 #define	C_PRELGET(x)		(int)((((x) >> 1) & C_PRELRANGE) - 1)
 #define	C_HARDCLOCK		0x0100 /* align to hardclock() calls */
 #define	C_ABSOLUTE		0x0200 /* event time is absolute. */
+#define	C_PRECALC		0x0400 /* event time is pre-calculated. */
 
 struct callout_handle {
 	struct callout *callout;
@@ -129,6 +130,8 @@ int	_callout_stop_safe(struct callout *, int, void (*)(void *));
 void	callout_process(sbintime_t now);
 #define callout_async_drain(c, d)					\
     _callout_stop_safe(c, 0, d)
+void callout_when(sbintime_t sbt, sbintime_t precision, int flags,
+    sbintime_t *sbt_res, sbintime_t *prec_res);
 #endif
 
 #endif /* _SYS_CALLOUT_H_ */

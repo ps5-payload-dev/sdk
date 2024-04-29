@@ -30,7 +30,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/netgraph/atm/ng_ccatm.h 189315 2009-03-03 18:47:33Z ed $
+ * $FreeBSD: releng/11.1/sys/netgraph/atm/ng_ccatm.h 189315 2009-03-03 18:47:33Z ed $
  */
 
 /*

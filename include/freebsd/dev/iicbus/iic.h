@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/iicbus/iic.h 300258 2016-05-20 03:03:04Z jah $
+ * $FreeBSD: releng/11.1/sys/dev/iicbus/iic.h 300258 2016-05-20 03:03:04Z jah $
  *
  */
 #ifndef __IIC_H

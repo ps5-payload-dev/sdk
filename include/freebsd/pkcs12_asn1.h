@@ -1,4 +1,4 @@
-/* Generated from /usr/src/kerberos5/lib/libasn1/../../../crypto/heimdal/lib/asn1/pkcs12.asn1 */
+/* Generated from /usr/src/crypto/heimdal/lib/asn1/pkcs12.asn1 */
 /* Do not edit */
 
 #ifndef __pkcs12_asn1_h__

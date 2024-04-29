@@ -28,7 +28,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)signal.h	8.1 (Berkeley) 6/11/93
- * $FreeBSD: releng/11.0/sys/x86/include/signal.h 247047 2013-02-20 17:39:52Z kib $
+ * $FreeBSD: releng/11.1/sys/x86/include/signal.h 247047 2013-02-20 17:39:52Z kib $
  */
 
 #ifndef _X86_SIGNAL_H

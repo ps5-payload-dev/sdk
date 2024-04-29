@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.0/sys/dev/ciss/cissreg.h 268018 2014-06-29 18:53:15Z sbruno $
+ *	$FreeBSD: releng/11.1/sys/dev/ciss/cissreg.h 268018 2014-06-29 18:53:15Z sbruno $
  */
 
 /*

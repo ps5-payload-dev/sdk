@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	From: @(#)if.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: releng/11.0/sys/net/if_clone.h 279538 2015-03-02 20:00:03Z hrs $
+ * $FreeBSD: releng/11.1/sys/net/if_clone.h 279538 2015-03-02 20:00:03Z hrs $
  */
 
 #ifndef	_NET_IF_CLONE_H_

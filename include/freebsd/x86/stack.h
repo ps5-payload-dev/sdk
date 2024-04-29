@@ -23,7 +23,7 @@
  * any improvements or extensions that they make and grant Carnegie the
  * rights to redistribute these changes.
  *
- * $FreeBSD: releng/11.0/sys/x86/include/stack.h 287645 2015-09-11 03:54:37Z markj $
+ * $FreeBSD: releng/11.1/sys/x86/include/stack.h 287645 2015-09-11 03:54:37Z markj $
  */
 
 #ifndef _X86_STACK_H

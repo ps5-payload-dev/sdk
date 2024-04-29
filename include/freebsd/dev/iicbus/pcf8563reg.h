@@ -5,7 +5,7 @@
  *
  * This file is in the public domain.
  *
- * $FreeBSD: releng/11.0/sys/dev/iicbus/pcf8563reg.h 234248 2012-04-13 23:07:32Z marius $
+ * $FreeBSD: releng/11.1/sys/dev/iicbus/pcf8563reg.h 234248 2012-04-13 23:07:32Z marius $
  */
 
 /*

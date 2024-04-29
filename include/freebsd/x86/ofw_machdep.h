@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/x86/include/ofw_machdep.h 287260 2015-08-28 15:41:09Z imp $
+ * $FreeBSD: releng/11.1/sys/x86/include/ofw_machdep.h 287260 2015-08-28 15:41:09Z imp $
  */
 
 #ifndef _MACHINE_OFW_MACHDEP_H_

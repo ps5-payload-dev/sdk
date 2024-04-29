@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/include/iso646.h 225801 2011-09-27 16:33:17Z jkim $
+ * $FreeBSD: releng/11.1/include/iso646.h 225801 2011-09-27 16:33:17Z jkim $
  */
 
 #ifndef _ISO646_H_

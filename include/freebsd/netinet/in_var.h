@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)in_var.h	8.2 (Berkeley) 1/9/95
- * $FreeBSD: releng/11.0/sys/netinet/in_var.h 302054 2016-06-21 13:48:49Z bz $
+ * $FreeBSD: releng/11.1/sys/netinet/in_var.h 309337 2016-11-30 21:53:06Z vangyzen $
  */
 
 #ifndef _NETINET_IN_VAR_H_
@@ -82,6 +82,8 @@ struct in_ifaddr {
 	struct	sockaddr_in ia_dstaddr; /* reserve space for broadcast addr */
 #define	ia_broadaddr	ia_dstaddr
 	struct	sockaddr_in ia_sockmask; /* reserve space for general netmask */
+	struct	callout ia_garp_timer;	/* timer for retransmitting GARPs */
+	int	ia_garp_count;		/* count of retransmitted GARPs */
 };
 
 /*

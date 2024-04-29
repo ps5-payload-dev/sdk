@@ -58,7 +58,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)in_var.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: releng/11.0/sys/netinet6/in6_var.h 301875 2016-06-13 22:31:16Z pfg $
+ * $FreeBSD: releng/11.1/sys/netinet6/in6_var.h 311681 2017-01-08 13:31:24Z ae $
  */
 
 #ifndef _NETINET6_IN6_VAR_H_
@@ -819,6 +819,7 @@ void	in6_newaddrmsg(struct in6_ifaddr *, int);
 /*
  * Extended API for IPv6 FIB support.
  */
+struct mbuf *ip6_tryforward(struct mbuf *);
 void	in6_rtredirect(struct sockaddr *, struct sockaddr *, struct sockaddr *,
 	    int, struct sockaddr *, u_int);
 int	in6_rtrequest(int, struct sockaddr *, struct sockaddr *,

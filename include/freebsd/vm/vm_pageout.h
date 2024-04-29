@@ -57,7 +57,7 @@
  * any improvements or extensions that they make and grant Carnegie the
  * rights to redistribute these changes.
  *
- * $FreeBSD: releng/11.0/sys/vm/vm_pageout.h 300865 2016-05-27 19:15:45Z alc $
+ * $FreeBSD: releng/11.1/sys/vm/vm_pageout.h 314663 2017-03-04 12:05:46Z avg $
  */
 
 #ifndef _VM_VM_PAGEOUT_H_
@@ -85,6 +85,12 @@ extern bool vm_pages_needed;
 
 #define	VM_OOM_MEM	1
 #define	VM_OOM_SWAPZ	2
+
+/*
+ * vm_lowmem flags.
+ */
+#define	VM_LOW_KMEM	0x01
+#define	VM_LOW_PAGES	0x02
 
 /*
  *	Exported routines.

@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)libkern.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: releng/11.0/sys/sys/libkern.h 298714 2016-04-27 19:09:21Z jkim $
+ * $FreeBSD: releng/11.1/sys/sys/libkern.h 319404 2017-06-01 09:00:38Z tuexen $
  */
 
 #ifndef _SYS_LIBKERN_H_
@@ -178,6 +178,14 @@ crc32(const void *buf, size_t size)
 uint32_t
 calculate_crc32c(uint32_t crc32c, const unsigned char *buffer,
     unsigned int length);
+#ifdef _KERNEL
+#if defined(__amd64__) || defined(__i386__)
+uint32_t sse42_crc32c(uint32_t, const unsigned char *, unsigned);
+#endif
+#if defined(__aarch64__)
+uint32_t armv8_crc32c(uint32_t, const unsigned char *, unsigned int);
+#endif
+#endif
 
 
 LIBKERN_INLINE void *memset(void *, int, size_t);

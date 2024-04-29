@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/gzio.h 279801 2015-03-09 03:50:53Z markj $
+ * $FreeBSD: releng/11.1/sys/sys/gzio.h 279801 2015-03-09 03:50:53Z markj $
  */
 
 #ifndef _SYS__GZIO_H_

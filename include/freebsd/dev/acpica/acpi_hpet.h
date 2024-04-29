@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/acpica/acpi_hpet.h 224919 2011-08-16 21:51:29Z mav $
+ * $FreeBSD: releng/11.1/sys/dev/acpica/acpi_hpet.h 305866 2016-09-16 10:04:28Z kib $
  */
 
 #ifndef __ACPI_HPET_H__
@@ -63,5 +63,16 @@
 #define	HPET_TIMER_FSB_ADDR(x)	((x) * 0x20 + 0x114)
 
 #define	HPET_MIN_CYCLES		128	/* Period considered reliable. */
+
+#ifdef _KERNEL
+struct timecounter;
+struct vdso_timehands;
+struct vdso_timehands32;
+
+uint32_t hpet_vdso_timehands(struct vdso_timehands *vdso_th,
+    struct timecounter *tc);
+uint32_t hpet_vdso_timehands32(struct vdso_timehands32 *vdso_th32,
+    struct timecounter *tc);
+#endif
 
 #endif /* !__ACPI_HPET_H__ */

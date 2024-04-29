@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/buf_ring.h 302292 2016-06-30 05:18:37Z wma $
+ * $FreeBSD: releng/11.1/sys/sys/buf_ring.h 302292 2016-06-30 05:18:37Z wma $
  *
  */
 

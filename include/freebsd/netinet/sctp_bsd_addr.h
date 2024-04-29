@@ -31,7 +31,7 @@
  */
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: releng/11.0/sys/netinet/sctp_bsd_addr.h 237540 2012-06-24 21:25:54Z tuexen $");
+__FBSDID("$FreeBSD: releng/11.1/sys/netinet/sctp_bsd_addr.h 310773 2016-12-29 11:32:42Z tuexen $");
 
 #ifndef _NETINET_SCTP_BSD_ADDR_H_
 #define _NETINET_SCTP_BSD_ADDR_H_
@@ -48,13 +48,12 @@ void sctp_startup_iterator(void);
 
 #ifdef INET6
 void sctp_gather_internal_ifa_flags(struct sctp_ifa *ifa);
-
 #endif
 
 #ifdef  SCTP_PACKET_LOGGING
 
 void sctp_packet_log(struct mbuf *m);
-int sctp_copy_out_packet_log(uint8_t * target, int length);
+int sctp_copy_out_packet_log(uint8_t *target, int length);
 
 #endif
 

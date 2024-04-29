@@ -26,7 +26,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/bitset.h 299184 2016-05-06 16:41:23Z royger $
+ * $FreeBSD: releng/11.1/sys/sys/bitset.h 319650 2017-06-07 11:30:28Z kib $
  */
 
 #ifndef _SYS_BITSET_H_
@@ -122,16 +122,46 @@
 		(d)->__bits[__i] |= (s)->__bits[__i];			\
 } while (0)
 
+#define	BIT_OR2(_s, d, s1, s2) do {					\
+	__size_t __i;							\
+	for (__i = 0; __i < __bitset_words((_s)); __i++)		\
+		(d)->__bits[__i] = (s1)->__bits[__i] | (s2)->__bits[__i];\
+} while (0)
+
 #define	BIT_AND(_s, d, s) do {						\
 	__size_t __i;							\
 	for (__i = 0; __i < __bitset_words((_s)); __i++)		\
 		(d)->__bits[__i] &= (s)->__bits[__i];			\
 } while (0)
 
+#define	BIT_AND2(_s, d, s1, s2) do {					\
+	__size_t __i;							\
+	for (__i = 0; __i < __bitset_words((_s)); __i++)		\
+		(d)->__bits[__i] = (s1)->__bits[__i] & (s2)->__bits[__i];\
+} while (0)
+
 #define	BIT_NAND(_s, d, s) do {						\
 	__size_t __i;							\
 	for (__i = 0; __i < __bitset_words((_s)); __i++)		\
 		(d)->__bits[__i] &= ~(s)->__bits[__i];			\
+} while (0)
+
+#define	BIT_NAND2(_s, d, s1, s2) do {					\
+	__size_t __i;							\
+	for (__i = 0; __i < __bitset_words((_s)); __i++)		\
+		(d)->__bits[__i] = (s1)->__bits[__i] & ~(s2)->__bits[__i];\
+} while (0)
+
+#define	BIT_XOR(_s, d, s) do {						\
+	__size_t __i;							\
+	for (__i = 0; __i < __bitset_words((_s)); __i++)		\
+		(d)->__bits[__i] ^= (s)->__bits[__i];			\
+} while (0)
+
+#define	BIT_XOR2(_s, d, s1, s2) do {					\
+	__size_t __i;							\
+	for (__i = 0; __i < __bitset_words((_s)); __i++)		\
+		(d)->__bits[__i] = (s1)->__bits[__i] ^ (s2)->__bits[__i];\
 } while (0)
 
 #define	BIT_CLR_ATOMIC(_s, n, p)					\

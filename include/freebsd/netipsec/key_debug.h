@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.0/sys/netipsec/key_debug.h 298398 2016-04-21 10:58:07Z ae $	*/
+/*	$FreeBSD: releng/11.1/sys/netipsec/key_debug.h 319599 2017-06-05 11:11:07Z ae $	*/
 /*	$KAME: key_debug.h,v 1.10 2001/08/05 08:37:52 itojun Exp $	*/
 
 /*-
@@ -53,10 +53,16 @@
 #define KEYDEBUG_IPSEC_DATA	(KEYDEBUG_IPSEC | KEYDEBUG_DATA)
 #define KEYDEBUG_IPSEC_DUMP	(KEYDEBUG_IPSEC | KEYDEBUG_DUMP)
 
-#define KEYDEBUG(lev,arg) \
-	do { if ((V_key_debug_level & (lev)) == (lev)) { arg; } } while (0)
+#ifdef IPSEC_DEBUG
+#define KEYDBG(lev, arg)	\
+    if ((V_key_debug_level & (KEYDEBUG_ ## lev)) == (KEYDEBUG_ ## lev)) { \
+	    arg;		\
+    }
+#else
+#define	KEYDBG(lev, arg)
+#endif /* !IPSEC_DEBUG */
 
-VNET_DECLARE(u_int32_t, key_debug_level);
+VNET_DECLARE(uint32_t, key_debug_level);
 #define	V_key_debug_level	VNET(key_debug_level)
 #endif /*_KERNEL*/
 
@@ -69,15 +75,26 @@ extern void kdebug_sadb_x_policy(struct sadb_ext *);
 struct secpolicy;
 struct secpolicyindex;
 struct secasindex;
+struct secashead;
 struct secasvar;
 struct secreplay;
 struct mbuf;
-extern void kdebug_secpolicy(struct secpolicy *);
-extern void kdebug_secpolicyindex(struct secpolicyindex *);
-extern void kdebug_secasindex(struct secasindex *);
-extern void kdebug_secasv(struct secasvar *);
-extern void kdebug_mbufhdr(const struct mbuf *);
-extern void kdebug_mbuf(const struct mbuf *);
+union sockaddr_union;
+const char* kdebug_secpolicy_state(u_int);
+const char* kdebug_secpolicy_policy(u_int);
+const char* kdebug_secpolicyindex_dir(u_int);
+const char* kdebug_ipsecrequest_level(u_int);
+const char* kdebug_secasindex_mode(u_int);
+const char* kdebug_secasv_state(u_int);
+void kdebug_secpolicy(struct secpolicy *);
+void kdebug_secpolicyindex(struct secpolicyindex *, const char *);
+void kdebug_secasindex(const struct secasindex *, const char *);
+void kdebug_secash(struct secashead *, const char *);
+void kdebug_secasv(struct secasvar *);
+void kdebug_mbufhdr(const struct mbuf *);
+void kdebug_mbuf(const struct mbuf *);
+char *ipsec_address(const union sockaddr_union *, char *, socklen_t);
+char *ipsec_sa2str(struct secasvar *, char *, size_t);
 #endif /*_KERNEL*/
 
 struct sockaddr;

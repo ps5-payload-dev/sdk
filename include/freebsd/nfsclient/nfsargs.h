@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)nfs.h	8.4 (Berkeley) 5/1/95
- * $FreeBSD: releng/11.0/sys/nfsclient/nfsargs.h 259084 2013-12-07 23:05:59Z rmacklem $
+ * $FreeBSD: releng/11.1/sys/nfsclient/nfsargs.h 317520 2017-04-27 20:14:54Z rmacklem $
  */
 
 #ifndef _NFSCLIENT_NFSARGS_H_
@@ -76,7 +76,7 @@ struct nfs_args {
 #define	NFSMNT_MAXGRPS		0x00000020  /* set maximum grouplist size */
 #define	NFSMNT_INT		0x00000040  /* allow interrupts on hard mount */
 #define	NFSMNT_NOCONN		0x00000080  /* Don't Connect the socket */
-/* 0x100 free, was NFSMNT_NQNFS */
+#define	NFSMNT_ONEOPENOWN	0x00000100  /* Use one OpenOwner for NFSv4.1 */
 #define	NFSMNT_NFSV3		0x00000200  /* Use NFS Version 3 protocol */
 #define	NFSMNT_KERB		0x00000400  /* Use RPCSEC_GSS/Krb5 */
 #define	NFSMNT_DUMBTIMR		0x00000800  /* Don't estimate rtt dynamically */

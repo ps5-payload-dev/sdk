@@ -26,7 +26,7 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/net/if_vlan_var.h 301496 2016-06-06 09:51:58Z araujo $
+ * $FreeBSD: releng/11.1/sys/net/if_vlan_var.h 301496 2016-06-06 09:51:58Z araujo $
  */
 
 #ifndef _NET_IF_VLAN_VAR_H_

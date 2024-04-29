@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.0/sys/net80211/ieee80211_radiotap.h 245156 2013-01-08 06:59:21Z adrian $ */
+/* $FreeBSD: releng/11.1/sys/net80211/ieee80211_radiotap.h 245156 2013-01-08 06:59:21Z adrian $ */
 /* $NetBSD: ieee80211_radiotap.h,v 1.16 2007/01/06 05:51:15 dyoung Exp $ */
 
 /*-

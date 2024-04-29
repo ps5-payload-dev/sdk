@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.0/sys/crypto/skein/skein_port.h 301010 2016-05-31 04:12:14Z allanjude $	*/
+/*	$FreeBSD: releng/11.1/sys/crypto/skein/skein_port.h 310372 2016-12-21 18:42:04Z emaste $	*/
 #ifndef _SKEIN_PORT_H_
 #define _SKEIN_PORT_H_
 /*******************************************************************
@@ -136,6 +136,16 @@ void    Skein_Get64_LSB_First(u64b_t *dst,const u08b_t *src,size_t wCnt)
 #define SKEIN256_End		_libmd_SKEIN256_End
 #define SKEIN512_End		_libmd_SKEIN512_End
 #define SKEIN1024_End		_libmd_SKEIN1024_End
+#endif
+#ifndef SKEIN256_Fd
+#define SKEIN256_Fd		_libmd_SKEIN256_Fd
+#define SKEIN512_Fd		_libmd_SKEIN512_Fd
+#define SKEIN1024_Fd		_libmd_SKEIN1024_Fd
+#endif
+#ifndef SKEIN256_FdChunk
+#define SKEIN256_FdChunk	_libmd_SKEIN256_FdChunk
+#define SKEIN512_FdChunk	_libmd_SKEIN512_FdChunk
+#define SKEIN1024_FdChunk	_libmd_SKEIN1024_FdChunk
 #endif
 #ifndef SKEIN256_File
 #define SKEIN256_File		_libmd_SKEIN256_File

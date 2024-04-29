@@ -28,7 +28,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/vm/vm_phys.h 297748 2016-04-09 13:58:04Z jhb $
+ * $FreeBSD: releng/11.1/sys/vm/vm_phys.h 297748 2016-04-09 13:58:04Z jhb $
  */
 
 /*

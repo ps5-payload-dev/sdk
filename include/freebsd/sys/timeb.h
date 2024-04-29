@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)timeb.h	8.2 (Berkeley) 1/21/94
- * $FreeBSD: releng/11.0/sys/sys/timeb.h 204926 2010-03-09 21:01:12Z ed $
+ * $FreeBSD: releng/11.1/sys/sys/timeb.h 204926 2010-03-09 21:01:12Z ed $
  */
 
 #ifndef _SYS_TIMEB_H_

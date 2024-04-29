@@ -23,7 +23,7 @@
  * any improvements or extensions that they make and grant Carnegie Mellon
  * the rights to redistribute these changes.
  *
- * $FreeBSD: releng/11.0/sys/amd64/include/db_machdep.h 139731 2005-01-05 20:17:21Z imp $
+ * $FreeBSD: releng/11.1/sys/amd64/include/db_machdep.h 308418 2016-11-07 12:10:17Z kib $
  */
 
 #ifndef _MACHINE_DB_MACHDEP_H_
@@ -56,12 +56,16 @@ do {						\
 #define	db_clear_single_step	kdb_cpu_clear_singlestep
 #define	db_set_single_step	kdb_cpu_set_singlestep
 
-#define	IS_BREAKPOINT_TRAP(type, code)	((type) == T_BPTFLT)
 /*
- * Watchpoints are not supported.  The debug exception type is in %dr6
- * and not yet in the args to this macro.
+ * The debug exception type is copied from %dr6 to 'code' and used to
+ * disambiguate single step traps.  Watchpoints have no special support.
+ * Our hardware breakpoints are not well integrated with ddb and are too
+ * different from watchpoints.  ddb treats them as unknown traps with
+ * unknown addresses and doesn't turn them off while it is running.
  */
-#define IS_WATCHPOINT_TRAP(type, code)	0
+#define	IS_BREAKPOINT_TRAP(type, code)	((type) == T_BPTFLT)
+#define	IS_SSTEP_TRAP(type, code)	((type) == T_TRCTRAP && (code) & 0x4000)
+#define	IS_WATCHPOINT_TRAP(type, code)	0
 
 #define	I_CALL		0xe8
 #define	I_CALLI		0xff

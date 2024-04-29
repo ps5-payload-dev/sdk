@@ -41,7 +41,7 @@
  *
  * All that code should go here for service.
  *
- * $FreeBSD: releng/11.0/sys/sys/clock.h 204646 2010-03-03 17:55:51Z joel $
+ * $FreeBSD: releng/11.1/sys/sys/clock.h 306403 2016-09-28 09:46:29Z kib $
  */
 
 #ifndef _SYS_CLOCK_H_
@@ -54,6 +54,7 @@
  */
 extern int tz_minuteswest;
 extern int tz_dsttime;
+extern struct mtx resettodr_lock;
 
 int utc_offset(void);
 

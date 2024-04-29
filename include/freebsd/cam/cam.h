@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/cam/cam.h 298810 2016-04-29 21:05:48Z pfg $
+ * $FreeBSD: releng/11.1/sys/cam/cam.h 298810 2016-04-29 21:05:48Z pfg $
  */
 
 #ifndef _CAM_CAM_H

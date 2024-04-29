@@ -28,7 +28,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * $NetBSD: if_gre.h,v 1.13 2003/11/10 08:51:52 wiz Exp $
- * $FreeBSD: releng/11.0/sys/net/if_gre.h 276215 2014-12-25 21:32:37Z ae $
+ * $FreeBSD: releng/11.1/sys/net/if_gre.h 317403 2017-04-25 11:19:22Z ae $
  */
 
 #ifndef _NET_IF_GRE_H_
@@ -69,7 +69,6 @@ struct gre_softc {
 	uint32_t		gre_oseq;
 	uint32_t		gre_key;
 	uint32_t		gre_options;
-	uint32_t		gre_mtu;
 	u_int			gre_fibnum;
 	u_int			gre_hlen;	/* header size */
 	union {

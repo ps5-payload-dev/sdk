@@ -28,7 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/netinet/ip_options.h 271610 2014-09-15 07:20:40Z hrs $
+ * $FreeBSD: releng/11.1/sys/netinet/ip_options.h 271610 2014-09-15 07:20:40Z hrs $
  */
 
 #ifndef _NETINET_IP_OPTIONS_H_

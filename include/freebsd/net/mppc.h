@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/net/mppc.h 301549 2016-06-07 15:07:00Z pfg $
+ * $FreeBSD: releng/11.1/sys/net/mppc.h 301549 2016-06-07 15:07:00Z pfg $
  */
 
 /*

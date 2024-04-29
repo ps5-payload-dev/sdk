@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/hwpmc/hwpmc_arm64.h 283112 2015-05-19 15:25:47Z br $
+ * $FreeBSD: releng/11.1/sys/dev/hwpmc/hwpmc_arm64.h 283112 2015-05-19 15:25:47Z br $
  */
 
 #ifndef _DEV_HWPMC_ARMV8_H_

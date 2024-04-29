@@ -31,7 +31,7 @@
  * SUCH DAMAGE.
  *
  *	from: @(#) floatingpoint.h	1.0 (Berkeley) 9/23/93
- * $FreeBSD: releng/11.0/sys/amd64/include/floatingpoint.h 144544 2005-04-02 17:31:42Z netchild $
+ * $FreeBSD: releng/11.1/sys/amd64/include/floatingpoint.h 144544 2005-04-02 17:31:42Z netchild $
  */
 
 #ifndef _FLOATINGPOINT_H_

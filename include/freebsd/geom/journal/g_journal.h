@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/geom/journal/g_journal.h 298755 2016-04-28 19:26:46Z pfg $
+ * $FreeBSD: releng/11.1/sys/geom/journal/g_journal.h 298755 2016-04-28 19:26:46Z pfg $
  */
 
 #ifndef	_G_JOURNAL_H_

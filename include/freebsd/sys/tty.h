@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/tty.h 259549 2013-12-18 12:50:43Z glebius $
+ * $FreeBSD: releng/11.1/sys/sys/tty.h 314538 2017-03-02 04:23:53Z ian $
  */
 
 #ifndef _SYS_TTY_H_
@@ -62,6 +62,7 @@ struct tty {
 	struct mtx	*t_mtx;		/* TTY lock. */
 	struct mtx	t_mtxobj;	/* Per-TTY lock (when not borrowing). */
 	TAILQ_ENTRY(tty) t_list;	/* (l) TTY list entry. */
+	int		t_drainwait;	/* (t) TIOCDRAIN timeout seconds. */
 	unsigned int	t_flags;	/* (t) Terminal option flags. */
 /* Keep flags in sync with db_show_tty and pstat(8). */
 #define	TF_NOPREFIX	0x00001	/* Don't prepend "tty" to device name. */

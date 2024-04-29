@@ -1,5 +1,5 @@
 /*
- * $FreeBSD: releng/11.0/sys/dev/lmc/if_lmc.h 299048 2016-05-04 06:23:49Z adrian $
+ * $FreeBSD: releng/11.1/sys/dev/lmc/if_lmc.h 299048 2016-05-04 06:23:49Z adrian $
  *
  * Copyright (c) 2002-2004 David Boggs. (boggs@boggs.palo-alto.ca.us)
  * All rights reserved.

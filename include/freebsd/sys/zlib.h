@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.0/sys/sys/zlib.h 281855 2015-04-22 14:38:58Z rodrigc $	*/
+/* $FreeBSD: releng/11.1/sys/sys/zlib.h 281855 2015-04-22 14:38:58Z rodrigc $	*/
 
 /*
  * This file is derived from zlib.h and zconf.h from the zlib-1.0.4

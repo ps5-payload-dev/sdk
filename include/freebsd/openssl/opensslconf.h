@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.0/secure/lib/libcrypto/opensslconf-x86.h 296279 2016-03-01 22:08:28Z jkim $ */
+/* $FreeBSD: releng/11.1/secure/lib/libcrypto/opensslconf-x86.h.in 305150 2016-08-31 20:21:03Z jkim $ */
 /* opensslconf.h */
 /* WARNING: Generated automatically from opensslconf.h.in by Configure. */
 

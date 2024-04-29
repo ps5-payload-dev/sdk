@@ -1,19 +1,23 @@
-/*	$FreeBSD: releng/11.0/sys/contrib/ipfilter/netinet/ip_proxy.h 255332 2013-09-06 23:11:19Z cy $	*/
+/*	$FreeBSD: releng/11.1/sys/contrib/ipfilter/netinet/ip_proxy.h 305138 2016-08-31 18:00:41Z dim $	*/
 
 /*
  * Copyright (C) 2012 by Darren Reed.
  *
  * See the IPFILTER.LICENCE file for details on licencing.
  *
- * $FreeBSD: releng/11.0/sys/contrib/ipfilter/netinet/ip_proxy.h 255332 2013-09-06 23:11:19Z cy $
+ * $FreeBSD: releng/11.1/sys/contrib/ipfilter/netinet/ip_proxy.h 305138 2016-08-31 18:00:41Z dim $
  * Id: ip_proxy.h,v 2.31.2.2 2005/03/12 19:33:48 darrenr Exp
  */
 
 #ifndef	__IP_PROXY_H__
 #define	__IP_PROXY_H__
 
-#ifndef SOLARIS
-#define SOLARIS (defined(sun) && (defined(__svr4__) || defined(__SVR4)))
+#ifndef	SOLARIS
+# if defined(sun) && (defined(__svr4__) || defined(__SVR4))
+#  define	SOLARIS		1
+# else
+#  define	SOLARIS		0
+# endif
 #endif
 
 #if defined(__STDC__) || defined(__GNUC__) || defined(_AIX51)

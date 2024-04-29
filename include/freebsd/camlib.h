@@ -22,7 +22,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/lib/libcam/camlib.h 297999 2016-04-14 21:10:53Z ngie $
+ * $FreeBSD: releng/11.1/lib/libcam/camlib.h 316317 2017-03-31 04:42:11Z ngie $
  */
 /*
  * Buffer encoding/decoding routines taken from the original FreeBSD SCSI
@@ -70,13 +70,13 @@
 #include <cam/cam.h>
 #include <cam/cam_ccb.h>
 
-#define CAM_ERRBUF_SIZE 2048	/* sizeof the CAM libarary error string  */
+#define	CAM_ERRBUF_SIZE 2048	/* CAM library error string size */
 
 /*
  * Right now we hard code the transport layer device, but this will change
  * if we ever get more than one transport layer.
  */
-#define XPT_DEVICE	"/dev/xpt0"
+#define	XPT_DEVICE	"/dev/xpt0"
 
 
 extern char cam_errbuf[];

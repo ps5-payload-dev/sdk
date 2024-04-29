@@ -28,7 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/include/nl_types.h 203963 2010-02-16 19:28:10Z imp $
+ * $FreeBSD: releng/11.1/include/nl_types.h 203963 2010-02-16 19:28:10Z imp $
  */
 
 #ifndef _NL_TYPES_H_

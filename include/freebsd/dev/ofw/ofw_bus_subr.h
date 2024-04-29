@@ -25,14 +25,16 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/ofw/ofw_bus_subr.h 301453 2016-06-05 16:20:12Z skra $
+ * $FreeBSD: releng/11.1/sys/dev/ofw/ofw_bus_subr.h 308373 2016-11-06 15:12:05Z jhibbits $
  */
 
 #ifndef	_DEV_OFW_OFW_BUS_SUBR_H_
 #define	_DEV_OFW_OFW_BUS_SUBR_H_
 
 #include <sys/bus.h>
-
+#ifdef INTRNG
+#include <sys/intr.h>
+#endif
 #include <dev/ofw/openfirm.h>
 
 #include "ofw_bus_if.h"
@@ -52,12 +54,14 @@ struct ofw_compat_data {
 	uintptr_t	 ocd_data;
 };
 
+#ifdef INTRNG
 struct intr_map_data_fdt {
 	struct intr_map_data	hdr;
 	phandle_t		iparent;
 	u_int			ncells;
-	pcell_t			*cells;
+	pcell_t			cells[];
 };
+#endif
 
 #define SIMPLEBUS_PNP_DESCR "Z:compat;P:private;"
 #define SIMPLEBUS_PNP_INFO(t) \
@@ -89,9 +93,7 @@ int ofw_bus_msimap(phandle_t, uint16_t, phandle_t *, uint32_t *);
 /* Routines for parsing device-tree data into resource lists. */
 int ofw_bus_reg_to_rl(device_t, phandle_t, pcell_t, pcell_t,
     struct resource_list *);
-#ifndef INTRNG
 int ofw_bus_intr_to_rl(device_t, phandle_t, struct resource_list *, int *);
-#endif
 int ofw_bus_intr_by_rid(device_t, phandle_t, int, phandle_t *, int *,
     pcell_t **);
 
@@ -105,6 +107,7 @@ phandle_t ofw_bus_find_iparent(phandle_t);
 /* Helper routine for checking compat prop */
 int ofw_bus_is_compatible(device_t, const char *);
 int ofw_bus_is_compatible_strict(device_t, const char *);
+int ofw_bus_node_is_compatible(phandle_t, const char *);
 
 /* 
  * Helper routine to search a list of compat properties.  The table is

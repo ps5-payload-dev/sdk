@@ -26,7 +26,7 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/rman.h 300317 2016-05-20 17:57:47Z jhb $
+ * $FreeBSD: releng/11.1/sys/sys/rman.h 300317 2016-05-20 17:57:47Z jhb $
  */
 
 #ifndef _SYS_RMAN_H_

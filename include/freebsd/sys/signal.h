@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)signal.h	8.4 (Berkeley) 5/4/95
- * $FreeBSD: releng/11.0/sys/sys/signal.h 301071 2016-05-31 19:05:41Z ed $
+ * $FreeBSD: releng/11.1/sys/sys/signal.h 306398 2016-09-28 09:28:26Z kib $
  */
 
 #ifndef _SYS_SIGNAL_H_
@@ -291,6 +291,7 @@ typedef	struct __siginfo {
 #define TRAP_BRKPT	1	/* Process breakpoint.			*/
 #define TRAP_TRACE	2	/* Process trace trap.			*/
 #define	TRAP_DTRACE	3	/* DTrace induced trap.			*/
+#define	TRAP_CAP	4	/* Capabilities protective trap.	*/
 
 /* codes for SIGCHLD */
 #define CLD_EXITED	1	/* Child has exited			*/

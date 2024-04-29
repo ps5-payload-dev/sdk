@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/taskqueue.h 304716 2016-08-24 01:56:30Z shurd $
+ * $FreeBSD: releng/11.1/sys/sys/taskqueue.h 315267 2017-03-14 15:59:51Z hselasky $
  */
 
 #ifndef _SYS_TASKQUEUE_H_
@@ -79,6 +79,7 @@ int	taskqueue_start_threads_cpuset(struct taskqueue **tqp, int count,
 int	taskqueue_enqueue(struct taskqueue *queue, struct task *task);
 int	taskqueue_enqueue_timeout(struct taskqueue *queue,
 	    struct timeout_task *timeout_task, int ticks);
+int	taskqueue_poll_is_busy(struct taskqueue *queue, struct task *task);
 int	taskqueue_cancel(struct taskqueue *queue, struct task *task,
 	    u_int *pendp);
 int	taskqueue_cancel_timeout(struct taskqueue *queue,

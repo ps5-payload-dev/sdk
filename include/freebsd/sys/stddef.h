@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/stddef.h 221476 2011-05-05 02:35:25Z obrien $
+ * $FreeBSD: releng/11.1/sys/sys/stddef.h 221476 2011-05-05 02:35:25Z obrien $
  */
 
 #ifndef _SYS_STDDEF_H_

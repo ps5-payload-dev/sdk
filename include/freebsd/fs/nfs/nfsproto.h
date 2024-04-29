@@ -29,7 +29,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/fs/nfs/nfsproto.h 281628 2015-04-16 22:35:15Z rmacklem $
+ * $FreeBSD: releng/11.1/sys/fs/nfs/nfsproto.h 306609 2016-10-03 00:10:14Z rmacklem $
  */
 
 #ifndef _NFS_NFSPROTO_H_
@@ -345,10 +345,10 @@
 
 /*
  * NFSPROC_NOOP is a fake op# that can't be the same as any V2/3/4 Procedure
- * or Operation#. Since the NFS V4 Op #s go higher, use NFSV41_NOPS, which
+ * or Operation#. Since the NFS V4 Op #s go higher, use NFSV42_NOPS, which
  * is one greater than the highest Op#.
  */
-#define	NFSPROC_NOOP		NFSV41_NOPS
+#define	NFSPROC_NOOP		NFSV42_NOPS
 
 /* Actual Version 2 procedure numbers */
 #define	NFSV2PROC_NULL		0

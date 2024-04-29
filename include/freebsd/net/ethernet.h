@@ -1,7 +1,7 @@
 /*
  * Fundamental constants relating to ethernet.
  *
- * $FreeBSD: releng/11.0/sys/net/ethernet.h 297358 2016-03-28 18:25:54Z gnn $
+ * $FreeBSD: releng/11.1/sys/net/ethernet.h 318604 2017-05-22 02:09:27Z sephe $
  *
  */
 

@@ -37,7 +37,7 @@
  *
  * Author: Julian Elischer <julian@freebsd.org>
  *
- * $FreeBSD: releng/11.0/sys/netgraph/netgraph.h 298813 2016-04-29 21:25:05Z pfg $
+ * $FreeBSD: releng/11.1/sys/netgraph/netgraph.h 298813 2016-04-29 21:25:05Z pfg $
  * $Whistle: netgraph.h,v 1.29 1999/11/01 07:56:13 julian Exp $
  */
 

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/x86/include/elf.h 247047 2013-02-20 17:39:52Z kib $
+ * $FreeBSD: releng/11.1/sys/x86/include/elf.h 247047 2013-02-20 17:39:52Z kib $
  */
 
 #ifndef _MACHINE_ELF_H_

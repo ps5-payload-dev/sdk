@@ -24,7 +24,7 @@
  * SUCH DAMAGE.
  *
  * $KAME: altq_red.h,v 1.8 2003/07/10 12:07:49 kjc Exp $
- * $FreeBSD: releng/11.0/sys/net/altq/altq_red.h 281613 2015-04-16 20:22:40Z glebius $
+ * $FreeBSD: releng/11.1/sys/net/altq/altq_red.h 281613 2015-04-16 20:22:40Z glebius $
  */
 
 #ifndef _ALTQ_ALTQ_RED_H_

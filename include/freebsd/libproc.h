@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/lib/libproc/libproc.h 272488 2014-10-03 23:20:37Z markj $
+ * $FreeBSD: releng/11.1/lib/libproc/libproc.h 316713 2017-04-11 17:36:19Z markj $
  */
 
 #ifndef	_LIBPROC_H_
@@ -154,4 +154,4 @@ int	proc_regset(struct proc_handle *, proc_reg_t, unsigned long);
 
 __END_DECLS
 
-#endif /* !_LIBPROC_H_ */
+#endif /* _LIBPROC_H_ */

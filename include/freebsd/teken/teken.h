@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/teken/teken.h 259667 2013-12-20 21:31:50Z ed $
+ * $FreeBSD: releng/11.1/sys/teken/teken.h 259667 2013-12-20 21:31:50Z ed $
  */
 
 #ifndef _TEKEN_H_

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/ofw/ofwpci.h 297392 2016-03-29 15:19:56Z zbb $
+ * $FreeBSD: releng/11.1/sys/dev/ofw/ofwpci.h 307347 2016-10-15 09:09:25Z mmel $
  */
 
 #ifndef _DEV_OFW_OFWPCI_H_
@@ -60,15 +60,19 @@ struct ofw_pci_softc {
 	int		sc_bus;
 	int		sc_initialized;
 	int		sc_quirks;
+	int		sc_have_pmem;
 
 	struct ofw_pci_range		*sc_range;
 	int				sc_nrange;
+	uint64_t			sc_range_mask;
 	struct ofw_pci_cell_info	*sc_cell_info;
 
 	struct rman			sc_io_rman;
 	struct rman			sc_mem_rman;
+	struct rman			sc_pmem_rman;
 	bus_space_tag_t			sc_memt;
 	bus_dma_tag_t			sc_dmat;
+	int				sc_pci_domain;
 
 	struct ofw_bus_iinfo		sc_pci_iinfo;
 };

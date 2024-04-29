@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)uio.h	8.5 (Berkeley) 2/22/94
- * $FreeBSD: releng/11.0/sys/sys/uio.h 291716 2015-12-03 20:54:55Z ken $
+ * $FreeBSD: releng/11.1/sys/sys/uio.h 291716 2015-12-03 20:54:55Z ken $
  */
 
 #ifndef _SYS_UIO_H_

@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ioctl.h	8.6 (Berkeley) 3/28/94
- * $FreeBSD: releng/11.0/sys/sys/ioctl.h 191947 2009-05-09 19:01:24Z ed $
+ * $FreeBSD: releng/11.1/sys/sys/ioctl.h 191947 2009-05-09 19:01:24Z ed $
  */
 
 #ifndef	_SYS_IOCTL_H_

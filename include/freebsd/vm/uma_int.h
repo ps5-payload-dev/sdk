@@ -24,7 +24,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/vm/uma_int.h 302393 2016-07-07 18:37:12Z cperciva $
+ * $FreeBSD: releng/11.1/sys/vm/uma_int.h 316834 2017-04-14 14:11:49Z avg $
  *
  */
 
@@ -210,7 +210,6 @@ struct uma_keg {
 	vm_offset_t	uk_kva;		/* Zone base KVA */
 	uma_zone_t	uk_slabzone;	/* Slab zone backing us, if OFFPAGE */
 
-	uint16_t	uk_slabsize;	/* Slab size for this keg */
 	uint16_t	uk_pgoff;	/* Offset to uma_slab struct */
 	uint16_t	uk_ppera;	/* pages per allocation from backend */
 	uint16_t	uk_ipers;	/* Items per slab */

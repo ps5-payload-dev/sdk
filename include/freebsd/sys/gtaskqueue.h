@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/gtaskqueue.h 304716 2016-08-24 01:56:30Z shurd $
+ * $FreeBSD: releng/11.1/sys/sys/gtaskqueue.h 304704 2016-08-23 21:21:56Z shurd $
  */
 
 #ifndef _SYS_GTASKQUEUE_H_

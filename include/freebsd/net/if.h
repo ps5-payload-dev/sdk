@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)if.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: releng/11.0/sys/net/if.h 301496 2016-06-06 09:51:58Z araujo $
+ * $FreeBSD: releng/11.1/sys/net/if.h 301496 2016-06-06 09:51:58Z araujo $
  */
 
 #ifndef _NET_IF_H_

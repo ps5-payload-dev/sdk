@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.0/sys/opencrypto/cryptodev.h 286292 2015-08-04 17:47:11Z jmg $	*/
+/*	$FreeBSD: releng/11.1/sys/opencrypto/cryptodev.h 286292 2015-08-04 17:47:11Z jmg $	*/
 /*	$OpenBSD: cryptodev.h,v 1.31 2002/06/11 11:14:29 beck Exp $	*/
 
 /*-

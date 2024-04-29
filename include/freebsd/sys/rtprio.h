@@ -28,7 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/rtprio.h 165898 2007-01-08 21:21:45Z imp $
+ * $FreeBSD: releng/11.1/sys/sys/rtprio.h 165898 2007-01-08 21:21:45Z imp $
  */
 
 #ifndef _SYS_RTPRIO_H_

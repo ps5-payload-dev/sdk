@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/ofw/ofwvar.h 194138 2009-06-14 00:05:38Z marius $
+ * $FreeBSD: releng/11.1/sys/dev/ofw/ofwvar.h 194138 2009-06-14 00:05:38Z marius $
  */
 
 #ifndef _DEV_OFW_OFWVAR_H_

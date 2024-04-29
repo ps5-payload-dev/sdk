@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/x86/include/metadata.h 293343 2016-01-07 19:47:26Z emaste $
+ * $FreeBSD: releng/11.1/sys/x86/include/metadata.h 293343 2016-01-07 19:47:26Z emaste $
  */
 
 #ifndef _MACHINE_METADATA_H_

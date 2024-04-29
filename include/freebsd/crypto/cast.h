@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.0/sys/opencrypto/cast.h 139825 2005-01-07 02:29:27Z imp $	*/
+/*	$FreeBSD: releng/11.1/sys/opencrypto/cast.h 139825 2005-01-07 02:29:27Z imp $	*/
 /*      $OpenBSD: cast.h,v 1.2 2002/03/14 01:26:51 millert Exp $       */
 
 /*-

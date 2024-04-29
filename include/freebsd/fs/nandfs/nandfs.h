@@ -25,7 +25,7 @@
  *
  * From: NetBSD: nilfs.h,v 1.1 2009/07/18 16:31:42 reinoud
  *
- * $FreeBSD: releng/11.0/sys/fs/nandfs/nandfs.h 268374 2014-07-07 23:21:07Z imp $
+ * $FreeBSD: releng/11.1/sys/fs/nandfs/nandfs.h 268374 2014-07-07 23:21:07Z imp $
  */
 
 #ifndef _FS_NANDFS_NANDFS_H_

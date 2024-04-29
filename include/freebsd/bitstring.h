@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/include/bitstring.h 299090 2016-05-04 22:34:11Z asomers $
+ * $FreeBSD: releng/11.1/include/bitstring.h 299090 2016-05-04 22:34:11Z asomers $
  */
 
 #ifndef _BITSTRING_H_

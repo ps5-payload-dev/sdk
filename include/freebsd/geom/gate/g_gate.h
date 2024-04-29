@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/geom/gate/g_gate.h 238119 2012-07-04 20:16:28Z pjd $
+ * $FreeBSD: releng/11.1/sys/geom/gate/g_gate.h 238119 2012-07-04 20:16:28Z pjd $
  */
 
 #ifndef _G_GATE_H_

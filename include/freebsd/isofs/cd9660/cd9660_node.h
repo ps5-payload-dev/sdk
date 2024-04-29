@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)cd9660_node.h	8.6 (Berkeley) 5/14/95
- * $FreeBSD: releng/11.0/sys/fs/cd9660/cd9660_node.h 187838 2009-01-28 18:54:56Z jhb $
+ * $FreeBSD: releng/11.1/sys/fs/cd9660/cd9660_node.h 187838 2009-01-28 18:54:56Z jhb $
  */
 
 /*

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.0/sys/sys/agpio.h 235782 2012-05-22 10:59:26Z kib $
+ *	$FreeBSD: releng/11.1/sys/sys/agpio.h 235782 2012-05-22 10:59:26Z kib $
  */
 
 #ifndef _SYS_AGPIO_H_

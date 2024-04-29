@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/boot.h 263005 2014-03-11 10:13:06Z royger $
+ * $FreeBSD: releng/11.1/sys/sys/boot.h 263005 2014-03-11 10:13:06Z royger $
  */
 
 #ifndef _SYS_BOOT_H_

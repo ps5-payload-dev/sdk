@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/iicbus/iiconf.h 298955 2016-05-03 03:41:25Z pfg $
+ * $FreeBSD: releng/11.1/sys/dev/iicbus/iiconf.h 298955 2016-05-03 03:41:25Z pfg $
  */
 #ifndef __IICONF_H
 #define __IICONF_H

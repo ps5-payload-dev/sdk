@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)if_dl.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: releng/11.0/sys/net/if_dl.h 287476 2015-09-05 05:33:20Z melifaro $
+ * $FreeBSD: releng/11.1/sys/net/if_dl.h 287476 2015-09-05 05:33:20Z melifaro $
  */
 
 #ifndef _NET_IF_DL_H_

@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/lib/libcasper/services/cap_grp/cap_grp.h 296047 2016-02-25 18:23:40Z oshogbo $
+ * $FreeBSD: releng/11.1/lib/libcasper/services/cap_grp/cap_grp.h 296047 2016-02-25 18:23:40Z oshogbo $
  */
 
 #ifndef	_CAP_GRP_H_

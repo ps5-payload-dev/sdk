@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/include/inttypes.h 263998 2014-04-01 14:46:11Z tijl $
+ * $FreeBSD: releng/11.1/include/inttypes.h 263998 2014-04-01 14:46:11Z tijl $
  */
 
 #ifndef _INTTYPES_H_

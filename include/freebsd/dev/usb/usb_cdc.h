@@ -1,5 +1,5 @@
 /*	$NetBSD: usbcdc.h,v 1.9 2004/10/23 13:24:24 augustss Exp $	*/
-/*	$FreeBSD: releng/11.0/sys/dev/usb/usb_cdc.h 298932 2016-05-02 17:44:03Z pfg $	*/
+/*	$FreeBSD: releng/11.1/sys/dev/usb/usb_cdc.h 298932 2016-05-02 17:44:03Z pfg $	*/
 
 /*-
  * Copyright (c) 1998 The NetBSD Foundation, Inc.

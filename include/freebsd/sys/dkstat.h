@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)dkstat.h	8.2 (Berkeley) 1/21/94
- * $FreeBSD: releng/11.0/sys/sys/dkstat.h 127976 2004-04-07 04:19:52Z imp $
+ * $FreeBSD: releng/11.1/sys/sys/dkstat.h 127976 2004-04-07 04:19:52Z imp $
  */
 
 #ifndef _SYS_DKSTAT_H_

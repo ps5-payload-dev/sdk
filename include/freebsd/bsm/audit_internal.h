@@ -30,7 +30,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/bsm/audit_internal.h 292522 2015-12-20 23:22:04Z brueffer $
+ * $FreeBSD: releng/11.1/sys/bsm/audit_internal.h 292522 2015-12-20 23:22:04Z brueffer $
  */
 
 #ifndef _AUDIT_INTERNAL_H

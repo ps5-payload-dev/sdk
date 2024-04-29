@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.0/sys/sys/msg.h 286088 2015-07-30 18:59:01Z rodrigc $ */
+/* $FreeBSD: releng/11.1/sys/sys/msg.h 286088 2015-07-30 18:59:01Z rodrigc $ */
 /*	$NetBSD: msg.h,v 1.4 1994/06/29 06:44:43 cgd Exp $	*/
 
 /*-

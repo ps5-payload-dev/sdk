@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/pmckern.h 260393 2014-01-07 14:03:42Z attilio $
+ * $FreeBSD: releng/11.1/sys/sys/pmckern.h 315285 2017-03-14 20:43:04Z mjg $
  */
 
 /*
@@ -173,6 +173,9 @@ extern const int pmc_kernel_version;
 
 /* PMC soft per cpu trapframe */
 extern struct trapframe pmc_tf[MAXCPU];
+
+/* Quick check if preparatory work is necessary */
+#define	PMC_HOOK_INSTALLED(cmd)	__predict_false(pmc_hook != NULL)
 
 /* Hook invocation; for use within the kernel */
 #define	PMC_CALL_HOOK(t, cmd, arg)		\

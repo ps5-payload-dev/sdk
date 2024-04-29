@@ -9,7 +9,7 @@
  */
 
 /* From: zutil.h,v 1.16 1996/07/24 13:41:13 me Exp $ */
-/* $FreeBSD: releng/11.0/sys/sys/zutil.h 281855 2015-04-22 14:38:58Z rodrigc $ */
+/* $FreeBSD: releng/11.1/sys/sys/zutil.h 281855 2015-04-22 14:38:58Z rodrigc $ */
 
 #ifndef _Z_UTIL_H
 #define _Z_UTIL_H

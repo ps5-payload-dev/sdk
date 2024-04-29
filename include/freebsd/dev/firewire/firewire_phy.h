@@ -30,7 +30,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/firewire/firewire_phy.h 272214 2014-09-27 16:50:21Z kan $
+ * $FreeBSD: releng/11.1/sys/dev/firewire/firewire_phy.h 272214 2014-09-27 16:50:21Z kan $
  *
  */
 

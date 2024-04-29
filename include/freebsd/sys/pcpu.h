@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/pcpu.h 299108 2016-05-05 02:51:31Z ngie $
+ * $FreeBSD: releng/11.1/sys/sys/pcpu.h 299108 2016-05-05 02:51:31Z ngie $
  */
 
 #ifndef _SYS_PCPU_H_

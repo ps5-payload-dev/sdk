@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)mtio.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: releng/11.0/sys/sys/mtio.h 279219 2015-02-23 21:59:30Z ken $
+ * $FreeBSD: releng/11.1/sys/sys/mtio.h 279219 2015-02-23 21:59:30Z ken $
  */
 
 #ifndef	_SYS_MTIO_H_

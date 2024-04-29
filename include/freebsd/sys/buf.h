@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)buf.h	8.9 (Berkeley) 3/30/95
- * $FreeBSD: releng/11.0/sys/sys/buf.h 298981 2016-05-03 15:14:17Z pfg $
+ * $FreeBSD: releng/11.1/sys/sys/buf.h 308554 2016-11-11 20:18:08Z kib $
  */
 
 #ifndef _SYS_BUF_H_
@@ -68,6 +68,7 @@ extern struct bio_ops {
 } bioops;
 
 struct vm_object;
+struct vm_page;
 
 typedef unsigned char b_xflags_t;
 
@@ -546,6 +547,12 @@ void	bdone(struct buf *);
 void	bpin(struct buf *);
 void	bunpin(struct buf *);
 void 	bunpin_wait(struct buf *);
+
+typedef daddr_t (vbg_get_lblkno_t)(struct vnode *, vm_ooffset_t);
+typedef int (vbg_get_blksize_t)(struct vnode *, daddr_t);
+int	vfs_bio_getpages(struct vnode *vp, struct vm_page **ma, int count,
+	    int *rbehind, int *rahead, vbg_get_lblkno_t get_lblkno,
+	    vbg_get_blksize_t get_blksize);
 
 #endif /* _KERNEL */
 

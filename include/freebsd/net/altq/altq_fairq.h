@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  * 
  * $DragonFly: src/sys/net/altq/altq_fairq.h,v 1.1 2008/04/06 18:58:15 dillon Exp $
- * $FreeBSD: releng/11.0/sys/net/altq/altq_fairq.h 287009 2015-08-21 22:02:22Z loos $
+ * $FreeBSD: releng/11.1/sys/net/altq/altq_fairq.h 287009 2015-08-21 22:02:22Z loos $
  */
 
 #ifndef _ALTQ_ALTQ_FAIRQ_H_

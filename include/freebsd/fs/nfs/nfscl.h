@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/fs/nfs/nfscl.h 244042 2012-12-08 22:52:39Z rmacklem $
+ * $FreeBSD: releng/11.1/sys/fs/nfs/nfscl.h 244042 2012-12-08 22:52:39Z rmacklem $
  */
 
 #ifndef	_NFS_NFSCL_H

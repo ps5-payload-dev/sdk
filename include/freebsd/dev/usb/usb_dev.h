@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.0/sys/dev/usb/usb_dev.h 246759 2013-02-13 12:35:17Z hselasky $ */
+/* $FreeBSD: releng/11.1/sys/dev/usb/usb_dev.h 246759 2013-02-13 12:35:17Z hselasky $ */
 /*-
  * Copyright (c) 2008 Hans Petter Selasky. All rights reserved.
  *

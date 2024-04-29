@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/lib/libprocstat/libprocstat.h 255219 2013-09-05 00:09:56Z pjd $
+ * $FreeBSD: releng/11.1/lib/libprocstat/libprocstat.h 255219 2013-09-05 00:09:56Z pjd $
  */
 
 #ifndef _LIBPROCSTAT_H_

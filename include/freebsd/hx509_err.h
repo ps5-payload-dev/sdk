@@ -1,4 +1,4 @@
-/* Generated from /usr/src/kerberos5/lib/libhx509/../../../crypto/heimdal/lib/hx509/hx509_err.et */
+/* Generated from /usr/src/crypto/heimdal/lib/hx509/hx509_err.et */
 /* $Id$ */
 
 #ifndef __hx509_err_h__

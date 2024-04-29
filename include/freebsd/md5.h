@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.0/lib/libmd/md5.h 300824 2016-05-27 05:31:14Z cem $ */
+/* $FreeBSD: releng/11.1/lib/libmd/md5.h 310372 2016-12-21 18:42:04Z emaste $ */
 
 #ifndef _MD5_H_
 #define _MD5_H_
@@ -25,6 +25,12 @@
 #ifndef MD5End
 #define MD5End		_libmd_MD5End
 #endif
+#ifndef MD5Fd
+#define MD5Fd		_libmd_MD5Fd
+#endif
+#ifndef MD5FdChunk
+#define MD5FdChunk	_libmd_MD5FdChunk
+#endif
 #ifndef MD5File
 #define MD5File		_libmd_MD5File
 #endif
@@ -37,13 +43,5 @@
 
 #endif
 
-#ifdef __cplusplus
-#define static
-#endif
-
 #include <sys/md5.h>
-
-#ifdef __cplusplus
-#undef static
-#endif
 #endif /* _MD5_H_ */

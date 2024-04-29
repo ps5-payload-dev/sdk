@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ttyent.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: releng/11.0/include/ttyent.h 260913 2014-01-20 18:15:06Z nwhitehorn $
+ * $FreeBSD: releng/11.1/include/ttyent.h 260913 2014-01-20 18:15:06Z nwhitehorn $
  */
 
 #ifndef	_TTYENT_H_

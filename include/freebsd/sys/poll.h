@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/poll.h 274462 2014-11-13 05:26:14Z dchagin $
+ * $FreeBSD: releng/11.1/sys/sys/poll.h 274462 2014-11-13 05:26:14Z dchagin $
  */
 
 #ifndef _SYS_POLL_H_

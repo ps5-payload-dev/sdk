@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.0/lib/libusb/libusb.h 302171 2016-06-24 10:55:14Z hselasky $ */
+/* $FreeBSD: releng/11.1/lib/libusb/libusb.h 302171 2016-06-24 10:55:14Z hselasky $ */
 /*-
  * Copyright (c) 2009 Sylvestre Gallon. All rights reserved.
  *

@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.0/sys/dev/ic/wd33c93reg.h 139749 2005-01-06 01:43:34Z imp $ */
+/* $FreeBSD: releng/11.1/sys/dev/ic/wd33c93reg.h 139749 2005-01-06 01:43:34Z imp $ */
 /*	$NecBSD: wd33c93reg.h,v 1.21.24.1 2001/06/13 05:52:05 honda Exp $	*/
 /*	$NetBSD$	*/
 /*-

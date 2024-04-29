@@ -32,7 +32,7 @@
 
 #ifndef RPC_HDR
 %#include <sys/cdefs.h>
-%__FBSDID("$FreeBSD: releng/11.0/include/rpcsvc/crypt.x 114629 2003-05-04 02:51:42Z obrien $");
+%__FBSDID("$FreeBSD: releng/11.1/include/rpcsvc/crypt.x 114629 2003-05-04 02:51:42Z obrien $");
 #endif
 
 /*

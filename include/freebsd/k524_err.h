@@ -1,4 +1,4 @@
-/* Generated from /usr/src/kerberos5/lib/libkrb5/../../../crypto/heimdal/lib/krb5/k524_err.et */
+/* Generated from /usr/src/crypto/heimdal/lib/krb5/k524_err.et */
 /* $Id$ */
 
 #ifndef __k524_err_h__

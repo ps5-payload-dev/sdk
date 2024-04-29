@@ -26,7 +26,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  *
- * $FreeBSD: releng/11.0/sys/vm/vm_domain.h 285387 2015-07-11 15:21:37Z adrian $
+ * $FreeBSD: releng/11.1/sys/vm/vm_domain.h 285387 2015-07-11 15:21:37Z adrian $
  */
 #ifndef	__VM_DOMAIN_H__
 #define	__VM_DOMAIN_H__

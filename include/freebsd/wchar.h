@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/include/wchar.h 300998 2016-05-30 16:26:34Z ed $
+ * $FreeBSD: releng/11.1/include/wchar.h 300998 2016-05-30 16:26:34Z ed $
  */
 
 /*-

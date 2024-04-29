@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/devmap.h 298627 2016-04-26 11:53:37Z br $
+ * $FreeBSD: releng/11.1/sys/sys/devmap.h 298627 2016-04-26 11:53:37Z br $
  */
 
 #ifndef	_SYS_DEVMAP_H_

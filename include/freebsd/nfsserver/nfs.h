@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)nfs.h	8.4 (Berkeley) 5/1/95
- * $FreeBSD: releng/11.0/sys/nfsserver/nfs.h 241896 2012-10-22 17:50:54Z kib $
+ * $FreeBSD: releng/11.1/sys/nfsserver/nfs.h 241896 2012-10-22 17:50:54Z kib $
  */
 
 #ifndef _NFSSERVER_NFS_H_

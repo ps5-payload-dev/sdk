@@ -22,7 +22,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/fs/nandfs/bmap.h 235537 2012-05-17 10:11:18Z gber $
+ * $FreeBSD: releng/11.1/sys/fs/nandfs/bmap.h 235537 2012-05-17 10:11:18Z gber $
  */
 
 #ifndef _BMAP_H

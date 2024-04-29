@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)nfsrvcache.h	8.3 (Berkeley) 3/30/95
- * $FreeBSD: releng/11.0/sys/nfsserver/nfsrvcache.h 195202 2009-06-30 19:03:27Z dfr $
+ * $FreeBSD: releng/11.1/sys/nfsserver/nfsrvcache.h 195202 2009-06-30 19:03:27Z dfr $
  */
 
 #ifndef _NFSSERVER_NFSRVCACHE_H_

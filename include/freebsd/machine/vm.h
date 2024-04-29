@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/amd64/include/vm.h 281887 2015-04-23 14:22:20Z jhb $
+ * $FreeBSD: releng/11.1/sys/amd64/include/vm.h 281887 2015-04-23 14:22:20Z jhb $
  */
 
 #ifndef _MACHINE_VM_H_

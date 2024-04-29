@@ -67,7 +67,7 @@
  *
  * OpenBSD: if_bridge.h,v 1.14 2001/03/22 03:48:29 jason Exp
  *
- * $FreeBSD: releng/11.0/sys/net/if_bridgevar.h 173320 2007-11-04 08:32:27Z thompsa $
+ * $FreeBSD: releng/11.1/sys/net/if_bridgevar.h 313050 2017-02-01 20:27:38Z kp $
  */
 
 /*
@@ -280,6 +280,7 @@ struct ifbpstpconf {
 #define BRIDGE_LOCK(_sc)		mtx_lock(&(_sc)->sc_mtx)
 #define BRIDGE_UNLOCK(_sc)		mtx_unlock(&(_sc)->sc_mtx)
 #define BRIDGE_LOCK_ASSERT(_sc)		mtx_assert(&(_sc)->sc_mtx, MA_OWNED)
+#define BRIDGE_UNLOCK_ASSERT(_sc)	mtx_assert(&(_sc)->sc_mtx, MA_NOTOWNED)
 #define	BRIDGE_LOCK2REF(_sc, _err)	do {	\
 	mtx_assert(&(_sc)->sc_mtx, MA_OWNED);	\
 	if ((_sc)->sc_iflist_xcnt > 0)		\

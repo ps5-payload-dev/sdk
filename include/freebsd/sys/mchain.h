@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/mchain.h 227650 2011-11-18 03:05:20Z kevlo $
+ * $FreeBSD: releng/11.1/sys/sys/mchain.h 227650 2011-11-18 03:05:20Z kevlo $
  */
 #ifndef _SYS_MCHAIN_H_
 #define _SYS_MCHAIN_H_

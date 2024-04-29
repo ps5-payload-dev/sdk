@@ -54,7 +54,7 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/ofw/openfirm.h 299477 2016-05-11 18:20:02Z gonzo $
+ * $FreeBSD: releng/11.1/sys/dev/ofw/openfirm.h 299477 2016-05-11 18:20:02Z gonzo $
  */
 
 #ifndef _DEV_OPENFIRM_H_

@@ -4,12 +4,16 @@
  * See the IPFILTER.LICENCE file for details on licencing.
  *
  * @(#)ip_fil.h	1.35 6/5/96
- * $FreeBSD: releng/11.0/sys/contrib/ipfilter/netinet/ip_fil.h 302289 2016-06-30 01:32:12Z bz $
+ * $FreeBSD: releng/11.1/sys/contrib/ipfilter/netinet/ip_fil.h 319179 2017-05-30 03:33:48Z cy $
  * Id: ip_fil.h,v 2.170.2.51 2007/10/10 09:48:03 darrenr Exp $
  */
 
 #ifndef	__IP_FIL_H__
 #define	__IP_FIL_H__
+
+#if !defined(linux) || !defined(_KERNEL)
+# include <netinet/in.h>
+#endif
 
 #include "netinet/ip_compat.h"
 #include "netinet/ipf_rb.h"
@@ -24,12 +28,12 @@
 # endif
 #endif
 
-#if !defined(linux) || !defined(_KERNEL)
-# include <netinet/in.h>
-#endif
-
 #ifndef	SOLARIS
-# define SOLARIS (defined(sun) && (defined(__svr4__) || defined(__SVR4)))
+# if defined(sun) && (defined(__svr4__) || defined(__SVR4))
+#  define	SOLARIS		1
+# else
+#  define	SOLARIS		0
+# endif
 #endif
 
 #ifndef	__P
@@ -139,32 +143,20 @@ typedef	int	(* lookupfunc_t) __P((struct ipf_main_softc_s *, void *,
  * i6addr is used as a container for both IPv4 and IPv6 addresses, as well
  * as other types of objects, depending on its qualifier.
  */
+typedef	union	i6addr	{
+	u_32_t	i6[4];
+	struct	in_addr	in4;
 #ifdef	USE_INET6
-typedef	union	i6addr	{
-	u_32_t	i6[4];
-	struct	in_addr	in4;
 	struct	in6_addr in6;
-	void	*vptr[2];
-	lookupfunc_t	lptr[2];
-	struct {
-		u_short	type;
-		u_short	subtype;
-		int	name;
-	} i6un;
-} i6addr_t;
-#else
-typedef	union	i6addr	{
-	u_32_t	i6[4];
-	struct	in_addr	in4;
-	void	*vptr[2];
-	lookupfunc_t	lptr[2];
-	struct {
-		u_short	type;
-		u_short	subtype;
-		int	name;
-	} i6un;
-} i6addr_t;
 #endif
+	void	*vptr[2];
+	lookupfunc_t	lptr[2];
+	struct {
+		u_short	type;
+		u_short	subtype;
+		int	name;
+	} i6un;
+} i6addr_t;
 
 #define in4_addr	in4.s_addr
 #define	iplookupnum	i6[1]

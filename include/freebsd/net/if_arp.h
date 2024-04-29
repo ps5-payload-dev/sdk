@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)if_arp.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: releng/11.0/sys/net/if_arp.h 274231 2014-11-07 15:14:10Z glebius $
+ * $FreeBSD: releng/11.1/sys/net/if_arp.h 274231 2014-11-07 15:14:10Z glebius $
  */
 
 #ifndef _NET_IF_ARP_H_

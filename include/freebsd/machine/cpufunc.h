@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/amd64/include/cpufunc.h 291688 2015-12-03 11:14:14Z kib $
+ * $FreeBSD: releng/11.1/sys/amd64/include/cpufunc.h 313148 2017-02-03 12:03:10Z kib $
  */
 
 /*
@@ -324,6 +324,13 @@ mfence(void)
 {
 
 	__asm __volatile("mfence" : : : "memory");
+}
+
+static __inline void
+sfence(void)
+{
+
+	__asm __volatile("sfence" : : : "memory");
 }
 
 static __inline void
@@ -645,9 +652,33 @@ load_gs(u_short sel)
 #endif
 
 static __inline void
+bare_lgdt(struct region_descriptor *addr)
+{
+	__asm __volatile("lgdt (%0)" : : "r" (addr));
+}
+
+static __inline void
+sgdt(struct region_descriptor *addr)
+{
+	char *loc;
+
+	loc = (char *)addr;
+	__asm __volatile("sgdt %0" : "=m" (*loc) : : "memory");
+}
+
+static __inline void
 lidt(struct region_descriptor *addr)
 {
 	__asm __volatile("lidt (%0)" : : "r" (addr));
+}
+
+static __inline void
+sidt(struct region_descriptor *addr)
+{
+	char *loc;
+
+	loc = (char *)addr;
+	__asm __volatile("sidt %0" : "=m" (*loc) : : "memory");
 }
 
 static __inline void
@@ -660,6 +691,15 @@ static __inline void
 ltr(u_short sel)
 {
 	__asm __volatile("ltr %0" : : "r" (sel));
+}
+
+static __inline uint32_t
+read_tr(void)
+{
+	u_short sel;
+
+	__asm __volatile("str %0" : "=r" (sel));
+	return (sel);
 }
 
 static __inline uint64_t

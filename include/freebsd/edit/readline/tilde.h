@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/lib/libedit/edit/readline/tilde.h 234690 2012-04-26 00:51:43Z obrien $
+ * $FreeBSD: releng/11.1/lib/libedit/edit/readline/tilde.h 234690 2012-04-26 00:51:43Z obrien $
  */
 
 #include <edit/readline/readline.h>

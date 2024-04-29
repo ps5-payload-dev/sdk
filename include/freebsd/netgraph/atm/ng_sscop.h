@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/netgraph/atm/ng_sscop.h 139823 2005-01-07 01:45:51Z imp $
+ * $FreeBSD: releng/11.1/sys/netgraph/atm/ng_sscop.h 139823 2005-01-07 01:45:51Z imp $
  *
  * Netgraph module for Q.2110 SSCOP
  */

@@ -31,7 +31,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  * 
- * $FreeBSD: releng/11.0/sys/dev/firewire/if_fwevar.h 170374 2007-06-06 14:31:36Z simokawa $
+ * $FreeBSD: releng/11.1/sys/dev/firewire/if_fwevar.h 170374 2007-06-06 14:31:36Z simokawa $
  */
 
 #ifndef _NET_IF_FWEVAR_H_

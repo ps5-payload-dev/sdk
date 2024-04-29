@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.0/sys/dev/agp/agpreg.h 296719 2016-03-12 09:44:23Z dumbbell $
+ *	$FreeBSD: releng/11.1/sys/dev/agp/agpreg.h 296719 2016-03-12 09:44:23Z dumbbell $
  */
 
 #ifndef _PCI_AGPREG_H_

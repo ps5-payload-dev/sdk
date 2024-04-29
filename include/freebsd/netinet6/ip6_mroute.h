@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	$KAME: ip6_mroute.h,v 1.19 2001/06/14 06:12:55 suz Exp $
- * $FreeBSD: releng/11.0/sys/netinet6/ip6_mroute.h 281172 2015-04-06 22:12:18Z glebius $
+ * $FreeBSD: releng/11.1/sys/netinet6/ip6_mroute.h 281172 2015-04-06 22:12:18Z glebius $
  */
 
 /*	BSDI ip_mroute.h,v 2.5 1996/10/11 16:01:48 pjd Exp	*/

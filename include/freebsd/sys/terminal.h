@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/terminal.h 273932 2014-11-01 17:05:15Z dumbbell $
+ * $FreeBSD: releng/11.1/sys/sys/terminal.h 273932 2014-11-01 17:05:15Z dumbbell $
  */
 
 #ifndef _SYS_TERMINAL_H_

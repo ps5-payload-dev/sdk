@@ -36,7 +36,7 @@
  *
  *	@(#)ar.h	8.2 (Berkeley) 1/21/94
  *
- * $FreeBSD: releng/11.0/include/ar.h 203964 2010-02-16 19:39:50Z imp $
+ * $FreeBSD: releng/11.1/include/ar.h 203964 2010-02-16 19:39:50Z imp $
  */
 
 #ifndef _AR_H_

@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)db.h	8.7 (Berkeley) 6/16/94
- * $FreeBSD: releng/11.0/include/db.h 203964 2010-02-16 19:39:50Z imp $
+ * $FreeBSD: releng/11.1/include/db.h 203964 2010-02-16 19:39:50Z imp $
  */
 
 #ifndef _DB_H_

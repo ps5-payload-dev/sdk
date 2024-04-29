@@ -37,7 +37,7 @@
  *
  * From: src/sys/sys/vnioctl.h,v 1.4
  *
- * $FreeBSD: releng/11.0/sys/sys/mdioctl.h 258909 2013-12-04 07:38:23Z trasz $
+ * $FreeBSD: releng/11.1/sys/sys/mdioctl.h 258909 2013-12-04 07:38:23Z trasz $
  */
 
 #ifndef _SYS_MDIOCTL_H_

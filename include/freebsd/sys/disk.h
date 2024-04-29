@@ -6,7 +6,7 @@
  * this stuff is worth it, you can buy me a beer in return.   Poul-Henning Kamp
  * ----------------------------------------------------------------------------
  *
- * $FreeBSD: releng/11.0/sys/sys/disk.h 300207 2016-05-19 14:08:36Z ken $
+ * $FreeBSD: releng/11.1/sys/sys/disk.h 300207 2016-05-19 14:08:36Z ken $
  *
  */
 

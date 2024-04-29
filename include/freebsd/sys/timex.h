@@ -18,7 +18,7 @@
  *								       *
  ***********************************************************************
  *
- * $FreeBSD: releng/11.0/sys/sys/timex.h 298981 2016-05-03 15:14:17Z pfg $
+ * $FreeBSD: releng/11.1/sys/sys/timex.h 298981 2016-05-03 15:14:17Z pfg $
  *
  * This header file defines the Network Time Protocol (NTP) interfaces
  * for user and daemon application programs.

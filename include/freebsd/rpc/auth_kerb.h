@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.0/include/rpc/auth_kerb.h 258578 2013-11-25 19:04:36Z hrs $ */
+/*	$FreeBSD: releng/11.1/include/rpc/auth_kerb.h 258578 2013-11-25 19:04:36Z hrs $ */
 /*-
  * Copyright (c) 2009, Sun Microsystems, Inc.
  * All rights reserved.

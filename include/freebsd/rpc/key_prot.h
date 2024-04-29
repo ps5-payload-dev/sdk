@@ -45,7 +45,7 @@ extern "C" {
 /* From: #pragma ident	"@(#)key_prot.x	1.7	94/04/29 SMI" */
 /* Copyright (c)  1990, 1991 Sun Microsystems, Inc. */
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: releng/11.0/include/rpcsvc/key_prot.x 259117 2013-12-09 04:26:50Z hrs $");
+__FBSDID("$FreeBSD: releng/11.1/include/rpcsvc/key_prot.x 259117 2013-12-09 04:26:50Z hrs $");
 
 /* 
  * Compiled from key_prot.x using rpcgen.

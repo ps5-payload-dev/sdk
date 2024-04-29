@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)fcntl.h	8.3 (Berkeley) 1/21/94
- * $FreeBSD: releng/11.0/sys/sys/fcntl.h 294205 2016-01-17 08:40:51Z kib $
+ * $FreeBSD: releng/11.1/sys/sys/fcntl.h 294205 2016-01-17 08:40:51Z kib $
  */
 
 #ifndef _SYS_FCNTL_H_

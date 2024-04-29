@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/io/iodev.h 207329 2010-04-28 15:38:01Z attilio $
+ * $FreeBSD: releng/11.1/sys/dev/io/iodev.h 207329 2010-04-28 15:38:01Z attilio $
  */
 
 #ifndef _DEV_IODEV_H_

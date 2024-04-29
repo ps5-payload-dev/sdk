@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)dir.h	8.2 (Berkeley) 1/4/94
- * $FreeBSD: releng/11.0/sys/sys/dir.h 143063 2005-03-02 21:33:29Z joerg $
+ * $FreeBSD: releng/11.1/sys/sys/dir.h 143063 2005-03-02 21:33:29Z joerg $
  */
 
 #ifndef _SYS_DIR_H_

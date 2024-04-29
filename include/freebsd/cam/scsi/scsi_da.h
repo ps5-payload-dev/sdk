@@ -46,7 +46,7 @@
  *
  * Ported to run under 386BSD by Julian Elischer (julian@tfs.com) Sept 1992
  *
- * $FreeBSD: releng/11.0/sys/cam/scsi/scsi_da.h 300207 2016-05-19 14:08:36Z ken $
+ * $FreeBSD: releng/11.1/sys/cam/scsi/scsi_da.h 311399 2017-01-05 11:03:58Z mav $
  */
 
 #ifndef	_SCSI_SCSI_DA_H
@@ -631,6 +631,20 @@ struct scsi_da_rw_recovery_page {
 #define SMS_RWER_LBPERE			0x80
 	u_int8_t write_retry_count;
 	u_int8_t reserved2;
+	u_int8_t recovery_time_limit[2];
+};
+
+struct scsi_da_verify_recovery_page {
+	u_int8_t page_code;
+#define SMS_VERIFY_ERROR_RECOVERY_PAGE	0x07
+	u_int8_t page_length;
+	u_int8_t byte3;
+#define SMS_VER_EER			0x08
+#define SMS_VER_PER			0x04
+#define SMS_VER_DTE			0x02
+#define SMS_VER_DCR			0x01
+	u_int8_t read_retry_count;
+	u_int8_t reserved[6];
 	u_int8_t recovery_time_limit[2];
 };
 

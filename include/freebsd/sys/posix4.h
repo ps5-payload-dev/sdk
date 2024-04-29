@@ -31,7 +31,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/posix4.h 287309 2015-08-30 17:58:11Z kib $
+ * $FreeBSD: releng/11.1/sys/sys/posix4.h 287309 2015-08-30 17:58:11Z kib $
  */
 
 #include <sys/param.h>

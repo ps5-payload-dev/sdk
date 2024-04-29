@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/ppbus/ppbconf.h 188093 2009-02-03 19:49:21Z jhb $
+ * $FreeBSD: releng/11.1/sys/dev/ppbus/ppbconf.h 305555 2016-09-07 19:02:47Z dim $
  *
  */
 #ifndef __PPBCONF_H
@@ -263,7 +263,7 @@ extern void _ppb_assert_locked(device_t, const char *, int);
 extern void ppb_init_callout(device_t, struct callout *, int);
 extern int ppb_sleep(device_t, void *, int, const char *, int);
 extern int ppb_get_status(device_t, struct ppb_status *);
-extern int ppb_poll_bus(device_t, int, char, char, int);
+extern int ppb_poll_bus(device_t, int, uint8_t, uint8_t, int);
 extern int ppb_reset_epp_timeout(device_t);
 extern int ppb_ecp_sync(device_t);
 extern int ppb_get_epp_protocol(device_t);

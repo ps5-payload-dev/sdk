@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/crypto/sha2/sha384.h 300773 2016-05-26 19:29:29Z cem $
+ * $FreeBSD: releng/11.1/sys/crypto/sha2/sha384.h 310372 2016-12-21 18:42:04Z emaste $
  */
 
 #ifndef _SHA384_H_
@@ -58,6 +58,12 @@ __BEGIN_DECLS
 #ifndef SHA384_End
 #define SHA384_End		_libmd_SHA384_End
 #endif
+#ifndef SHA384_Fd
+#define SHA384_Fd		_libmd_SHA384_Fd
+#endif
+#ifndef SHA384_FdChunk
+#define SHA384_FdChunk		_libmd_SHA384_FdChunk
+#endif
 #ifndef SHA384_File
 #define SHA384_File		_libmd_SHA384_File
 #endif
@@ -74,10 +80,13 @@ __BEGIN_DECLS
 
 void	SHA384_Init(SHA384_CTX *);
 void	SHA384_Update(SHA384_CTX *, const void *, size_t);
-void	SHA384_Final(unsigned char [static SHA384_DIGEST_LENGTH], SHA384_CTX *);
+void	SHA384_Final(unsigned char [__min_size(SHA384_DIGEST_LENGTH)],
+    SHA384_CTX *);
 #ifndef _KERNEL
 char   *SHA384_End(SHA384_CTX *, char *);
 char   *SHA384_Data(const void *, unsigned int, char *);
+char   *SHA384_Fd(int, char *);
+char   *SHA384_FdChunk(int, char *, off_t, off_t);
 char   *SHA384_File(const char *, char *);
 char   *SHA384_FileChunk(const char *, char *, off_t, off_t);
 #endif

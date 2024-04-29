@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.0/sys/amd64/include/resource.h 261790 2014-02-12 04:30:37Z jhb $ */
+/* $FreeBSD: releng/11.1/sys/amd64/include/resource.h 261790 2014-02-12 04:30:37Z jhb $ */
 /*-
  * Copyright 1998 Massachusetts Institute of Technology
  *

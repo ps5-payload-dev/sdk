@@ -1,4 +1,4 @@
-/* Generated from /usr/src/kerberos5/lib/libhx509/../../../crypto/heimdal/lib/hx509/ocsp.asn1 */
+/* Generated from /usr/src/crypto/heimdal/lib/hx509/ocsp.asn1 */
 /* Do not edit */
 
 #ifndef __ocsp_asn1_h__

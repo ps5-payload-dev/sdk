@@ -1,4 +1,4 @@
-/* Generated from /usr/src/kerberos5/lib/libwind/../../../crypto/heimdal/lib/wind/wind_err.et */
+/* Generated from /usr/src/crypto/heimdal/lib/wind/wind_err.et */
 /* $Id$ */
 
 #ifndef __wind_err_h__

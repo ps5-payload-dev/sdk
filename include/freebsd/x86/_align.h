@@ -35,7 +35,7 @@
  * SUCH DAMAGE.
  *
  *	from: @(#)param.h	5.8 (Berkeley) 6/28/91
- * $FreeBSD: releng/11.0/sys/x86/include/_align.h 301037 2016-05-31 13:31:19Z ed $
+ * $FreeBSD: releng/11.1/sys/x86/include/_align.h 301037 2016-05-31 13:31:19Z ed $
  */
 
 #ifndef _X86_INCLUDE__ALIGN_H_

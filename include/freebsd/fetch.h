@@ -25,7 +25,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/lib/libfetch/fetch.h 267133 2014-06-05 22:16:26Z bapt $
+ * $FreeBSD: releng/11.1/lib/libfetch/fetch.h 315902 2017-03-24 14:19:52Z des $
  */
 
 #ifndef _FETCH_H_INCLUDED
@@ -47,6 +47,7 @@ struct url {
 	off_t		 offset;
 	size_t		 length;
 	time_t		 ims_time;
+	int		 netrcfd;
 };
 
 struct url_stat {

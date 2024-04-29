@@ -28,7 +28,7 @@
  *
  *	@(#)socketvar.h	8.3 (Berkeley) 2/19/95
  *
- * $FreeBSD: releng/11.0/sys/sys/socketvar.h 302153 2016-06-23 21:07:15Z np $
+ * $FreeBSD: releng/11.1/sys/sys/socketvar.h 315312 2017-03-15 16:38:39Z dchagin $
  */
 
 #ifndef _SYS_SOCKETVAR_H_
@@ -321,6 +321,7 @@ extern u_long	sb_max;
 extern so_gen_t so_gencnt;
 
 struct file;
+struct filecaps;
 struct filedesc;
 struct mbuf;
 struct sockaddr;
@@ -340,7 +341,7 @@ struct uio;
  */
 int	getsockaddr(struct sockaddr **namp, caddr_t uaddr, size_t len);
 int	getsock_cap(struct thread *td, int fd, cap_rights_t *rightsp,
-	    struct file **fpp, u_int *fflagp);
+	    struct file **fpp, u_int *fflagp, struct filecaps *havecaps);
 void	soabort(struct socket *so);
 int	soaccept(struct socket *so, struct sockaddr **nam);
 void	soaio_enqueue(struct task *task);

@@ -57,7 +57,7 @@
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGES.
  *
- * $FreeBSD: releng/11.0/sys/sys/bitstring.h 302180 2016-06-24 21:44:46Z asomers $
+ * $FreeBSD: releng/11.1/sys/sys/bitstring.h 302180 2016-06-24 21:44:46Z asomers $
  */
 #ifndef _SYS_BITSTRING_H_
 #define	_SYS_BITSTRING_H_

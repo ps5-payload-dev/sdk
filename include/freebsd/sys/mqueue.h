@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/mqueue.h 152948 2005-11-30 05:12:03Z davidxu $
+ * $FreeBSD: releng/11.1/sys/sys/mqueue.h 152948 2005-11-30 05:12:03Z davidxu $
  */
 
 #ifndef _SYS_MQUEUE_H_

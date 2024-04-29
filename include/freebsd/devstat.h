@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/lib/libdevstat/devstat.h 244270 2012-12-15 18:19:48Z trociny $
+ * $FreeBSD: releng/11.1/lib/libdevstat/devstat.h 244270 2012-12-15 18:19:48Z trociny $
  */
 
 #ifndef _DEVSTAT_H

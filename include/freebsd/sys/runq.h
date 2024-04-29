@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/runq.h 177435 2008-03-20 05:51:16Z jeff $
+ * $FreeBSD: releng/11.1/sys/sys/runq.h 177435 2008-03-20 05:51:16Z jeff $
  */
 
 #ifndef	_RUNQ_H_

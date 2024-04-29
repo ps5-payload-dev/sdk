@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/hwpmc/hwpmc_uncore.h 266195 2014-05-15 21:19:13Z markj $
+ * $FreeBSD: releng/11.1/sys/dev/hwpmc/hwpmc_uncore.h 266195 2014-05-15 21:19:13Z markj $
  */
 
 #ifndef _DEV_HWPMC_UNCORE_H_

@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)errno.h	8.5 (Berkeley) 1/21/94
- * $FreeBSD: releng/11.0/sys/sys/errno.h 296715 2016-03-12 07:54:42Z trasz $
+ * $FreeBSD: releng/11.1/sys/sys/errno.h 317342 2017-04-23 20:32:46Z kib $
  */
 
 #ifndef _SYS_ERRNO_H_
@@ -184,13 +184,23 @@ __END_DECLS
 #define	ELAST		96		/* Must be equal largest errno */
 #endif /* _POSIX_SOURCE */
 
-#ifdef _KERNEL
+#if defined(_KERNEL) || defined(_WANT_KERNEL_ERRNO)
 /* pseudo-errors returned inside kernel to modify return to process */
 #define	ERESTART	(-1)		/* restart syscall */
 #define	EJUSTRETURN	(-2)		/* don't modify regs, just return */
 #define	ENOIOCTL	(-3)		/* ioctl not handled by this layer */
 #define	EDIRIOCTL	(-4)		/* do direct ioctl in GEOM */
 #define	ERELOOKUP	(-5)		/* retry the directory lookup */
+#endif
+
+#ifndef _KERNEL
+#if __EXT1_VISIBLE
+/* ISO/IEC 9899:2011 K.3.2.2 */
+#ifndef _ERRNO_T_DEFINED
+#define _ERRNO_T_DEFINED
+typedef int errno_t;
+#endif
+#endif /* __EXT1_VISIBLE */
 #endif
 
 #endif

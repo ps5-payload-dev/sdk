@@ -33,7 +33,7 @@
  *
  *	From: @(#)ansi.h	8.2 (Berkeley) 1/4/94
  *	From: @(#)types.h	8.3 (Berkeley) 1/5/94
- * $FreeBSD: releng/11.0/sys/x86/include/_types.h 301029 2016-05-31 08:36:39Z ed $
+ * $FreeBSD: releng/11.1/sys/x86/include/_types.h 313574 2017-02-11 02:00:56Z kib $
  */
 
 #ifndef _MACHINE__TYPES_H_
@@ -142,8 +142,6 @@ typedef	__uint32_t	__vm_paddr_t;
 #endif
 typedef	__uint32_t	__vm_size_t;
 #endif
-typedef	__int64_t	__vm_ooffset_t;
-typedef	__uint64_t	__vm_pindex_t;
 typedef	int		___wchar_t;
 
 #define	__WCHAR_MIN	__INT_MIN	/* min value for a wchar_t */

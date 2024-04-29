@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/lib/libdpv/dpv.h 294862 2016-01-27 00:02:51Z dteske $
+ * $FreeBSD: releng/11.1/lib/libdpv/dpv.h 294862 2016-01-27 00:02:51Z dteske $
  */
 
 #ifndef _DPV_H_

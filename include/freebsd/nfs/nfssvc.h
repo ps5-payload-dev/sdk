@@ -29,7 +29,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/nfs/nfssvc.h 291527 2015-11-30 21:54:27Z rmacklem $
+ * $FreeBSD: releng/11.1/sys/nfs/nfssvc.h 291527 2015-11-30 21:54:27Z rmacklem $
  */
 
 #ifndef _NFS_NFSSVC_H_

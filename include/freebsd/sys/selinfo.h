@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)select.h	8.2 (Berkeley) 1/4/94
- * $FreeBSD: releng/11.0/sys/sys/selinfo.h 225177 2011-08-25 15:51:54Z attilio $
+ * $FreeBSD: releng/11.1/sys/sys/selinfo.h 225177 2011-08-25 15:51:54Z attilio $
  */
 
 #ifndef _SYS_SELINFO_H_

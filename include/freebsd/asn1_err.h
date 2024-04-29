@@ -1,4 +1,4 @@
-/* Generated from /usr/src/kerberos5/lib/libasn1/../../../crypto/heimdal/lib/asn1/asn1_err.et */
+/* Generated from /usr/src/crypto/heimdal/lib/asn1/asn1_err.et */
 /* $Id$ */
 
 #ifndef __asn1_err_h__

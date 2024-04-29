@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)socket.h	8.4 (Berkeley) 2/21/94
- * $FreeBSD: releng/11.0/sys/sys/socket.h 301038 2016-05-31 13:32:33Z ed $
+ * $FreeBSD: releng/11.1/sys/sys/socket.h 313567 2017-02-10 19:49:42Z jhb $
  */
 
 #ifndef _SYS_SOCKET_H_
@@ -435,6 +435,7 @@ struct msghdr {
 #endif
 #ifdef _KERNEL
 #define	MSG_SOCALLBCK   0x10000		/* for use by socket callbacks - soreceive (TCP) */
+#define	MSG_MORETOCOME	0x100000	/* additional data pending */
 #endif
 
 /*

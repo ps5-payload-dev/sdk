@@ -1,6 +1,10 @@
 /*-
  * Copyright 2012 Konstantin Belousov <kib@FreeBSD.ORG>.
+ * Copyright 2016 The FreeBSD Foundation.
  * All rights reserved.
+ *
+ * Portions of this software were developed by Konstantin Belousov
+ * under sponsorship from the FreeBSD Foundation.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -22,7 +26,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/x86/include/vdso.h 237433 2012-06-22 07:06:40Z kib $
+ * $FreeBSD: releng/11.1/sys/x86/include/vdso.h 311376 2017-01-05 07:42:08Z sephe $
  */
 
 #ifndef _X86_VDSO_H
@@ -30,7 +34,12 @@
 
 #define	VDSO_TIMEHANDS_MD			\
 	uint32_t	th_x86_shift;		\
-	uint32_t	th_res[7];
+	uint32_t	th_x86_hpet_idx;	\
+	uint32_t	th_res[6];
+
+#define	VDSO_TH_ALGO_X86_TSC	VDSO_TH_ALGO_1
+#define	VDSO_TH_ALGO_X86_HPET	VDSO_TH_ALGO_2
+#define	VDSO_TH_ALGO_X86_HVTSC	VDSO_TH_ALGO_3	/* Hyper-V ref. TSC */
 
 #ifdef _KERNEL
 #ifdef COMPAT_FREEBSD32

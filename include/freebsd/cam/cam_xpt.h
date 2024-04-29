@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/cam/cam_xpt.h 291716 2015-12-03 20:54:55Z ken $
+ * $FreeBSD: releng/11.1/sys/cam/cam_xpt.h 291716 2015-12-03 20:54:55Z ken $
  */
 
 #ifndef _CAM_CAM_XPT_H

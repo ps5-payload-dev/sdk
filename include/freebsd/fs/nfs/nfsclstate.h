@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/fs/nfs/nfsclstate.h 268115 2014-07-01 20:47:16Z rmacklem $
+ * $FreeBSD: releng/11.1/sys/fs/nfs/nfsclstate.h 317393 2017-04-24 23:47:12Z rmacklem $
  */
 
 #ifndef _NFS_NFSCLSTATE_H_
@@ -65,6 +65,7 @@ struct nfsclsession {
 	uint16_t	nfsess_foreslots;
 	uint16_t	nfsess_backslots;
 	uint8_t		nfsess_sessionid[NFSX_V4SESSIONID];
+	uint8_t		nfsess_defunct;		/* Non-zero for old sessions */
 };
 
 /*

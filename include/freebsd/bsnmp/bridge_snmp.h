@@ -25,7 +25,7 @@
  *
  * Bridge MIB implementation for SNMPd.
  *
- * $FreeBSD: releng/11.0/usr.sbin/bsnmpd/modules/snmp_bridge/bridge_snmp.h 171791 2007-08-08 19:27:50Z syrinx $
+ * $FreeBSD: releng/11.1/usr.sbin/bsnmpd/modules/snmp_bridge/bridge_snmp.h 171791 2007-08-08 19:27:50Z syrinx $
  */
 
 #ifndef	SNMP_BRIDGE_H

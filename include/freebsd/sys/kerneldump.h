@@ -32,7 +32,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/kerneldump.h 295041 2016-01-29 15:12:31Z br $
+ * $FreeBSD: releng/11.1/sys/sys/kerneldump.h 295041 2016-01-29 15:12:31Z br $
  */
 
 #ifndef _SYS_KERNELDUMP_H

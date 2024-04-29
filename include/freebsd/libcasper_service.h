@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/lib/libcasper/libcasper/libcasper_service.h 301572 2016-06-08 02:03:53Z oshogbo $
+ * $FreeBSD: releng/11.1/lib/libcasper/libcasper/libcasper_service.h 301572 2016-06-08 02:03:53Z oshogbo $
  */
 
 #ifndef	_LIBCASPER_SERVICE_H_

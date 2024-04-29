@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/ata.h 300207 2016-05-19 14:08:36Z ken $
+ * $FreeBSD: releng/11.1/sys/sys/ata.h 319089 2017-05-29 05:22:34Z rpokala $
  */
 
 #ifndef _SYS_ATA_H_
@@ -263,7 +263,7 @@ struct ata_params {
 	u_int16_t       reserved170[6];
 /*176*/ u_int8_t        media_serial[60];
 /*206*/ u_int16_t       sct;
-	u_int16_t       reserved206[2];
+	u_int16_t       reserved207[2];
 /*209*/ u_int16_t       lsalign;
 /*210*/ u_int16_t       wrv_sectors_m3_1;
 	u_int16_t       wrv_sectors_m3_2;

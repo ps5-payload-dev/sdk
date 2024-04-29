@@ -31,7 +31,7 @@
  */
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: releng/11.0/sys/netinet/sctp_header.h 303267 2016-07-24 14:50:16Z tuexen $");
+__FBSDID("$FreeBSD: releng/11.1/sys/netinet/sctp_header.h 310219 2016-12-18 13:04:29Z tuexen $");
 
 #ifndef _NETINET_SCTP_HEADER_H_
 #define _NETINET_SCTP_HEADER_H_
@@ -141,9 +141,9 @@ struct sctp_supported_chunk_types_param {
  */
 struct sctp_data {
 	uint32_t tsn;
-	uint16_t stream_id;
-	uint16_t stream_sequence;
-	uint32_t protocol_id;
+	uint16_t sid;
+	uint16_t ssn;
+	uint32_t ppid;
 	/* user data follows */
 }         SCTP_PACKED;
 
@@ -154,11 +154,11 @@ struct sctp_data_chunk {
 
 struct sctp_idata {
 	uint32_t tsn;
-	uint16_t stream_id;
+	uint16_t sid;
 	uint16_t reserved;	/* Where does the SSN go? */
-	uint32_t msg_id;
+	uint32_t mid;
 	union {
-		uint32_t protocol_id;
+		uint32_t ppid;
 		uint32_t fsn;	/* Fragment Sequence Number */
 	}     ppid_fsn;
 	/* user data follows */
@@ -182,7 +182,6 @@ struct sctp_init {
 	uint32_t initial_tsn;	/* I-TSN */
 	/* optional param's follow */
 }         SCTP_PACKED;
-
 #define SCTP_IDENTIFICATION_SIZE 16
 #define SCTP_ADDRESS_SIZE 4
 #define SCTP_RESERVE_SPACE 6
@@ -391,14 +390,14 @@ struct sctp_forward_tsn_chunk {
 }                      SCTP_PACKED;
 
 struct sctp_strseq {
-	uint16_t stream;
-	uint16_t sequence;
+	uint16_t sid;
+	uint16_t ssn;
 }           SCTP_PACKED;
 
 struct sctp_strseq_mid {
-	uint16_t stream;
+	uint16_t sid;
 	uint16_t flags;
-	uint32_t msg_id;
+	uint32_t mid;
 };
 
 struct sctp_forward_tsn_msg {

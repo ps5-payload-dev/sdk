@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)domain.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: releng/11.0/sys/sys/domain.h 285522 2015-07-14 02:00:50Z cem $
+ * $FreeBSD: releng/11.1/sys/sys/domain.h 285522 2015-07-14 02:00:50Z cem $
  */
 
 #ifndef _SYS_DOMAIN_H_

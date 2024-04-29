@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	from: @(#)ns16550.h	7.1 (Berkeley) 5/9/91
- * $FreeBSD: releng/11.0/sys/dev/ic/ns16550.h 293642 2016-01-10 18:11:23Z marius $
+ * $FreeBSD: releng/11.1/sys/dev/ic/ns16550.h 293642 2016-01-10 18:11:23Z marius $
  */
 
 /*

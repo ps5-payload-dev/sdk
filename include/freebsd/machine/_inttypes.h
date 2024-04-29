@@ -1,6 +1,6 @@
 /*-
  * This file is in the public domain.
  */
-/* $FreeBSD: releng/11.0/sys/amd64/include/_inttypes.h 217157 2011-01-08 18:09:48Z tijl $ */
+/* $FreeBSD: releng/11.1/sys/amd64/include/_inttypes.h 217157 2011-01-08 18:09:48Z tijl $ */
 
 #include <x86/_inttypes.h>

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/x86/include/init.h 272310 2014-09-30 16:46:45Z royger $
+ * $FreeBSD: releng/11.1/sys/x86/include/init.h 272310 2014-09-30 16:46:45Z royger $
  */
 
 #ifndef __X86_INIT_H__

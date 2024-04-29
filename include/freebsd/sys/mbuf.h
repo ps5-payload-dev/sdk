@@ -28,7 +28,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)mbuf.h	8.5 (Berkeley) 2/19/95
- * $FreeBSD: releng/11.0/sys/sys/mbuf.h 300982 2016-05-30 04:48:06Z sephe $
+ * $FreeBSD: releng/11.1/sys/sys/mbuf.h 318815 2017-05-24 20:54:14Z np $
  */
 
 #ifndef _SYS_MBUF_H_
@@ -334,7 +334,7 @@ struct mbuf {
 #define	M_HASHTYPE_RSS_TCP_IPV6		M_HASHTYPE_HASH(4) /* TCPv6 4-tuple */
 #define	M_HASHTYPE_RSS_IPV6_EX		M_HASHTYPE_HASH(5) /* IPv6 2-tuple +
 							    * ext hdrs */
-#define	M_HASHTYPE_RSS_TCP_IPV6_EX	M_HASHTYPE_HASH(6) /* TCPv6 4-tiple +
+#define	M_HASHTYPE_RSS_TCP_IPV6_EX	M_HASHTYPE_HASH(6) /* TCPv6 4-tuple +
 							    * ext hdrs */
 /* Non-standard RSS hash types */
 #define	M_HASHTYPE_RSS_UDP_IPV4		M_HASHTYPE_HASH(7) /* IPv4 UDP 4-tuple*/

@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/nv.h 293361 2016-01-07 20:52:35Z bdrewery $
+ * $FreeBSD: releng/11.1/sys/sys/nv.h 293361 2016-01-07 20:52:35Z bdrewery $
  */
 
 #ifndef	_NV_H_

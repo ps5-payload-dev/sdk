@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/_pctrie.h 250551 2013-05-12 04:05:01Z jeff $
+ * $FreeBSD: releng/11.1/sys/sys/_pctrie.h 250551 2013-05-12 04:05:01Z jeff $
  */
 
 #ifndef __SYS_PCTRIE_H_

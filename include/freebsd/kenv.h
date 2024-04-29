@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/include/kenv.h 152750 2005-11-24 07:20:26Z ru $
+ * $FreeBSD: releng/11.1/include/kenv.h 152750 2005-11-24 07:20:26Z ru $
  */
 
 #ifndef _KENV_H_

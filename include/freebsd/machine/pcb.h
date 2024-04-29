@@ -31,7 +31,7 @@
  * SUCH DAMAGE.
  *
  *	from: @(#)pcb.h	5.10 (Berkeley) 5/12/91
- * $FreeBSD: releng/11.0/sys/amd64/include/pcb.h 290728 2015-11-12 22:00:59Z jhb $
+ * $FreeBSD: releng/11.1/sys/amd64/include/pcb.h 306314 2016-09-25 17:24:10Z kib $
  */
 
 #ifndef _AMD64_PCB_H_
@@ -83,6 +83,7 @@ struct pcb {
 #define	PCB_FPUINITDONE	0x08	/* fpu state is initialized */
 #define	PCB_USERFPUINITDONE 0x10 /* fpu user state is initialized */
 #define	PCB_32BIT	0x40	/* process has 32 bit context (segs etc) */
+#define	PCB_FPUNOSAVE	0x80	/* no save area for current FPU ctx */
 
 	uint16_t	pcb_initial_fpucw;
 

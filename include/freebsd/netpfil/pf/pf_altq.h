@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  *	$OpenBSD: pfvar.h,v 1.282 2009/01/29 15:12:28 pyr Exp $
- *	$FreeBSD: releng/11.0/sys/netpfil/pf/pf_altq.h 287009 2015-08-21 22:02:22Z loos $
+ *	$FreeBSD: releng/11.1/sys/netpfil/pf/pf_altq.h 287009 2015-08-21 22:02:22Z loos $
  */
 
 #ifndef	_NET_PF_ALTQ_H_

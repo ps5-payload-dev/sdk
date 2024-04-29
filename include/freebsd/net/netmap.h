@@ -25,7 +25,7 @@
  */
 
 /*
- * $FreeBSD: releng/11.0/sys/net/netmap.h 285349 2015-07-10 05:51:36Z luigi $
+ * $FreeBSD: releng/11.1/sys/net/netmap.h 285349 2015-07-10 05:51:36Z luigi $
  *
  * Definitions of constants and the structures used by the netmap
  * framework, for the part visible to both kernel and userspace.

@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/amd64/include/pc/bios.h 270828 2014-08-29 21:25:47Z jhb $
+ * $FreeBSD: releng/11.1/sys/amd64/include/pc/bios.h 317004 2017-04-16 07:21:20Z mmel $
  */
 
 #ifndef _MACHINE_PC_BIOS_H_
@@ -40,6 +40,9 @@
 #define	SMAP_TYPE_ACPI_RECLAIM	3
 #define	SMAP_TYPE_ACPI_NVS	4
 #define	SMAP_TYPE_ACPI_ERROR	5
+#define	SMAP_TYPE_DISABLED	6
+#define	SMAP_TYPE_PMEM		7
+#define	SMAP_TYPE_PRAM		12
 
 #define	SMAP_XATTR_ENABLED	0x00000001
 #define	SMAP_XATTR_NON_VOLATILE	0x00000002

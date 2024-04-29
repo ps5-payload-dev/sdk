@@ -22,7 +22,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/seq.h 285294 2015-07-08 22:21:25Z mjg $
+ * $FreeBSD: releng/11.1/sys/sys/seq.h 312714 2017-01-24 19:39:24Z mjg $
  */
 
 #ifndef _SYS_SEQ_H_
@@ -59,7 +59,6 @@ typedef uint32_t seq_t;
  * 		lobj = gobj;
  * 		if (seq_consistent(&gobj->seq, seq))
  * 			break;
- * 		cpu_spinwait();
  * 	}
  * 	foo(lobj);
  */		

@@ -37,7 +37,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ipc.h	8.4 (Berkeley) 2/19/95
- * $FreeBSD: releng/11.0/sys/sys/ipc.h 298981 2016-05-03 15:14:17Z pfg $
+ * $FreeBSD: releng/11.1/sys/sys/ipc.h 298981 2016-05-03 15:14:17Z pfg $
  */
 
 /*

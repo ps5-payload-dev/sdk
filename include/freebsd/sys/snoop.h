@@ -12,7 +12,7 @@
  *
  * Snoop stuff.
  *
- * $FreeBSD: releng/11.0/sys/sys/snoop.h 150298 2005-09-18 19:23:35Z cognet $
+ * $FreeBSD: releng/11.1/sys/sys/snoop.h 150298 2005-09-18 19:23:35Z cognet $
  */
 
 #ifndef _SYS_SNOOP_H_

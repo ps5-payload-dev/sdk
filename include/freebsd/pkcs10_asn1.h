@@ -1,4 +1,4 @@
-/* Generated from /usr/src/kerberos5/lib/libhx509/../../../crypto/heimdal/lib/hx509/pkcs10.asn1 */
+/* Generated from /usr/src/crypto/heimdal/lib/hx509/pkcs10.asn1 */
 /* Do not edit */
 
 #ifndef __pkcs10_asn1_h__

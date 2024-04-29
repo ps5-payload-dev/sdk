@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/include/complex.h 251121 2013-05-30 04:49:26Z das $
+ * $FreeBSD: releng/11.1/include/complex.h 251121 2013-05-30 04:49:26Z das $
  */
 
 #ifndef _COMPLEX_H

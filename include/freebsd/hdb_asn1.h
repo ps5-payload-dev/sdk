@@ -1,4 +1,4 @@
-/* Generated from /usr/src/kerberos5/lib/libhdb/../../../crypto/heimdal/lib/hdb/hdb.asn1 */
+/* Generated from /usr/src/crypto/heimdal/lib/hdb/hdb.asn1 */
 /* Do not edit */
 
 #ifndef __hdb_asn1_h__

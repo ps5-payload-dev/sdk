@@ -37,7 +37,7 @@
  *
  * Author: Archie Cobbs <archie@freebsd.org>
  *
- * $FreeBSD: releng/11.0/sys/netgraph/ng_pptpgre.h 177587 2008-03-24 22:55:22Z mav $
+ * $FreeBSD: releng/11.1/sys/netgraph/ng_pptpgre.h 177587 2008-03-24 22:55:22Z mav $
  * $Whistle: ng_pptpgre.h,v 1.3 1999/12/08 00:11:36 archie Exp $
  */
 

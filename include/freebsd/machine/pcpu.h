@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/amd64/include/pcpu.h 282684 2015-05-09 19:11:01Z kib $
+ * $FreeBSD: releng/11.1/sys/amd64/include/pcpu.h 307856 2016-10-24 11:47:27Z kib $
  */
 
 #ifndef _MACHINE_PCPU_H_
@@ -65,7 +65,8 @@
 	u_int	pc_vcpu_id;		/* Xen vCPU ID */		\
 	uint32_t pc_pcid_next;						\
 	uint32_t pc_pcid_gen;						\
-	char	__pad[149]		/* be divisor of PAGE_SIZE	\
+	uint32_t pc_smp_tlb_done;	/* TLB op acknowledgement */	\
+	char	__pad[145]		/* be divisor of PAGE_SIZE	\
 					   after cache alignment */
 
 #define	PC_DBREG_CMD_NONE	0

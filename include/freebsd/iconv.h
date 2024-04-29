@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.0/include/iconv.h 281550 2015-04-15 09:09:20Z tijl $	*/
+/*	$FreeBSD: releng/11.1/include/iconv.h 281550 2015-04-15 09:09:20Z tijl $	*/
 /*	$NetBSD: iconv.h,v 1.6 2005/02/03 04:39:32 perry Exp $	*/
 
 /*-

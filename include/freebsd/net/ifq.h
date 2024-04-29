@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	From: @(#)if.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: releng/11.0/sys/net/ifq.h 296178 2016-02-29 03:54:51Z sephe $
+ * $FreeBSD: releng/11.1/sys/net/ifq.h 296178 2016-02-29 03:54:51Z sephe $
  */
 
 #ifndef	_NET_IFQ_H_

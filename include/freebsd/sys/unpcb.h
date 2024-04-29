@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)unpcb.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: releng/11.0/sys/sys/unpcb.h 285522 2015-07-14 02:00:50Z cem $
+ * $FreeBSD: releng/11.1/sys/sys/unpcb.h 305159 2016-08-31 21:35:12Z markj $
  */
 
 #ifndef _SYS_UNPCB_H_
@@ -103,11 +103,6 @@ struct unpcb {
 #define	UNP_WANTCRED			0x004	/* credentials wanted */
 #define	UNP_CONNWAIT			0x008	/* connect blocks until accepted */
 
-#define	UNPGC_REF			0x1	/* unpcb has external ref. */
-#define	UNPGC_DEAD			0x2	/* unpcb might be dead. */
-#define	UNPGC_SCANNED			0x4	/* Has been scanned. */
-#define	UNPGC_IGNORE_RIGHTS		0x8	/* Attached rights are freed */
-
 /*
  * These flags are used to handle non-atomicity in connect() and bind()
  * operations on a socket: in particular, to avoid races between multiple
@@ -115,6 +110,15 @@ struct unpcb {
  */
 #define	UNP_CONNECTING			0x010	/* Currently connecting. */
 #define	UNP_BINDING			0x020	/* Currently binding. */
+#define	UNP_NASCENT			0x040	/* Newborn child socket. */
+
+/*
+ * Flags in unp_gcflag.
+ */
+#define	UNPGC_REF			0x1	/* unpcb has external ref. */
+#define	UNPGC_DEAD			0x2	/* unpcb might be dead. */
+#define	UNPGC_SCANNED			0x4	/* Has been scanned. */
+#define	UNPGC_IGNORE_RIGHTS		0x8	/* Attached rights are freed */
 
 #define	sotounpcb(so)	((struct unpcb *)((so)->so_pcb))
 

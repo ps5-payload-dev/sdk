@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.0/sys/sys/kobj.h 300443 2016-05-23 03:29:43Z adrian $
+ *	$FreeBSD: releng/11.1/sys/sys/kobj.h 318274 2017-05-14 14:21:09Z marius $
  */
 
 #ifndef _SYS_KOBJ_H_
@@ -226,10 +226,12 @@ extern u_int kobj_lookup_misses;
 	kobj_method_t **_cep =					\
 	    &OPS->cache[_desc->id & (KOBJ_CACHE_SIZE-1)];	\
 	kobj_method_t *_ce = *_cep;				\
-	kobj_lookup_hits++; /* assume hit */			\
-	if (_ce->desc != _desc)					\
+	if (_ce->desc != _desc) {				\
 		_ce = kobj_lookup_method(OPS->cls,		\
 					 _cep, _desc);		\
+		kobj_lookup_misses++;				\
+	} else							\
+		kobj_lookup_hits++;				\
 	_m = _ce->func;						\
 } while(0)
 #else

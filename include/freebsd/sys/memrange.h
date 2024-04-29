@@ -1,7 +1,7 @@
 /*
  * Memory range attribute operations, performed on /dev/mem
  *
- * $FreeBSD: releng/11.0/sys/sys/memrange.h 298981 2016-05-03 15:14:17Z pfg $
+ * $FreeBSD: releng/11.1/sys/sys/memrange.h 298981 2016-05-03 15:14:17Z pfg $
  */
 
 #ifndef _SYS_MEMRANGE_H_

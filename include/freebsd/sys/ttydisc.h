@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/ttydisc.h 196452 2009-08-23 08:04:40Z ed $
+ * $FreeBSD: releng/11.1/sys/sys/ttydisc.h 196452 2009-08-23 08:04:40Z ed $
  */
 
 #ifndef _SYS_TTYDISC_H_

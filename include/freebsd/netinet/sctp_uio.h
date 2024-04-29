@@ -31,7 +31,7 @@
  */
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: releng/11.0/sys/netinet/sctp_uio.h 303267 2016-07-24 14:50:16Z tuexen $");
+__FBSDID("$FreeBSD: releng/11.1/sys/netinet/sctp_uio.h 310218 2016-12-18 13:00:11Z tuexen $");
 
 #ifndef _NETINET_SCTP_UIO_H_
 #define _NETINET_SCTP_UIO_H_
@@ -147,7 +147,6 @@ struct sctp_extrcvinfo {
 	uint16_t sinfo_keynumber_valid;
 	uint8_t __reserve_pad[SCTP_ALIGN_RESV_PAD_SHORT];
 };
-
 #define sinfo_pr_value sinfo_timetolive
 #define sreinfo_next_flags serinfo_next_flags
 #define sreinfo_next_stream serinfo_next_stream
@@ -573,7 +572,6 @@ struct sctp_paddrparams {
 	uint16_t spp_pathmaxrxt;
 	uint8_t spp_dscp;
 };
-
 #define spp_ipv4_tos spp_dscp
 
 #define SPP_HB_ENABLE		0x00000001
@@ -1284,7 +1282,6 @@ sctp_sorecvmsg(struct socket *so,
     int *msg_flags,
     struct sctp_sndrcvinfo *sinfo,
     int filling_sinfo);
-
 #endif
 
 /*

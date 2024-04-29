@@ -20,7 +20,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/mouse.h 282734 2015-05-10 20:36:57Z rpaulo $
+ * $FreeBSD: releng/11.1/sys/sys/mouse.h 307576 2016-10-18 20:17:57Z gonzo $
  */
 
 #ifndef _SYS_MOUSE_H_
@@ -170,6 +170,7 @@ typedef struct synapticshw {
 #define MOUSE_MODEL_4DPLUS		12
 #define MOUSE_MODEL_SYNAPTICS		13
 #define	MOUSE_MODEL_TRACKPOINT		14
+#define	MOUSE_MODEL_ELANTECH		15
 
 typedef struct mousemode {
 	int protocol;		/* MOUSE_PROTO_XXX */
@@ -239,6 +240,9 @@ typedef struct mousevar {
 
 /* Synaptics Touchpad */
 #define MOUSE_SYNAPTICS_PACKETSIZE	6	/* '3' works better */
+
+/* Elantech Touchpad */
+#define MOUSE_ELANTECH_PACKETSIZE	6
 
 /* Microsoft Serial mouse data packet */
 #define MOUSE_MSS_PACKETSIZE	3

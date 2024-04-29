@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.0/sys/sys/spigenio.h 300817 2016-05-27 01:40:33Z adrian $
+ *	$FreeBSD: releng/11.1/sys/sys/spigenio.h 300817 2016-05-27 01:40:33Z adrian $
  */
 
 #ifndef _SYS_SPIGENIO_H_

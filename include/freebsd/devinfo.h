@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.0/lib/libdevinfo/devinfo.h 294883 2016-01-27 02:23:54Z jhibbits $
+ *	$FreeBSD: releng/11.1/lib/libdevinfo/devinfo.h 294883 2016-01-27 02:23:54Z jhibbits $
  */
 
 #ifndef _DEVINFO_H_INCLUDED

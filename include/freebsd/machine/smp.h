@@ -6,7 +6,7 @@
  * this stuff is worth it, you can buy me a beer in return.   Poul-Henning Kamp
  * ----------------------------------------------------------------------------
  *
- * $FreeBSD: releng/11.0/sys/amd64/include/smp.h 291949 2015-12-07 17:41:20Z kib $
+ * $FreeBSD: releng/11.1/sys/amd64/include/smp.h 309020 2016-11-22 18:43:04Z jhb $
  *
  */
 
@@ -20,9 +20,6 @@
 #ifndef LOCORE
 
 #include <x86/x86_smp.h>
-
-extern int pmap_pcid_enabled;
-extern int invpcid_works;
 
 /* global symbols in mpboot.S */
 extern char			mptramp_start[];

@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)grp.h	8.2 (Berkeley) 1/21/94
- * $FreeBSD: releng/11.0/include/grp.h 265878 2014-05-11 13:48:21Z jilles $
+ * $FreeBSD: releng/11.1/include/grp.h 265878 2014-05-11 13:48:21Z jilles $
  */
 
 #ifndef _GRP_H_

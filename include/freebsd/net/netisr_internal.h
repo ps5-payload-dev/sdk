@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/net/netisr_internal.h 222249 2011-05-24 12:34:19Z rwatson $
+ * $FreeBSD: releng/11.1/sys/net/netisr_internal.h 222249 2011-05-24 12:34:19Z rwatson $
  */
 
 #ifndef _NET_NETISR_INTERNAL_H_

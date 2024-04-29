@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.0/sys/cam/scsi/scsi_enc.h 291126 2015-11-21 10:22:01Z mav $ */
+/* $FreeBSD: releng/11.1/sys/cam/scsi/scsi_enc.h 291126 2015-11-21 10:22:01Z mav $ */
 /*-
  * Copyright (c) 2000 by Matthew Jacob
  * All rights reserved.

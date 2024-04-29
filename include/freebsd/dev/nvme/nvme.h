@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/nvme/nvme.h 301778 2016-06-10 06:04:53Z imp $
+ * $FreeBSD: releng/11.1/sys/dev/nvme/nvme.h 301778 2016-06-10 06:04:53Z imp $
  */
 
 #ifndef __NVME_H__

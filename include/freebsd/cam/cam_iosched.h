@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/cam/cam_iosched.h 298010 2016-04-14 22:13:44Z imp $
+ * $FreeBSD: releng/11.1/sys/cam/cam_iosched.h 298010 2016-04-14 22:13:44Z imp $
  */
 
 #ifndef _CAM_CAM_IOSCHED_H

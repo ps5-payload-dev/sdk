@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/include/uchar.h 250985 2013-05-25 16:58:12Z ed $
+ * $FreeBSD: releng/11.1/include/uchar.h 250985 2013-05-25 16:58:12Z ed $
  */
 
 #ifndef _UCHAR_H_

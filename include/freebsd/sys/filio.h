@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)filio.h	8.1 (Berkeley) 3/28/94
- * $FreeBSD: releng/11.0/sys/sys/filio.h 195191 2009-06-30 13:38:49Z emaste $
+ * $FreeBSD: releng/11.1/sys/sys/filio.h 195191 2009-06-30 13:38:49Z emaste $
  */
 
 #ifndef	_SYS_FILIO_H_

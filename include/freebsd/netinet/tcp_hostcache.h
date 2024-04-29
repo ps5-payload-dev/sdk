@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/netinet/tcp_hostcache.h 292087 2015-12-11 06:22:58Z hiren $
+ * $FreeBSD: releng/11.1/sys/netinet/tcp_hostcache.h 292087 2015-12-11 06:22:58Z hiren $
  */
 
 /*

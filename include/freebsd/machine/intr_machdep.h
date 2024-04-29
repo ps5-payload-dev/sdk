@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/amd64/include/intr_machdep.h 302895 2016-07-15 09:44:48Z royger $
+ * $FreeBSD: releng/11.1/sys/amd64/include/intr_machdep.h 305672 2016-09-09 19:57:32Z jhb $
  */
 
 #ifndef __MACHINE_INTR_MACHDEP_H__
@@ -148,8 +148,9 @@ extern cpuset_t intr_cpus;
 #endif
 extern struct mtx icu_lock;
 extern int elcr_found;
-
+#ifdef SMP
 extern int msix_disable_migration;
+#endif
 
 #ifndef DEV_ATPIC
 void	atpic_reset(void);

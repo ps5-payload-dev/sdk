@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/loginclass.h 290861 2015-11-15 12:50:14Z trasz $
+ * $FreeBSD: releng/11.1/sys/sys/loginclass.h 290861 2015-11-15 12:50:14Z trasz $
  */
 
 #ifndef _SYS_LOGINCLASS_H_

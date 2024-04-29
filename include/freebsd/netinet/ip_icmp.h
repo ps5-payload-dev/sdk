@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ip_icmp.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: releng/11.0/sys/netinet/ip_icmp.h 298800 2016-04-29 20:22:01Z tuexen $
+ * $FreeBSD: releng/11.1/sys/netinet/ip_icmp.h 298800 2016-04-29 20:22:01Z tuexen $
  */
 
 #ifndef _NETINET_IP_ICMP_H_

@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.0/sys/sys/aac_ioctl.h 218909 2011-02-21 09:01:34Z brucec $
+ *	$FreeBSD: releng/11.1/sys/sys/aac_ioctl.h 218909 2011-02-21 09:01:34Z brucec $
  */
 
 /*

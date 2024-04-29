@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/cam/cam_ccb.h 301778 2016-06-10 06:04:53Z imp $
+ * $FreeBSD: releng/11.1/sys/cam/cam_ccb.h 312844 2017-01-26 21:06:59Z mav $
  */
 
 #ifndef _CAM_CAM_CCB_H
@@ -779,6 +779,13 @@ struct ccb_accept_tio {
 	u_int      init_id;		/* initiator id of who selected */
 	struct     scsi_sense_data sense_data;
 };
+
+static __inline uint8_t *
+atio_cdb_ptr(struct ccb_accept_tio *ccb)
+{
+	return ((ccb->ccb_h.flags & CAM_CDB_POINTER) ?
+	    ccb->cdb_io.cdb_ptr : ccb->cdb_io.cdb_bytes);
+}
 
 /* Release SIM Queue */
 struct ccb_relsim {

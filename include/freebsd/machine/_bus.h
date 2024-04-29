@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/amd64/include/_bus.h 145253 2005-04-18 21:45:34Z imp $
+ * $FreeBSD: releng/11.1/sys/amd64/include/_bus.h 145253 2005-04-18 21:45:34Z imp $
  */
 
 #ifndef AMD64_INCLUDE__BUS_H

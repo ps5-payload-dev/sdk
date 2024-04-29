@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/geom/label/g_label.h 284582 2015-06-18 21:55:55Z trasz $
+ * $FreeBSD: releng/11.1/sys/geom/label/g_label.h 284582 2015-06-18 21:55:55Z trasz $
  */
 
 #ifndef	_G_LABEL_H_

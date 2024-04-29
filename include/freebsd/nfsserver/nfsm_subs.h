@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)nfsm_subs.h	8.2 (Berkeley) 3/30/95
- * $FreeBSD: releng/11.0/sys/nfsserver/nfsm_subs.h 276780 2015-01-07 17:22:56Z rwatson $
+ * $FreeBSD: releng/11.1/sys/nfsserver/nfsm_subs.h 276780 2015-01-07 17:22:56Z rwatson $
  */
 
 #ifndef _NFSSERVER_NFSM_SUBS_H_

@@ -24,7 +24,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/x86/include/cputypes.h 292668 2015-12-23 21:41:42Z jhb $
+ * $FreeBSD: releng/11.1/sys/x86/include/cputypes.h 308433 2016-11-08 06:13:22Z jhb $
  */
 
 #ifndef _X86_CPUTYPES_H_
@@ -45,10 +45,5 @@
 #define	CPU_VENDOR_INTEL	0x8086		/* Intel */
 #define	CPU_VENDOR_RISE		0xdead2bad	/* Rise */
 #define	CPU_VENDOR_CENTAUR	CPU_VENDOR_IDT
-
-#ifndef LOCORE
-extern int	cpu;
-extern int	cpu_class;
-#endif
 
 #endif /* !_X86_CPUTYPES_H_ */

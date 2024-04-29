@@ -24,7 +24,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/include/semaphore.h 277983 2015-01-31 16:39:26Z jilles $
+ * $FreeBSD: releng/11.1/include/semaphore.h 315274 2017-03-14 17:52:43Z vangyzen $
  */
 
 /* semaphore.h: POSIX 1003.1b semaphores */
@@ -52,6 +52,10 @@ typedef	struct _sem	sem_t;
 struct timespec;
 
 __BEGIN_DECLS
+#if __BSD_VISIBLE
+int	 sem_clockwait_np(sem_t * __restrict, __clockid_t, int,
+	    const struct timespec *, struct timespec *);
+#endif
 int	 sem_close(sem_t *);
 int	 sem_destroy(sem_t *);
 int	 sem_getvalue(sem_t * __restrict, int * __restrict);

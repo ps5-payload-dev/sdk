@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/refcount.h 261520 2014-02-05 18:13:27Z jhb $
+ * $FreeBSD: releng/11.1/sys/sys/refcount.h 261520 2014-02-05 18:13:27Z jhb $
  */
 
 #ifndef __SYS_REFCOUNT_H__

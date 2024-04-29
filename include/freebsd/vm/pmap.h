@@ -57,7 +57,7 @@
  * any improvements or extensions that they make and grant Carnegie the
  * rights to redistribute these changes.
  *
- * $FreeBSD: releng/11.0/sys/vm/pmap.h 286313 2015-08-05 10:48:32Z jah $
+ * $FreeBSD: releng/11.1/sys/vm/pmap.h 286313 2015-08-05 10:48:32Z jah $
  */
 
 /*

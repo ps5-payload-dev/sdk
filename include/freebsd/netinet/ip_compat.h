@@ -4,7 +4,7 @@
  * See the IPFILTER.LICENCE file for details on licencing.
  *
  * @(#)ip_compat.h	1.8 1/14/96
- * $FreeBSD: releng/11.0/sys/contrib/ipfilter/netinet/ip_compat.h 295126 2016-02-01 17:41:21Z glebius $
+ * $FreeBSD: releng/11.1/sys/contrib/ipfilter/netinet/ip_compat.h 314251 2017-02-25 08:07:28Z cy $
  * Id: ip_compat.h,v 2.142.2.57 2007/10/10 09:51:42 darrenr Exp $
  */
 
@@ -32,7 +32,13 @@
 # define 	__KERNEL__
 #endif
 
-#define	SOLARIS	(defined(sun) && (defined(__svr4__) || defined(__SVR4)))
+#ifndef	SOLARIS
+# if defined(sun) && (defined(__svr4__) || defined(__SVR4))
+#  define	SOLARIS		1
+# else
+#  define	SOLARIS		0
+# endif
+#endif
 
 
 #if defined(__SVR4) || defined(__svr4__) || defined(__sgi)
@@ -159,6 +165,7 @@ struct  ether_addr {
 #    define	READ_ENTER(x)		rw_rlock(&(x)->ipf_lk)
 #    define	WRITE_ENTER(x)		rw_wlock(&(x)->ipf_lk)
 #    define	MUTEX_DOWNGRADE(x)	rw_downgrade(&(x)->ipf_lk)
+#    define	MUTEX_TRY_UPGRADE(x)	rw_try_upgrade(&(x)->ipf_lk)
 #    define	RWLOCK_INIT(x,y)	rw_init(&(x)->ipf_lk, (y))
 #    define	RW_DESTROY(x)		rw_destroy(&(x)->ipf_lk)
 #    define	RWLOCK_EXIT(x)		do { \
@@ -414,6 +421,8 @@ extern	void	freembt __P((mb_t *));
 
 # define	MUTEX_DOWNGRADE(x)	eMrwlock_downgrade(&(x)->ipf_emu, \
 							   __FILE__, __LINE__)
+# define	MUTEX_TRY_UPGRADE(x)	eMrwlock_try_upgrade(&(x)->ipf_emu, \
+							   __FILE__, __LINE__)
 # define	READ_ENTER(x)		eMrwlock_read_enter(&(x)->ipf_emu, \
 							    __FILE__, __LINE__)
 # define	RWLOCK_INIT(x, y)	eMrwlock_init(&(x)->ipf_emu, y)
@@ -664,6 +673,7 @@ extern	char	*ipf_getifname __P((struct ifnet *, char *));
 # define	READ_ENTER(x)		;
 # define	WRITE_ENTER(x)		;
 # define	MUTEX_DOWNGRADE(x)	;
+# define	MUTEX_TRY_UPGRADE(x)	;
 # define	RWLOCK_INIT(x, y)	;
 # define	RWLOCK_EXIT(x)		;
 # define	RW_DESTROY(x)		;

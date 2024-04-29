@@ -34,7 +34,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/x86/include/_stdint.h 301030 2016-05-31 08:38:24Z ed $
+ * $FreeBSD: releng/11.1/sys/x86/include/_stdint.h 301030 2016-05-31 08:38:24Z ed $
  */
 
 #ifndef _MACHINE__STDINT_H_

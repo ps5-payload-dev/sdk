@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)telnet.h	8.2 (Berkeley) 12/15/93
- * $FreeBSD: releng/11.0/include/arpa/telnet.h 203965 2010-02-16 19:46:46Z imp $
+ * $FreeBSD: releng/11.1/include/arpa/telnet.h 203965 2010-02-16 19:46:46Z imp $
  */
 
 #ifndef _ARPA_TELNET_H_

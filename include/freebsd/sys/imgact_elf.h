@@ -25,7 +25,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/imgact_elf.h 298981 2016-05-03 15:14:17Z pfg $
+ * $FreeBSD: releng/11.1/sys/sys/imgact_elf.h 316576 2017-04-06 15:19:18Z kib $
  */
 
 #ifndef _SYS_IMGACT_ELF_H_
@@ -39,6 +39,7 @@
 
 struct image_params;
 struct thread;
+struct vnode;
 
 /*
  * Structure used to pass information from the loader to the
@@ -80,6 +81,7 @@ typedef struct {
 #define	BI_CAN_EXEC_DYN		0x0001
 #define	BI_BRAND_NOTE		0x0002	/* May have note.ABI-tag section. */
 #define	BI_BRAND_NOTE_MANDATORY	0x0004	/* Must have note.ABI-tag section. */
+#define	BI_BRAND_ONLY_STATIC	0x0008	/* Match only interp-less binaries. */
 } __ElfN(Brandinfo);
 
 __ElfType(Auxargs);

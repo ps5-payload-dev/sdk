@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.0/sys/sys/_semaphore.h 201546 2010-01-05 02:37:59Z davidxu $
+ *	$FreeBSD: releng/11.1/sys/sys/_semaphore.h 201546 2010-01-05 02:37:59Z davidxu $
  */
 #ifndef __SEMAPHORE_H_
 #define __SEMAPHORE_H_

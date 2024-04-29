@@ -22,7 +22,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/netinet/in_kdtrace.h 292384 2015-12-16 23:39:27Z markj $
+ * $FreeBSD: releng/11.1/sys/netinet/in_kdtrace.h 317368 2017-04-24 11:34:02Z smh $
  */
 
 #ifndef _SYS_IN_KDTRACE_H_
@@ -65,6 +65,7 @@ SDT_PROBE_DECLARE(tcp, , , debug__input);
 SDT_PROBE_DECLARE(tcp, , , debug__output);
 SDT_PROBE_DECLARE(tcp, , , debug__user);
 SDT_PROBE_DECLARE(tcp, , , debug__drop);
+SDT_PROBE_DECLARE(tcp, , , receive__autoresize);
 
 SDT_PROBE_DECLARE(udp, , , receive);
 SDT_PROBE_DECLARE(udp, , , send);

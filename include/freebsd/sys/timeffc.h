@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/timeffc.h 228856 2011-12-24 01:32:01Z lstewart $
+ * $FreeBSD: releng/11.1/sys/sys/timeffc.h 228856 2011-12-24 01:32:01Z lstewart $
  */
 
 #ifndef _SYS_TIMEFF_H_

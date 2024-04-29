@@ -2,7 +2,7 @@
  * generic krb5-types.h for cross compiling, assume system is posix/sus
  */
 
-/* $FreeBSD: releng/11.0/kerberos5/include/krb5-types.h 233294 2012-03-22 08:48:42Z stas $ */
+/* $FreeBSD: releng/11.1/kerberos5/include/krb5-types.h 233294 2012-03-22 08:48:42Z stas $ */
 
 #ifndef __krb5_types_h__
 #define __krb5_types_h__

@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/ttyqueue.h 198223 2009-10-19 07:17:37Z ed $
+ * $FreeBSD: releng/11.1/sys/sys/ttyqueue.h 314538 2017-03-02 04:23:53Z ian $
  */
 
 #ifndef _SYS_TTYQUEUE_H_
@@ -69,7 +69,7 @@ struct ttyoutq {
 
 #ifdef _KERNEL
 /* Input queue handling routines. */
-void	ttyinq_setsize(struct ttyinq *ti, struct tty *tp, size_t len);
+int	ttyinq_setsize(struct ttyinq *ti, struct tty *tp, size_t len);
 void	ttyinq_free(struct ttyinq *ti);
 int	ttyinq_read_uio(struct ttyinq *ti, struct tty *tp, struct uio *uio,
     size_t readlen, size_t flushlen);
@@ -136,7 +136,7 @@ void	ttyinq_line_iterate_from_reprintpos(struct ttyinq *ti,
 
 /* Output queue handling routines. */
 void	ttyoutq_flush(struct ttyoutq *to);
-void	ttyoutq_setsize(struct ttyoutq *to, struct tty *tp, size_t len);
+int	ttyoutq_setsize(struct ttyoutq *to, struct tty *tp, size_t len);
 void	ttyoutq_free(struct ttyoutq *to);
 size_t	ttyoutq_read(struct ttyoutq *to, void *buf, size_t len);
 int	ttyoutq_read_uio(struct ttyoutq *to, struct tty *tp, struct uio *uio);

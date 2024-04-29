@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/limits.h 219271 2011-03-04 19:28:27Z jilles $
+ * $FreeBSD: releng/11.1/sys/sys/limits.h 219271 2011-03-04 19:28:27Z jilles $
  */
 
 #ifndef _SYS_LIMITS_H_

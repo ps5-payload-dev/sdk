@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/gnu/lib/libregex/gnuregex.h 126224 2004-02-25 10:56:54Z ache $
+ * $FreeBSD: releng/11.1/gnu/lib/libregex/gnuregex.h 126224 2004-02-25 10:56:54Z ache $
  */
 
 #ifdef __GNUC__

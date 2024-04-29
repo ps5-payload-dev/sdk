@@ -29,7 +29,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/soundcard.h 301406 2016-06-04 18:57:00Z ed $
+ * $FreeBSD: releng/11.1/sys/sys/soundcard.h 301406 2016-06-04 18:57:00Z ed $
  */
 
 /*

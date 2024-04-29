@@ -57,7 +57,7 @@
  * any improvements or extensions that they make and grant Carnegie the
  * rights to redistribute these changes.
  *
- * $FreeBSD: releng/11.0/sys/vm/vm_param.h 287640 2015-09-11 03:00:20Z markj $
+ * $FreeBSD: releng/11.1/sys/vm/vm_param.h 287640 2015-09-11 03:00:20Z markj $
  */
 
 /*

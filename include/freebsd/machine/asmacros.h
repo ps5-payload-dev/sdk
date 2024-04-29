@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/amd64/include/asmacros.h 274489 2014-11-13 22:11:44Z scottl $
+ * $FreeBSD: releng/11.1/sys/amd64/include/asmacros.h 274489 2014-11-13 22:11:44Z scottl $
  */
 
 #ifndef _MACHINE_ASMACROS_H_

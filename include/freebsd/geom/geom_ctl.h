@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/geom/geom_ctl.h 115624 2003-06-01 13:47:51Z phk $
+ * $FreeBSD: releng/11.1/sys/geom/geom_ctl.h 115624 2003-06-01 13:47:51Z phk $
  */
 
 #ifndef _GEOM_GEOM_CTL_H_

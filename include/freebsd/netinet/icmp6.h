@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.0/sys/netinet/icmp6.h 301478 2016-06-06 00:35:45Z gnn $	*/
+/*	$FreeBSD: releng/11.1/sys/netinet/icmp6.h 301478 2016-06-06 00:35:45Z gnn $	*/
 /*	$KAME: icmp6.h,v 1.46 2001/04/27 15:09:48 itojun Exp $	*/
 
 /*-

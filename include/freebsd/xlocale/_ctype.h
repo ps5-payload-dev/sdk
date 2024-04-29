@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/include/xlocale/_ctype.h 290494 2015-11-07 12:43:35Z bapt $
+ * $FreeBSD: releng/11.1/include/xlocale/_ctype.h 290494 2015-11-07 12:43:35Z bapt $
  */
 
 

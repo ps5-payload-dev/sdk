@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ioccom.h	8.2 (Berkeley) 3/28/94
- * $FreeBSD: releng/11.0/sys/sys/ioccom.h 206051 2010-04-01 16:21:35Z pjd $
+ * $FreeBSD: releng/11.1/sys/sys/ioccom.h 206051 2010-04-01 16:21:35Z pjd $
  */
 
 #ifndef	_SYS_IOCCOM_H_

@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/x86/include/mca.h 281887 2015-04-23 14:22:20Z jhb $
+ * $FreeBSD: releng/11.1/sys/x86/include/mca.h 281887 2015-04-23 14:22:20Z jhb $
  */
 
 #ifndef __X86_MCA_H__

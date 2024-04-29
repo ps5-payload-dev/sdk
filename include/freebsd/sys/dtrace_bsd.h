@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/dtrace_bsd.h 276142 2014-12-23 15:38:19Z markj $
+ * $FreeBSD: releng/11.1/sys/sys/dtrace_bsd.h 276142 2014-12-23 15:38:19Z markj $
  *
  * This file contains BSD shims for Sun's DTrace code.
  */

@@ -1,4 +1,4 @@
-/* Generated from /usr/src/kerberos5/lib/libheimntlm/../../../crypto/heimdal/lib/ntlm/ntlm_err.et */
+/* Generated from /usr/src/crypto/heimdal/lib/ntlm/ntlm_err.et */
 
 #ifndef __ntlm_err_h__
 #define __ntlm_err_h__

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/smbus/smbus.h 281985 2015-04-25 16:15:01Z grembo $
+ * $FreeBSD: releng/11.1/sys/dev/smbus/smbus.h 281985 2015-04-25 16:15:01Z grembo $
  *
  */
 #ifndef __SMBUS_H

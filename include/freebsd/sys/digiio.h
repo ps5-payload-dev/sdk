@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/digiio.h 162711 2006-09-27 19:57:02Z ru $
+ * $FreeBSD: releng/11.1/sys/sys/digiio.h 162711 2006-09-27 19:57:02Z ru $
  */
 
 /*

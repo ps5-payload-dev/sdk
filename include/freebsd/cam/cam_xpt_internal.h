@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/cam/cam_xpt_internal.h 301771 2016-06-09 22:39:02Z imp $
+ * $FreeBSD: releng/11.1/sys/cam/cam_xpt_internal.h 301771 2016-06-09 22:39:02Z imp $
  */
 
 #ifndef _CAM_CAM_XPT_INTERNAL_H

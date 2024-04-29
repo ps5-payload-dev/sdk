@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)tcp_var.h	8.4 (Berkeley) 5/24/95
- * $FreeBSD: releng/11.0/sys/netinet/tcp_syncache.h 294870 2016-01-27 00:48:05Z glebius $
+ * $FreeBSD: releng/11.1/sys/netinet/tcp_syncache.h 319654 2017-06-07 12:50:54Z tuexen $
  */
 
 #ifndef _NETINET_TCP_SYNCACHE_H_
@@ -38,7 +38,7 @@ void	 syncache_init(void);
 #ifdef VIMAGE
 void	syncache_destroy(void);
 #endif
-void	 syncache_unreach(struct in_conninfo *, struct tcphdr *);
+void	 syncache_unreach(struct in_conninfo *, tcp_seq);
 int	 syncache_expand(struct in_conninfo *, struct tcpopt *,
 	     struct tcphdr *, struct socket **, struct mbuf *);
 int	 syncache_add(struct in_conninfo *, struct tcpopt *,
@@ -99,6 +99,7 @@ struct syncache_head {
 	int		sch_nextc;
 	u_int		sch_length;
 	struct tcp_syncache *sch_sc;
+	time_t		sch_last_overflow;
 };
 
 #define	SYNCOOKIE_SECRET_SIZE	16

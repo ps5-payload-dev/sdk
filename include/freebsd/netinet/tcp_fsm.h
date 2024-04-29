@@ -28,7 +28,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)tcp_fsm.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: releng/11.0/sys/netinet/tcp_fsm.h 171656 2007-07-30 11:06:42Z des $
+ * $FreeBSD: releng/11.1/sys/netinet/tcp_fsm.h 306517 2016-09-30 18:14:05Z hiren $
  */
 
 #ifndef _NETINET_TCP_FSM_H_
@@ -73,7 +73,8 @@
 
 #define	TCPS_HAVERCVDSYN(s)	((s) >= TCPS_SYN_RECEIVED)
 #define	TCPS_HAVEESTABLISHED(s)	((s) >= TCPS_ESTABLISHED)
-#define	TCPS_HAVERCVDFIN(s)	((s) >= TCPS_TIME_WAIT)
+#define	TCPS_HAVERCVDFIN(s)	\
+    ((s) == TCPS_CLOSE_WAIT || ((s) >= TCPS_CLOSING && (s) != TCPS_FIN_WAIT_2))
 
 #ifdef	TCPOUTFLAGS
 /*

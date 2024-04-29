@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/include/xlocale/_time.h 231673 2012-02-14 12:03:23Z theraven $
+ * $FreeBSD: releng/11.1/include/xlocale/_time.h 231673 2012-02-14 12:03:23Z theraven $
  */
 
 #ifndef _LOCALE_T_DEFINED

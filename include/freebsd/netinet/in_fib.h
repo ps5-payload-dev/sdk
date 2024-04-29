@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/netinet/in_fib.h 291993 2015-12-08 10:50:03Z melifaro $
+ * $FreeBSD: releng/11.1/sys/netinet/in_fib.h 291993 2015-12-08 10:50:03Z melifaro $
  */
 
 #ifndef _NETINET_IN_FIB_H_

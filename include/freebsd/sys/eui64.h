@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/eui64.h 139825 2005-01-07 02:29:27Z imp $
+ * $FreeBSD: releng/11.1/sys/sys/eui64.h 139825 2005-01-07 02:29:27Z imp $
  */
 #ifndef _SYS_EUI64_H
 #define _SYS_EUI64_H

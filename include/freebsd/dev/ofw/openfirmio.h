@@ -34,7 +34,7 @@
  *
  *	@(#)openpromio.h	8.1 (Berkeley) 6/11/93
  *
- * $FreeBSD: releng/11.0/sys/dev/ofw/openfirmio.h 146400 2005-05-19 15:22:16Z marius $
+ * $FreeBSD: releng/11.1/sys/dev/ofw/openfirmio.h 146400 2005-05-19 15:22:16Z marius $
  */
 
 #ifndef _DEV_OFW_OPENFIRMIO_H_

@@ -30,7 +30,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/capsicum.h 287209 2015-08-27 15:16:41Z ed $
+ * $FreeBSD: releng/11.1/sys/sys/capsicum.h 306398 2016-09-28 09:28:26Z kib $
  */
 
 /*
@@ -367,6 +367,8 @@ cap_rights_t	*cap_rights(struct filedesc *fdp, int fd);
 int	cap_ioctl_check(struct filedesc *fdp, int fd, u_long cmd);
 int	cap_fcntl_check_fde(struct filedescent *fde, int cmd);
 int	cap_fcntl_check(struct filedesc *fdp, int fd, int cmd);
+
+extern int trap_enotcap;
 
 #else /* !_KERNEL */
 

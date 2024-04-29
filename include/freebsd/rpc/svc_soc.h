@@ -1,5 +1,5 @@
 /*	$NetBSD: svc_soc.h,v 1.1 2000/06/02 22:57:57 fvdl Exp $	*/
-/*	$FreeBSD: releng/11.0/include/rpc/svc_soc.h 258578 2013-11-25 19:04:36Z hrs $ */
+/*	$FreeBSD: releng/11.1/include/rpc/svc_soc.h 258578 2013-11-25 19:04:36Z hrs $ */
 
 /*-
  * Copyright (c) 2009, Sun Microsystems, Inc.

@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/geom/mountver/g_mountver.h 202437 2010-01-16 09:52:49Z trasz $
+ * $FreeBSD: releng/11.1/sys/geom/mountver/g_mountver.h 202437 2010-01-16 09:52:49Z trasz $
  */
 
 #ifndef	_G_MOUNTVER_H_

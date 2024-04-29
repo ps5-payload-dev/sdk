@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)filedesc.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: releng/11.0/sys/sys/sigio.h 139825 2005-01-07 02:29:27Z imp $
+ * $FreeBSD: releng/11.1/sys/sys/sigio.h 139825 2005-01-07 02:29:27Z imp $
  */
 
 #ifndef _SYS_SIGIO_H_

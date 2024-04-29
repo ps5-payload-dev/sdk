@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)buf.h	8.9 (Berkeley) 3/30/95
- * $FreeBSD: releng/11.0/sys/sys/bio.h 300207 2016-05-19 14:08:36Z ken $
+ * $FreeBSD: releng/11.1/sys/sys/bio.h 300207 2016-05-19 14:08:36Z ken $
  */
 
 #ifndef _SYS_BIO_H_

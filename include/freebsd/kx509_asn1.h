@@ -1,4 +1,4 @@
-/* Generated from /usr/src/kerberos5/lib/libasn1/../../../crypto/heimdal/lib/asn1/kx509.asn1 */
+/* Generated from /usr/src/crypto/heimdal/lib/asn1/kx509.asn1 */
 /* Do not edit */
 
 #ifndef __kx509_asn1_h__

@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/include/fnmatch.h 203964 2010-02-16 19:39:50Z imp $
+ * $FreeBSD: releng/11.1/include/fnmatch.h 203964 2010-02-16 19:39:50Z imp $
  *	@(#)fnmatch.h	8.1 (Berkeley) 6/2/93
  */
 

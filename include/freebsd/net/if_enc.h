@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/net/if_enc.h 291292 2015-11-25 07:31:59Z ae $
+ * $FreeBSD: releng/11.1/sys/net/if_enc.h 291292 2015-11-25 07:31:59Z ae $
  */
 
 #ifndef _NET_IF_ENC_H

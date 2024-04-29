@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)file.h	8.3 (Berkeley) 1/9/95
- * $FreeBSD: releng/11.0/sys/sys/file.h 297400 2016-03-29 19:57:11Z glebius $
+ * $FreeBSD: releng/11.1/sys/sys/file.h 316294 2017-03-30 20:03:20Z dchagin $
  */
 
 #ifndef _SYS_FILE_H_
@@ -50,11 +50,10 @@ struct thread;
 struct uio;
 struct knote;
 struct vnode;
-struct socket;
-
 
 #endif /* _KERNEL */
 
+#define	DTYPE_NONE	0	/* not yet initialized */
 #define	DTYPE_VNODE	1	/* file */
 #define	DTYPE_SOCKET	2	/* communications endpoint */
 #define	DTYPE_PIPE	3	/* pipe */
@@ -68,6 +67,7 @@ struct socket;
 #define	DTYPE_DEV	11	/* Device specific fd type */
 #define	DTYPE_PROCDESC	12	/* process descriptor */
 #define	DTYPE_LINUXEFD	13	/* emulation eventfd type */
+#define	DTYPE_LINUXTFD	14	/* emulation timerfd type */
 
 #ifdef _KERNEL
 
@@ -266,10 +266,6 @@ int fgetvp_read(struct thread *td, int fd, cap_rights_t *rightsp,
     struct vnode **vpp);
 int fgetvp_write(struct thread *td, int fd, cap_rights_t *rightsp,
     struct vnode **vpp);
-
-int fgetsock(struct thread *td, int fd, cap_rights_t *rightsp,
-    struct socket **spp, u_int *fflagp);
-void fputsock(struct socket *sp);
 
 static __inline int
 _fnoop(void)

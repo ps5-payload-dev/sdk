@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)types.h	8.6 (Berkeley) 2/19/95
- * $FreeBSD: releng/11.0/sys/sys/types.h 299571 2016-05-12 21:18:17Z cem $
+ * $FreeBSD: releng/11.1/sys/sys/types.h 313574 2017-02-11 02:00:56Z kib $
  */
 
 #ifndef _SYS_TYPES_H_
@@ -250,9 +250,9 @@ typedef	struct cap_rights	cap_rights_t;
 #endif
 
 typedef	__vm_offset_t	vm_offset_t;
-typedef	__vm_ooffset_t	vm_ooffset_t;
+typedef	__int64_t	vm_ooffset_t;
 typedef	__vm_paddr_t	vm_paddr_t;
-typedef	__vm_pindex_t	vm_pindex_t;
+typedef	__uint64_t	vm_pindex_t;
 typedef	__vm_size_t	vm_size_t;
 
 typedef __rman_res_t    rman_res_t;

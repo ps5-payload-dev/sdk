@@ -31,7 +31,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/geom/geom_disk.h 302150 2016-06-23 20:05:59Z ken $
+ * $FreeBSD: releng/11.1/sys/geom/geom_disk.h 312405 2017-01-19 11:16:25Z mav $
  */
 
 #ifndef _GEOM_GEOM_DISK_H_
@@ -118,6 +118,11 @@ struct disk {
 #define	DISKFLAG_UNMAPPED_BIO	0x10
 #define	DISKFLAG_DIRECT_COMPLETION	0x20
 #define	DISKFLAG_CANZONE	0x80
+
+#define	DISK_RR_UNKNOWN		0
+#define	DISK_RR_NON_ROTATING	1
+#define	DISK_RR_MIN		0x0401
+#define	DISK_RR_MAX		0xfffe
 
 struct disk *disk_alloc(void);
 void disk_create(struct disk *disk, int version);

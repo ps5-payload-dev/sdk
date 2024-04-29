@@ -38,7 +38,7 @@
  * SUCH DAMAGE.
  *
  *	from: @(#)vmparam.h	5.9 (Berkeley) 5/12/91
- * $FreeBSD: releng/11.0/sys/amd64/include/vmparam.h 284147 2015-06-08 04:59:32Z alc $
+ * $FreeBSD: releng/11.1/sys/amd64/include/vmparam.h 319616 2017-06-06 08:33:19Z trasz $
  */
 
 
@@ -52,7 +52,7 @@
 /*
  * Virtual memory related constants, all in bytes
  */
-#define	MAXTSIZ		(128UL*1024*1024)	/* max text size */
+#define	MAXTSIZ		(32768UL*1024*1024)	/* max text size */
 #ifndef DFLDSIZ
 #define	DFLDSIZ		(32768UL*1024*1024)	/* initial data size limit */
 #endif

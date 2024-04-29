@@ -58,7 +58,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)in.h	8.3 (Berkeley) 1/3/94
- * $FreeBSD: releng/11.0/sys/netinet6/in6.h 301217 2016-06-02 17:51:29Z gnn $
+ * $FreeBSD: releng/11.1/sys/netinet6/in6.h 315514 2017-03-18 22:04:20Z ae $
  */
 
 #ifndef __KAME_NETINET_IN_H_INCLUDED_
@@ -432,10 +432,7 @@ struct route_in6 {
 #define IPV6_BINDV6ONLY		IPV6_V6ONLY
 #endif
 
-#if 1 /* IPSEC */
 #define IPV6_IPSEC_POLICY	28 /* struct; get/set security policy */
-#endif /* IPSEC */
-
 				   /* 29; unused; was IPV6_FAITH */
 #if 1 /* IPV6FIREWALL */
 #define IPV6_FW_ADD		30 /* add a firewall rule to chain */
@@ -637,7 +634,10 @@ struct ip6_mtuinfo {
 					 * receiving IF. */
 #define	IPV6CTL_RFC6204W3	50	/* Accept defroute even when forwarding
 					   enabled */
-#define	IPV6CTL_MAXID		51
+#define	IPV6CTL_INTRQMAXLEN	51	/* max length of IPv6 netisr queue */
+#define	IPV6CTL_INTRDQMAXLEN	52	/* max length of direct IPv6 netisr
+					 * queue */
+#define	IPV6CTL_MAXID		53
 #endif /* __BSD_VISIBLE */
 
 /*

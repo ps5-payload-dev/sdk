@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/iicbus/ds1307reg.h 297573 2016-04-05 03:27:33Z jhibbits $
+ * $FreeBSD: releng/11.1/sys/dev/iicbus/ds1307reg.h 297573 2016-04-05 03:27:33Z jhibbits $
  */
 
 /*

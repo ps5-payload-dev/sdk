@@ -31,7 +31,7 @@
  */
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: releng/11.0/sys/netinet/sctp_sysctl.h 299543 2016-05-12 16:34:59Z tuexen $");
+__FBSDID("$FreeBSD: releng/11.1/sys/netinet/sctp_sysctl.h 299543 2016-05-12 16:34:59Z tuexen $");
 
 #ifndef _NETINET_SCTP_SYSCTL_H_
 #define _NETINET_SCTP_SYSCTL_H_

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/_types.h 299571 2016-05-12 21:18:17Z cem $
+ * $FreeBSD: releng/11.1/sys/sys/_types.h 309258 2016-11-28 18:36:37Z jhb $
  */
 
 #ifndef _SYS__TYPES_H_
@@ -99,6 +99,11 @@ typedef	__uint_least32_t __char32_t;
 #define	_CHAR16_T_DECLARED
 #define	_CHAR32_T_DECLARED
 #endif
+
+typedef struct {
+	long long __max_align1 __aligned(_Alignof(long long));
+	long double __max_align2 __aligned(_Alignof(long double));
+} __max_align_t;
 
 typedef	__uint32_t	__dev_t;	/* device number */
 

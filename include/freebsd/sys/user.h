@@ -29,7 +29,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)user.h	8.2 (Berkeley) 9/23/93
- * $FreeBSD: releng/11.0/sys/sys/user.h 298981 2016-05-03 15:14:17Z pfg $
+ * $FreeBSD: releng/11.1/sys/sys/user.h 310120 2016-12-15 16:51:33Z vangyzen $
  */
 
 #ifndef _SYS_USER_H_
@@ -180,12 +180,13 @@ struct kinfo_proc {
 	char	ki_comm[COMMLEN+1];	/* command name */
 	char	ki_emul[KI_EMULNAMELEN+1];  /* emulation name */
 	char	ki_loginclass[LOGINCLASSLEN+1]; /* login class */
+	char	ki_moretdname[MAXCOMLEN-TDNAMLEN+1];	/* more thread name */
 	/*
 	 * When adding new variables, take space for char-strings from the
 	 * front of ki_sparestrings, and ints from the end of ki_spareints.
 	 * That way the spare room from both arrays will remain contiguous.
 	 */
-	char	ki_sparestrings[50];	/* spare string space */
+	char	ki_sparestrings[46];	/* spare string space */
 	int	ki_spareints[KI_NSPARE_INT];	/* spare room for growth */
 	int	ki_oncpu;		/* Which cpu we are on */
 	int	ki_lastcpu;		/* Last cpu we were on */

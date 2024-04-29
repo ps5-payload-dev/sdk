@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/lib/libpmc/pmc.h 290929 2015-11-16 15:16:09Z jtl $
+ * $FreeBSD: releng/11.1/lib/libpmc/pmc.h 290929 2015-11-16 15:16:09Z jtl $
  */
 
 #ifndef _PMC_H_

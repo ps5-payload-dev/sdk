@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)unistd.h	8.12 (Berkeley) 4/27/95
- * $FreeBSD: releng/11.0/include/unistd.h 296162 2016-02-28 17:52:33Z kib $
+ * $FreeBSD: releng/11.1/include/unistd.h 304977 2016-08-29 05:15:43Z kib $
  */
 
 #ifndef _UNISTD_H_
@@ -384,6 +384,7 @@ extern int optind, opterr, optopt;
 /* ISO/IEC 9945-1: 1996 */
 #if __POSIX_VISIBLE >= 199506 || __XSI_VISIBLE
 int	 fsync(int);
+int	 fdatasync(int);
 
 /*
  * ftruncate() was in the POSIX Realtime Extension (it's used for shared

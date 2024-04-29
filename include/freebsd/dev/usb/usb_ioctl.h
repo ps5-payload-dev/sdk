@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.0/sys/dev/usb/usb_ioctl.h 283879 2015-06-01 11:24:34Z hselasky $ */
+/* $FreeBSD: releng/11.1/sys/dev/usb/usb_ioctl.h 283879 2015-06-01 11:24:34Z hselasky $ */
 /*-
  * Copyright (c) 2008 Hans Petter Selasky. All rights reserved.
  * Copyright (c) 1998 The NetBSD Foundation, Inc. All rights reserved.

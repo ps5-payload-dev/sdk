@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/netinet/tcp_lro.h 300731 2016-05-26 11:10:31Z hselasky $
+ * $FreeBSD: releng/11.1/sys/netinet/tcp_lro.h 300731 2016-05-26 11:10:31Z hselasky $
  */
 
 #ifndef _TCP_LRO_H_

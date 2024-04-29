@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/usb/uled_ioctl.h 271159 2014-09-05 11:25:58Z kevlo $
+ * $FreeBSD: releng/11.1/sys/dev/usb/uled_ioctl.h 271159 2014-09-05 11:25:58Z kevlo $
  */
 
 #ifndef _ULED_IOCTL_H_

@@ -22,7 +22,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/copyright.h 292983 2015-12-31 11:21:45Z bz $
+ * $FreeBSD: releng/11.1/sys/sys/copyright.h 310966 2016-12-31 12:52:23Z bapt $
  */
 
 
@@ -34,7 +34,7 @@
 
 /* FreeBSD */
 #define COPYRIGHT_FreeBSD \
-	"Copyright (c) 1992-2016 The FreeBSD Project.\n"
+	"Copyright (c) 1992-2017 The FreeBSD Project.\n"
 
 /* Foundation */
 #define	TRADEMARK_Foundation \

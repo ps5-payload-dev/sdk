@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.0/sys/net/firewire.h 194581 2009-06-21 10:29:31Z rdivacky $
+ *	$FreeBSD: releng/11.1/sys/net/firewire.h 194581 2009-06-21 10:29:31Z rdivacky $
  */
 
 #ifndef _NET_FIREWIRE_H_

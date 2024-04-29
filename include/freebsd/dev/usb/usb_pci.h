@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.0/sys/dev/usb/usb_pci.h 246122 2013-01-30 15:26:04Z hselasky $ */
+/* $FreeBSD: releng/11.1/sys/dev/usb/usb_pci.h 246122 2013-01-30 15:26:04Z hselasky $ */
 /*-
  * Copyright (c) 2008 Hans Petter Selasky. All rights reserved.
  *

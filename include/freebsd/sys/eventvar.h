@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.0/sys/sys/eventvar.h 256849 2013-10-21 16:44:53Z kib $
+ *	$FreeBSD: releng/11.1/sys/sys/eventvar.h 256849 2013-10-21 16:44:53Z kib $
  */
 
 #ifndef _SYS_EVENTVAR_H_

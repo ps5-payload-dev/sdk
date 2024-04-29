@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/_unrhdr.h 255057 2013-08-30 07:37:45Z kib $
+ * $FreeBSD: releng/11.1/sys/sys/_unrhdr.h 255057 2013-08-30 07:37:45Z kib $
  */
 
 #ifndef _SYS_UNRHDR_H

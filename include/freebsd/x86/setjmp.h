@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/x86/include/setjmp.h 232275 2012-02-28 22:17:52Z tijl $
+ * $FreeBSD: releng/11.1/sys/x86/include/setjmp.h 232275 2012-02-28 22:17:52Z tijl $
  */
 
 #ifndef _MACHINE_SETJMP_H_

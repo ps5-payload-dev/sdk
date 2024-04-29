@@ -28,7 +28,7 @@
  * POSSIBILITY OF SUCH DAMAGES.
  *
  * $Id: //depot/users/kenm/FreeBSD-test/sys/cam/scsi/smp_all.h#4 $
- * $FreeBSD: releng/11.0/sys/cam/scsi/smp_all.h 216088 2010-11-30 22:39:46Z ken $
+ * $FreeBSD: releng/11.1/sys/cam/scsi/smp_all.h 216088 2010-11-30 22:39:46Z ken $
  */
 
 /*

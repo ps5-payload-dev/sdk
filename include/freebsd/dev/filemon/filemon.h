@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/filemon/filemon.h 284477 2015-06-16 23:03:15Z sjg $
+ * $FreeBSD: releng/11.1/sys/dev/filemon/filemon.h 284477 2015-06-16 23:03:15Z sjg $
  */
 
 #define FILEMON_SET_FD		_IOWR('S', 1, int)

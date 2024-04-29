@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)utsname.h	8.1 (Berkeley) 1/4/94
- * $FreeBSD: releng/11.0/sys/sys/utsname.h 127976 2004-04-07 04:19:52Z imp $
+ * $FreeBSD: releng/11.1/sys/sys/utsname.h 127976 2004-04-07 04:19:52Z imp $
  */
 
 #ifndef	_SYS_UTSNAME_H

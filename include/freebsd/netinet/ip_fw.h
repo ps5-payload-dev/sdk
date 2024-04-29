@@ -22,7 +22,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/netinet/ip_fw.h 304084 2016-08-14 16:32:23Z ae $
+ * $FreeBSD: releng/11.1/sys/netinet/ip_fw.h 317043 2017-04-17 09:36:35Z ae $
  */
 
 #ifndef _IPFW2_H
@@ -109,6 +109,28 @@ typedef struct _ip_fw3_opheader {
 
 #define	IP_FW_DUMP_SOPTCODES	116	/* Dump available sopts/versions */
 #define	IP_FW_DUMP_SRVOBJECTS	117	/* Dump existing named objects */
+
+#define	IP_FW_NAT64STL_CREATE	130	/* Create stateless NAT64 instance */
+#define	IP_FW_NAT64STL_DESTROY	131	/* Destroy stateless NAT64 instance */
+#define	IP_FW_NAT64STL_CONFIG	132	/* Modify stateless NAT64 instance */
+#define	IP_FW_NAT64STL_LIST	133	/* List stateless NAT64 instances */
+#define	IP_FW_NAT64STL_STATS	134	/* Get NAT64STL instance statistics */
+#define	IP_FW_NAT64STL_RESET_STATS 135	/* Reset NAT64STL instance statistics */
+
+#define	IP_FW_NAT64LSN_CREATE	140	/* Create stateful NAT64 instance */
+#define	IP_FW_NAT64LSN_DESTROY	141	/* Destroy stateful NAT64 instance */
+#define	IP_FW_NAT64LSN_CONFIG	142	/* Modify stateful NAT64 instance */
+#define	IP_FW_NAT64LSN_LIST	143	/* List stateful NAT64 instances */
+#define	IP_FW_NAT64LSN_STATS	144	/* Get NAT64LSN instance statistics */
+#define	IP_FW_NAT64LSN_LIST_STATES 145	/* Get stateful NAT64 states */
+#define	IP_FW_NAT64LSN_RESET_STATS 146	/* Reset NAT64LSN instance statistics */
+
+#define	IP_FW_NPTV6_CREATE	150	/* Create NPTv6 instance */
+#define	IP_FW_NPTV6_DESTROY	151	/* Destroy NPTv6 instance */
+#define	IP_FW_NPTV6_CONFIG	152	/* Modify NPTv6 instance */
+#define	IP_FW_NPTV6_LIST	153	/* List NPTv6 instances */
+#define	IP_FW_NPTV6_STATS	154	/* Get NPTv6 instance statistics */
+#define	IP_FW_NPTV6_RESET_STATS	155	/* Reset NPTv6 instance statistics */
 
 /*
  * The kernel representation of ipfw rules is made of a list of
@@ -259,6 +281,7 @@ enum ipfw_opcodes {		/* arguments (4 byte each)	*/
 
 	O_EXTERNAL_ACTION,	/* arg1=id of external action handler */
 	O_EXTERNAL_INSTANCE,	/* arg1=id of eaction handler instance */
+	O_EXTERNAL_DATA,	/* variable length data */
 
 	O_LAST_OPCODE		/* not an opcode!		*/
 };
@@ -683,7 +706,8 @@ struct _ipfw_dyn_rule {
 					/* to generate keepalives)	*/
 	u_int16_t	dyn_type;	/* rule type			*/
 	u_int16_t	count;		/* refcount			*/
-};
+	u_int16_t	kidx;		/* index of named object */
+} __packed __aligned(8);
 
 /*
  * Definitions for IP option names.
@@ -784,9 +808,17 @@ typedef struct  _ipfw_obj_tlv {
 #define	IPFW_TLV_TBLENT_LIST	8
 #define	IPFW_TLV_RANGE		9
 #define	IPFW_TLV_EACTION	10
+#define	IPFW_TLV_COUNTERS	11
+#define	IPFW_TLV_OBJDATA	12
+#define	IPFW_TLV_STATE_NAME	14
 
 #define	IPFW_TLV_EACTION_BASE	1000
 #define	IPFW_TLV_EACTION_NAME(arg)	(IPFW_TLV_EACTION_BASE + (arg))
+
+typedef struct _ipfw_obj_data {
+	ipfw_obj_tlv	head;
+	void		*data[0];
+} ipfw_obj_data;
 
 /* Object name TLV */
 typedef struct _ipfw_obj_ntlv {

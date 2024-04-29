@@ -32,7 +32,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/geom/geom.h 300287 2016-05-20 08:22:20Z kib $
+ * $FreeBSD: releng/11.1/sys/geom/geom.h 300287 2016-05-20 08:22:20Z kib $
  */
 
 #ifndef _GEOM_GEOM_H_

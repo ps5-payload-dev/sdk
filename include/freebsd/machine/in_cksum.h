@@ -29,7 +29,7 @@
  *	from tahoe:	in_cksum.c	1.2	86/01/05
  *	from:		@(#)in_cksum.c	1.3 (Berkeley) 1/19/91
  *	from: Id: in_cksum.c,v 1.8 1995/12/03 18:35:19 bde Exp
- * $FreeBSD: releng/11.0/sys/amd64/include/in_cksum.h 286336 2015-08-05 19:05:12Z emaste $
+ * $FreeBSD: releng/11.1/sys/amd64/include/in_cksum.h 286336 2015-08-05 19:05:12Z emaste $
  */
 
 #ifndef _MACHINE_IN_CKSUM_H_

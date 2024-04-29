@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/geom/nop/g_nop.h 289110 2015-10-10 09:03:31Z trasz $
+ * $FreeBSD: releng/11.1/sys/geom/nop/g_nop.h 289110 2015-10-10 09:03:31Z trasz $
  */
 
 #ifndef	_G_NOP_H_

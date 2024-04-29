@@ -25,7 +25,7 @@
  */
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: releng/11.0/sys/dev/mfi/mfi_ioctl.h 233805 2012-04-02 19:13:02Z ambrisko $");
+__FBSDID("$FreeBSD: releng/11.1/sys/dev/mfi/mfi_ioctl.h 233805 2012-04-02 19:13:02Z ambrisko $");
 
 #include <dev/mfi/mfireg.h>
 

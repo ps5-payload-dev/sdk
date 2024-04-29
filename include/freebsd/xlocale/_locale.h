@@ -26,18 +26,19 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/include/xlocale/_locale.h 231673 2012-02-14 12:03:23Z theraven $
+ * $FreeBSD: releng/11.1/include/xlocale/_locale.h 304863 2016-08-26 21:23:38Z ache $
  */
 
 #ifndef _XLOCALE_LOCALE_H
 #define _XLOCALE_LOCALE_H
 
+/* Bit shifting order of LC_*_MASK should match XLC_* and LC_* order. */
 #define LC_COLLATE_MASK  (1<<0)
 #define LC_CTYPE_MASK    (1<<1)
-#define LC_MESSAGES_MASK (1<<2)
-#define LC_MONETARY_MASK (1<<3)
-#define LC_NUMERIC_MASK  (1<<4)
-#define LC_TIME_MASK     (1<<5)
+#define LC_MONETARY_MASK (1<<2)
+#define LC_NUMERIC_MASK  (1<<3)
+#define LC_TIME_MASK     (1<<4)
+#define LC_MESSAGES_MASK (1<<5)
 #define LC_ALL_MASK      (LC_COLLATE_MASK | LC_CTYPE_MASK | LC_MESSAGES_MASK | \
 			  LC_MONETARY_MASK | LC_NUMERIC_MASK | LC_TIME_MASK)
 #define LC_GLOBAL_LOCALE ((locale_t)-1)

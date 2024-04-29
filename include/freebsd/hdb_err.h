@@ -1,4 +1,4 @@
-/* Generated from /usr/src/kerberos5/lib/libhdb/../../../crypto/heimdal/lib/hdb/hdb_err.et */
+/* Generated from /usr/src/crypto/heimdal/lib/hdb/hdb_err.et */
 /* $Id$ */
 
 #ifndef __hdb_err_h__

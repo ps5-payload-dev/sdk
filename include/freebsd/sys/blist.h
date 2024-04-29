@@ -44,19 +44,19 @@
  *		ops.
  *
  *		SWAPBLK_NONE is returned on failure.  This module is typically
- *		capable of managing up to (2^31) blocks per blist, though
+ *		capable of managing up to (2^63) blocks per blist, though
  *		the memory utilization would be insane if you actually did
  *		that.  Managing something like 512MB worth of 4K blocks 
  *		eats around 32 KBytes of memory. 
  *
- * $FreeBSD: releng/11.0/sys/sys/blist.h 178792 2008-05-05 19:48:54Z kmacy $
+ * $FreeBSD: releng/11.1/sys/sys/blist.h 319981 2017-06-15 17:06:04Z alc $
 
  */
 
 #ifndef _SYS_BLIST_H_
 #define _SYS_BLIST_H_
 
-typedef	u_int32_t	u_daddr_t;	/* unsigned disk address */
+typedef	uint64_t	u_daddr_t;	/* unsigned disk address */
 
 /*
  * note: currently use SWAPBLK_NONE as an absolute value rather then 

@@ -31,7 +31,7 @@
  * SUCH DAMAGE.
  *
  * $KAME: altq_classq.h,v 1.6 2003/01/07 07:33:38 kjc Exp $
- * $FreeBSD: releng/11.0/sys/net/altq/altq_classq.h 287009 2015-08-21 22:02:22Z loos $
+ * $FreeBSD: releng/11.1/sys/net/altq/altq_classq.h 287009 2015-08-21 22:02:22Z loos $
  */
 /*
  * class queue definitions extracted from rm_class.h.

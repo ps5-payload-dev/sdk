@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/select.h 265051 2014-04-28 13:42:41Z emaste $
+ * $FreeBSD: releng/11.1/sys/sys/select.h 265051 2014-04-28 13:42:41Z emaste $
  */
 
 #ifndef _SYS_SELECT_H_

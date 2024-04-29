@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/net/mp_ring.h 300113 2016-05-18 04:35:58Z scottl $
+ * $FreeBSD: releng/11.1/sys/net/mp_ring.h 300113 2016-05-18 04:35:58Z scottl $
  *
  */
 

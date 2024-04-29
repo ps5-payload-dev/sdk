@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/rmlock.h 275751 2014-12-13 21:00:10Z dchagin $
+ * $FreeBSD: releng/11.1/sys/sys/rmlock.h 275751 2014-12-13 21:00:10Z dchagin $
  */
 
 #ifndef _SYS_RMLOCK_H_

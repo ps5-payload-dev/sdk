@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/elf64.h 276539 2015-01-02 15:36:29Z emaste $
+ * $FreeBSD: releng/11.1/sys/sys/elf64.h 318972 2017-05-27 01:35:59Z emaste $
  */
 
 #ifndef _SYS_ELF64_H_
@@ -256,5 +256,12 @@ typedef struct {
 	Elf64_Half	si_boundto;	/* direct bindings - symbol bound to */
 	Elf64_Half	si_flags;	/* per symbol flags */
 } Elf64_Syminfo;
+
+typedef struct {
+	Elf64_Word	ch_type;
+	Elf64_Word	ch_reserved;
+	Elf64_Xword	ch_size;
+	Elf64_Xword	ch_addralign;
+} Elf64_Chdr;
 
 #endif /* !_SYS_ELF64_H_ */

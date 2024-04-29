@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.0/sys/sys/_kstack_cache.h 228567 2011-12-16 10:56:16Z kib $
+ *	$FreeBSD: releng/11.1/sys/sys/_kstack_cache.h 228567 2011-12-16 10:56:16Z kib $
  */
 
 #ifndef _SYS__KSTACK_CACHE_H

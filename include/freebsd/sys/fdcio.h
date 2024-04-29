@@ -24,7 +24,7 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/fdcio.h 296590 2016-03-10 00:36:38Z imp $
+ * $FreeBSD: releng/11.1/sys/sys/fdcio.h 296590 2016-03-10 00:36:38Z imp $
  */
 
 #ifndef	_MACHINE_IOCTL_FD_H_

@@ -32,7 +32,7 @@
  *
  *	@(#)fbio.h	8.2 (Berkeley) 10/30/93
  *
- * $FreeBSD: releng/11.0/sys/sys/fbio.h 279488 2015-03-01 12:54:22Z dumbbell $
+ * $FreeBSD: releng/11.1/sys/sys/fbio.h 307589 2016-10-19 01:35:21Z gonzo $
  */
 
 #ifndef _SYS_FBIO_H_
@@ -142,6 +142,8 @@ struct fb_info {
 	uint32_t	fb_flags;
 #define	FB_FLAG_NOMMAP		1	/* mmap unsupported. */
 #define	FB_FLAG_NOWRITE		2	/* disable writes for the time being */
+#define	FB_FLAG_MEMATTR		4	/* override memattr for mmap */
+	vm_memattr_t	fb_memattr;
 	int		fb_stride;
 	int		fb_bpp;		/* bits per pixel */
 	uint32_t	fb_cmap[16];

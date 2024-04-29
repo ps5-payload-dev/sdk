@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/netsmb/smb_dev.h 250236 2013-05-04 14:03:18Z davide $
+ * $FreeBSD: releng/11.1/sys/netsmb/smb_dev.h 250236 2013-05-04 14:03:18Z davide $
  */
 #ifndef _NETSMB_DEV_H_
 #define _NETSMB_DEV_H_

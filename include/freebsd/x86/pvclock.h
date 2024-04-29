@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/x86/include/pvclock.h 278184 2015-02-04 08:33:04Z bryanv $
+ * $FreeBSD: releng/11.1/sys/x86/include/pvclock.h 278184 2015-02-04 08:33:04Z bryanv $
  */
 
 #ifndef X86_PVCLOCK

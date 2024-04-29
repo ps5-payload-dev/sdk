@@ -22,7 +22,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/vdso.h 291171 2015-11-23 07:09:35Z kib $
+ * $FreeBSD: releng/11.1/sys/sys/vdso.h 311376 2017-01-05 07:42:08Z sephe $
  */
 
 #ifndef _SYS_VDSO_H
@@ -53,6 +53,9 @@ struct vdso_timekeep {
 #define	VDSO_TK_VER_1		0x1
 #define	VDSO_TK_VER_CURR	VDSO_TK_VER_1
 #define	VDSO_TH_ALGO_1		0x1
+#define	VDSO_TH_ALGO_2		0x2
+#define	VDSO_TH_ALGO_3		0x3
+#define	VDSO_TH_ALGO_4		0x4
 
 #ifndef _KERNEL
 
@@ -62,7 +65,7 @@ struct timezone;
 
 int __vdso_clock_gettime(clockid_t clock_id, struct timespec *ts);
 int __vdso_gettimeofday(struct timeval *tv, struct timezone *tz);
-u_int __vdso_gettc(const struct vdso_timehands *vdso_th);
+int __vdso_gettc(const struct vdso_timehands *vdso_th, u_int *tc);
 int __vdso_gettimekeep(struct vdso_timekeep **tk);
 
 #endif

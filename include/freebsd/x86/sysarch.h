@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/x86/include/sysarch.h 233209 2012-03-19 21:57:31Z tijl $
+ * $FreeBSD: releng/11.1/sys/x86/include/sysarch.h 233209 2012-03-19 21:57:31Z tijl $
  */
 
 /*

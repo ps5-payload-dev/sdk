@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/netgraph/ng_pred1.h 165619 2006-12-29 09:54:32Z glebius $
+ * $FreeBSD: releng/11.1/sys/netgraph/ng_pred1.h 165619 2006-12-29 09:54:32Z glebius $
  */
 
 #ifndef _NETGRAPH_NG_PRED1_H_

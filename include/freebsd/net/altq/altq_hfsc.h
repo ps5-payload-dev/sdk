@@ -28,7 +28,7 @@
  * changes without encumbrance.
  *
  * $KAME: altq_hfsc.h,v 1.12 2003/12/05 05:40:46 kjc Exp $
- * $FreeBSD: releng/11.0/sys/net/altq/altq_hfsc.h 287009 2015-08-21 22:02:22Z loos $
+ * $FreeBSD: releng/11.1/sys/net/altq/altq_hfsc.h 287009 2015-08-21 22:02:22Z loos $
  */
 #ifndef _ALTQ_ALTQ_HFSC_H_
 #define	_ALTQ_ALTQ_HFSC_H_

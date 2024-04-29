@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)signal.h	8.3 (Berkeley) 3/30/94
- * $FreeBSD: releng/11.0/include/signal.h 300997 2016-05-30 13:51:27Z ed $
+ * $FreeBSD: releng/11.1/include/signal.h 315282 2017-03-14 20:14:57Z pfg $
  */
 
 #ifndef _SIGNAL_H_
@@ -40,6 +40,8 @@
 #include <machine/ucontext.h>
 #include <sys/_ucontext.h>
 #endif
+
+__NULLABILITY_PRAGMA_PUSH
 
 #if __BSD_VISIBLE
 /*
@@ -82,10 +84,11 @@ int	sigdelset(sigset_t *, int);
 int	sigemptyset(sigset_t *);
 int	sigfillset(sigset_t *);
 int	sigismember(const sigset_t *, int);
-int	sigpending(sigset_t *) __nonnull(1);
+int	sigpending(sigset_t * _Nonnull);
 int	sigprocmask(int, const sigset_t * __restrict, sigset_t * __restrict);
-int	sigsuspend(const sigset_t *) __nonnull(1);
-int	sigwait(const sigset_t * __restrict, int * __restrict) __nonnull_all;
+int	sigsuspend(const sigset_t * _Nonnull);
+int	sigwait(const sigset_t * _Nonnull __restrict,
+	    int * _Nonnull __restrict);
 #endif
 
 #if __POSIX_VISIBLE >= 199506 || __XSI_VISIBLE >= 600
@@ -104,7 +107,7 @@ int	sighold(int);
 int	sigignore(int);
 int	sigpause(int);
 int	sigrelse(int);
-void	(*sigset(int, void (*)(int)))(int);
+void	(* _Nullable sigset(int, void (* _Nullable)(int)))(int);
 int	xsi_sigpause(int);
 #endif
 
@@ -124,5 +127,6 @@ int	sigstack(const struct sigstack *, struct sigstack *);
 int	sigvec(int, struct sigvec *, struct sigvec *);
 #endif
 __END_DECLS
+__NULLABILITY_PRAGMA_POP
 
 #endif /* !_SIGNAL_H_ */

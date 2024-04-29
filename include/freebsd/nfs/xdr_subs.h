@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)xdr_subs.h	8.3 (Berkeley) 3/30/95
- * $FreeBSD: releng/11.0/sys/nfs/xdr_subs.h 139823 2005-01-07 01:45:51Z imp $
+ * $FreeBSD: releng/11.1/sys/nfs/xdr_subs.h 139823 2005-01-07 01:45:51Z imp $
  */
 
 

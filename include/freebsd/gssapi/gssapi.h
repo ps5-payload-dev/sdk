@@ -25,7 +25,7 @@
  * HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF
  * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
  *
- * $FreeBSD: releng/11.0/include/gssapi/gssapi.h 252409 2013-06-30 07:46:22Z hrs $
+ * $FreeBSD: releng/11.1/include/gssapi/gssapi.h 252409 2013-06-30 07:46:22Z hrs $
  */
 
 #ifndef _GSSAPI_GSSAPI_H_

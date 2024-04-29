@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/extattr.h 248995 2013-04-02 05:30:41Z mdf $
+ * $FreeBSD: releng/11.1/sys/sys/extattr.h 248995 2013-04-02 05:30:41Z mdf $
  */
 /*
  * Developed by the TrustedBSD Project.

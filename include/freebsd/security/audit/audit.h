@@ -26,7 +26,7 @@
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/security/audit/audit.h 255219 2013-09-05 00:09:56Z pjd $
+ * $FreeBSD: releng/11.1/sys/security/audit/audit.h 255219 2013-09-05 00:09:56Z pjd $
  */
 
 /*

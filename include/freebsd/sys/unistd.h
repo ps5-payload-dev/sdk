@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)unistd.h	8.2 (Berkeley) 1/7/94
- * $FreeBSD: releng/11.0/sys/sys/unistd.h 296572 2016-03-09 19:05:11Z jhb $
+ * $FreeBSD: releng/11.1/sys/sys/unistd.h 312170 2017-01-14 11:16:10Z kib $
  */
 
 #ifndef _SYS_UNISTD_H_
@@ -65,7 +65,7 @@
 #define	_POSIX_MONOTONIC_CLOCK		200112L
 #define	_POSIX_NO_TRUNC			1
 #define	_POSIX_PRIORITIZED_IO		(-1)
-#define	_POSIX_PRIORITY_SCHEDULING	200112L
+#define	_POSIX_PRIORITY_SCHEDULING	0
 #define	_POSIX_RAW_SOCKETS		200112L
 #define	_POSIX_REALTIME_SIGNALS		200112L
 #define	_POSIX_SEMAPHORES		200112L

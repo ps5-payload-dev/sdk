@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.0/sys/dev/usb/usb_dynamic.h 290135 2015-10-29 08:28:39Z hselasky $ */
+/* $FreeBSD: releng/11.1/sys/dev/usb/usb_dynamic.h 290135 2015-10-29 08:28:39Z hselasky $ */
 /*-
  * Copyright (c) 2008 Hans Petter Selasky. All rights reserved.
  *

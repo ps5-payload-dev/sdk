@@ -25,7 +25,7 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/net/ieee_oui.h 266462 2014-05-20 02:59:13Z grehan $
+ * $FreeBSD: releng/11.1/sys/net/ieee_oui.h 266462 2014-05-20 02:59:13Z grehan $
  *
  * Author: George V. Neville-Neil
  *

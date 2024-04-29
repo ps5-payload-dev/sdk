@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/include/strings.h 272673 2014-10-07 04:54:11Z delphij $
+ * $FreeBSD: releng/11.1/include/strings.h 272673 2014-10-07 04:54:11Z delphij $
  */
 
 #ifndef _STRINGS_H_

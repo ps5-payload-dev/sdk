@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)filedesc.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: releng/11.0/sys/sys/filedesc.h 287539 2015-09-07 20:02:56Z mjg $
+ * $FreeBSD: releng/11.1/sys/sys/filedesc.h 315895 2017-03-24 08:06:00Z mjg $
  */
 
 #ifndef _SYS_FILEDESC_H_
@@ -190,6 +190,11 @@ int	getvnode(struct thread *td, int fd, cap_rights_t *rightsp,
 	    struct file **fpp);
 void	mountcheckdirs(struct vnode *olddp, struct vnode *newdp);
 
+int	fget_cap_locked(struct filedesc *fdp, int fd, cap_rights_t *needrightsp,
+	    struct file **fpp, struct filecaps *havecapsp);
+int	fget_cap(struct thread *td, int fd, cap_rights_t *needrightsp,
+	    struct file **fpp, struct filecaps *havecapsp);
+
 /* Return a referenced file from an unlocked descriptor. */
 int	fget_unlocked(struct filedesc *fdp, int fd, cap_rights_t *needrightsp,
 	    struct file **fpp, seq_t *seqp);
@@ -205,6 +210,23 @@ fget_locked(struct filedesc *fdp, int fd)
 		return (NULL);
 
 	return (fdp->fd_ofiles[fd].fde_file);
+}
+
+static __inline struct filedescent *
+fdeget_locked(struct filedesc *fdp, int fd)
+{
+	struct filedescent *fde;
+
+	FILEDESC_LOCK_ASSERT(fdp);
+
+	if ((u_int)fd > fdp->fd_lastfile)
+		return (NULL);
+
+	fde = &fdp->fd_ofiles[fd];
+	if (fde->fde_file == NULL)
+		return (NULL);
+
+	return (fde);
 }
 
 static __inline bool

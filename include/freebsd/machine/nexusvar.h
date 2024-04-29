@@ -26,7 +26,7 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/amd64/include/nexusvar.h 177157 2008-03-13 20:39:04Z jhb $
+ * $FreeBSD: releng/11.1/sys/amd64/include/nexusvar.h 177157 2008-03-13 20:39:04Z jhb $
  */
 
 #ifndef _MACHINE_NEXUSVAR_H_

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	 $FreeBSD: releng/11.0/sys/netgraph/netflow/netflow_v9.h 219182 2011-03-02 16:15:11Z glebius $
+ *	 $FreeBSD: releng/11.1/sys/netgraph/netflow/netflow_v9.h 219182 2011-03-02 16:15:11Z glebius $
  */
 
 #ifndef	_NETFLOW_V9_H_

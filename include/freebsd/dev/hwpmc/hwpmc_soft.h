@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/dev/hwpmc/hwpmc_soft.h 233628 2012-03-28 20:58:30Z fabient $
+ * $FreeBSD: releng/11.1/sys/dev/hwpmc/hwpmc_soft.h 233628 2012-03-28 20:58:30Z fabient $
  */
 
 #ifndef _DEV_HWPMC_SOFT_H_

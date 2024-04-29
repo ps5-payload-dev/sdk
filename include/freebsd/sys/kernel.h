@@ -39,7 +39,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)kernel.h	8.3 (Berkeley) 1/21/94
- * $FreeBSD: releng/11.0/sys/sys/kernel.h 301114 2016-06-01 10:14:04Z bz $
+ * $FreeBSD: releng/11.1/sys/sys/kernel.h 316448 2017-04-03 09:36:44Z kib $
  */
 
 #ifndef _SYS_KERNEL_H_
@@ -352,7 +352,7 @@ struct tunable_uint64 {
 	uint64_t *var;
 };
 #define	TUNABLE_UINT64(path, var)				\
-	static struct tunable_ulong __CONCAT(__tunable_uint64_, __LINE__) = { \
+	static struct tunable_uint64 __CONCAT(__tunable_uint64_, __LINE__) = { \
 		(path),						\
 		(var),						\
 	};							\

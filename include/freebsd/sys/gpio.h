@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/gpio.h 298738 2016-04-28 12:03:22Z mmel $
+ * $FreeBSD: releng/11.1/sys/sys/gpio.h 298738 2016-04-28 12:03:22Z mmel $
  *
  */
 

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/include/fmtmsg.h 236629 2012-06-05 19:42:57Z ed $
+ * $FreeBSD: releng/11.1/include/fmtmsg.h 236629 2012-06-05 19:42:57Z ed $
  */
 
 #ifndef _FMTMSG_H_

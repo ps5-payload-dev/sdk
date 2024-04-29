@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.0/lib/libpam/libpam/security/pam_mod_misc.h 301602 2016-06-08 11:47:19Z des $
+ *	$FreeBSD: releng/11.1/lib/libpam/libpam/security/pam_mod_misc.h 301602 2016-06-08 11:47:19Z des $
  */
 
 #ifndef PAM_MOD_MISC_H

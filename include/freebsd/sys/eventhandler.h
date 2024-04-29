@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/sys/eventhandler.h 277796 2015-01-27 17:33:18Z avg $
+ * $FreeBSD: releng/11.1/sys/sys/eventhandler.h 307606 2016-10-19 06:15:27Z sephe $
  */
 
 #ifndef _SYS_EVENTHANDLER_H_
@@ -269,5 +269,12 @@ typedef void (*register_framebuffer_fn)(void *, struct fb_info *);
 typedef void (*unregister_framebuffer_fn)(void *, struct fb_info *);
 EVENTHANDLER_DECLARE(register_framebuffer, register_framebuffer_fn);
 EVENTHANDLER_DECLARE(unregister_framebuffer, unregister_framebuffer_fn);
+
+/* Veto ada attachment */
+struct cam_path;
+struct ata_params;
+typedef void (*ada_probe_veto_fn)(void *, struct cam_path *,
+    struct ata_params *, int *);
+EVENTHANDLER_DECLARE(ada_probe_veto, ada_probe_veto_fn);
 
 #endif /* _SYS_EVENTHANDLER_H_ */

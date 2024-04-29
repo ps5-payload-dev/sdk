@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/x86/include/acpica_machdep.h 298094 2016-04-16 03:44:50Z gjb $
+ * $FreeBSD: releng/11.1/sys/x86/include/acpica_machdep.h 298094 2016-04-16 03:44:50Z gjb $
  */
 
 /******************************************************************************

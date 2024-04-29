@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  *	$OpenBSD: pfvar.h,v 1.282 2009/01/29 15:12:28 pyr Exp $
- *	$FreeBSD: releng/11.0/sys/netpfil/pf/pf.h 278843 2015-02-16 07:01:02Z glebius $
+ *	$FreeBSD: releng/11.1/sys/netpfil/pf/pf.h 278843 2015-02-16 07:01:02Z glebius $
  */
 
 #ifndef	_NET_PF_H_

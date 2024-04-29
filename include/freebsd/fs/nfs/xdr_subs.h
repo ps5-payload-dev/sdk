@@ -29,7 +29,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.0/sys/fs/nfs/xdr_subs.h 191783 2009-05-04 15:23:58Z rmacklem $
+ * $FreeBSD: releng/11.1/sys/fs/nfs/xdr_subs.h 191783 2009-05-04 15:23:58Z rmacklem $
  */
 
 #ifndef _NFS_XDR_SUBS_H_
