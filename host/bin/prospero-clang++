@@ -26,7 +26,8 @@ export PATH=${SCRIPT_DIR}:$PATH
 
 exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang++" \
      -target x86_64-sie-ps5 \
-     -nobuiltininc -isysroot "${PS5_PAYLOAD_SDK}" \
+     -isysroot "${PS5_PAYLOAD_SDK}" \
+     -isystem "${PS5_PAYLOAD_SDK}/target/include" \
      -stdlib++-isystem "${PS5_PAYLOAD_SDK}/target/include/c++/v1" \
      -fno-stack-protector -fno-plt \
      "$@"
