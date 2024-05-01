@@ -26,7 +26,7 @@ endif
 LDS := ld.lld-18 ld.lld-17 ld.lld-16 ld.lld-15 ld.lld
 LDS := $(foreach LD,$(LDS),$(if $(shell command -v $(LD) 2> /dev/null),$(LD)))
 LD  := $(firstword $(LDS))
-ifndef CC
+ifndef LD
     $(error No suitable linker found)
 endif
 
