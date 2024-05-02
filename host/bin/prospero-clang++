@@ -21,10 +21,15 @@ SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
 PS5_PAYLOAD_SDK="${SCRIPT_DIR}/.."
 
-LIBS="-lc++ -lc++abi -lunwind -lSceLibcInternal -lScePosixForWebKit -lc_locale"
+LIBS_C="-lSceLibcInternal -lScePosixForWebKit -lc_locale"
+LIBS_CXX="-lc++ -lc++abi -lunwind"
 for ARG in "$@"; do
     if [[ "$ARG" == "-c" || "$ARG" == "-nostdlib" ]]; then
-	LIBS=""
+	LIBS_C=""
+	LIBS_CXX=""
+    fi
+    if [[ "$ARG" == "-nostdlib++" ]]; then
+	LIBS_CXX=""
     fi
 done
 
@@ -36,4 +41,4 @@ exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang++" \
      -stdlib++-isystem "${PS5_PAYLOAD_SDK}/target/include/c++/v1" \
      -fno-stack-protector -fno-plt \
      -frtti -fexceptions \
-     $LIBS "$@"
+     $LIBS_C $LIBS_CXX "$@"
