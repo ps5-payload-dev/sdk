@@ -21,6 +21,13 @@ SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
 PS5_PAYLOAD_SDK="${SCRIPT_DIR}/.."
 
+LIBS="-lSceLibcInternal -lScePosixForWebKit -lc_locale"
+for ARG in "$@"; do
+    if [[ "$ARG" == "-c" || "$ARG" == "-nostdlibc" ]]; then
+	LIBS=""
+    fi
+done
+
 # ensure clang knows where prospero-lld is at
 export PATH=${SCRIPT_DIR}:$PATH
 exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang" \
@@ -28,4 +35,4 @@ exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang" \
      -isysroot "${PS5_PAYLOAD_SDK}" \
      -isystem "${PS5_PAYLOAD_SDK}/target/include" \
      -fno-stack-protector -fno-plt \
-     "$@"
+     $LIBS "$@"

@@ -19,14 +19,21 @@ SCRIPT_PATH="${BASH_SOURCE[0]}"
 SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
 SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
+LIBS="-lc++ -lc++abi -lunwind -lSceLibcInternal -lScePosixForWebKit -lc_locale"
+for ARG in "$@"; do
+    if [[ "$ARG" == "-c" || "$ARG" == "-nostdlib" ]]; then
+	LIBS=""
+    fi
+done
+
 PS5_PAYLOAD_SDK="${SCRIPT_DIR}/.."
 
 # ensure clang++ knows where prospero-lld is at
 export PATH=${SCRIPT_DIR}:$PATH
-
 exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang++" \
      -target x86_64-sie-ps5 \
      -isysroot "${PS5_PAYLOAD_SDK}" \
      -stdlib++-isystem "${PS5_PAYLOAD_SDK}/target/include/c++/v1" \
      -fno-stack-protector -fno-plt \
-     "$@"
+     -frtti -fexceptions \
+     $LIBS "$@"
