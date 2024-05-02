@@ -45,6 +45,7 @@ done
 
 for SAMPLE in "${CMAKE_SAMPLES[@]}"; do
     ${CMAKE} \
+	-DCMAKE_VERBOSE_MAKEFILE=YES \
 	-B $PS5_PAYLOAD_SDK/build/$SAMPLE \
 	-S $SCRIPTDIR/samples/$SAMPLE || exit 1
     ${MAKE} -C $PS5_PAYLOAD_SDK/build/$SAMPLE clean all
