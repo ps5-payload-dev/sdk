@@ -41,7 +41,7 @@ ARCHIVE := libc_locale.a
 all: $(ARCHIVE)
 
 $(ARCHIVE): $(OBJS)
-	ar -rsc $@ $^
+	$(AR) -rsc $@ $^
 
 clean:
 	rm -f *.a *.o
