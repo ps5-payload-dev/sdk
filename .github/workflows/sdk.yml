@@ -32,6 +32,7 @@ jobs:
       run: |
         make
         make DESTDIR=${{ runner.tool_cache }}/ps5-payload-sdk install
+        PS5_PAYLOAD_SDK=${{ runner.tool_cache }}/ps5-payload-sdk ./libcxx.sh
         tar -zcf ps5-payload-sdk.tar.gz -C ${{ runner.tool_cache }}/ps5-payload-sdk .
 
     - name: Test
