@@ -24,7 +24,7 @@ ifndef CC
 endif
 
 ARS := llvm-ar-18 llvm-ar-17 llvm-ar-16 llvm-ar-15 llvm-ar
-ARS := $(foreach LD,$(ARS),$(if $(shell command -v $(AR) 2> /dev/null),$(AR)))
+ARS := $(foreach AR,$(ARS),$(if $(shell command -v $(AR) 2> /dev/null),$(AR)))
 AR  := $(firstword $(ARS))
 ifndef AR
     $(error No suitable archiver found)
