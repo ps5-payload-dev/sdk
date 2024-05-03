@@ -19,7 +19,6 @@ SCRIPT_PATH="${BASH_SOURCE[0]}"
 SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
 SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
-PS5_PAYLOAD_SDK="${SCRIPT_DIR}/.."
 TOOLCHAIN="${SCRIPT_NAME::-6}"
 
 exec cmake \
