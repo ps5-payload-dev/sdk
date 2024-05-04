@@ -30,6 +30,7 @@ along with this program; see the file COPYING. If not, see
 #define DT_RELA    7
 #define DT_RELASZ  8
 
+#define R_X86_64_64       1
 #define R_X86_64_GLOB_DAT 6
 #define R_X86_64_JMP_SLOT 7
 #define R_X86_64_RELATIVE 8
@@ -431,6 +432,30 @@ r_relative(Elf64_Rela* rela) {
  *
  **/
 static int
+r_direct_64(Elf64_Rela* rela) {
+  unsigned long loc = (unsigned long)(__text_start + rela->r_offset);
+  Elf64_Sym* sym = symtab + ELF64_R_SYM(rela->r_info);
+  const char* name = strtab + sym->st_name;
+  int pid = syscall(SYS_getpid);
+  unsigned long val = 0;
+
+  for(rtld_lib_t *lib=libhead; lib!=0; lib=lib->next) {
+    if((val=rtld_sym(lib, name))) {
+      val += rela->r_addend;
+      return mdbg_copyin(pid, &val, loc, sizeof(val));
+    }
+  }
+
+  klog_printf("Unable to resolve '%s'\n", name);
+
+  return -1;
+}
+
+
+/**
+ *
+ **/
+static int
 rtld_load(void) {
   Elf64_Rela* rela = 0;
   long relasz = 0;
@@ -472,6 +497,12 @@ rtld_load(void) {
     switch(rela[i].r_info & 0xffffffffl) {
     case R_X86_64_JMP_SLOT:
       if(r_jmp_slot(&rela[i])) {
+	return -1;
+      }
+      break;
+
+    case R_X86_64_64:
+      if(r_direct_64(&rela[i])) {
 	return -1;
       }
       break;
