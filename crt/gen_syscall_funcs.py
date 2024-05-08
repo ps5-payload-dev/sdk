@@ -63,15 +63,6 @@ with open(f'{header}/../include/freebsd/sys/syscall.h') as f:
         name = name.strip()
         no = int(no.strip())
 
-        if name.startswith('__acl'):
-            continue
-
-        if name.startswith('__cap'):
-            continue
-
-        if name.startswith('__'):
-            name = name[2:]
-
         if name in ['syscall', 'pipe', 'MAXSYSCALL']:
             continue
 
