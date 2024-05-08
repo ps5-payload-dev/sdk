@@ -16,6 +16,8 @@
 
 DESTDIR ?= /opt/ps5-payload-sdk
 
+PYTHON ?= python3
+
 CCS := clang-18 clang-17 clang-16 clang-15 clang
 CCS := $(foreach CC,$(CCS),$(if $(shell command -v $(CC) 2> /dev/null),$(CC)))
 CC  := $(firstword $(CCS))
@@ -36,14 +38,19 @@ CFLAGS += -Wall -Werror
 
 all: crt1.o
 
-crt1.o: crt.o klog.o kernel.o rtld.o patch.o mdbg.o env.o
+crt1.o: crt.o klog.o kernel.o rtld.o patch.o mdbg.o env.o syscalls.o
 	$(LD) -r -o $@ $^
+
+syscalls.o: syscalls.c
+
+syscalls.c: ../include/freebsd/sys/syscall.h
+	$(PYTHON) gen_syscall_funcs.py > $@
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $^
 
 clean:
-	rm -f *.o
+	rm -f *.o syscalls.c
 
 install: crt1.o
 	install -d $(DESTDIR)/target/lib

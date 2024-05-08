@@ -40,30 +40,7 @@ extern int main(int argc, char* argv[], char *envp[]);
 int __klog_init(payload_args_t *args);
 int __kernel_init(payload_args_t* args);
 int __rtld_init(payload_args_t* args);
-
-
-/**
- * The PS5 does not allow syscalls from .text sections that are allocated in
- * shared memory. Instead, we simply assign the approriate registers, and
- * jump directly to a syscall instruction in libkernel (which is not in shared
- * memory).
- **/
-static __attribute__ ((used)) long ptr_syscall = 0;
-asm(".intel_syntax noprefix\n"
-    ".global syscall\n"
-    ".type syscall @function\n"
-    "syscall:\n"
-    "  mov rax, rdi\n"                      // sysno
-    "  mov rdi, rsi\n"                      // arg1
-    "  mov rsi, rdx\n"                      // arg2
-    "  mov rdx, rcx\n"                      // arg3
-    "  mov r10, r8\n"                       // arg4
-    "  mov r8,  r9\n"                       // arg5
-    "  mov r9,  qword ptr [rsp + 8]\n"      // arg6
-    "  jmp qword ptr [rip + ptr_syscall]\n" // syscall
-    "  ret\n"
-    );
-
+int __syscall_init(payload_args_t* args);
 
 static payload_args_t* payload_args = 0;
 
@@ -79,21 +56,14 @@ pre_init(payload_args_t *args) {
   int *__isthreaded;
   int error = 0;
 
-  if(args->sceKernelDlsym(0x1, "getpid", &ptr_syscall)) {
-    if((error=args->sceKernelDlsym(0x2001, "getpid", &ptr_syscall))) {
-      return error;
-    }
-  }
-
-  // jump directly to the syscall instruction
-  // in getpid (provided by libkernel)
-  ptr_syscall += 0xa;
-
   if((error=args->sceKernelDlsym(0x2, "__isthreaded", &__isthreaded))) {
     return error;
   }
   *__isthreaded = 1;
 
+  if((error=__syscall_init(args))) {
+    return error;
+  }
   if((error=__klog_init(args))) {
     return error;
   }
