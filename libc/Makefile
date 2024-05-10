@@ -36,7 +36,7 @@ CFLAGS += -nobuiltininc -isystem ../include/freebsd
 SRCS := $(wildcard *.c)
 OBJS := $(SRCS:.c=.o)
 
-ARCHIVE := libc_locale.a
+ARCHIVE := libc.a
 
 all: $(ARCHIVE)
 
