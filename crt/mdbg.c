@@ -70,6 +70,10 @@ mdbg_memop(int memop, mdbg_memop_args_t *args) {
   mdbg_res_t res;
   long err;
 
+  if(args->pid < 0) {
+    args->pid = pid;
+  }
+
   if(kernel_get_ucred_caps(pid, caps)) {
     return -1;
   }
