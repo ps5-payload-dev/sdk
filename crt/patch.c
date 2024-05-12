@@ -39,7 +39,6 @@ static int (*sceKernelDlsym)(int, const char*, void*) = 0;
  **/
 static int
 patch_sceKernelSpawn(void) {
-  int pid = syscall(SYS_getpid);
   unsigned long loc;
   unsigned long val;
 
@@ -49,7 +48,7 @@ patch_sceKernelSpawn(void) {
   }
 
   loc += 52;
-  if(mdbg_copyout(pid, loc, &val, sizeof(val))) {
+  if(mdbg_copyout(-1, loc, &val, sizeof(val))) {
     klog_perror("mdbg_copyout");
     return -1;
   }
@@ -64,7 +63,7 @@ patch_sceKernelSpawn(void) {
   }
 
   val = 0x90909090a8758948l;
-  if(mdbg_copyin(pid, &val, loc, sizeof(val))) {
+  if(mdbg_copyin(-1, &val, loc, sizeof(val))) {
     klog_perror("mdbg_copyin");
     return -1;
   }
@@ -107,7 +106,7 @@ patch_kernel_ucred(void) {
 
 
 __attribute__((constructor(105))) static void
-payload_constructor(payload_args_t *args) {
+patch_constructor(payload_args_t *args) {
   sceKernelDlsym = args->sceKernelDlsym;
   patch_sceKernelSpawn();
   patch_kernel_ucred();

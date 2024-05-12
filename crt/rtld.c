@@ -399,12 +399,11 @@ r_glob_dat(Elf64_Rela* rela) {
   unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
   Elf64_Sym* sym = symtab + ELF64_R_SYM(rela->r_info);
   const char* name = strtab + sym->st_name;
-  int pid = syscall(SYS_getpid);
   unsigned long val = 0;
 
   for(rtld_lib_t *lib=libhead; lib!=0; lib=lib->next) {
     if((val=rtld_sym(lib, name))) {
-      return mdbg_copyin(pid, &val, loc, sizeof(val));
+      return mdbg_copyin(-1, &val, loc, sizeof(val));
     }
   }
 
@@ -430,14 +429,13 @@ static int
 r_relative(Elf64_Rela* rela) {
   unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
   unsigned long val = (unsigned long)(__image_start + rela->r_addend);
-  int pid = syscall(SYS_getpid);
 
   // ELF loader allready applied relocation
   if(*((unsigned long*)loc) == val) {
       return 0;
   }
 
-  if(mdbg_copyin(pid, &val, loc, sizeof(val))) {
+  if(mdbg_copyin(-1, &val, loc, sizeof(val))) {
     klog_perror("mdbg_copyin");
     return -1;
   }
@@ -454,13 +452,12 @@ r_direct_64(Elf64_Rela* rela) {
   unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
   Elf64_Sym* sym = symtab + ELF64_R_SYM(rela->r_info);
   const char* name = strtab + sym->st_name;
-  int pid = syscall(SYS_getpid);
   unsigned long val = 0;
 
   for(rtld_lib_t *lib=libhead; lib!=0; lib=lib->next) {
     if((val=rtld_sym(lib, name))) {
       val += rela->r_addend;
-      return mdbg_copyin(pid, &val, loc, sizeof(val));
+      return mdbg_copyin(-1, &val, loc, sizeof(val));
     }
   }
 
