@@ -38,19 +38,14 @@ CFLAGS += -Wall -Werror
 
 all: crt1.o
 
-crt1.o: crt.o klog.o kernel.o rtld.o patch.o mdbg.o env.o syscalls.o
+crt1.o: crt.o klog.o kernel.o rtld.o patch.o mdbg.o env.o
 	$(LD) -r -o $@ $^
-
-syscalls.o: syscalls.c
-
-syscalls.c: ../include/freebsd/sys/syscall.h
-	$(PYTHON) gen_syscall_funcs.py > $@
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $^
 
 clean:
-	rm -f *.o syscalls.c
+	rm -f *.o
 
 install: crt1.o
 	install -d $(DESTDIR)/target/lib

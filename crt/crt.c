@@ -40,15 +40,31 @@ extern int main(int argc, char* argv[], char *envp[]);
 int __klog_init(payload_args_t *args);
 int __kernel_init(payload_args_t* args);
 int __rtld_init(payload_args_t* args);
-int __syscall_init(payload_args_t* args);
 
 static payload_args_t* payload_args = 0;
-
 
 payload_args_t*
 payload_get_args(void) {
   return payload_args;
 }
+
+
+static __attribute__ ((used)) long ptr_syscall = 0;
+
+asm(".intel_syntax noprefix\n"
+    ".global syscall\n"
+    ".type syscall @function\n"
+    "syscall:\n"
+    "  mov rax, rdi\n"
+    "  mov rdi, rsi\n"
+    "  mov rsi, rdx\n"
+    "  mov rdx, rcx\n"
+    "  mov r10, r8\n"
+    "  mov r8,  r9\n"
+    "  mov r9,  qword ptr [rsp + 8]\n"
+    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  ret\n"
+    );
 
 
 static int
@@ -61,9 +77,15 @@ pre_init(payload_args_t *args) {
   }
   *__isthreaded = 1;
 
-  if((error=__syscall_init(args))) {
-    return error;
+  if(args->sceKernelDlsym(0x1, "getpid", &ptr_syscall)) {
+    if((error=args->sceKernelDlsym(0x2001, "getpid", &ptr_syscall))) {
+      return error;
+    }
   }
+  // jump directly to the syscall instruction
+  // in getpid (provided by libkernel)
+  ptr_syscall += 0xa;
+
   if((error=__klog_init(args))) {
     return error;
   }
@@ -96,22 +118,6 @@ terminate(void) {
   }
 }
 
-
-/**
- * Terminate the payload with an assertion printed to /dev/klog.
- **/
-void
-__assert(const char *func, const char *file, int line, const char *expr) {
-  if(!func) {
-    klog_printf("Assertion failed: (%s), file %s, line %d\n",
-		expr, file, line);
-  } else {
-    klog_printf("Assertion failed: (%s), function %s, file %s, line %d\n",
-		expr, func, file, line);
-  }
-  *payload_args->payloadout = -1;
-  terminate();
-}
 
 
 /**
