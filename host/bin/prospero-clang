@@ -34,5 +34,5 @@ exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang" \
      -target x86_64-sie-ps5 \
      -isysroot "${PS5_PAYLOAD_SDK}" \
      -isystem "${PS5_PAYLOAD_SDK}/target/include" \
-     -fno-stack-protector -fno-plt \
+     -fno-stack-protector -fno-plt -femulated-tls \
      $LIBS "$@"
