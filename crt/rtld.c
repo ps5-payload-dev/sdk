@@ -266,6 +266,24 @@ static const sysmodtab_t sysmodtab[] = {
 /**
  *
  **/
+static void
+klog_resolve_error(const char *name) {
+  klog_printf("Unable to resolve the symbol '%s'\n", name);
+}
+
+
+/**
+ *
+ **/
+static void
+klog_libload_error(const char *name) {
+  klog_printf("Unable to load the library '%s'\n", name);
+}
+
+
+/**
+ *
+ **/
 static rtld_lib_t*
 rtld_open(const char* basename) {
   rtld_lib_t *lib = 0;
@@ -362,7 +380,7 @@ dt_needed(const char* basename) {
     return 0;
   }
 
-  klog_printf("Unable to load '%s'\n", basename);
+  klog_libload_error(basename);
 
   // FIXME: ignoring errors when loading libScePosixForWebKit
   if(!strcmp(basename, "libScePosixForWebKit.so")) {
@@ -390,7 +408,7 @@ r_glob_dat(Elf64_Rela* rela) {
     }
   }
 
-  klog_printf("Unable to resolve '%s'\n", name);
+  klog_resolve_error(name);
 
   return -1;
 }
@@ -446,7 +464,7 @@ r_direct_64(Elf64_Rela* rela) {
     }
   }
 
-  klog_printf("Unable to resolve '%s'\n", name);
+  klog_resolve_error(name);
 
   return -1;
 }
@@ -547,44 +565,44 @@ __rtld_init(payload_args_t *args) {
 
   // load deps to libc
   if((error=args->sceKernelDlsym(0x2, "malloc", &malloc))) {
-    klog_perror("Unable to resolve 'malloc'");
+    klog_resolve_error("malloc");
     return error;
   }
   if((error=args->sceKernelDlsym(0x2, "free", &free))) {
-    klog_perror("Unable to resolve 'free'");
+    klog_resolve_error("free");
     return error;
   }
   if((error=args->sceKernelDlsym(0x2, "strcat", &strcat))) {
-    klog_perror("Unable to resolve 'strcat'");
+    klog_resolve_error("strcat");
     return error;
   }
   if((error=args->sceKernelDlsym(0x2, "strcmp", &strcmp))) {
-    klog_perror("Unable to resolve 'strcmp'");
+    klog_resolve_error("strcmp");
     return error;
   }
   if((error=args->sceKernelDlsym(0x2, "strlen", &strlen))) {
-    klog_perror("Unable to resolve 'strlen'");
+    klog_resolve_error("strlen");
     return error;
   }
   if((error=args->sceKernelDlsym(0x2, "sprintf", &sprintf))) {
-    klog_perror("Unable to resolve 'sprintf'");
+    klog_resolve_error("sprintf");
     return error;
   }
 
   // load deps to libkernel
   if((error=args->sceKernelDlsym(libkernel_handle, "sceKernelDlsym",
 				 &sceKernelDlsym))) {
-    klog_perror("Unable to resolve 'sceKernelDlsym'");
+    klog_resolve_error("sceKernelDlsym");
     return error;
   }
   if((error=args->sceKernelDlsym(libkernel_handle, "sceKernelLoadStartModule",
 				 &sceKernelLoadStartModule))) {
-    klog_perror("Unable to resolve 'sceKernelLoadStartModule'");
+    klog_resolve_error("sceKernelLoadStartModule");
     return error;
   }
   if((error=args->sceKernelDlsym(libkernel_handle, "sceKernelStopUnloadModule",
 				 &sceKernelStopUnloadModule))) {
-    klog_perror("Unable to resolve 'sceKernelStopUnloadModule'");
+    klog_resolve_error("sceKernelStopUnloadModule");
     return error;
   }
 
@@ -609,12 +627,12 @@ __rtld_init(payload_args_t *args) {
   // load deps to sysmodule
   if((handle=sceKernelLoadStartModule("/system/common/lib/libSceSysmodule.sprx",
 				      0, 0, 0, 0, 0)) <= 0) {
-    klog_puts("Unable to load libSceSysmodule.sprx");
+    klog_libload_error("libSceSysmodule.sprx");
     return -1;
   }
   if((error=args->sceKernelDlsym(handle, "sceSysmoduleLoadModuleInternal",
 				 &sceSysmoduleLoadModuleInternal))) {
-    klog_perror("Unable to resolve 'sceSysmoduleLoadModuleInternal'");
+    klog_resolve_error("sceSysmoduleLoadModuleInternal");
     return error;
   }
 
