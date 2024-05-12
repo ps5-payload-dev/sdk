@@ -71,7 +71,7 @@ typedef struct rtld_lib {
 /**
  * dependencies provided by the ELF linker.
  **/
-extern unsigned char __text_start[] __attribute__((weak));
+extern unsigned char __image_start[] __attribute__((weak));
 extern Elf64_Dyn _DYNAMIC[];
 
 
@@ -396,7 +396,7 @@ dt_needed(const char* basename) {
  **/
 static int
 r_glob_dat(Elf64_Rela* rela) {
-  unsigned long loc = (unsigned long)(__text_start + rela->r_offset);
+  unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
   Elf64_Sym* sym = symtab + ELF64_R_SYM(rela->r_info);
   const char* name = strtab + sym->st_name;
   int pid = syscall(SYS_getpid);
@@ -428,8 +428,8 @@ r_jmp_slot(Elf64_Rela* rela) {
  **/
 static int
 r_relative(Elf64_Rela* rela) {
-  unsigned long loc = (unsigned long)(__text_start + rela->r_offset);
-  unsigned long val = (unsigned long)(__text_start + rela->r_addend);
+  unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
+  unsigned long val = (unsigned long)(__image_start + rela->r_addend);
   int pid = syscall(SYS_getpid);
 
   // ELF loader allready applied relocation
@@ -451,7 +451,7 @@ r_relative(Elf64_Rela* rela) {
  **/
 static int
 r_direct_64(Elf64_Rela* rela) {
-  unsigned long loc = (unsigned long)(__text_start + rela->r_offset);
+  unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
   Elf64_Sym* sym = symtab + ELF64_R_SYM(rela->r_info);
   const char* name = strtab + sym->st_name;
   int pid = syscall(SYS_getpid);
@@ -482,15 +482,15 @@ rtld_load(void) {
   for(int i=0; _DYNAMIC[i].d_tag!=DT_NULL; i++) {
     switch(_DYNAMIC[i].d_tag) {
     case DT_SYMTAB:
-      symtab = (Elf64_Sym*)(__text_start + _DYNAMIC[i].d_un.d_ptr);
+      symtab = (Elf64_Sym*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
       break;
 
     case DT_STRTAB:
-      strtab = (char*)(__text_start + _DYNAMIC[i].d_un.d_ptr);
+      strtab = (char*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
       break;
 
     case DT_RELA:
-      rela = (Elf64_Rela*)(__text_start + _DYNAMIC[i].d_un.d_ptr);
+      rela = (Elf64_Rela*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
       break;
 
     case DT_RELASZ:

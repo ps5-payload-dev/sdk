@@ -26,6 +26,8 @@ PHDRS {
 }
 
 SECTIONS {
+	PROVIDE_HIDDEN (__image_start = .);
+
 	.text : ALIGN(CONSTANT(MAXPAGESIZE)) {
 	    PROVIDE_HIDDEN (__text_start = .);
 	    *(.text .text.*)
