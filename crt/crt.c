@@ -125,6 +125,9 @@ terminate(void) {
  **/
 void
 _start(payload_args_t *args, int argc, char* argv[], char* envp[]) {
+  char** (*getargv)(void) = 0;
+  int (*getargc)(void) = 0;
+
   unsigned long count = 0;
 
   // Clear .bss section.
@@ -137,6 +140,15 @@ _start(payload_args_t *args, int argc, char* argv[], char* envp[]) {
   if((*args->payloadout=pre_init(args))) {
     terminate();
     return;
+  }
+
+  // Obtain argc and argv from libkernel
+  if((!args->sceKernelDlsym(0x1, "getargc", &getargc) ||
+      !args->sceKernelDlsym(0x2001, "getargc", &getargc)) &&
+     (!args->sceKernelDlsym(0x1, "getargv", &getargv) ||
+      !args->sceKernelDlsym(0x2001, "getargv", &getargv))) {
+    argc = getargc();
+    argv = getargv();
   }
 
   // Run .init functions.
