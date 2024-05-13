@@ -31,6 +31,10 @@ klog_label(char *buf, unsigned long size) {
   buf[0] = 0;
   syscall(0x268, pid, buf, size);
 
+  if(buf[0] == 0) {
+    snprintf(buf, size, "pid:%d", syscall(SYS_getpid));
+  }
+
   return buf;
 }
 
