@@ -28,7 +28,7 @@
 #include <sys/cdefs.h>
 __FBSDID("$FreeBSD$");
 
-//#include "namespace.h"
+#include "namespace.h"
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/sockio.h>
@@ -39,7 +39,7 @@ __FBSDID("$FreeBSD$");
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
-//#include "un-namespace.h"
+#include "un-namespace.h"
 
 /*
  * From RFC 2553:
@@ -68,15 +68,15 @@ if_nametoindex(const char *ifname)
 	struct ifaddrs *ifaddrs, *ifa;
 	unsigned int ni;
 
-	s = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
+	s = _socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
 	if (s != -1) {
 		memset(&ifr, 0, sizeof(ifr));
 		strlcpy(ifr.ifr_name, ifname, sizeof(ifr.ifr_name));
-		if (ioctl(s, SIOCGIFINDEX, &ifr) != -1) {
-			close(s);
+		if (_ioctl(s, SIOCGIFINDEX, &ifr) != -1) {
+			_close(s);
 			return (ifr.ifr_index);
 		}
-		close(s);
+		_close(s);
 	}
 
 	if (getifaddrs(&ifaddrs) < 0)
