@@ -106,16 +106,30 @@ static int   (*sceKernelStopUnloadModule)(int, unsigned long, const void*, unsig
 					  const void*, void*) = 0;
 static int   (*sceSysmoduleLoadModuleInternal)(unsigned int) = 0;
 
+static const char* (*sceKernelGetFsSandboxRandomWord)(void) = 0;
+
+/**
+ *
+ **/
+
+static const char*
+SANDBOX_LIBRARY_PATH[] = {
+  "priv_ex/lib",
+  "common_ex/lib",
+  "priv/lib",
+  "common/lib"
+};
+
 
 /**
  *
  **/
 static const char*
-LD_LIBRARY_PATH[] = {
-  "/system/priv/lib",
-  "/system/common/lib",
+SYSTEM_LIBRARY_PATH[] = {
   "/system_ex/priv_ex/lib",
   "/system_ex/common_ex/lib",
+  "/system/priv/lib",
+  "/system/common/lib",
 };
 
 
@@ -285,10 +299,34 @@ klog_libload_error(const char *name) {
  *
  **/
 static rtld_lib_t*
+sprx_load(const char* filename) {
+  rtld_lib_t *lib;
+  int handle;
+
+  if(syscall(SYS_access, filename, 0) < 0) {
+    return 0;
+  }
+
+  if((handle=sceKernelLoadStartModule(filename, 0, 0, 0, 0, 0)) > 0) {
+    lib = malloc(sizeof(rtld_lib_t));
+    lib->handle = handle;
+    lib->next = 0;
+    return lib;
+  }
+
+  return 0;
+}
+
+
+/**
+ *
+ **/
+static rtld_lib_t*
 rtld_open(const char* basename) {
-  rtld_lib_t *lib = 0;
+  const char *sandbox;
+  char sprxname[255];
   char filename[255];
-  int handle = 0;
+  rtld_lib_t *lib;
 
   if(!strcmp(basename, "libkernel.so") ||
      !strcmp(basename, "libkernel_web.so") ||
@@ -306,38 +344,45 @@ rtld_open(const char* basename) {
     return lib;
   }
 
-  for(int i=0; i<sizeof(LD_LIBRARY_PATH)/sizeof(LD_LIBRARY_PATH[0]); i++) {
-    sprintf(filename, "%s/%s", LD_LIBRARY_PATH[i], basename);
-    filename[strlen(filename)-2] = 0;
-    strcat(filename, "sprx");
-    if(syscall(SYS_access, filename, 0) < 0) {
-      continue;
-    }
-
-    // sysmodules needs to be loaded internally first
-    for(int i=0; i<sizeof(sysmodtab)/sizeof(sysmodtab[0]); i++) {
-      if(!strcmp(basename, sysmodtab[i].name)) {
-	if(sceSysmoduleLoadModuleInternal(sysmodtab[i].handle)) {
-	  klog_perror("sceSysmoduleLoadModuleInternal");
-	  return 0;
-	}
+  // sysmodules needs to be loaded internally first
+  for(int i=0; i<sizeof(sysmodtab)/sizeof(sysmodtab[0]); i++) {
+    if(!strcmp(basename, sysmodtab[i].name)) {
+      if(sceSysmoduleLoadModuleInternal(sysmodtab[i].handle)) {
+	klog_perror("sceSysmoduleLoadModuleInternal");
+	return 0;
       }
-    }
-
-    if((handle=sceKernelLoadStartModule(filename, 0, 0, 0, 0, 0)) > 0) {
-      break;
     }
   }
 
-  if(handle <= 0) {
+  if(strlen(basename) < 3) {
     return 0;
   }
 
-  lib         = malloc(sizeof(rtld_lib_t));
-  lib->handle = handle;
-  lib->next   = 0;
+  sprintf(sprxname, "%s", basename);
+  sprxname[strlen(basename)-3] = 0;
+  strcat(sprxname, ".sprx");
+
+  for(int i=0; i<sizeof(SYSTEM_LIBRARY_PATH)/sizeof(SYSTEM_LIBRARY_PATH[0]); i++) {
+    sprintf(filename, "%s/%s", SYSTEM_LIBRARY_PATH[i], sprxname);
+    if((lib=sprx_load(filename))) {
+      return lib;
+    }
+  }
+
+  if(!(sandbox=sceKernelGetFsSandboxRandomWord())) {
+    return 0;
+  }
+
+  klog_printf("sandbox path: %s\n", sandbox);
   
-  return lib;
+  for(int i=0; i<sizeof(SANDBOX_LIBRARY_PATH)/sizeof(SANDBOX_LIBRARY_PATH[0]); i++) {
+    sprintf(filename, "/%s/%s/%s", sandbox, SANDBOX_LIBRARY_PATH[i], sprxname);
+    if((lib=sprx_load(filename))) {
+      return lib;
+    }
+  }
+
+  return 0;
 }
 
 
@@ -581,7 +626,6 @@ __rtld_init(payload_args_t *args) {
   static const unsigned char privcaps[16] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
 					     0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
   int pid = syscall(SYS_getpid);
-  unsigned long rootdir = 0;
   unsigned char caps[16];
   int error = 0;
 
@@ -627,6 +671,11 @@ __rtld_init(payload_args_t *args) {
     klog_resolve_error("sceKernelDlsym");
     return error;
   }
+  if((error=args->sceKernelDlsym(libkernel_handle, "sceKernelGetFsSandboxRandomWord",
+				 &sceKernelGetFsSandboxRandomWord))) {
+    klog_resolve_error("sceKernelGetFsSandboxRandomWord");
+    return error;
+  }
   if((error=args->sceKernelDlsym(libkernel_handle, "sceKernelLoadStartModule",
 				 &sceKernelLoadStartModule))) {
     klog_resolve_error("sceKernelLoadStartModule");
@@ -638,17 +687,14 @@ __rtld_init(payload_args_t *args) {
     return error;
   }
 
-  // jailbreak, raise caps
-  if(!(rootdir=kernel_get_proc_rootdir(pid))) {
-    klog_puts("kernel_get_proc_rootdir failed");
+  if(rtld_load_sysmodule(args)) {
+    klog_puts("load_sysmodule failed");
     return -1;
   }
+
+  // raise caps
   if(kernel_get_ucred_caps(pid, caps)) {
     klog_puts("kernel_get_ucred_caps failed");
-    return -1;
-  }
-  if(kernel_set_proc_rootdir(pid, kernel_get_root_vnode())) {
-    klog_puts("kernel_set_proc_rootdir failed");
     return -1;
   }
   if(kernel_set_ucred_caps(pid, privcaps)) {
@@ -656,18 +702,9 @@ __rtld_init(payload_args_t *args) {
     return -1;
   }
 
-  if(rtld_load_sysmodule(args)) {
-    klog_puts("load_sysmodule failed");
-    return -1;
-  }
-
   error = rtld_load();
 
   // restore jail and caps
-  if(kernel_set_proc_rootdir(pid, rootdir)) {
-    klog_puts("kernel_set_proc_rootdir failed");
-    return -1;
-  }
   if(kernel_set_ucred_caps(pid, caps)) {
     klog_puts("kernel_set_ucred_caps failed");
     return -1;
