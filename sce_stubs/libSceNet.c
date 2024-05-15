@@ -379,6 +379,10 @@ asm(".global sceNetDuplicateIpStop\n"
     ".type sceNetDuplicateIpStop @function\n"
     "sceNetDuplicateIpStop:\n");
 
+asm(".global sceNetEmulationDebugSettingsSet\n"
+    ".type sceNetEmulationDebugSettingsSet @function\n"
+    "sceNetEmulationDebugSettingsSet:\n");
+
 asm(".global sceNetEmulationGet\n"
     ".type sceNetEmulationGet @function\n"
     "sceNetEmulationGet:\n");

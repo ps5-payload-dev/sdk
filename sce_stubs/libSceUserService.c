@@ -171,6 +171,14 @@ asm(".global sceUserServiceGetGamePresets\n"
     ".type sceUserServiceGetGamePresets @function\n"
     "sceUserServiceGetGamePresets:\n");
 
+asm(".global sceUserServiceGetGazeActivate\n"
+    ".type sceUserServiceGetGazeActivate @function\n"
+    "sceUserServiceGetGazeActivate:\n");
+
+asm(".global sceUserServiceGetGazeCalibData\n"
+    ".type sceUserServiceGetGazeCalibData @function\n"
+    "sceUserServiceGetGazeCalibData:\n");
+
 asm(".global sceUserServiceGetGlsAccessTokenNiconicoLive\n"
     ".type sceUserServiceGetGlsAccessTokenNiconicoLive @function\n"
     "sceUserServiceGetGlsAccessTokenNiconicoLive:\n");
@@ -363,6 +371,10 @@ asm(".global sceUserServiceGetGlsTtsVolume\n"
     ".type sceUserServiceGetGlsTtsVolume @function\n"
     "sceUserServiceGetGlsTtsVolume:\n");
 
+asm(".global sceUserServiceGetHintShowFlag\n"
+    ".type sceUserServiceGetHintShowFlag @function\n"
+    "sceUserServiceGetHintShowFlag:\n");
+
 asm(".global sceUserServiceGetHmuBrightness\n"
     ".type sceUserServiceGetHmuBrightness @function\n"
     "sceUserServiceGetHmuBrightness:\n");
@@ -426,6 +438,14 @@ asm(".global sceUserServiceGetInitialUser\n"
 asm(".global sceUserServiceGetIsFakePlus\n"
     ".type sceUserServiceGetIsFakePlus @function\n"
     "sceUserServiceGetIsFakePlus:\n");
+
+asm(".global sceUserServiceGetIsFakePremium\n"
+    ".type sceUserServiceGetIsFakePremium @function\n"
+    "sceUserServiceGetIsFakePremium:\n");
+
+asm(".global sceUserServiceGetIsHrtfEnabled\n"
+    ".type sceUserServiceGetIsHrtfEnabled @function\n"
+    "sceUserServiceGetIsHrtfEnabled:\n");
 
 asm(".global sceUserServiceGetIsQuickSignup\n"
     ".type sceUserServiceGetIsQuickSignup @function\n"
@@ -607,6 +627,14 @@ asm(".global sceUserServiceGetParentalMorpheus\n"
     ".type sceUserServiceGetParentalMorpheus @function\n"
     "sceUserServiceGetParentalMorpheus:\n");
 
+asm(".global sceUserServiceGetPartyChatTranscriptionFlag\n"
+    ".type sceUserServiceGetPartyChatTranscriptionFlag @function\n"
+    "sceUserServiceGetPartyChatTranscriptionFlag:\n");
+
+asm(".global sceUserServiceGetPartyChatTranscriptionLanguageType\n"
+    ".type sceUserServiceGetPartyChatTranscriptionLanguageType @function\n"
+    "sceUserServiceGetPartyChatTranscriptionLanguageType:\n");
+
 asm(".global sceUserServiceGetPartyMuteList\n"
     ".type sceUserServiceGetPartyMuteList @function\n"
     "sceUserServiceGetPartyMuteList:\n");
@@ -731,9 +759,21 @@ asm(".global sceUserServiceGetPbtcWednesdayHoursStart\n"
     ".type sceUserServiceGetPbtcWednesdayHoursStart @function\n"
     "sceUserServiceGetPbtcWednesdayHoursStart:\n");
 
+asm(".global sceUserServiceGetPlatformPrivacyWs1Internal\n"
+    ".type sceUserServiceGetPlatformPrivacyWs1Internal @function\n"
+    "sceUserServiceGetPlatformPrivacyWs1Internal:\n");
+
 asm(".global sceUserServiceGetPlayTogetherFlags\n"
     ".type sceUserServiceGetPlayTogetherFlags @function\n"
     "sceUserServiceGetPlayTogetherFlags:\n");
+
+asm(".global sceUserServiceGetPlayingBigAppTitleId\n"
+    ".type sceUserServiceGetPlayingBigAppTitleId @function\n"
+    "sceUserServiceGetPlayingBigAppTitleId:\n");
+
+asm(".global sceUserServiceGetPsCloudFeedbackTime\n"
+    ".type sceUserServiceGetPsCloudFeedbackTime @function\n"
+    "sceUserServiceGetPsCloudFeedbackTime:\n");
 
 asm(".global sceUserServiceGetPsnPasswordForDebug\n"
     ".type sceUserServiceGetPsnPasswordForDebug @function\n"
@@ -867,6 +907,10 @@ asm(".global sceUserServiceGetTraditionalChineseInputType\n"
     ".type sceUserServiceGetTraditionalChineseInputType @function\n"
     "sceUserServiceGetTraditionalChineseInputType:\n");
 
+asm(".global sceUserServiceGetTriggerEffectStrength\n"
+    ".type sceUserServiceGetTriggerEffectStrength @function\n"
+    "sceUserServiceGetTriggerEffectStrength:\n");
+
 asm(".global sceUserServiceGetUserColor\n"
     ".type sceUserServiceGetUserColor @function\n"
     "sceUserServiceGetUserColor:\n");
@@ -899,6 +943,10 @@ asm(".global sceUserServiceGetVibrationEnabled\n"
     ".type sceUserServiceGetVibrationEnabled @function\n"
     "sceUserServiceGetVibrationEnabled:\n");
 
+asm(".global sceUserServiceGetVibrationStrength\n"
+    ".type sceUserServiceGetVibrationStrength @function\n"
+    "sceUserServiceGetVibrationStrength:\n");
+
 asm(".global sceUserServiceGetVoiceAgentEnable\n"
     ".type sceUserServiceGetVoiceAgentEnable @function\n"
     "sceUserServiceGetVoiceAgentEnable:\n");
@@ -915,6 +963,10 @@ asm(".global sceUserServiceGetVoiceAgentSessionTimeout\n"
     ".type sceUserServiceGetVoiceAgentSessionTimeout @function\n"
     "sceUserServiceGetVoiceAgentSessionTimeout:\n");
 
+asm(".global sceUserServiceGetVoiceAgentStatusBit\n"
+    ".type sceUserServiceGetVoiceAgentStatusBit @function\n"
+    "sceUserServiceGetVoiceAgentStatusBit:\n");
+
 asm(".global sceUserServiceGetVoiceAgentStatusBitFactory\n"
     ".type sceUserServiceGetVoiceAgentStatusBitFactory @function\n"
     "sceUserServiceGetVoiceAgentStatusBitFactory:\n");
@@ -922,6 +974,10 @@ asm(".global sceUserServiceGetVoiceAgentStatusBitFactory\n"
 asm(".global sceUserServiceGetVoiceAgentTtsSpeed\n"
     ".type sceUserServiceGetVoiceAgentTtsSpeed @function\n"
     "sceUserServiceGetVoiceAgentTtsSpeed:\n");
+
+asm(".global sceUserServiceGetVoiceAgentTtsVolume\n"
+    ".type sceUserServiceGetVoiceAgentTtsVolume @function\n"
+    "sceUserServiceGetVoiceAgentTtsVolume:\n");
 
 asm(".global sceUserServiceGetVoiceRecognitionLastUsedOsk\n"
     ".type sceUserServiceGetVoiceRecognitionLastUsedOsk @function\n"
@@ -1038,6 +1094,10 @@ asm(".global sceUserServiceSetCaptureStatus\n"
 asm(".global sceUserServiceSetChatStatus\n"
     ".type sceUserServiceSetChatStatus @function\n"
     "sceUserServiceSetChatStatus:\n");
+
+asm(".global sceUserServiceSetControlCenterFunctionControlSettings\n"
+    ".type sceUserServiceSetControlCenterFunctionControlSettings @function\n"
+    "sceUserServiceSetControlCenterFunctionControlSettings:\n");
 
 asm(".global sceUserServiceSetCreatedVersion\n"
     ".type sceUserServiceSetCreatedVersion @function\n"
@@ -1523,6 +1583,18 @@ asm(".global sceUserServiceSetParentalMorpheus\n"
     ".type sceUserServiceSetParentalMorpheus @function\n"
     "sceUserServiceSetParentalMorpheus:\n");
 
+asm(".global sceUserServiceSetPartyChatTranscriptionFlag\n"
+    ".type sceUserServiceSetPartyChatTranscriptionFlag @function\n"
+    "sceUserServiceSetPartyChatTranscriptionFlag:\n");
+
+asm(".global sceUserServiceSetPartyChatTranscriptionLanguageType\n"
+    ".type sceUserServiceSetPartyChatTranscriptionLanguageType @function\n"
+    "sceUserServiceSetPartyChatTranscriptionLanguageType:\n");
+
+asm(".global sceUserServiceSetPartyChatTranscriptionVoiceType\n"
+    ".type sceUserServiceSetPartyChatTranscriptionVoiceType @function\n"
+    "sceUserServiceSetPartyChatTranscriptionVoiceType:\n");
+
 asm(".global sceUserServiceSetPartyMuteList\n"
     ".type sceUserServiceSetPartyMuteList @function\n"
     "sceUserServiceSetPartyMuteList:\n");
@@ -1650,6 +1722,10 @@ asm(".global sceUserServiceSetPbtcWednesdayHoursStart\n"
 asm(".global sceUserServiceSetPlayTogetherFlags\n"
     ".type sceUserServiceSetPlayTogetherFlags @function\n"
     "sceUserServiceSetPlayTogetherFlags:\n");
+
+asm(".global sceUserServiceSetPsCloudFeedbackTime\n"
+    ".type sceUserServiceSetPsCloudFeedbackTime @function\n"
+    "sceUserServiceSetPsCloudFeedbackTime:\n");
 
 asm(".global sceUserServiceSetPsnPasswordForDebug\n"
     ".type sceUserServiceSetPsnPasswordForDebug @function\n"
@@ -1790,6 +1866,38 @@ asm(".global sceUserServiceSetUserStatus\n"
 asm(".global sceUserServiceSetVibrationEnabled\n"
     ".type sceUserServiceSetVibrationEnabled @function\n"
     "sceUserServiceSetVibrationEnabled:\n");
+
+asm(".global sceUserServiceSetVoiceAgentEnable\n"
+    ".type sceUserServiceSetVoiceAgentEnable @function\n"
+    "sceUserServiceSetVoiceAgentEnable:\n");
+
+asm(".global sceUserServiceSetVoiceAgentEnableWup\n"
+    ".type sceUserServiceSetVoiceAgentEnableWup @function\n"
+    "sceUserServiceSetVoiceAgentEnableWup:\n");
+
+asm(".global sceUserServiceSetVoiceAgentLanguage\n"
+    ".type sceUserServiceSetVoiceAgentLanguage @function\n"
+    "sceUserServiceSetVoiceAgentLanguage:\n");
+
+asm(".global sceUserServiceSetVoiceAgentSessionTimeout\n"
+    ".type sceUserServiceSetVoiceAgentSessionTimeout @function\n"
+    "sceUserServiceSetVoiceAgentSessionTimeout:\n");
+
+asm(".global sceUserServiceSetVoiceAgentStatusBit\n"
+    ".type sceUserServiceSetVoiceAgentStatusBit @function\n"
+    "sceUserServiceSetVoiceAgentStatusBit:\n");
+
+asm(".global sceUserServiceSetVoiceAgentStatusBitFactory\n"
+    ".type sceUserServiceSetVoiceAgentStatusBitFactory @function\n"
+    "sceUserServiceSetVoiceAgentStatusBitFactory:\n");
+
+asm(".global sceUserServiceSetVoiceAgentTtsSpeed\n"
+    ".type sceUserServiceSetVoiceAgentTtsSpeed @function\n"
+    "sceUserServiceSetVoiceAgentTtsSpeed:\n");
+
+asm(".global sceUserServiceSetVoiceAgentTtsVolume\n"
+    ".type sceUserServiceSetVoiceAgentTtsVolume @function\n"
+    "sceUserServiceSetVoiceAgentTtsVolume:\n");
 
 asm(".global sceUserServiceSetVoiceRecognitionLastUsedOsk\n"
     ".type sceUserServiceSetVoiceRecognitionLastUsedOsk @function\n"

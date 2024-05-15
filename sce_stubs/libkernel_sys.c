@@ -443,6 +443,10 @@ asm(".global blockpool_unmap\n"
     ".type blockpool_unmap @function\n"
     "blockpool_unmap:\n");
 
+asm(".global cfsetspeed\n"
+    ".type cfsetspeed @function\n"
+    "cfsetspeed:\n");
+
 asm(".global chdir\n"
     ".type chdir @function\n"
     "chdir:\n");
@@ -2411,6 +2415,10 @@ asm(".global sceKernelGetAppInfoByAppId\n"
     ".type sceKernelGetAppInfoByAppId @function\n"
     "sceKernelGetAppInfoByAppId:\n");
 
+asm(".global sceKernelGetAppInfoListForMinisyscore\n"
+    ".type sceKernelGetAppInfoListForMinisyscore @function\n"
+    "sceKernelGetAppInfoListForMinisyscore:\n");
+
 asm(".global sceKernelGetAppState\n"
     ".type sceKernelGetAppState @function\n"
     "sceKernelGetAppState:\n");
@@ -2478,6 +2486,10 @@ asm(".global sceKernelGetCompiledSdkVersionByPid\n"
 asm(".global sceKernelGetCoredumpAppInfo\n"
     ".type sceKernelGetCoredumpAppInfo @function\n"
     "sceKernelGetCoredumpAppInfo:\n");
+
+asm(".global sceKernelGetCpuCoreClock\n"
+    ".type sceKernelGetCpuCoreClock @function\n"
+    "sceKernelGetCpuCoreClock:\n");
 
 asm(".global sceKernelGetCpuFrequency\n"
     ".type sceKernelGetCpuFrequency @function\n"
@@ -2615,6 +2627,10 @@ asm(".global sceKernelGetGPO\n"
     ".type sceKernelGetGPO @function\n"
     "sceKernelGetGPO:\n");
 
+asm(".global sceKernelGetGenuineProsperoSystemSwVersion\n"
+    ".type sceKernelGetGenuineProsperoSystemSwVersion @function\n"
+    "sceKernelGetGenuineProsperoSystemSwVersion:\n");
+
 asm(".global sceKernelGetHwFeatureInfoForDecid\n"
     ".type sceKernelGetHwFeatureInfoForDecid @function\n"
     "sceKernelGetHwFeatureInfoForDecid:\n");
@@ -2695,6 +2711,10 @@ asm(".global sceKernelGetModuleListInternal\n"
     ".type sceKernelGetModuleListInternal @function\n"
     "sceKernelGetModuleListInternal:\n");
 
+asm(".global sceKernelGetNandInfo\n"
+    ".type sceKernelGetNandInfo @function\n"
+    "sceKernelGetNandInfo:\n");
+
 asm(".global sceKernelGetOpenPsId\n"
     ".type sceKernelGetOpenPsId @function\n"
     "sceKernelGetOpenPsId:\n");
@@ -2767,6 +2787,14 @@ asm(".global sceKernelGetProductStr\n"
     ".type sceKernelGetProductStr @function\n"
     "sceKernelGetProductStr:\n");
 
+asm(".global sceKernelGetProsperoCompiledSdkVersion\n"
+    ".type sceKernelGetProsperoCompiledSdkVersion @function\n"
+    "sceKernelGetProsperoCompiledSdkVersion:\n");
+
+asm(".global sceKernelGetProsperoCompiledSdkVersionByPid\n"
+    ".type sceKernelGetProsperoCompiledSdkVersionByPid @function\n"
+    "sceKernelGetProsperoCompiledSdkVersionByPid:\n");
+
 asm(".global sceKernelGetProsperoSystemSwVersion\n"
     ".type sceKernelGetProsperoSystemSwVersion @function\n"
     "sceKernelGetProsperoSystemSwVersion:\n");
@@ -2774,6 +2802,14 @@ asm(".global sceKernelGetProsperoSystemSwVersion\n"
 asm(".global sceKernelGetPrtAperture\n"
     ".type sceKernelGetPrtAperture @function\n"
     "sceKernelGetPrtAperture:\n");
+
+asm(".global sceKernelGetPs4CompiledSdkVersion\n"
+    ".type sceKernelGetPs4CompiledSdkVersion @function\n"
+    "sceKernelGetPs4CompiledSdkVersion:\n");
+
+asm(".global sceKernelGetPs4CompiledSdkVersionByPid\n"
+    ".type sceKernelGetPs4CompiledSdkVersionByPid @function\n"
+    "sceKernelGetPs4CompiledSdkVersionByPid:\n");
 
 asm(".global sceKernelGetPs4SystemSwVersion\n"
     ".type sceKernelGetPs4SystemSwVersion @function\n"
@@ -2891,6 +2927,10 @@ asm(".global sceKernelGetThreadName\n"
     ".type sceKernelGetThreadName @function\n"
     "sceKernelGetThreadName:\n");
 
+asm(".global sceKernelGetToolMemoryRange\n"
+    ".type sceKernelGetToolMemoryRange @function\n"
+    "sceKernelGetToolMemoryRange:\n");
+
 asm(".global sceKernelGetTraceMemoryStats\n"
     ".type sceKernelGetTraceMemoryStats @function\n"
     "sceKernelGetTraceMemoryStats:\n");
@@ -2906,6 +2946,10 @@ asm(".global sceKernelGetUniversalMode\n"
 asm(".global sceKernelGetUpdVersion\n"
     ".type sceKernelGetUpdVersion @function\n"
     "sceKernelGetUpdVersion:\n");
+
+asm(".global sceKernelGetUpdatemode\n"
+    ".type sceKernelGetUpdatemode @function\n"
+    "sceKernelGetUpdatemode:\n");
 
 asm(".global sceKernelGetUtokenDataExecutionForRcmgr\n"
     ".type sceKernelGetUtokenDataExecutionForRcmgr @function\n"
@@ -2999,6 +3043,10 @@ asm(".global sceKernelIccControlUSBPowerState\n"
     ".type sceKernelIccControlUSBPowerState @function\n"
     "sceKernelIccControlUSBPowerState:\n");
 
+asm(".global sceKernelIccGetBDDriveChuckingState\n"
+    ".type sceKernelIccGetBDDriveChuckingState @function\n"
+    "sceKernelIccGetBDDriveChuckingState:\n");
+
 asm(".global sceKernelIccGetBDPowerState\n"
     ".type sceKernelIccGetBDPowerState @function\n"
     "sceKernelIccGetBDPowerState:\n");
@@ -3019,9 +3067,17 @@ asm(".global sceKernelIccGetCpuInfoBit\n"
     ".type sceKernelIccGetCpuInfoBit @function\n"
     "sceKernelIccGetCpuInfoBit:\n");
 
+asm(".global sceKernelIccGetEmcBtDownload\n"
+    ".type sceKernelIccGetEmcBtDownload @function\n"
+    "sceKernelIccGetEmcBtDownload:\n");
+
 asm(".global sceKernelIccGetErrLog\n"
     ".type sceKernelIccGetErrLog @function\n"
     "sceKernelIccGetErrLog:\n");
+
+asm(".global sceKernelIccGetFloydVersion\n"
+    ".type sceKernelIccGetFloydVersion @function\n"
+    "sceKernelIccGetFloydVersion:\n");
 
 asm(".global sceKernelIccGetHwInfo\n"
     ".type sceKernelIccGetHwInfo @function\n"
@@ -3051,6 +3107,10 @@ asm(".global sceKernelIccGetUSBPowerState\n"
     ".type sceKernelIccGetUSBPowerState @function\n"
     "sceKernelIccGetUSBPowerState:\n");
 
+asm(".global sceKernelIccGetWlanBtGpio\n"
+    ".type sceKernelIccGetWlanBtGpio @function\n"
+    "sceKernelIccGetWlanBtGpio:\n");
+
 asm(".global sceKernelIccIndicatorBootDone\n"
     ".type sceKernelIccIndicatorBootDone @function\n"
     "sceKernelIccIndicatorBootDone:\n");
@@ -3071,6 +3131,10 @@ asm(".global sceKernelIccIndicatorStandbyShutdown\n"
     ".type sceKernelIccIndicatorStandbyShutdown @function\n"
     "sceKernelIccIndicatorStandbyShutdown:\n");
 
+asm(".global sceKernelIccIsThermalAlert\n"
+    ".type sceKernelIccIsThermalAlert @function\n"
+    "sceKernelIccIsThermalAlert:\n");
+
 asm(".global sceKernelIccNotifyBootStatus\n"
     ".type sceKernelIccNotifyBootStatus @function\n"
     "sceKernelIccNotifyBootStatus:\n");
@@ -3082,6 +3146,10 @@ asm(".global sceKernelIccNvsFlush\n"
 asm(".global sceKernelIccReadPowerBootMessage\n"
     ".type sceKernelIccReadPowerBootMessage @function\n"
     "sceKernelIccReadPowerBootMessage:\n");
+
+asm(".global sceKernelIccSetBootTimestamp\n"
+    ".type sceKernelIccSetBootTimestamp @function\n"
+    "sceKernelIccSetBootTimestamp:\n");
 
 asm(".global sceKernelIccSetBuzzer\n"
     ".type sceKernelIccSetBuzzer @function\n"
@@ -3098,6 +3166,22 @@ asm(".global sceKernelIccSetCpuInfoBit\n"
 asm(".global sceKernelIccSetDownloadMode\n"
     ".type sceKernelIccSetDownloadMode @function\n"
     "sceKernelIccSetDownloadMode:\n");
+
+asm(".global sceKernelIccSetEmcBtDownload\n"
+    ".type sceKernelIccSetEmcBtDownload @function\n"
+    "sceKernelIccSetEmcBtDownload:\n");
+
+asm(".global sceKernelIccSetPriorityBuzzer\n"
+    ".type sceKernelIccSetPriorityBuzzer @function\n"
+    "sceKernelIccSetPriorityBuzzer:\n");
+
+asm(".global sceKernelIccSetWlanBtGpio\n"
+    ".type sceKernelIccSetWlanBtGpio @function\n"
+    "sceKernelIccSetWlanBtGpio:\n");
+
+asm(".global sceKernelIccSetWlanBtManuTestMode\n"
+    ".type sceKernelIccSetWlanBtManuTestMode @function\n"
+    "sceKernelIccSetWlanBtManuTestMode:\n");
 
 asm(".global sceKernelInstallExceptionHandler\n"
     ".type sceKernelInstallExceptionHandler @function\n"

@@ -391,6 +391,10 @@ asm(".global blockpool_unmap\n"
     ".type blockpool_unmap @function\n"
     "blockpool_unmap:\n");
 
+asm(".global cfsetspeed\n"
+    ".type cfsetspeed @function\n"
+    "cfsetspeed:\n");
+
 asm(".global chdir\n"
     ".type chdir @function\n"
     "chdir:\n");
@@ -2087,6 +2091,10 @@ asm(".global sceKernelGetCompiledSdkVersionByPid\n"
     ".type sceKernelGetCompiledSdkVersionByPid @function\n"
     "sceKernelGetCompiledSdkVersionByPid:\n");
 
+asm(".global sceKernelGetCpuCoreClock\n"
+    ".type sceKernelGetCpuCoreClock @function\n"
+    "sceKernelGetCpuCoreClock:\n");
+
 asm(".global sceKernelGetCpuFrequency\n"
     ".type sceKernelGetCpuFrequency @function\n"
     "sceKernelGetCpuFrequency:\n");
@@ -2210,6 +2218,10 @@ asm(".global sceKernelGetGPI\n"
 asm(".global sceKernelGetGPO\n"
     ".type sceKernelGetGPO @function\n"
     "sceKernelGetGPO:\n");
+
+asm(".global sceKernelGetGenuineProsperoSystemSwVersion\n"
+    ".type sceKernelGetGenuineProsperoSystemSwVersion @function\n"
+    "sceKernelGetGenuineProsperoSystemSwVersion:\n");
 
 asm(".global sceKernelGetHwFeatureInfoForDecid\n"
     ".type sceKernelGetHwFeatureInfoForDecid @function\n"
@@ -2335,6 +2347,14 @@ asm(".global sceKernelGetProductStr\n"
     ".type sceKernelGetProductStr @function\n"
     "sceKernelGetProductStr:\n");
 
+asm(".global sceKernelGetProsperoCompiledSdkVersion\n"
+    ".type sceKernelGetProsperoCompiledSdkVersion @function\n"
+    "sceKernelGetProsperoCompiledSdkVersion:\n");
+
+asm(".global sceKernelGetProsperoCompiledSdkVersionByPid\n"
+    ".type sceKernelGetProsperoCompiledSdkVersionByPid @function\n"
+    "sceKernelGetProsperoCompiledSdkVersionByPid:\n");
+
 asm(".global sceKernelGetProsperoSystemSwVersion\n"
     ".type sceKernelGetProsperoSystemSwVersion @function\n"
     "sceKernelGetProsperoSystemSwVersion:\n");
@@ -2342,6 +2362,14 @@ asm(".global sceKernelGetProsperoSystemSwVersion\n"
 asm(".global sceKernelGetPrtAperture\n"
     ".type sceKernelGetPrtAperture @function\n"
     "sceKernelGetPrtAperture:\n");
+
+asm(".global sceKernelGetPs4CompiledSdkVersion\n"
+    ".type sceKernelGetPs4CompiledSdkVersion @function\n"
+    "sceKernelGetPs4CompiledSdkVersion:\n");
+
+asm(".global sceKernelGetPs4CompiledSdkVersionByPid\n"
+    ".type sceKernelGetPs4CompiledSdkVersionByPid @function\n"
+    "sceKernelGetPs4CompiledSdkVersionByPid:\n");
 
 asm(".global sceKernelGetPs4SystemSwVersion\n"
     ".type sceKernelGetPs4SystemSwVersion @function\n"
@@ -2446,6 +2474,10 @@ asm(".global sceKernelGetSystemSwVersion\n"
 asm(".global sceKernelGetThreadName\n"
     ".type sceKernelGetThreadName @function\n"
     "sceKernelGetThreadName:\n");
+
+asm(".global sceKernelGetToolMemoryRange\n"
+    ".type sceKernelGetToolMemoryRange @function\n"
+    "sceKernelGetToolMemoryRange:\n");
 
 asm(".global sceKernelGetTraceMemoryStats\n"
     ".type sceKernelGetTraceMemoryStats @function\n"
@@ -2555,6 +2587,10 @@ asm(".global sceKernelIccControlUSBPowerState\n"
     ".type sceKernelIccControlUSBPowerState @function\n"
     "sceKernelIccControlUSBPowerState:\n");
 
+asm(".global sceKernelIccGetBDDriveChuckingState\n"
+    ".type sceKernelIccGetBDDriveChuckingState @function\n"
+    "sceKernelIccGetBDDriveChuckingState:\n");
+
 asm(".global sceKernelIccGetBDPowerState\n"
     ".type sceKernelIccGetBDPowerState @function\n"
     "sceKernelIccGetBDPowerState:\n");
@@ -2650,6 +2686,10 @@ asm(".global sceKernelIccSetCpuInfoBit\n"
 asm(".global sceKernelIccSetDownloadMode\n"
     ".type sceKernelIccSetDownloadMode @function\n"
     "sceKernelIccSetDownloadMode:\n");
+
+asm(".global sceKernelIccSetPriorityBuzzer\n"
+    ".type sceKernelIccSetPriorityBuzzer @function\n"
+    "sceKernelIccSetPriorityBuzzer:\n");
 
 asm(".global sceKernelInstallExceptionHandler\n"
     ".type sceKernelInstallExceptionHandler @function\n"

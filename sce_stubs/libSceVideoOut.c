@@ -299,6 +299,10 @@ asm(".global sceVideoOutGetOutputStatus\n"
     ".type sceVideoOutGetOutputStatus @function\n"
     "sceVideoOutGetOutputStatus:\n");
 
+asm(".global sceVideoOutGetPipelineStatus\n"
+    ".type sceVideoOutGetPipelineStatus @function\n"
+    "sceVideoOutGetPipelineStatus:\n");
+
 asm(".global sceVideoOutGetPortStatusInfo\n"
     ".type sceVideoOutGetPortStatusInfo @function\n"
     "sceVideoOutGetPortStatusInfo:\n");
@@ -547,6 +551,10 @@ asm(".global sceVideoOutSysGetMonitorInfo_\n"
     ".type sceVideoOutSysGetMonitorInfo_ @function\n"
     "sceVideoOutSysGetMonitorInfo_:\n");
 
+asm(".global sceVideoOutSysGetPipelineStatus\n"
+    ".type sceVideoOutSysGetPipelineStatus @function\n"
+    "sceVideoOutSysGetPipelineStatus:\n");
+
 asm(".global sceVideoOutSysGetResolutionStatus\n"
     ".type sceVideoOutSysGetResolutionStatus @function\n"
     "sceVideoOutSysGetResolutionStatus:\n");
@@ -611,6 +619,10 @@ asm(".global sceVideoOutSysResetAtGpuReset\n"
     ".type sceVideoOutSysResetAtGpuReset @function\n"
     "sceVideoOutSysResetAtGpuReset:\n");
 
+asm(".global sceVideoOutSysSetColorMode\n"
+    ".type sceVideoOutSysSetColorMode @function\n"
+    "sceVideoOutSysSetColorMode:\n");
+
 asm(".global sceVideoOutSysSetDcePipeMode\n"
     ".type sceVideoOutSysSetDcePipeMode @function\n"
     "sceVideoOutSysSetDcePipeMode:\n");
@@ -622,6 +634,10 @@ asm(".global sceVideoOutSysSetDimmer\n"
 asm(".global sceVideoOutSysSetDimmer2\n"
     ".type sceVideoOutSysSetDimmer2 @function\n"
     "sceVideoOutSysSetDimmer2:\n");
+
+asm(".global sceVideoOutSysSetHdcpEncryption\n"
+    ".type sceVideoOutSysSetHdcpEncryption @function\n"
+    "sceVideoOutSysSetHdcpEncryption:\n");
 
 asm(".global sceVideoOutSysSetHdrMetadata\n"
     ".type sceVideoOutSysSetHdrMetadata @function\n"

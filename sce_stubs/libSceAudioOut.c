@@ -7,6 +7,10 @@ asm(".global sceAudioDeviceControlSet\n"
     ".type sceAudioDeviceControlSet @function\n"
     "sceAudioDeviceControlSet:\n");
 
+asm(".global sceAudioOut2AllAudioMainToHeadphoneForDiag\n"
+    ".type sceAudioOut2AllAudioMainToHeadphoneForDiag @function\n"
+    "sceAudioOut2AllAudioMainToHeadphoneForDiag:\n");
+
 asm(".global sceAudioOut2ArbitrationInitialize\n"
     ".type sceAudioOut2ArbitrationInitialize @function\n"
     "sceAudioOut2ArbitrationInitialize:\n");
@@ -171,6 +175,42 @@ asm(".global sceAudioOut2MbusInit\n"
     ".type sceAudioOut2MbusInit @function\n"
     "sceAudioOut2MbusInit:\n");
 
+asm(".global sceAudioOut2MbusSetCaesarParam\n"
+    ".type sceAudioOut2MbusSetCaesarParam @function\n"
+    "sceAudioOut2MbusSetCaesarParam:\n");
+
+asm(".global sceAudioOut2MbusSetConnections\n"
+    ".type sceAudioOut2MbusSetConnections @function\n"
+    "sceAudioOut2MbusSetConnections:\n");
+
+asm(".global sceAudioOut2MbusSetDeviceConnections\n"
+    ".type sceAudioOut2MbusSetDeviceConnections @function\n"
+    "sceAudioOut2MbusSetDeviceConnections:\n");
+
+asm(".global sceAudioOut2MbusSetHeadphoneOutMode\n"
+    ".type sceAudioOut2MbusSetHeadphoneOutMode @function\n"
+    "sceAudioOut2MbusSetHeadphoneOutMode:\n");
+
+asm(".global sceAudioOut2MbusSetMorpheusParam\n"
+    ".type sceAudioOut2MbusSetMorpheusParam @function\n"
+    "sceAudioOut2MbusSetMorpheusParam:\n");
+
+asm(".global sceAudioOut2MbusSetPortConnections\n"
+    ".type sceAudioOut2MbusSetPortConnections @function\n"
+    "sceAudioOut2MbusSetPortConnections:\n");
+
+asm(".global sceAudioOut2MbusSetPortStatuses\n"
+    ".type sceAudioOut2MbusSetPortStatuses @function\n"
+    "sceAudioOut2MbusSetPortStatuses:\n");
+
+asm(".global sceAudioOut2MbusSetSparkParam\n"
+    ".type sceAudioOut2MbusSetSparkParam @function\n"
+    "sceAudioOut2MbusSetSparkParam:\n");
+
+asm(".global sceAudioOut2MbusUserLoginFor3DAudio\n"
+    ".type sceAudioOut2MbusUserLoginFor3DAudio @function\n"
+    "sceAudioOut2MbusUserLoginFor3DAudio:\n");
+
 asm(".global sceAudioOut2PortCreate\n"
     ".type sceAudioOut2PortCreate @function\n"
     "sceAudioOut2PortCreate:\n");
@@ -206,6 +246,10 @@ asm(".global sceAudioOut2ReportRegisterHandler\n"
 asm(".global sceAudioOut2ReportUnregisterHandler\n"
     ".type sceAudioOut2ReportUnregisterHandler @function\n"
     "sceAudioOut2ReportUnregisterHandler:\n");
+
+asm(".global sceAudioOut2SetDebugHeadphoneMode\n"
+    ".type sceAudioOut2SetDebugHeadphoneMode @function\n"
+    "sceAudioOut2SetDebugHeadphoneMode:\n");
 
 asm(".global sceAudioOut2SetSystemDebugState\n"
     ".type sceAudioOut2SetSystemDebugState @function\n"
@@ -266,6 +310,10 @@ asm(".global sceAudioOutDetachFromApplicationByPid\n"
 asm(".global sceAudioOutDeviceIdOpen\n"
     ".type sceAudioOutDeviceIdOpen @function\n"
     "sceAudioOutDeviceIdOpen:\n");
+
+asm(".global sceAudioOutEnable3DAudioByArbitration\n"
+    ".type sceAudioOutEnable3DAudioByArbitration @function\n"
+    "sceAudioOutEnable3DAudioByArbitration:\n");
 
 asm(".global sceAudioOutEnable3DAudioForUser\n"
     ".type sceAudioOutEnable3DAudioForUser @function\n"
@@ -414,6 +462,10 @@ asm(".global sceAudioOutSetAllMute\n"
 asm(".global sceAudioOutSetCaesarVolume\n"
     ".type sceAudioOutSetCaesarVolume @function\n"
     "sceAudioOutSetCaesarVolume:\n");
+
+asm(".global sceAudioOutSetChatBalance\n"
+    ".type sceAudioOutSetChatBalance @function\n"
+    "sceAudioOutSetChatBalance:\n");
 
 asm(".global sceAudioOutSetHeadphoneOutMode\n"
     ".type sceAudioOutSetHeadphoneOutMode @function\n"

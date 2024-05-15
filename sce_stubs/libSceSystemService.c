@@ -511,6 +511,10 @@ asm(".global sceShellCoreUtilExitApp\n"
     ".type sceShellCoreUtilExitApp @function\n"
     "sceShellCoreUtilExitApp:\n");
 
+asm(".global sceShellCoreUtilExitAppWithValue\n"
+    ".type sceShellCoreUtilExitAppWithValue @function\n"
+    "sceShellCoreUtilExitAppWithValue:\n");
+
 asm(".global sceShellCoreUtilExitMiniApp\n"
     ".type sceShellCoreUtilExitMiniApp @function\n"
     "sceShellCoreUtilExitMiniApp:\n");
@@ -687,6 +691,10 @@ asm(".global sceShellCoreUtilGetNetEvConfigFileInfoString\n"
     ".type sceShellCoreUtilGetNetEvConfigFileInfoString @function\n"
     "sceShellCoreUtilGetNetEvConfigFileInfoString:\n");
 
+asm(".global sceShellCoreUtilGetNoticeScreenSkipFlagByAppId\n"
+    ".type sceShellCoreUtilGetNoticeScreenSkipFlagByAppId @function\n"
+    "sceShellCoreUtilGetNoticeScreenSkipFlagByAppId:\n");
+
 asm(".global sceShellCoreUtilGetOutOfVrPlayZoneWarning\n"
     ".type sceShellCoreUtilGetOutOfVrPlayZoneWarning @function\n"
     "sceShellCoreUtilGetOutOfVrPlayZoneWarning:\n");
@@ -694,6 +702,10 @@ asm(".global sceShellCoreUtilGetOutOfVrPlayZoneWarning\n"
 asm(".global sceShellCoreUtilGetPapcGamePcl\n"
     ".type sceShellCoreUtilGetPapcGamePcl @function\n"
     "sceShellCoreUtilGetPapcGamePcl:\n");
+
+asm(".global sceShellCoreUtilGetPasscodeInputType\n"
+    ".type sceShellCoreUtilGetPasscodeInputType @function\n"
+    "sceShellCoreUtilGetPasscodeInputType:\n");
 
 asm(".global sceShellCoreUtilGetPbtcUserInfoList\n"
     ".type sceShellCoreUtilGetPbtcUserInfoList @function\n"
@@ -867,6 +879,14 @@ asm(".global sceShellCoreUtilIsKilledOrSuspendedByLogout\n"
     ".type sceShellCoreUtilIsKilledOrSuspendedByLogout @function\n"
     "sceShellCoreUtilIsKilledOrSuspendedByLogout:\n");
 
+asm(".global sceShellCoreUtilIsLotusMicActivated\n"
+    ".type sceShellCoreUtilIsLotusMicActivated @function\n"
+    "sceShellCoreUtilIsLotusMicActivated:\n");
+
+asm(".global sceShellCoreUtilIsM2StorageTemperatureDanger\n"
+    ".type sceShellCoreUtilIsM2StorageTemperatureDanger @function\n"
+    "sceShellCoreUtilIsM2StorageTemperatureDanger:\n");
+
 asm(".global sceShellCoreUtilIsNeededCrashReport\n"
     ".type sceShellCoreUtilIsNeededCrashReport @function\n"
     "sceShellCoreUtilIsNeededCrashReport:\n");
@@ -915,6 +935,10 @@ asm(".global sceShellCoreUtilMakeManifestFile\n"
     ".type sceShellCoreUtilMakeManifestFile @function\n"
     "sceShellCoreUtilMakeManifestFile:\n");
 
+asm(".global sceShellCoreUtilMicMuteKeyPressed\n"
+    ".type sceShellCoreUtilMicMuteKeyPressed @function\n"
+    "sceShellCoreUtilMicMuteKeyPressed:\n");
+
 asm(".global sceShellCoreUtilMountAppRight\n"
     ".type sceShellCoreUtilMountAppRight @function\n"
     "sceShellCoreUtilMountAppRight:\n");
@@ -955,6 +979,10 @@ asm(".global sceShellCoreUtilNotifyBgmCoreTermination\n"
     ".type sceShellCoreUtilNotifyBgmCoreTermination @function\n"
     "sceShellCoreUtilNotifyBgmCoreTermination:\n");
 
+asm(".global sceShellCoreUtilNotifyConnectAccountStatusChanged\n"
+    ".type sceShellCoreUtilNotifyConnectAccountStatusChanged @function\n"
+    "sceShellCoreUtilNotifyConnectAccountStatusChanged:\n");
+
 asm(".global sceShellCoreUtilNotifyFsReadError\n"
     ".type sceShellCoreUtilNotifyFsReadError @function\n"
     "sceShellCoreUtilNotifyFsReadError:\n");
@@ -966,6 +994,14 @@ asm(".global sceShellCoreUtilNotifyImeStatusChanged\n"
 asm(".global sceShellCoreUtilNotifyPsnAccountInfoReceived\n"
     ".type sceShellCoreUtilNotifyPsnAccountInfoReceived @function\n"
     "sceShellCoreUtilNotifyPsnAccountInfoReceived:\n");
+
+asm(".global sceShellCoreUtilNotifyStartEventToUniversalMicMute\n"
+    ".type sceShellCoreUtilNotifyStartEventToUniversalMicMute @function\n"
+    "sceShellCoreUtilNotifyStartEventToUniversalMicMute:\n");
+
+asm(".global sceShellCoreUtilNotifySystemResumeTelemetryInfo\n"
+    ".type sceShellCoreUtilNotifySystemResumeTelemetryInfo @function\n"
+    "sceShellCoreUtilNotifySystemResumeTelemetryInfo:\n");
 
 asm(".global sceShellCoreUtilNotifySystemSuspendTelemetryInfo\n"
     ".type sceShellCoreUtilNotifySystemSuspendTelemetryInfo @function\n"
@@ -1039,6 +1075,10 @@ asm(".global sceShellCoreUtilRequestShutdown\n"
     ".type sceShellCoreUtilRequestShutdown @function\n"
     "sceShellCoreUtilRequestShutdown:\n");
 
+asm(".global sceShellCoreUtilResetAllNoticeScreenSkipFlag\n"
+    ".type sceShellCoreUtilResetAllNoticeScreenSkipFlag @function\n"
+    "sceShellCoreUtilResetAllNoticeScreenSkipFlag:\n");
+
 asm(".global sceShellCoreUtilResetAutoPowerDownTimer\n"
     ".type sceShellCoreUtilResetAutoPowerDownTimer @function\n"
     "sceShellCoreUtilResetAutoPowerDownTimer:\n");
@@ -1046,6 +1086,10 @@ asm(".global sceShellCoreUtilResetAutoPowerDownTimer\n"
 asm(".global sceShellCoreUtilResetBgdcConfig\n"
     ".type sceShellCoreUtilResetBgdcConfig @function\n"
     "sceShellCoreUtilResetBgdcConfig:\n");
+
+asm(".global sceShellCoreUtilResetNoticeScreenSkipFlag\n"
+    ".type sceShellCoreUtilResetNoticeScreenSkipFlag @function\n"
+    "sceShellCoreUtilResetNoticeScreenSkipFlag:\n");
 
 asm(".global sceShellCoreUtilSetAppData\n"
     ".type sceShellCoreUtilSetAppData @function\n"
@@ -1166,6 +1210,10 @@ asm(".global sceShellCoreUtilStartPsNowGame\n"
 asm(".global sceShellCoreUtilStopPsNowGame\n"
     ".type sceShellCoreUtilStopPsNowGame @function\n"
     "sceShellCoreUtilStopPsNowGame:\n");
+
+asm(".global sceShellCoreUtilSwitchMicMute\n"
+    ".type sceShellCoreUtilSwitchMicMute @function\n"
+    "sceShellCoreUtilSwitchMicMute:\n");
 
 asm(".global sceShellCoreUtilTalkKeyEventReceived\n"
     ".type sceShellCoreUtilTalkKeyEventReceived @function\n"
@@ -1998,6 +2046,10 @@ asm(".global sceSystemStateMgrTickMusicPlayback\n"
 asm(".global sceSystemStateMgrTickPartyChat\n"
     ".type sceSystemStateMgrTickPartyChat @function\n"
     "sceSystemStateMgrTickPartyChat:\n");
+
+asm(".global sceSystemStateMgrTickVideoPlayback\n"
+    ".type sceSystemStateMgrTickVideoPlayback @function\n"
+    "sceSystemStateMgrTickVideoPlayback:\n");
 
 asm(".global sceSystemStateMgrTurnOff\n"
     ".type sceSystemStateMgrTurnOff @function\n"
