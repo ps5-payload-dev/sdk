@@ -2539,6 +2539,8 @@ asm(".intel_syntax noprefix\n"
     );
 
 
+/*
+  TODO: not currently supported
 asm(".intel_syntax noprefix\n"
     ".global accept4\n"
     ".type accept4 @function\n"
@@ -2548,7 +2550,7 @@ asm(".intel_syntax noprefix\n"
     "  jmp qword ptr [rip + ptr_syscall]\n"
     "  ret\n"
     );
-
+*/
 
 asm(".intel_syntax noprefix\n"
     ".global aio_mlock\n"
