@@ -2551,17 +2551,6 @@ asm(".intel_syntax noprefix\n"
 
 
 asm(".intel_syntax noprefix\n"
-    ".global pipe2\n"
-    ".type pipe2 @function\n"
-    "pipe2:\n"
-    "  mov rax, 542\n"
-    "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
-    "  ret\n"
-    );
-
-
-asm(".intel_syntax noprefix\n"
     ".global aio_mlock\n"
     ".type aio_mlock @function\n"
     "aio_mlock:\n"
