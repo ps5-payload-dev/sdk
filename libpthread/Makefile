@@ -1,4 +1,4 @@
-#   Copyright (C) 2023 John Törnblom
+#   Copyright (C) 2024 John Törnblom
 #
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -14,18 +14,30 @@
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
 
-MAKE    ?= make
 DESTDIR ?= /opt/ps5-payload-sdk
 
-TOPTARGETS := all clean install
-SUBDIRS    := crt sce_stubs libc libm libpthread include host
+ARS := llvm-ar-18 llvm-ar-17 llvm-ar-16 llvm-ar-15 llvm-ar
+ARS := $(foreach AR,$(ARS),$(if $(shell command -v $(AR) 2> /dev/null),$(AR)))
+AR  := $(firstword $(ARS))
+ifndef AR
+    $(error No suitable archiver found)
+endif
 
-$(TOPTARGETS): $(SUBDIRS)
+# libpthread is provided by libkernel, which is always linked with.
+# Create an empty archive to make it easier to compile projects that
+# explicitly link with -lpthread
 
-$(SUBDIRS):
-	$(MAKE) -C $@ $(MAKECMDGOALS)
+ARCHIVE := libpthread.a
 
-.PHONY: $(TOPTARGETS) $(SUBDIRS)
+all: $(ARCHIVE)
 
-install:
-	cp -r samples/. $(DESTDIR)/samples
+$(ARCHIVE):
+	$(AR) rcs $@
+
+clean:
+	rm -f *.a *.o
+
+install: $(ARCHIVE)
+	install -d $(DESTDIR)/target/lib
+	install $^ $(DESTDIR)/target/lib
+
