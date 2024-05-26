@@ -149,7 +149,7 @@ typedef struct {
 static void* (*malloc)(unsigned long) = 0;
 static void  (*free)(void*) = 0;
 static int   (*strncmp)(const char*, const char*, unsigned long) = 0;
-
+static int   (*strlen)(const char*) = 0;
 
 /**
  * public constants.
@@ -216,6 +216,10 @@ __kernel_init(payload_args_t* args) {
   }
   if((error=args->sceKernelDlsym(0x2, "free", &free))) {
     klog_perror("Unable to resolve 'free'");
+    return error;
+  }
+  if((error=args->sceKernelDlsym(0x2, "strlen", &strlen))) {
+    klog_perror("Unable to resolve 'strlen'");
     return error;
   }
   if((error=args->sceKernelDlsym(0x2, "strncmp", &strncmp))) {
@@ -479,6 +483,63 @@ kernel_dynlib_obj(int pid, unsigned int handle, dynlib_obj_t* obj) {
   }
 
   return 0;
+}
+
+
+int
+kernel_dynlib_handle(int pid, const char* basename, unsigned int *handle) {
+  unsigned long kproc;
+  unsigned long kaddr;
+  unsigned long kpath;
+  unsigned long blen;
+  unsigned long plen;
+  char path[1024];
+  long temphandle;
+
+  if(!(kproc=kernel_get_proc(pid))) {
+    return -1;
+  }
+
+  if(kernel_copyout(kproc + 0x3e8, &kaddr, sizeof(kaddr)) < 0) {
+    return -1;
+  }
+
+  blen = strlen(basename);
+  do {
+    if(kernel_copyout(kaddr, &kaddr, sizeof(kaddr)) < 0) {
+      return -1;
+    }
+    if(!kaddr) {
+      return -1;
+    }
+    if(kernel_copyout(kaddr + __builtin_offsetof(dynlib_obj_t, path),
+		      &kpath, sizeof(kpath)) < 0) {
+      return -1;
+    }
+    if(kernel_copyout(kpath, path, sizeof(path)) < 0) {
+      return -1;
+    }
+
+    if(kernel_copyout(kaddr + __builtin_offsetof(dynlib_obj_t, handle),
+		      &temphandle, sizeof(temphandle)) < 0) {
+      return -1;
+    }
+
+    plen = strlen(path);
+    if(plen <= blen) {
+      continue;
+    }
+    if(path[plen-blen-1] != '/') {
+      continue;
+    }
+    if(strncmp(path + plen - blen, basename, blen)) {
+      continue;
+    }
+
+
+    *handle = (unsigned int)temphandle;
+    return 0;
+  } while(1);
 }
 
 

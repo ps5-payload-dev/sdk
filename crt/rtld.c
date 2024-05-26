@@ -546,29 +546,15 @@ rtld_load(void) {
  **/
 static int
 rtld_load_sysmodule(payload_args_t *args) {
-  unsigned long nb_handles = 0;
-  int handles[256];
-  int handle;
+  int pid = syscall(SYS_getpid);
+  unsigned int handle;
 
-  // get handles for loaded modules
-  if(syscall(0x250, handles, sizeof(handles), &nb_handles)) {
-    return -1;
-  }
-
-  // try to load sceSysmoduleLoadModuleInternal from all of the handles
-  for(int i=0; i<nb_handles; i++) {
-    handle = handles[i];
-    if(!args->sceKernelDlsym(handle, "sceSysmoduleLoadModuleInternal",
-			     &sceSysmoduleLoadModuleInternal)) {
-      return 0;
+  if(kernel_dynlib_handle(pid, "libSceSysmodule.sprx", &handle)) {
+    if((handle=sceKernelLoadStartModule("/system/common/lib/libSceSysmodule.sprx",
+					0, 0, 0, 0, 0)) <= 0) {
+      klog_libload_error("libSceSysmodule.sprx");
+      return -1;
     }
-  }
-
-  // load libSceSysmodule
-  if((handle=sceKernelLoadStartModule("/system/common/lib/libSceSysmodule.sprx",
-				      0, 0, 0, 0, 0)) <= 0) {
-    klog_libload_error("libSceSysmodule.sprx");
-    return -1;
   }
 
   // resolve sceSysmoduleLoadModuleInternal
