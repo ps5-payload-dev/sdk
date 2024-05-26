@@ -292,7 +292,8 @@ rtld_open(const char* basename) {
 
   if(!strcmp(basename, "libkernel.so") ||
      !strcmp(basename, "libkernel_web.so") ||
-     !strcmp(basename, "libkernel_sys.so")) {
+     !strcmp(basename, "libkernel_sys.so") ||
+     !strcmp(basename, "libpthread.so")) {
     lib           = malloc(sizeof(rtld_lib_t));
     lib->handle   = libkernel_handle;
     lib->next     = 0;
