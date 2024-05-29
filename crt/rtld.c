@@ -300,7 +300,8 @@ rtld_open(const char* basename) {
     return lib;
   }
 
-  if(!strcmp(basename, "libSceLibcInternal.so")) {
+  if(!strcmp(basename, "libSceLibcInternal.so") ||
+     !strcmp(basename, "libm.so")) {
     lib           = malloc(sizeof(rtld_lib_t));
     lib->handle   = 0x2;
     lib->next     = 0;

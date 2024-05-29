@@ -18,7 +18,7 @@ MAKE    ?= make
 DESTDIR ?= /opt/ps5-payload-sdk
 
 TOPTARGETS := all clean install
-SUBDIRS    := crt sce_stubs libc libm include host
+SUBDIRS    := crt sce_stubs libc include host
 
 $(TOPTARGETS): $(SUBDIRS)
 
