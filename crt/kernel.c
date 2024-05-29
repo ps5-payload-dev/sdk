@@ -536,9 +536,9 @@ kernel_dynlib_handle(int pid, const char* basename, unsigned int *handle) {
       continue;
     }
 
-
     *handle = (unsigned int)temphandle;
     return 0;
+
   } while(1);
 }
 
