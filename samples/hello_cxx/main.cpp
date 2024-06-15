@@ -31,6 +31,12 @@ void task(string prefix) {
     cout << n << " ";
   }
   cout << endl;
+
+  try {
+    throw int(42);
+  } catch(int e) {
+    cout << "Caught exception: " << e << endl;
+  }
 }
 
 

@@ -34,7 +34,7 @@ done
 
 BIN_PATH="${LLVM_BINDIR}/ld.lld"
 exec "${BIN_PATH}" \
-     -pie \
+     -pie --eh-frame-hdr \
      -z max-page-size=0x4000 \
      -T "${PS5_PAYLOAD_SDK}/ldscripts/elf_x86_64.x" \
      -L "${PS5_PAYLOAD_SDK}/target/lib" \
