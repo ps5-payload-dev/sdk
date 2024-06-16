@@ -25,7 +25,7 @@ endif
 
 ELF := hello_stdio.elf
 
-CFLAGS := -Wall -Werror
+CFLAGS := -Wall -Werror -g
 
 all: $(ELF)
 
@@ -38,3 +38,10 @@ clean:
 test: $(ELF)
 	$(PS5_DEPLOY) -h $(PS5_HOST) -p $(PS5_PORT) $^
 
+debug: $(ELF)
+	gdb \
+	-ex "target extended-remote $(PS5_HOST):2159" \
+	-ex "file $(ELF)" \
+	-ex "remote put $(ELF) /data/$(ELF)" \
+	-ex "set remote exec-file /data/$(ELF)" \
+	-ex "start"

@@ -26,7 +26,7 @@ endif
 
 ELF := browser.elf
 
-CFLAGS := -Wall -Werror -DPS5_URL='"$(PS5_URL)"'
+CFLAGS := -Wall -Werror -g -DPS5_URL='"$(PS5_URL)"'
 CFLAGS += -lSceSystemService -lSceUserService
 
 all: $(ELF)
@@ -40,3 +40,10 @@ clean:
 test: $(ELF)
 	$(PS5_DEPLOY) -h $(PS5_HOST) -p $(PS5_PORT) $^
 
+debug: $(ELF)
+	gdb \
+	-ex "target extended-remote $(PS5_HOST):2159" \
+	-ex "file $(ELF)" \
+	-ex "remote put $(ELF) /data/$(ELF)" \
+	-ex "set remote exec-file /data/$(ELF)" \
+	-ex "start"
