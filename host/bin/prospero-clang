@@ -21,7 +21,11 @@ SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
 PS5_PAYLOAD_SDK="$(realpath "${SCRIPT_DIR}/..")"
 
-LIBS="-lSceLibcInternal -lScePosixForWebKit -lc"
+LIBS="-lSceLibcInternal -lScePosixForWebKit"
+LIBS="$LIBS -Wl,--whole-archive"
+LIBS="$LIBS -lc"
+LIBS="$LIBS -Wl,--no-whole-archive"
+
 for ARG in "$@"; do
     if [[ "$ARG" == "-c" || "$ARG" == "-nostdlibc" ]]; then
 	LIBS=""
