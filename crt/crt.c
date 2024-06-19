@@ -21,8 +21,8 @@ along with this program; see the file COPYING. If not, see
 /**
  * Dependencies provided by the ELF linker.
  **/
-extern void (*__init_array_start[])(payload_args_t*, int, char**, char**) __attribute__((weak));
-extern void (*__init_array_end[])(payload_args_t*, int, char**, char**) __attribute__((weak));
+extern void (*__init_array_start[])(int, char**, char**) __attribute__((weak));
+extern void (*__init_array_end[])(int, char**, char**) __attribute__((weak));
 
 extern void (*__fini_array_start[])(void) __attribute__((weak));
 extern void (*__fini_array_end[])(void) __attribute__((weak));
@@ -124,17 +124,20 @@ terminate(void) {
  * Entry-point invoked by the ELF loader.
  **/
 void
-_start(payload_args_t *args, int argc, char* argv[], char* envp[]) {
+_start(payload_args_t *args) {
   char** (*getargv)(void) = 0;
   int (*getargc)(void) = 0;
-
   unsigned long count = 0;
+  char** envp = 0;
+  char** argv = 0;
+  int argc = 0;
 
   // Clear .bss section.
   for(unsigned char* bss=__bss_start; bss<__bss_end; bss++) {
     *bss = 0;
   }
 
+  // Init runtime
   payload_args = args;
   *args->payloadout = 0;
   if((*args->payloadout=pre_init(args))) {
@@ -142,7 +145,7 @@ _start(payload_args_t *args, int argc, char* argv[], char* envp[]) {
     return;
   }
 
-  // Obtain argc and argv from libkernel
+  // Obtain argc, argv and envp from libkernel
   if((!args->sceKernelDlsym(0x1, "getargc", &getargc) ||
       !args->sceKernelDlsym(0x2001, "getargc", &getargc)) &&
      (!args->sceKernelDlsym(0x1, "getargv", &getargv) ||
@@ -150,11 +153,16 @@ _start(payload_args_t *args, int argc, char* argv[], char* envp[]) {
     argc = getargc();
     argv = getargv();
   }
+  if(args->sceKernelDlsym(0x1, "environ", &envp)) {
+    if(args->sceKernelDlsym(0x2001, "environ", &envp)) {
+      envp = 0;
+    }
+  }
 
   // Run .init functions.
   count = __init_array_end - __init_array_start;
   for(int i=0; i<count; i++) {
-    __init_array_start[i](args, argc, argv, envp);
+    __init_array_start[i](argc, argv, envp);
   }
 
   // Run the actual payload

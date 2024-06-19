@@ -27,3 +27,4 @@ typedef struct payload_args {
 } payload_args_t;
 
 
+payload_args_t* payload_get_args(void);

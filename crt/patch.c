@@ -106,9 +106,10 @@ patch_kernel_ucred(void) {
 
 
 __attribute__((constructor(105))) static void
-patch_constructor(payload_args_t *args) {
+patch_constructor(void) {
+  payload_args_t *args = payload_get_args();
+
   sceKernelDlsym = args->sceKernelDlsym;
   patch_sceKernelSpawn();
   patch_kernel_ucred();
 }
-
