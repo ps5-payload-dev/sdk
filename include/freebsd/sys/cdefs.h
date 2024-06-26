@@ -384,7 +384,7 @@
 #define	__nonnull_all
 #endif
 
-#if __GNUC_PREREQ__(3, 4)
+#if __GNUC_PREREQ__(3, 4) && !defined(__PROSPERO__)
 #define	__fastcall	__attribute__((__fastcall__))
 #define	__result_use_check	__attribute__((__warn_unused_result__))
 #else
