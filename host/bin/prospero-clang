@@ -21,7 +21,7 @@ SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
 PS5_PAYLOAD_SDK="$(realpath "${SCRIPT_DIR}/..")"
 
-LIBS="-lSceLibcInternal -lScePosixForWebKit"
+LIBS="-lSceLibcInternal -lSceNet"
 LIBS="$LIBS -Wl,--whole-archive"
 LIBS="$LIBS -lc"
 LIBS="$LIBS -Wl,--no-whole-archive"
