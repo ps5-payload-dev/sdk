@@ -28,13 +28,18 @@ TOOLS := bin/cmake-bin-wrapper \
          bin/prospero-deploy \
          bin/prospero-lld \
          bin/prospero-pkg-config \
+         bin/prospero-nid \
          bin/prospero-fetchpkg
 
 LDSCRIPTS := elf_x86_64.x
 
-all:
+all: bin/prospero-nid
 
 clean:
+	rm -f bin/prospero-nid
+
+bin/prospero-nid: bin/prospero-nid.c
+	$(CC) -static -o $@ $<
 
 install: install-tools install-symlinks install-ldscripts install-toolchains
 
