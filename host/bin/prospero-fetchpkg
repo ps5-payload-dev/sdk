@@ -1,0 +1,137 @@
+#!/usr/bin/env python3
+# encoding: utf-8
+# Copyright (C) 2024 John Törnblom
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; see the file COPYING. If not see
+# <http://www.gnu.org/licenses/>.
+'''
+Fetch Sony Playstation 4 or 5 package updates referenced by a JSON-formatted
+manifest at the given URL. For more information see:
+    https://www.psdevwiki.com/ps4/Package_Files#Manifest
+'''
+
+import json
+import operator
+import optparse
+import os
+import ssl
+import sys
+import time
+import urllib.request
+import hashlib
+
+
+def fetch_manifest(url):
+    '''
+    Fetch the JSON-encoded manifest and load it into a dict.
+    '''
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    req = urllib.request.Request(url, None, headers)
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    response = urllib.request.urlopen(req, context=ctx)
+
+    return json.loads(response.read())
+
+
+def fetch_piece(url, f, filesize):
+    '''
+    Fetch a piece of the package at the given url, concatinate it to a file,
+    and return a list with the sha1 and sha256 hexdigest. The filesize is used
+    to log progress to stdout.
+    '''
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    req = urllib.request.Request(url, None, headers)
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    response = urllib.request.urlopen(req, context=ctx)
+
+    chunksize = 1024*1024*5 # 5MiB
+    hsha1 = hashlib.sha1()
+    hsha256 = hashlib.sha256()
+
+    while True:
+        t = time.time()
+        chunk = response.read(chunksize)
+        if chunk:
+            f.write(chunk)
+            hsha1.update(chunk)
+            hsha256.update(chunk)
+        else:
+            break
+
+        size = f.tell()
+        speed = (chunksize / (time.time() - t)) / (1024*1024)
+        progress = int(100 * size / filesize)
+        filename = os.path.basename(f.name)
+
+        print(f'Downloading {filename}: {progress: 6d}% ({speed: 6.2f}MiB/s)', end='\r')
+
+    return [hsha1.hexdigest(), hsha256.hexdigest()]
+
+
+if __name__ == '__main__':
+    parser = optparse.OptionParser(usage="%prog [options] URL",
+                                   description=__doc__.strip(),
+                                   formatter=optparse.TitledHelpFormatter())
+
+    parser.add_option("-o", "--output", dest="output", metavar="PATH",
+                      help="Save pkg to PATH",
+                      action="store", default=None)
+
+    (opts, args) = parser.parse_args()
+    if not args:
+        parser.print_usage()
+        sys.exit(1)
+
+    url = args[0]
+    # if incorrect URL is provided, try to rewrite it into a correct one
+    if url.endswith('_sc.pkg'):
+        url = url[:-7] + '.json'
+    elif url.endswith('-DP.pkg'):
+        url = url[:-7] + '.json'
+    elif url.endswith('_0.pkg'):
+        url = url[:-6] + '.json'
+
+    if opts.output:
+        filename = opts.output
+    else:
+        filename = os.path.basename(url)[:-4] + 'pkg'
+
+    t = time.time()
+    manifest = fetch_manifest(url)
+    with open(filename, 'w+b') as f:
+        for piece in sorted(manifest['pieces'],
+                            key=operator.itemgetter('fileOffset')):
+            if f.tell() != piece['fileOffset']:
+                print('\nWARNING: inconsistent piece offset')
+
+            hashes = fetch_piece(piece['url'], f, manifest['originalFileSize'])
+
+            if f.tell() != piece['fileOffset'] + piece['fileSize']:
+                print('\nWARNING: inconsistent piece size')
+
+            if not piece['hashValue'].lower() in hashes:
+                print('\nWARNING: inconsistent piece hash')
+
+        if f.tell() != manifest['originalFileSize']:
+            print('\nWARNING: inconsistent file size')
+
+    name = os.path.basename(filename)
+    size = os.path.getsize(filename) / (1024*1024)
+    speed = size / (time.time() - t)
+    print(f'Completed {name}: {size:.2f}MiB ({speed:.2f}MiB/s)    \n')
+

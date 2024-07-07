@@ -27,7 +27,8 @@ TOOLS := bin/cmake-bin-wrapper \
          bin/prospero-clang++ \
          bin/prospero-deploy \
          bin/prospero-lld \
-         bin/prospero-pkg-config
+         bin/prospero-pkg-config \
+         bin/prospero-fetchpkg
 
 LDSCRIPTS := elf_x86_64.x
 
