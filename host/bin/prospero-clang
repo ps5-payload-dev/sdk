@@ -21,14 +21,12 @@ SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
 PS5_PAYLOAD_SDK="$(realpath "${SCRIPT_DIR}/..")"
 
-LIBS="-lSceLibcInternal -lSceNet"
-LIBS="$LIBS -Wl,--whole-archive"
-LIBS="$LIBS -lc"
-LIBS="$LIBS -Wl,--no-whole-archive"
-
+LIBS="-lc"
+DEPS="-lSceLibcInternal -lSceNet"
 for ARG in "$@"; do
     if [[ "$ARG" == "-c" || "$ARG" == "-nostdlibc" ]]; then
 	LIBS=""
+	DEPS=""
     fi
 done
 
@@ -39,4 +37,4 @@ exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang" \
      -isysroot "${PS5_PAYLOAD_SDK}" \
      -isystem "${PS5_PAYLOAD_SDK}/target/include" \
      -fno-stack-protector -fno-plt -femulated-tls \
-     $LIBS "$@"
+     $LIBS "$@" $DEPS

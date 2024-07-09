@@ -21,20 +21,14 @@ SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
 PS5_PAYLOAD_SDK="$(realpath "${SCRIPT_DIR}/..")"
 
-LIBS_C="-lSceLibcInternal -lSceNet"
-LIBS_C="$LIBS_C -Wl,--whole-archive"
-LIBS_C="$LIBS_C -lc"
-LIBS_C="$LIBS_C -Wl,--no-whole-archive"
-
-LIBS_CXX="-lc++"
-LIBS_CXX="$LIBS_CXX -Wl,--whole-archive"
-LIBS_CXX="$LIBS_CXX -lunwind -lc++abi"
-LIBS_CXX="$LIBS_CXX -Wl,--no-whole-archive"
-
+LIBS_C="-lc"
+LIBS_CXX="-lunwind -lc++abi -lc++"
+LIBS_DEPS="-lSceLibcInternal -lSceNet"
 for ARG in "$@"; do
     if [[ "$ARG" == "-c" || "$ARG" == "-nostdlib" ]]; then
 	LIBS_C=""
 	LIBS_CXX=""
+	LIBS_DEPS=""
     fi
     if [[ "$ARG" == "-nostdlib++" ]]; then
 	LIBS_CXX=""
@@ -50,4 +44,4 @@ exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang++" \
      -stdlib++-isystem "${PS5_PAYLOAD_SDK}/target/include/c++/v1" \
      -fno-stack-protector -fno-plt -femulated-tls \
      -frtti -fexceptions \
-     $LIBS_C $LIBS_CXX "$@"
+     $LIBS_C $LIBS_CXX "$@" $LIBS_DEPS
