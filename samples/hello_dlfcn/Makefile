@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 #   Copyright (C) 2024 John Törnblom
 #
 # This file is free software; you can redistribute it and/or modify it
@@ -15,28 +14,34 @@
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
 
-SCRIPT_PATH="${BASH_SOURCE[0]}"
-SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
-SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
+PS5_HOST ?= ps5
+PS5_PORT ?= 9021
 
-PS5_PAYLOAD_SDK="$(realpath "${SCRIPT_DIR}/..")"
+ifdef PS5_PAYLOAD_SDK
+    include $(PS5_PAYLOAD_SDK)/toolchain/prospero.mk
+else
+    $(error PS5_PAYLOAD_SDK is undefined)
+endif
 
-LLVM_CONFIG="${SCRIPT_DIR}/llvm-config"
-LLVM_BINDIR=$("${LLVM_CONFIG}" --bindir)
+ELF := hello_dlfcn.elf
 
+CFLAGS := -Wall -Werror -g
 
-LIBKERNEL=-lkernel_web
-for ARG in "$@"; do
-    if [[ "$ARG" == "-lkernel" || "$ARG" == "-lkernel_sys" ]]; then
-	LIBKERNEL=$ARG
-    fi
-done
+all: $(ELF)
 
-BIN_PATH="${LLVM_BINDIR}/ld.lld"
-exec "${BIN_PATH}" \
-     -pie --eh-frame-hdr \
-     -z max-page-size=0x4000 \
-     -T "${PS5_PAYLOAD_SDK}/ldscripts/elf_x86_64.x" \
-     -L "${PS5_PAYLOAD_SDK}/target/lib" \
-     "${PS5_PAYLOAD_SDK}/target/lib/crt1.o" \
-     "$@" "${LIBKERNEL}"
+$(ELF): main.c
+	$(CC) $(CFLAGS) -o $@ $^
+
+clean:
+	rm -f $(ELF)
+
+test: $(ELF)
+	$(PS5_DEPLOY) -h $(PS5_HOST) -p $(PS5_PORT) $^
+
+debug: $(ELF)
+	gdb \
+	-ex "target extended-remote $(PS5_HOST):2159" \
+	-ex "file $(ELF)" \
+	-ex "remote put $(ELF) /data/$(ELF)" \
+	-ex "set remote exec-file /data/$(ELF)" \
+	-ex "start"
