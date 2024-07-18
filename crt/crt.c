@@ -40,6 +40,8 @@ extern int main(int argc, char* argv[], char *envp[]);
 int __klog_init(payload_args_t *args);
 int __kernel_init(payload_args_t* args);
 int __rtld_init(payload_args_t* args);
+int __rtld_fini(void);
+
 
 static payload_args_t* payload_args = 0;
 
@@ -107,6 +109,8 @@ static void
 terminate(void) {
   void (*exit)(int) = 0;
   long dummy;
+
+  __rtld_fini();
 
   // we are running inside a hijacked process, just return
   if(payload_args->sceKernelDlsym(0x1, "sceKernelDlsym", &dummy)) {

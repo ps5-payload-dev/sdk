@@ -773,6 +773,18 @@ __rtld_init(payload_args_t *args) {
 }
 
 
+void
+__rtld_fini(void) {
+  rtld_lib_t* next;
+
+  while(libhead) {
+    next = libhead->next;
+    rtld_close(libhead);
+    libhead = next;
+  }
+}
+
+
 void*
 dlopen(const char *filename, int flags) {
   char sprx[0x1000];
