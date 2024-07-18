@@ -378,8 +378,9 @@ rtld_lib_new(int handle, int flags) {
 static rtld_lib_t*
 rtld_open(const char* cwd, const char* filename, int flags) {
   const char *basename = rtld_basename(filename);
+  int pid = syscall(SYS_getpid);
+  unsigned int handle;
   char path[0x4000];
-  int handle;
   int error;
 
   if(!filename) {
@@ -399,13 +400,16 @@ rtld_open(const char* cwd, const char* filename, int flags) {
     return rtld_lib_new(2, flags | RTLD_NODELETE);
   }
 
-  if(rtld_find_sprx(cwd, filename, path)) {
-    dlerrno = ENOENT;
+  if(!kernel_dynlib_handle(pid, basename, &handle)) {
+    return rtld_lib_new(handle, flags | RTLD_NODELETE);
+  }
+
+  if(flags & RTLD_NOLOAD) {
     return 0;
   }
 
-  if(flags & RTLD_NOLOAD) { // TODO
-    dlerrno = ENOSYS;
+  if(rtld_find_sprx(cwd, filename, path)) {
+    dlerrno = ENOENT;
     return 0;
   }
 
