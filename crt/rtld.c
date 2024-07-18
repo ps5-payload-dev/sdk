@@ -127,18 +127,6 @@ static int   (*sceSysmoduleLoadModuleInternal)(unsigned int) = 0;
 /**
  *
  **/
-static const char*
-LD_LIBRARY_PATH[] = {
-  "/system/priv/lib",
-  "/system/common/lib",
-  "/system_ex/priv_ex/lib",
-  "/system_ex/common_ex/lib",
-};
-
-
-/**
- *
- **/
 static const sysmodtab_t sysmodtab[] = {
   {"libSceAbstractLocal.sprx", 0x8000005f},
   {"libSceAbstractStorage.sprx", 0x80000058},
@@ -347,11 +335,24 @@ rtld_find_sprx(const char* cwd, const char* filename, char *path) {
     return 0;
   }
 
-  for(int i=0; i<sizeof(LD_LIBRARY_PATH)/sizeof(LD_LIBRARY_PATH[0]); i++) {
-    sprintf(path, "%s/%s", LD_LIBRARY_PATH[i], filename);
-    if(!syscall(SYS_access, path, 0)) {
+  sprintf(path, "/system/priv/lib/%s", filename);
+  if(!syscall(SYS_access, path, 0)) {
       return 0;
-    }
+  }
+
+  sprintf(path, "/system/common/lib/%s", filename);
+  if(!syscall(SYS_access, path, 0)) {
+      return 0;
+  }
+
+  sprintf(path, "/system_ex/priv_ex/lib/%s", filename);
+  if(!syscall(SYS_access, path, 0)) {
+      return 0;
+  }
+
+  sprintf(path, "/system_ex/common_ex/lib/%s", filename);
+  if(!syscall(SYS_access, path, 0)) {
+      return 0;
   }
 
   return -1;
