@@ -16,6 +16,7 @@
 
 PS5_PAYLOAD_SDK := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))..)
 PS5_SYSROOT     := $(PS5_PAYLOAD_SDK)/target
+PS5_HBROOT      := $(PS5_SYSROOT)/user/homebrew
 PS5_DEPLOY      := $(PS5_PAYLOAD_SDK)/bin/prospero-deploy
 
 AS         := $(PS5_PAYLOAD_SDK)/bin/prospero-clang
