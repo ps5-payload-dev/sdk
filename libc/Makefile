@@ -47,6 +47,6 @@ clean:
 	rm -f *.a *.o
 
 install: $(ARCHIVE)
-	install -d $(DESTDIR)/target/lib
-	install $^ $(DESTDIR)/target/lib
+	install -d $(DESTDIR)/target/user/homebrew/lib
+	install $^ $(DESTDIR)/target/user/homebrew/lib
 

@@ -22,6 +22,8 @@ PS5_PAYLOAD_SDK="$(realpath "${PS5_PAYLOAD_SDK}")"
 
 export PS5_PAYLOAD_SDK=${PS5_PAYLOAD_SDK}
 export PS5_SYSROOT=${PS5_PAYLOAD_SDK}/target
+export PS5_HBROOT=/user/homebrew
+
 export PS5_DEPLOY=${PS5_PAYLOAD_SDK}/bin/prospero-deploy
 
 export CC=${PS5_PAYLOAD_SDK}/bin/prospero-clang

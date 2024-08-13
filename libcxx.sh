@@ -34,7 +34,7 @@ tar xf $TEMPDIR/llvm.tar.xz -C $TEMPDIR || exit 1
 
 ${CMAKE} -S $TEMPDIR/llvm-project-$LLVM_VER.src/runtimes \
 	 -B $TEMPDIR/build \
-	 -DCMAKE_INSTALL_PREFIX="${PS5_SYSROOT}" \
+	 -DCMAKE_INSTALL_PREFIX="${PS5_HBROOT}" \
 	 -DCMAKE_BUILD_TYPE=Release \
 	 -DCMAKE_CXX_FLAGS="-nostdlib++" \
 	 -DLLVM_ENABLE_RUNTIMES="libunwind;libcxxabi;libcxx" \
@@ -56,4 +56,4 @@ ${CMAKE} -S $TEMPDIR/llvm-project-$LLVM_VER.src/runtimes \
 	 -DLIBUNWIND_IS_BAREMETAL=YES \
 	 -DLIBUNWIND_ENABLE_SHARED=NO \
 	 -DLIBUNWIND_USE_COMPILER_RT=NO || exit 1
-${MAKE} -C $TEMPDIR/build install DESTDIR="/"
+${MAKE} -C $TEMPDIR/build install DESTDIR="${PS5_SYSROOT}"

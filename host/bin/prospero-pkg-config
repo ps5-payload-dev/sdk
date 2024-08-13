@@ -22,8 +22,8 @@ SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 PS5_PAYLOAD_SDK="$(realpath "${SCRIPT_DIR}/..")"
 
 export PKG_CONFIG_DIR=
-export PKG_CONFIG_SYSROOT_DIR=${PS5_PAYLOAD_SDK}/target
-export PKG_CONFIG_LIBDIR=${PS5_PAYLOAD_SDK}/target/lib/pkgconfig
-export PKG_CONFIG_PATH=${PS5_PAYLOAD_SDK}/target/libdata/pkgconfig
+export PKG_CONFIG_SYSROOT_DIR=${PS5_PAYLOAD_SDK}/target/user/homebrew
+export PKG_CONFIG_LIBDIR=${PKG_CONFIG_SYSROOT_DIR}/lib/pkgconfig
+export PKG_CONFIG_PATH=${PKG_CONFIG_SYSROOT_DIR}/libdata/pkgconfig
 
 exec -a "${SCRIPT_NAME}" pkg-config --static "$@"

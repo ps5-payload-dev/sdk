@@ -48,5 +48,5 @@ clean:
 	rm -f *.o
 
 install: crt1.o
-	install -d $(DESTDIR)/target/lib
-	install $^ $(DESTDIR)/target/lib
+	install -d $(DESTDIR)/target/user/homebrew/lib
+	install $^ $(DESTDIR)/target/user/homebrew/lib

@@ -21,7 +21,7 @@ all:
 clean:
 
 install:
-	install -d $(DESTDIR)/target
-	cp -r freebsd/. $(DESTDIR)/target/include
-	cp -r khronos/. $(DESTDIR)/target/include
-	cp -r ps5/. $(DESTDIR)/target/include/ps5
+	install -d      $(DESTDIR)/target/user/homebrew/include
+	cp -r freebsd/. $(DESTDIR)/target/user/homebrew/include
+	cp -r khronos/. $(DESTDIR)/target/user/homebrew/include
+	cp -r ps5/.     $(DESTDIR)/target/user/homebrew/include/ps5
