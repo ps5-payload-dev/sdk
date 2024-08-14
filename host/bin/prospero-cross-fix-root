@@ -28,11 +28,16 @@ else
     WORKDIR=$1
 fi
 
+#
+# Based on:
+#  https://github.com/gentoo/crossdev/blob/master/wrappers/cross-fix-root
+#
+
 if [ -d "${WORKDIR}/lib" ]; then
-    echo "Prepending sysroot to paths in libtool linker scripts"
     cd "${WORKDIR}/lib" || exit 1
 
     for FILENAME in $(find . -type f -name "lib*.la"); do
+	echo "Prepending sysroot to libdir in ${FILENAME}"
 	sed -i \
 	    -e "s|^libdir='${PS5_HBROOT}\(.*\)'|libdir='${PS5_SYSROOT}${PS5_HBROOT}\1'|" \
 	    -e "s|^\(dependency_libs=.* \)${PS5_HBROOT}\(.*\.la\)|\1${PS5_SYSROOT}${PS5_HBROOT}\2|g" \
@@ -41,12 +46,12 @@ if [ -d "${WORKDIR}/lib" ]; then
 fi
 
 if [ -d "${WORKDIR}/bin" ]; then
-    echo "Prepending sysroot to prefix in *-config scripts"
     cd "${WORKDIR}/bin" || exit 1
 
     for FILENAME in $(find . -type f -name "*-config"); do
+	echo "Prepending sysroot to prefix in ${FILENAME}"
 	sed -i \
-	    -e "s|^prefix='${PS5_HBROOT}\(.*\)'|prefix='${PS5_SYSROOT}${PS5_HBROOT}\1'|" \
+	    -e "s|^prefix=.${PS5_HBROOT}\(.*\).|prefix='${PS5_SYSROOT}${PS5_HBROOT}\1'|" \
 	    "${FILENAME}"
     done
 fi
