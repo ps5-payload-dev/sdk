@@ -64,5 +64,5 @@ clean:
 	rm -f *.o *.so $(NID_DB)
 
 install: $(SHARED)
-	install -d $(DESTDIR)/target/user/homebrew/lib
-	install $(SHARED) $(DESTDIR)/target/user/homebrew/lib
+	install -d $(DESTDIR)/target/lib
+	install $(SHARED) $(DESTDIR)/target/lib

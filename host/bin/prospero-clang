@@ -20,7 +20,6 @@ SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
 SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
 PS5_PAYLOAD_SDK="$(realpath "${SCRIPT_DIR}/..")"
-PS5_PAYLOAD_HBROOT="${PS5_PAYLOAD_SDK}/target/user/homebrew"
 
 LIBS="-lc"
 DEPS="-lSceLibcInternal -lSceNet"
@@ -32,10 +31,11 @@ for ARG in "$@"; do
 done
 
 # ensure clang knows where prospero-lld is at
+
 export PATH=${SCRIPT_DIR}:$PATH
 exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang" \
      -target x86_64-sie-ps5 \
      -isysroot "${PS5_PAYLOAD_SDK}" \
-     -resource-dir "${PS5_PAYLOAD_HBROOT}" \
+     -isystem "${PS5_PAYLOAD_SDK}/target/include" \
      -fno-stack-protector -fno-plt -femulated-tls \
      $LIBS "$@" $DEPS

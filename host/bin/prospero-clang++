@@ -20,7 +20,6 @@ SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
 SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
 PS5_PAYLOAD_SDK="$(realpath "${SCRIPT_DIR}/..")"
-PS5_PAYLOAD_HBROOT="${PS5_PAYLOAD_SDK}/target/user/homebrew"
 
 LIBS_C="-lc"
 LIBS_CXX="-lunwind -lc++abi -lc++"
@@ -42,8 +41,7 @@ export PATH=${SCRIPT_DIR}:$PATH
 exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang++" \
      -target x86_64-sie-ps5 \
      -isysroot "${PS5_PAYLOAD_SDK}" \
-     -resource-dir "${PS5_PAYLOAD_HBROOT}" \
-     -stdlib++-isystem "${PS5_PAYLOAD_HBROOT}/include/c++/v1" \
+     -stdlib++-isystem "${PS5_PAYLOAD_SDK}/target/include/c++/v1" \
      -fno-stack-protector -fno-plt -femulated-tls \
      -frtti -fexceptions \
      $LIBS_C $LIBS_CXX "$@" $LIBS_DEPS

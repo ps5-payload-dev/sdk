@@ -42,4 +42,4 @@ exec "${BIN_PATH}" \
      -L "${PS5_PAYLOAD_HBROOT}/lib" \
      "$@" \
      "${LIBKERNEL}" \
-     "${PS5_PAYLOAD_HBROOT}/lib/crt1.o"
+     "${PS5_PAYLOAD_SDK}/target/lib/crt1.o"
