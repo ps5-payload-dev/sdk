@@ -34,8 +34,7 @@ fi
 #
 
 if [ -d "${WORKDIR}/lib" ]; then
-    cd "${WORKDIR}/lib" || exit 1
-
+    pushd "${WORKDIR}/lib" || exit 1
     for FILENAME in $(find . -type f -name "lib*.la"); do
 	echo "Prepending sysroot to libdir in ${FILENAME}"
 	sed -i \
@@ -43,15 +42,16 @@ if [ -d "${WORKDIR}/lib" ]; then
 	    -e "s|^\(dependency_libs=.* \)${PS5_HBROOT}\(.*\.la\)|\1${PS5_SYSROOT}${PS5_HBROOT}\2|g" \
 	    "${FILENAME}"
     done
+    popd
 fi
 
 if [ -d "${WORKDIR}/bin" ]; then
-    cd "${WORKDIR}/bin" || exit 1
-
+    pushd "${WORKDIR}/bin" || exit 1
     for FILENAME in $(find . -type f -name "*-config"); do
 	echo "Prepending sysroot to prefix in ${FILENAME}"
 	sed -i \
 	    -e "s|^prefix=.${PS5_HBROOT}\(.*\).|prefix='${PS5_SYSROOT}${PS5_HBROOT}\1'|" \
 	    "${FILENAME}"
     done
+    popd
 fi
