@@ -34,7 +34,7 @@ if [ -d "${WORKDIR}/lib" ]; then
 
     for FILENAME in $(find . -type f -name "lib*.la"); do
 	sed -i \
-	    -e "s|^libdir='${PS5_HBROOT}\(.*\)'|libdir='${PS5_SYSROOT}\1'|" \
+	    -e "s|^libdir='${PS5_HBROOT}\(.*\)'|libdir='${PS5_SYSROOT}${PS5_HBROOT}\1'|" \
 	    -e "s|^\(dependency_libs=.* \)${PS5_HBROOT}\(.*\.la\)|\1${PS5_SYSROOT}${PS5_HBROOT}\2|g" \
 	    "${FILENAME}"
     done
@@ -46,7 +46,7 @@ if [ -d "${WORKDIR}/bin" ]; then
 
     for FILENAME in $(find . -type f -name "*-config"); do
 	sed -i \
-	    -e "s|^prefix='${PS5_HBROOT}\(.*\)'|prefix='${PS5_SYSROOT}\1'|" \
+	    -e "s|^prefix='${PS5_HBROOT}\(.*\)'|prefix='${PS5_SYSROOT}${PS5_HBROOT}\1'|" \
 	    "${FILENAME}"
     done
 fi
