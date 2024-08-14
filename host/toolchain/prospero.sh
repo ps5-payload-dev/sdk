@@ -25,6 +25,7 @@ export PS5_SYSROOT=${PS5_PAYLOAD_SDK}/target
 export PS5_HBROOT=/user/homebrew
 
 export PS5_DEPLOY=${PS5_PAYLOAD_SDK}/bin/prospero-deploy
+export PS5_CROSS_FIX_ROOT=${PS5_PAYLOAD_SDK}/bin/prospero-cross-fix-root
 
 export CC=${PS5_PAYLOAD_SDK}/bin/prospero-clang
 export CXX=${PS5_PAYLOAD_SDK}/bin/prospero-clang++

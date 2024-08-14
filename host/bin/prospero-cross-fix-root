@@ -20,24 +20,33 @@ SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
 SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
 PS5_PAYLOAD_SDK="$(realpath "${SCRIPT_DIR}/..")"
-
 source "${PS5_PAYLOAD_SDK}/toolchain/prospero.sh"
-cd "${PS5_SYSROOT}/${PS5_HBROOT}/lib" || exit 0
 
-echo "Prepending sysroot to paths in libtool linker scripts"
-for FILENAME in $(find . -type f -name "lib*.la"); do
-    sed -i \
-	-e "s|^libdir='${PS5_HBROOT}\(.*\)'|libdir='${PS5_SYSROOT}\1'|" \
-	-e "s|^\(dependency_libs=.* \)${PS5_HBROOT}\(.*\.la\)|\1${PS5_SYSROOT}${PS5_HBROOT}\2|g" \
-	"${FILENAME}"
-done
+if [[ -z $1 ]]; then
+    WORKDIR="${PS5_SYSROOT}/${PS5_HBROOT}"
+else
+    WORKDIR=$1
+fi
 
-cd "${PS5_SYSROOT}/${PS5_HBROOT}/bin" || exit 0
-echo "Prepending sysroot to prefix in *-config scripts"
-for FILENAME in $(find . -type f -name "*-config"); do
-    sed -i \
-	-e "s|^prefix='${PS5_HBROOT}\(.*\)'|prefix='${PS5_SYSROOT}\1'|" \
-	"${FILENAME}"
-done
+if [ -d "${WORKDIR}/lib" ]; then
+    echo "Prepending sysroot to paths in libtool linker scripts"
+    cd "${WORKDIR}/lib" || exit 1
 
-exit 0
+    for FILENAME in $(find . -type f -name "lib*.la"); do
+	sed -i \
+	    -e "s|^libdir='${PS5_HBROOT}\(.*\)'|libdir='${PS5_SYSROOT}\1'|" \
+	    -e "s|^\(dependency_libs=.* \)${PS5_HBROOT}\(.*\.la\)|\1${PS5_SYSROOT}${PS5_HBROOT}\2|g" \
+	    "${FILENAME}"
+    done
+fi
+
+if [ -d "${WORKDIR}/bin" ]; then
+    echo "Prepending sysroot to prefix in *-config scripts"
+    cd "${WORKDIR}/bin" || exit 1
+
+    for FILENAME in $(find . -type f -name "*-config"); do
+	sed -i \
+	    -e "s|^prefix='${PS5_HBROOT}\(.*\)'|prefix='${PS5_SYSROOT}\1'|" \
+	    "${FILENAME}"
+    done
+fi
