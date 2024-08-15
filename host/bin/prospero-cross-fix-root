@@ -40,8 +40,8 @@ if [ -d "${WORKDIR}/lib" ]; then
     for FILENAME in $(find . -type f -name "lib*.la"); do
 	echo "cross-fix-root: prepending sysroot to libdir in ${FILENAME}"
 	sed -i \
-            -e "s|^libdir='${PS5_HBROOT}\(.*\)'|libdir='${PS5_SYSROOT}${PS5_HBROOT}\1'|g" \
-            -e "s|^\(dependency_libs=.*\) ${PS5_HBROOT}\(.*\.la\)|\1${PS5_SYSROOT}${PS5_HBROOT}\2|g" \
+	    -e "/^libdir=/s:=.*:='${PS5_SYSROOT}${PS5_HBROOT}/lib':" \
+	    -e "/^dependency_libs=/s: ${PS5_HBROOT}/lib/: ${PS5_SYSROOT}/${PS5_HBROOT}/lib/:g" \
             "${FILENAME}" || exit 1
     done
 fi
@@ -50,8 +50,7 @@ if [ -d "${WORKDIR}/bin" ]; then
     cd "${WORKDIR}/bin" || exit 1
     for FILENAME in $(find . -type f -name "*-config"); do
 	echo "cross-fix-root: prepending sysroot to prefix in ${FILENAME}"
-	sed -i \
-	    -e "s|^prefix=.${PS5_HBROOT}\(.*\).|prefix='${PS5_SYSROOT}${PS5_HBROOT}\1'|" \
-	    "${FILENAME}" || exit 1
+	sed -i "/^prefix=/s:=.*:='${PS5_SYSROOT}/${PS5_HBROOT}':" "${FILENAME}" || exit 1
     done
 fi
+
