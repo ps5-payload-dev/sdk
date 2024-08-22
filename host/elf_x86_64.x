@@ -16,7 +16,6 @@ along with this program; see the file COPYING. If not, see
 
 OUTPUT_FORMAT("elf64-x86-64")
 OUTPUT_ARCH(i386:x86-64)
-ENTRY(_start)
 
 PHDRS {
 	ph_text   PT_LOAD FLAGS (0x5);
