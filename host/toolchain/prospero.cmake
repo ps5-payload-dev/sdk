@@ -43,14 +43,13 @@ set(CMAKE_INSTALL_PREFIX "/user/homebrew" CACHE PATH "")
 #
 # Encrease default verbosity in makefiles
 #
-set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_VERBOSE_MAKEFILE ON CACHE BOOL "")
 
 #
 # We only support positional independent executables
 #
 set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "Shared libs not available")
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
+set(CMAKE_POSITION_INDEPENDENT_CODE ON CACHE BOOL "")
 
 #
 # Set compilers
