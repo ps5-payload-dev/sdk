@@ -38,7 +38,7 @@ set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 #
 # Set prefix (on the target platform)
 #
-set(CMAKE_INSTALL_PREFIX "/user/homebrew")
+set(CMAKE_INSTALL_PREFIX "/user/homebrew" CACHE PATH "")
 
 #
 # Encrease default verbosity in makefiles
