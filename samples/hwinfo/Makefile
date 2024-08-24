@@ -38,6 +38,10 @@ clean:
 test: $(ELF)
 	$(PS5_DEPLOY) -h $(PS5_HOST) -p $(PS5_PORT) $^
 
+install: $(ELF)
+	install -d $(DESTDIR)/$(PREFIX)/bin
+	install $^ $(DESTDIR)/$(PREFIX)/bin/hwinfo
+
 debug: $(ELF)
 	gdb \
 	-ex "target extended-remote $(PS5_HOST):2159" \

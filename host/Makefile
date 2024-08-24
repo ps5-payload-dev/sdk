@@ -18,7 +18,8 @@ DESTDIR ?= /opt/ps5-payload-sdk
 
 TOOLCHAINS := toolchain/prospero.sh \
               toolchain/prospero.mk \
-              toolchain/prospero.cmake
+              toolchain/prospero.cmake \
+              toolchain/prospero.ini
 
 TOOLS := bin/cmake-bin-wrapper \
          bin/llvm-bin-wrapper \

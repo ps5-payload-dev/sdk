@@ -26,7 +26,6 @@ set(CMAKE_SYSTEM_NAME FreeBSD)
 set(CMAKE_SYSTEM_VERSION 9)
 set(CMAKE_CROSSCOMPILING 1)
 
-
 #
 # Set sysroot and search paths
 #
@@ -36,6 +35,15 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
+#
+# Set prefix (on the target platform)
+#
+set(CMAKE_INSTALL_PREFIX "/user/homebrew")
+
+#
+# Encrease default verbosity in makefiles
+#
+set(CMAKE_VERBOSE_MAKEFILE ON)
 
 #
 # We only support positional independent executables
