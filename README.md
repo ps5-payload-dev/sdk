@@ -14,9 +14,9 @@ john@localhost:ps5-payload-dev/sdk$ sudo apt-get install bash socat cmake pkg-co
 ## Quick-start
 To download and install a binary distribution for GNU/Linux:
 ```console
-john@localhost:tmp$ wget https://github.com/ps5-payload-dev/sdk/releases/download/v0.15/ps5-payload-sdk.tar.gz
-john@localhost:tmp$ mkdir -p /opt/ps5-payload-sdk-0.15/
-john@localhost:tmp$ tar xvf ps5-payload-sdk.tar.gz -C /opt/ps5-payload-sdk-0.15/
+john@localhost:tmp$ wget https://github.com/ps5-payload-dev/sdk/releases/download/v0.16/ps5-payload-sdk.tar.gz
+john@localhost:tmp$ mkdir -p /opt/ps5-payload-sdk-0.16/
+john@localhost:tmp$ tar xvf ps5-payload-sdk.tar.gz -C /opt/ps5-payload-sdk-0.16/
 ```
 
 ## Building
