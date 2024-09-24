@@ -264,7 +264,7 @@ SHA1Final(unsigned char *digest, SHA1_CTX *context) {
  **/
 static void
 nid_encode(const char *sym, char nid[12]) {
-  uint8_t digest[16];
+  uint8_t digest[20];
   SHA1_CTX ctx;
 
   SHA1Init(&ctx);
