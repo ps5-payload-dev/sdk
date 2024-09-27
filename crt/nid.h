@@ -16,15 +16,4 @@ along with this program; see the file COPYING. If not, see
 
 #pragma once
 
-
-typedef struct payload_args {
-  int (*sys_dynlib_dlsym)(int, const char*, void*);
-  int  *rwpipe;
-  int  *rwpair;
-  long  kpipe_addr;
-  long  kdata_base_addr;
-  int  *payloadout;
-} payload_args_t;
-
-
-payload_args_t* payload_get_args(void);
+char* nid_encode(const char *sym, char buf[12]);

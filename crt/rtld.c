@@ -17,7 +17,7 @@ along with this program; see the file COPYING. If not, see
 #include "kernel.h"
 #include "klog.h"
 #include "mdbg.h"
-#include "payload.h"
+#include "nid.h"
 #include "syscall.h"
 
 
@@ -48,6 +48,9 @@ along with this program; see the file COPYING. If not, see
 #define EINVAL 22
 #define ENOSYS 78
 
+#define DLSYM(handle, sym) (sym=(void*)kernel_dynlib_dlsym(-1, handle, #sym))
+
+
 typedef struct {
   long d_tag;
   union {
@@ -77,6 +80,10 @@ typedef struct {
 typedef struct rtld_lib {
   int              handle;
   int              flags;
+  unsigned long    mapbase;
+  char            *strtab;
+  Elf64_Sym       *symtab;
+  unsigned long    symtabsize;
   struct rtld_lib* next;
 } rtld_lib_t;
 
@@ -109,14 +116,14 @@ static int dlerrno = 0;
  **/
 static void* (*malloc)(unsigned long) = 0;
 static void  (*free)(void*) = 0;
-static char* (*strcat)(char*, const char*);
-static char* (*strcpy)(char*, const char*);
+static char* (*strcat)(char*, const char*) = 0;
+static char* (*strcpy)(char*, const char*) = 0;
 static int   (*strcmp)(const char*, const char*) = 0;
+static int   (*strncmp)(const char*, const char*, unsigned long) = 0;
 static int   (*strlen)(const char*) = 0;
 static int   (*sprintf)(char*, const char*, ...) = 0;
 static char* (*getcwd)(char*, unsigned long) = 0;
 static char* (*_Strerror)(int, char*) = 0;
-static int   (*sceKernelDlsym)(int, const char*, void*) = 0;
 static int   (*sceKernelLoadStartModule)(const char*, unsigned long, const void*,
 					 unsigned int, void*, int*) = 0;
 static int   (*sceKernelStopUnloadModule)(int, unsigned long, const void*, unsigned int,
@@ -365,9 +372,39 @@ rtld_find_sprx(const char* cwd, const char* filename, char *path) {
 static rtld_lib_t*
 rtld_lib_new(int handle, int flags) {
   rtld_lib_t *lib = malloc(sizeof(rtld_lib_t));
+  dynlib_dynsec_t dynsec;
+  dynlib_obj_t obj;
+
   lib->handle = handle;
   lib->flags = flags;
+  lib->mapbase = 0;
+  lib->symtab = 0;
+  lib->symtabsize = 0;
+  lib->strtab = 0;
   lib->next = 0;
+
+  if(kernel_dynlib_obj(-1, handle, &obj)) {
+    return lib;
+  }
+  if(kernel_copyout(obj.dynsec, &dynsec, sizeof(dynsec)) < 0) {
+    return lib;
+  }
+  if(!(lib->strtab=malloc(dynsec.strtabsize))) {
+    return lib;
+  }
+  if(kernel_copyout(dynsec.strtab, lib->strtab, dynsec.strtabsize) < 0) {
+    return lib;
+  }
+  if(!(lib->symtab=malloc(dynsec.symtabsize))) {
+    return lib;
+  }
+  if(kernel_copyout(dynsec.symtab, lib->symtab, dynsec.symtabsize) < 0) {
+    return lib;
+  }
+
+  lib->mapbase = obj.mapbase;
+  lib->symtabsize = dynsec.symtabsize;
+
   return lib;
 }
 
@@ -437,10 +474,19 @@ rtld_open(const char* cwd, const char* filename, int flags) {
 static unsigned long
 rtld_sym(rtld_lib_t* lib, const char* name) {
   unsigned long addr = 0;
-  int error;
+  char nid[12];
 
-  if((error=sceKernelDlsym(lib->handle, name, &addr))) {
-    dlerrno = error;
+  nid_encode(name, nid);
+
+  for(unsigned long i=0; i<lib->symtabsize/sizeof(Elf64_Sym); i++) {
+    if(!lib->symtab[i].st_value) {
+      continue;
+    }
+
+    if(!strncmp(nid, lib->strtab + lib->symtab[i].st_name, 11)) {
+      addr = lib->mapbase + lib->symtab[i].st_value;
+      break;
+    }
   }
 
   return addr;
@@ -455,6 +501,13 @@ rtld_close(rtld_lib_t* lib) {
   int handle = lib->handle;
   int flags = lib->flags;
   int error = 0;
+
+  if(lib->symtab) {
+    free(lib->symtab);
+  }
+  if(lib->strtab) {
+    free(lib->strtab);
+  }
 
   free(lib);
 
@@ -642,7 +695,7 @@ rtld_load(void) {
  *
  **/
 static int
-rtld_load_sysmodule(payload_args_t *args) {
+rtld_load_sysmodule(void) {
   int pid = syscall(SYS_getpid);
   unsigned int handle;
 
@@ -654,14 +707,17 @@ rtld_load_sysmodule(payload_args_t *args) {
     }
   }
 
-  // resolve sceSysmoduleLoadModuleInternal
-  return args->sceKernelDlsym(handle, "sceSysmoduleLoadModuleInternal",
-			      &sceSysmoduleLoadModuleInternal);
+  if(!DLSYM(handle, sceSysmoduleLoadModuleInternal)) {
+    klog_resolve_error("sceSysmoduleLoadModuleInternal");
+    return -1;
+  }
+
+  return 0;
 }
 
 
 int
-__rtld_init(payload_args_t *args) {
+__rtld_init(void) {
   static const unsigned char privcaps[16] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
 					     0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
   int pid = syscall(SYS_getpid);
@@ -670,9 +726,9 @@ __rtld_init(payload_args_t *args) {
   int error = 0;
 
   // determine libkernel handle
-  if(!args->sceKernelDlsym(0x1, "sceKernelDlsym", &sceKernelDlsym)) {
+  if(kernel_dynlib_dlsym(pid, 0x1, "sceKernelDlsym")) {
     libkernel_handle = 0x1;
-  } else if(!args->sceKernelDlsym(0x2001, "sceKernelDlsym", &sceKernelDlsym)) {
+  } else if(kernel_dynlib_dlsym(pid, 0x2001, "sceKernelDlsym")) {
     libkernel_handle = 0x2001;
   } else {
     klog_puts("Unable to determine libkernel handle");
@@ -680,58 +736,55 @@ __rtld_init(payload_args_t *args) {
   }
 
   // load deps to libc
-  if((error=args->sceKernelDlsym(0x2, "malloc", &malloc))) {
+  if(!DLSYM(0x2, malloc)) {
     klog_resolve_error("malloc");
-    return error;
+    return -1;
   }
-  if((error=args->sceKernelDlsym(0x2, "free", &free))) {
+  if(!DLSYM(0x2, free)) {
     klog_resolve_error("free");
-    return error;
+    return -1;
   }
-  if((error=args->sceKernelDlsym(0x2, "strcat", &strcat))) {
+  if(!DLSYM(0x2, strcat)) {
     klog_resolve_error("strcat");
-    return error;
+    return -1;
   }
-  if((error=args->sceKernelDlsym(0x2, "strcpy", &strcpy))) {
+  if(!DLSYM(0x2, strcpy)) {
     klog_resolve_error("strcpy");
-    return error;
+    return -1;
   }
-  if((error=args->sceKernelDlsym(0x2, "strcmp", &strcmp))) {
+  if(!DLSYM(0x2, strcmp)) {
     klog_resolve_error("strcmp");
-    return error;
+    return -1;
   }
-  if((error=args->sceKernelDlsym(0x2, "strlen", &strlen))) {
+  if(!DLSYM(0x2, strncmp)) {
+    klog_resolve_error("strncmp");
+    return -1;
+  }
+  if(!DLSYM(0x2, strlen)) {
     klog_resolve_error("strlen");
-    return error;
+    return -1;
   }
-  if((error=args->sceKernelDlsym(0x2, "sprintf", &sprintf))) {
+  if(!DLSYM(0x2, sprintf)) {
     klog_resolve_error("sprintf");
-    return error;
+    return -1;
   }
-  if((error=args->sceKernelDlsym(0x2, "getcwd", &getcwd))) {
+  if(!DLSYM(0x2, getcwd)) {
     klog_resolve_error("getcwd");
-    return error;
+    return -1;
   }
-  if((error=args->sceKernelDlsym(0x2, "_Strerror", &_Strerror))) {
+  if(!DLSYM(0x2, _Strerror)) {
     klog_resolve_error("_Strerror");
-    return error;
+    return -1;
   }
 
   // load deps to libkernel
-  if((error=args->sceKernelDlsym(libkernel_handle, "sceKernelDlsym",
-				 &sceKernelDlsym))) {
-    klog_resolve_error("sceKernelDlsym");
-    return error;
-  }
-  if((error=args->sceKernelDlsym(libkernel_handle, "sceKernelLoadStartModule",
-				 &sceKernelLoadStartModule))) {
+  if(!DLSYM(libkernel_handle, sceKernelLoadStartModule)) {
     klog_resolve_error("sceKernelLoadStartModule");
-    return error;
+    return -1;
   }
-  if((error=args->sceKernelDlsym(libkernel_handle, "sceKernelStopUnloadModule",
-				 &sceKernelStopUnloadModule))) {
+  if(!DLSYM(libkernel_handle, sceKernelStopUnloadModule)) {
     klog_resolve_error("sceKernelStopUnloadModule");
-    return error;
+    return -1;
   }
 
   // jailbreak, raise caps
@@ -752,7 +805,7 @@ __rtld_init(payload_args_t *args) {
     return -1;
   }
 
-  if(rtld_load_sysmodule(args)) {
+  if(rtld_load_sysmodule()) {
     klog_puts("load_sysmodule failed");
     return -1;
   }

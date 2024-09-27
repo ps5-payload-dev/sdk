@@ -20,7 +20,7 @@ along with this program; see the file COPYING. If not, see
 
 
 typedef struct payload_args {
-  int (*sceKernelDlsym)(int, const char*, void*);
+  int (*sys_dynlib_dlsym)(int, const char*, void*);
   int* rwpipe;
   int* rwpair;
 

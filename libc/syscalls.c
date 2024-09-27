@@ -2631,15 +2631,19 @@ asm(".intel_syntax noprefix\n"
 
 __attribute__((constructor(105))) static void
 syscall_constructor(void) {
+  int (*sceKernelDlsym)(int, const char*, void*) = 0;
   payload_args_t* args = payload_get_args();
 
-  if(args->sceKernelDlsym(0x1, "getpid", &ptr_syscall)) {
-    if(args->sceKernelDlsym(0x2001, "getpid", &ptr_syscall)) {
-      return;
+  if(args->sys_dynlib_dlsym(0x1, "sceKernelDlsym", &sceKernelDlsym)) {
+    args->sys_dynlib_dlsym(0x2001, "sceKernelDlsym", &sceKernelDlsym);
+  }
+  if(sceKernelDlsym == args->sys_dynlib_dlsym) {
+    if(args->sys_dynlib_dlsym(0x1, "getpid", &ptr_syscall)) {
+      args->sys_dynlib_dlsym(0x2001, "getpid", &ptr_syscall);
     }
+  } else {
+    ptr_syscall = (long)args->sys_dynlib_dlsym;
   }
 
-  // jump directly to the syscall instruction
-  // in getpid (provided by libkernel)
-  ptr_syscall += 0xa;
+  ptr_syscall += 0xa; // jump directly to the syscall instruction
 }

@@ -14,8 +14,10 @@ You should have received a copy of the GNU General Public License
 along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
-#include "payload.h"
+#include "kernel.h"
 #include "syscall.h"
+
+#define DLSYM(handle, sym) (sym=(void*)kernel_dynlib_dlsym(-1, handle, #sym))
 
 
 static int   (*snprintf)(char*, unsigned long, const char*, ...) = 0;
@@ -80,22 +82,19 @@ klog_perror(const char *s) {
 
 
 int
-__klog_init(payload_args_t *args) {
-  int error;
-
-  if((error=args->sceKernelDlsym(0x2, "snprintf", &snprintf))) {
-    return error;
+__klog_init(void) {
+  if(!DLSYM(0x2, snprintf)) {
+    return -1;
   }
-  if((error=args->sceKernelDlsym(0x2, "strerror", &strerror))) {
-    return error;
+  if(!DLSYM(0x2, strerror)) {
+    return -1;
   }
-  if((error=args->sceKernelDlsym(0x2, "vsnprintf", &vsnprintf))) {
-    return error;
+  if(!DLSYM(0x2, vsnprintf)) {
+    return -1;
   }
-
-  if(args->sceKernelDlsym(0x1, "__error", &__error)) {
-    if((error=args->sceKernelDlsym(0x2001, "__error", &__error))) {
-      return error;
+  if(!DLSYM(0x1, __error)) {
+    if(!DLSYM(0x2001, __error)) {
+      return -1;
     }
   }
 

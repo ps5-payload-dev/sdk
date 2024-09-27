@@ -14,7 +14,8 @@ You should have received a copy of the GNU General Public License
 along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
-#include "klog.h"
+#include "kernel.h"
+#include "nid.h"
 #include "payload.h"
 #include "syscall.h"
 
@@ -24,110 +25,9 @@ along with this program; see the file COPYING. If not, see
 #define IPPROTO_IPV6 41
 #define IPV6_PKTINFO 46
 
-
-/**
- * dynamic library loaded in kernel memory.
- **/
-typedef struct dynlib_dynsec {
-  struct {
-    unsigned long le_next;
-    unsigned long le_prev;
-  } list_entry;
-
-  unsigned long sysvec;
-  unsigned int refcount;
-  unsigned long size;
-
-  unsigned long symtab;
-  unsigned long symtabsize;
-
-  unsigned long strtab;
-  unsigned long strtabsize;
-
-  unsigned long pltrela;
-  unsigned long pltrelasize;
-
-  unsigned long rela;
-  unsigned long relasize;
-
-  unsigned long hash;
-  unsigned long hashsize;
-
-  unsigned long dynamic;
-  unsigned long dynamicsize;
-
-  unsigned long sce_comment;
-  unsigned long sce_commentsize;
-
-  unsigned long sce_dynlib;
-  unsigned long sce_dynlibsize;
-
-  unsigned long unknown1;     // execpath?
-  unsigned long unknown1size;
-
-  unsigned long buckets;
-  unsigned long bucketssize;
-  unsigned int nbuckets;
-
-  unsigned long chains;
-  unsigned long chainssize;
-  unsigned int nchains;
-
-  unsigned long unknown2[7];
-} dynlib_dynsec_t;
-
-
-/**
- * an ELF loaded in kernel memory.
- **/
-typedef struct dynlib_obj {
-  unsigned long next;
-  unsigned long path;
-  unsigned long unknown0[2];
-  unsigned int refcount;
-  unsigned long handle;
-
-  unsigned long mapbase;
-  unsigned long mapsize;
-  unsigned long textsize;
-
-  unsigned long database;
-  unsigned long datasize;
-
-  unsigned long unknown1;
-  unsigned long unknown1size;
-
-  unsigned long entry;
-  unsigned long unknown2;
-  unsigned long vaddrbase;
-
-  unsigned int tlsindex;
-  unsigned long tlsinit;
-  unsigned long tlsinitsize;
-  unsigned long tlssize;
-  unsigned long  tlsoffset;
-  unsigned long tlsalign;
-
-  unsigned long pltgot;
-
-  unsigned long unknown3[6];
-
-  unsigned long init;
-  unsigned long fini;
-
-  unsigned long eh_frame_hdr;
-  unsigned long eh_frame_hdr_size;
-
-  unsigned long eh_frame;
-  unsigned long eh_frame_size;
-
-  int status;
-  int flags;
-
-  unsigned long unknown4[5];
-  unsigned long dynsec;
-  unsigned long unknown5[6]; //fingerprint?
-} dynlib_obj_t;
+#define EBADF  9
+#define EFAULT 14
+#define ENOSYS 78
 
 
 /**
@@ -142,14 +42,6 @@ typedef struct {
   unsigned long st_size;
 } Elf64_Sym;
 
-
-/**
- * external dependencies.
- **/
-static void* (*malloc)(unsigned long) = 0;
-static void  (*free)(void*) = 0;
-static int   (*strncmp)(const char*, const char*, unsigned long) = 0;
-static int   (*strlen)(const char*) = 0;
 
 /**
  * public constants.
@@ -192,6 +84,38 @@ static int rw_pair[2] = {-1, -1};
 #define VICTIM_SOCK rw_pair[1]
 
 
+static int
+strncmp(const char *s1, const char *s2, unsigned long n) {
+  if(n == 0) {
+    return 0;
+  }
+
+  do {
+    if(*s1 != *s2++) {
+      return (*(const unsigned char *)s1 -
+              *(const unsigned char *)(s2 - 1));
+    }
+    if(*s1++ == '\0') {
+      break;
+    }
+  } while (--n != 0);
+
+  return 0;
+}
+
+
+static unsigned long
+strlen(const char *str) {
+  const char *start = str;
+
+  while(*str) {
+    str++;
+  }
+
+  return str - start;
+}
+
+
 unsigned int
 kernel_get_fw_version(void) {
   int mib[2] = {1, 46};
@@ -208,50 +132,25 @@ kernel_get_fw_version(void) {
 
 int
 __kernel_init(payload_args_t* args) {
-  int error = 0;
-
-  if((error=args->sceKernelDlsym(0x2, "malloc", &malloc))) {
-    klog_perror("Unable to resolve 'malloc'");
-    return error;
-  }
-  if((error=args->sceKernelDlsym(0x2, "free", &free))) {
-    klog_perror("Unable to resolve 'free'");
-    return error;
-  }
-  if((error=args->sceKernelDlsym(0x2, "strlen", &strlen))) {
-    klog_perror("Unable to resolve 'strlen'");
-    return error;
-  }
-  if((error=args->sceKernelDlsym(0x2, "strncmp", &strncmp))) {
-    klog_perror("Unable to resolve 'strncmp'");
-    return error;
-  }
-
   if((rw_pair[0]=args->rwpair[0]) < 0) {
-    klog_puts("Invalid master socket");
-    return -1;
+    return -EBADF;
   }
   if((rw_pair[1]=args->rwpair[1]) < 0) {
-    klog_puts("Invalid victim socket");
-    return -1;
+    return -EBADF;
   }
 
   if((rw_pipe[0]=args->rwpipe[0]) < 0) {
-    klog_puts("Invalid kernel read handle");
-    return -1;
+    return -EBADF;
   }
   if((rw_pipe[1]=args->rwpipe[1]) < 0) {
-    klog_puts("Invalid kernel write handle");
-    return -1;
+    return -EBADF;
   }
 
   if(!(pipe_addr=args->kpipe_addr)) {
-    klog_puts("Invalid kernel pipe address");
-    return -1;
+    return -EFAULT;
   }
   if(!(KERNEL_ADDRESS_DATA_BASE=args->kdata_base_addr)) {
-    klog_puts("Invalid kernel .data address");
-    return -1;
+    return -EFAULT;
   }
 
   switch(kernel_get_fw_version() & 0xffff0000) {
@@ -342,8 +241,7 @@ __kernel_init(payload_args_t* args) {
     break;
 
   default:
-    klog_printf("Unknown firmware 0x%x\n", kernel_get_fw_version());
-    return -1;
+    return -ENOSYS;
   }
 
   return 0;
@@ -480,6 +378,10 @@ kernel_get_proc(int pid) {
     return 0;
   }
 
+  if(pid <= 0) {
+    pid = syscall(SYS_getpid);
+  }
+
   while(addr) {
     if(kernel_copyout(addr + KERNEL_OFFSET_PROC_P_PID, &other_pid,
 		      sizeof(other_pid))) {
@@ -501,7 +403,7 @@ kernel_get_proc(int pid) {
 }
 
 
-static int
+int
 kernel_dynlib_obj(int pid, unsigned int handle, dynlib_obj_t* obj) {
   unsigned long kproc;
   unsigned long kaddr;
@@ -643,11 +545,11 @@ kernel_dynlib_mapbase_addr(int pid, unsigned int handle) {
 
 unsigned long
 kernel_dynlib_resolve(int pid, int handle, const char *nid) {
+  unsigned long vaddr = 0;
   dynlib_dynsec_t dynsec;
-  unsigned long vaddr;
-  Elf64_Sym *symtab;
   dynlib_obj_t obj;
-  char *strtab;
+  Elf64_Sym sym;
+  char str[12];
 
   if(kernel_dynlib_obj(pid, handle, &obj)) {
     return 0;
@@ -657,38 +559,33 @@ kernel_dynlib_resolve(int pid, int handle, const char *nid) {
     return 0;
   }
 
-  if(!(symtab=malloc(dynsec.symtabsize))) {
-    return 0;
-  }
-
-  if(kernel_copyout(dynsec.symtab, symtab, dynsec.symtabsize) < 0) {
-    free(symtab);
-    return 0;
-  }
-
-  if(!(strtab=malloc(dynsec.strtabsize))) {
-    free(symtab);
-    return 0;
-  }
-
-  if(kernel_copyout(dynsec.strtab, strtab, dynsec.strtabsize) < 0) {
-    free(symtab);
-    free(strtab);
-    return 0;
-  }
-
-  vaddr = 0;
-  for(unsigned long i=0; i<dynsec.symtabsize / sizeof(Elf64_Sym); i++) {
-    if(!strncmp(nid, strtab + symtab[i].st_name, 11)) {
-      vaddr = obj.mapbase + symtab[i].st_value;
+  for(unsigned long i=0; i<dynsec.symtabsize / sizeof(sym); i++) {
+    if(kernel_copyout(dynsec.symtab + sizeof(sym)*i, &sym, sizeof(sym)) < 0) {
+      return 0;
+    }
+    if(!sym.st_value) {
+      continue;
+    }
+    if(kernel_copyout(dynsec.strtab + sym.st_name, str, sizeof(str)) < 0) {
+      return 0;
+    }
+    if(!strncmp(nid, str, 11)) {
+      vaddr = obj.mapbase + sym.st_value;
       break;
     }
   }
 
-  free(symtab);
-  free(strtab);
-
   return vaddr;
+}
+
+
+unsigned long
+kernel_dynlib_dlsym(int pid, unsigned int handle, const char* sym) {
+  char nid[12];
+
+  nid_encode(sym, nid);
+
+  return kernel_dynlib_resolve(pid, handle, nid);
 }
 
 

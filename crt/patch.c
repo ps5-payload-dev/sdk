@@ -21,9 +21,6 @@ along with this program; see the file COPYING. If not, see
 #include "syscall.h"
 
 
-static int (*sceKernelDlsym)(int, const char*, void*) = 0;
-
-
 /**
  * Patch retail distributions of sceKernelSpawn() that ignore the dbg parameter.
  *
@@ -42,9 +39,10 @@ patch_sceKernelSpawn(void) {
   unsigned long loc;
   unsigned long val;
 
-  if(sceKernelDlsym(0x1, "sceKernelSpawn", &loc) &&
-     sceKernelDlsym(0x2001, "sceKernelSpawn", &loc)) {
-    return -1;
+  if(!(loc=kernel_dynlib_dlsym(-1, 0x1, "sceKernelSpawn"))) {
+    if(!(loc=kernel_dynlib_dlsym(-1, 0x2001, "sceKernelSpawn"))) {
+      return -1;
+    }
   }
 
   loc += 52;
@@ -107,9 +105,6 @@ patch_kernel_ucred(void) {
 
 __attribute__((constructor(105))) static void
 patch_constructor(void) {
-  payload_args_t *args = payload_get_args();
-
-  sceKernelDlsym = args->sceKernelDlsym;
   patch_sceKernelSpawn();
   patch_kernel_ucred();
 }

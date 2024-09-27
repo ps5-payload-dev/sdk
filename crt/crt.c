@@ -14,8 +14,11 @@ You should have received a copy of the GNU General Public License
 along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
+#include "kernel.h"
 #include "klog.h"
 #include "payload.h"
+
+#define DLSYM(handle, sym) (sym=(void*)kernel_dynlib_dlsym(-1, handle, #sym))
 
 
 /**
@@ -37,9 +40,9 @@ extern unsigned char __bss_end[] __attribute__((weak));
 extern int main(int argc, char* argv[], char *envp[]);
 
 
-int __klog_init(payload_args_t *args);
 int __kernel_init(payload_args_t* args);
-int __rtld_init(payload_args_t* args);
+int __klog_init(void);
+int __rtld_init(void);
 int __rtld_fini(void);
 
 
@@ -74,29 +77,21 @@ pre_init(payload_args_t *args) {
   int *__isthreaded;
   int error = 0;
 
-  if((error=args->sceKernelDlsym(0x2, "__isthreaded", &__isthreaded))) {
-    return error;
-  }
-  *__isthreaded = 1;
-
-  if(args->sceKernelDlsym(0x1, "getpid", &ptr_syscall)) {
-    if((error=args->sceKernelDlsym(0x2001, "getpid", &ptr_syscall))) {
-      return error;
-    }
-  }
-  // jump directly to the syscall instruction
-  // in getpid (provided by libkernel)
-  ptr_syscall += 0xa;
-
-  if((error=__klog_init(args))) {
-    return error;
-  }
   if((error=__kernel_init(args))) {
     return error;
   }
-  if((error=__rtld_init(args))) {
+  if((error=__klog_init())) {
     return error;
   }
+  if((error=__rtld_init())) {
+    klog_puts("Unable to initialize rtld");
+    return error;
+  }
+  if(!DLSYM(0x2, __isthreaded)) {
+    klog_puts("Unable to resolve the symbol '__isthreaded'");
+    return -1;
+  }
+  *__isthreaded = 1;
 
   return 0;
 }
@@ -108,20 +103,19 @@ pre_init(payload_args_t *args) {
 static void
 terminate(void) {
   void (*exit)(int) = 0;
-  long dummy;
-
-  __rtld_fini();
 
   // we are running inside a hijacked process, just return
-  if(payload_args->sceKernelDlsym(0x1, "sceKernelDlsym", &dummy)) {
+  if(kernel_dynlib_dlsym(-1, 0x2001, "sceKernelDlsym")) {
+    klog_puts("we are running inside a hijacked process, just return");
     return;
   }
 
-  if(!payload_args->sceKernelDlsym(0x2, "exit", &exit)) {
+  __rtld_fini();
+
+  if(DLSYM(0x2, exit)) {
     exit(*payload_args->payloadout);
   }
 }
-
 
 
 /**
@@ -129,10 +123,11 @@ terminate(void) {
  **/
 void
 _start(payload_args_t *args) {
+  int (*sceKernelDlsym)(int, const char*, void*) = 0;
   char** (*getargv)(void) = 0;
   int (*getargc)(void) = 0;
   unsigned long count = 0;
-  char** envp = 0;
+  char** environ = 0;
   char** argv = 0;
   int argc = 0;
 
@@ -143,34 +138,39 @@ _start(payload_args_t *args) {
 
   // Init runtime
   payload_args = args;
-  *args->payloadout = 0;
+  if(args->sys_dynlib_dlsym(0x1, "sceKernelDlsym", &sceKernelDlsym)) {
+    args->sys_dynlib_dlsym(0x2001, "sceKernelDlsym", &sceKernelDlsym);
+  }
+  if(sceKernelDlsym == args->sys_dynlib_dlsym) {
+    if(args->sys_dynlib_dlsym(0x1, "getpid", &ptr_syscall)) {
+      args->sys_dynlib_dlsym(0x2001, "getpid", &ptr_syscall);
+    }
+  } else {
+    ptr_syscall = (long)args->sys_dynlib_dlsym;
+  }
+  ptr_syscall += 0xa; // jump directly to the syscall instruction
+
   if((*args->payloadout=pre_init(args))) {
     terminate();
     return;
   }
 
   // Obtain argc, argv and envp from libkernel
-  if((!args->sceKernelDlsym(0x1, "getargc", &getargc) ||
-      !args->sceKernelDlsym(0x2001, "getargc", &getargc)) &&
-     (!args->sceKernelDlsym(0x1, "getargv", &getargv) ||
-      !args->sceKernelDlsym(0x2001, "getargv", &getargv))) {
+  if((DLSYM(0x1, getargc) || DLSYM(0x2001, getargc)) &&
+     (DLSYM(0x1, getargv) || DLSYM(0x2001, getargv)) &&
+     (DLSYM(0x1, environ) || DLSYM(0x2001, environ))) {
     argc = getargc();
     argv = getargv();
-  }
-  if(args->sceKernelDlsym(0x1, "environ", &envp)) {
-    if(args->sceKernelDlsym(0x2001, "environ", &envp)) {
-      envp = 0;
-    }
   }
 
   // Run .init functions.
   count = __init_array_end - __init_array_start;
   for(int i=0; i<count; i++) {
-    __init_array_start[i](argc, argv, envp);
+    __init_array_start[i](argc, argv, environ);
   }
 
-  // Run the actual payload
-  *args->payloadout = main(argc, argv, envp);
+  // Run the actual payload.
+  *args->payloadout = main(argc, argv, environ);
 
   // Run .fini functions.
   count = __fini_array_end - __fini_array_start;
