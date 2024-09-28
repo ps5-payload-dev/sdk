@@ -232,6 +232,7 @@ __kernel_init(payload_args_t* args) {
     break;
 
   case 0x5000000:
+  case 0x5020000:
   case 0x5100000:
   case 0x5500000:
     KERNEL_ADDRESS_ALLPROC        = KERNEL_ADDRESS_DATA_BASE + 0x290DD00;
