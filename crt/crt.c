@@ -104,13 +104,13 @@ static void
 terminate(void) {
   void (*exit)(int) = 0;
 
+  __rtld_fini();
+
   // we are running inside a hijacked process, just return
   if(kernel_dynlib_dlsym(-1, 0x2001, "sceKernelDlsym")) {
     klog_puts("we are running inside a hijacked process, just return");
     return;
   }
-
-  __rtld_fini();
 
   if(DLSYM(0x2, exit)) {
     exit(*payload_args->payloadout);
