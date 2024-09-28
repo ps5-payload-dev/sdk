@@ -297,7 +297,7 @@ SHA1Final(unsigned char *digest, SHA1_CTX *context) {
 char*
 nid_encode(const char *sym, char nid[12]) {
   const unsigned char salt[16] = "\x51\x8d\x64\xa6\x35\xde\xd8\xc1\xe6\xb0\x39\xb1\xc3\xe5\x52\x30";
-  char b64charset[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
+  const char b64charset[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
   unsigned char digest[20];
   SHA1_CTX ctx;
 
