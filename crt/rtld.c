@@ -98,7 +98,7 @@ typedef struct sysmodtab {
  * dependencies provided by the ELF linker.
  **/
 extern unsigned char __image_start[] __attribute__((weak));
-extern Elf64_Dyn _DYNAMIC[];
+extern Elf64_Dyn _DYNAMIC[] __attribute__((weak));
 
 
 /**
@@ -132,7 +132,7 @@ static int   (*sceSysmoduleLoadModuleInternal)(unsigned int) = 0;
 
 
 /**
- *
+ * lookup table for sceSysmoduleLoadModuleInternal().
  **/
 static const sysmodtab_t sysmodtab[] = {
   {"libSceAbstractLocal.sprx", 0x8000005f},
@@ -276,7 +276,7 @@ static const sysmodtab_t sysmodtab[] = {
 
 
 /**
- *
+ * Log a symbol resolution error to /dev/klog
  **/
 static void
 klog_resolve_error(const char *name) {
@@ -285,7 +285,7 @@ klog_resolve_error(const char *name) {
 
 
 /**
- *
+ * Log a library loading error to /dev/klog
  **/
 static void
 klog_libload_error(const char *name) {
