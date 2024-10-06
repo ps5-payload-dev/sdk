@@ -33,7 +33,7 @@ export PS5_CROSS_FIX_ROOT=${PS5_PAYLOAD_SDK}/bin/prospero-cross-fix-root
 export CC=${PS5_PAYLOAD_SDK}/bin/prospero-clang
 export CXX=${PS5_PAYLOAD_SDK}/bin/prospero-clang++
 export AS=${PS5_PAYLOAD_SDK}/bin/prospero-clang
-export LD=${PS5_PAYLOAD_SDK}/bin/prospero-ldd
+export LD=${PS5_PAYLOAD_SDK}/bin/prospero-lld
 export CMAKE=${PS5_PAYLOAD_SDK}/bin/prospero-cmake
 export PKG_CONFIG=${PS5_PAYLOAD_SDK}/bin/prospero-pkg-config
 
