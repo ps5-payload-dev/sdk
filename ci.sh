@@ -35,6 +35,7 @@ MAKE_SAMPLES=("arbitrary_syscall"
 	      "hwinfo"
 	      "list_files"
 	      "mntinfo"
+	      "notify"
 	      "ps")
 
 CMAKE_SAMPLES=("hello_cmake"
