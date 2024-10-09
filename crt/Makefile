@@ -39,7 +39,7 @@ CFLAGS += -Wall -Werror
 all: crt1.o
 
 crt1.o: crt.o klog.o nid.o kernel.o rtld.o patch.o mdbg.o
-	$(LD) -r -o $@ $^
+	$(LD) -m elf_x86_64 -r -o $@ $^
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $^
