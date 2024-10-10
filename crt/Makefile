@@ -16,8 +16,6 @@
 
 DESTDIR ?= /opt/ps5-payload-sdk
 
-PYTHON ?= python3
-
 CCS := clang-18 clang-17 clang-16 clang-15 clang
 CCS := $(foreach CC,$(CCS),$(if $(shell command -v $(CC) 2> /dev/null),$(CC)))
 CC  := $(firstword $(CCS))
