@@ -246,19 +246,18 @@ addrconfig(int family) {
 
 struct hostent*
 gethostbyaddr(const void* addr, socklen_t len, int type) {
-  static char ip[] = "000.000.000.000";
-  static char* ip_list[] = {ip, 0};
+  static struct in_addr inaddr;
   static char host[NI_MAXHOST];
+  static char* addr_list[] = {(char*)&inaddr, 0};
   static char* aliases[] = {0};
   static struct hostent h;
-  struct in_addr inaddr;
 
   if(type != AF_INET || len != 4) {
     return 0;
   }
 
   h.h_name = host;
-  h.h_addr_list = ip_list;
+  h.h_addr_list = addr_list;
   h.h_aliases = aliases;
   h.h_addrtype = type;
   h.h_length = len;
@@ -266,7 +265,6 @@ gethostbyaddr(const void* addr, socklen_t len, int type) {
   memcpy(&inaddr, addr, sizeof(inaddr));
 
   if(!resolve_aton(addr, host, sizeof(host))) {
-    strncpy(ip, inet_ntoa(inaddr), sizeof(ip));
     return &h;
   }
 
