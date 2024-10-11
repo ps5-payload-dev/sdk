@@ -34,6 +34,7 @@ along with this program; see the file COPYING. If not, see
 #include <sys/socket.h>
 #include <sys/sysctl.h>
 #include <sys/ioctl.h>
+#include <sys/errno.h>
 
 
 int sceNetPoolCreate(const char*, int, int);
@@ -268,6 +269,51 @@ gethostbyaddr(const void* addr, socklen_t len, int type) {
     strncpy(ip, inet_ntoa(inaddr), sizeof(ip));
     return &h;
   }
+
+  return 0;
+}
+
+
+int
+gethostbyname_r(const char *name, struct hostent *ret, char *buf, size_t buflen,
+                struct hostent **result, int *h_errnop) {
+  struct in_addr inaddr;
+  int needed = 0;
+  int err;
+
+  needed += strlen(name)+1;  // h_name
+  needed += sizeof(char*)*2; // h_addr_list
+  needed += sizeof(inaddr);  // h_addr_list[0]
+  needed += sizeof(char*);   // h_aliases
+
+  if(needed > buflen) {
+    return ERANGE;
+  }
+
+  if((err=resolve_ntoa(name, &inaddr.s_addr))) {
+    return err;
+  }
+
+  ret->h_name = buf;
+  strcpy(ret->h_name, name);
+  buf += strlen(name)+1;
+
+  ret->h_addr_list = (void*)buf;
+  buf += sizeof(char*)*2;
+
+  ret->h_addr_list[0] = buf;
+  memcpy(ret->h_addr_list[0], &inaddr, sizeof(inaddr));
+  buf += sizeof(inaddr);
+  ret->h_addr_list[1] = 0;
+
+  ret->h_aliases = (void*)buf;
+  ret->h_aliases[0] = 0;
+  buf += sizeof(char*);
+
+  ret->h_addrtype = AF_INET;
+  ret->h_length = sizeof(inaddr);
+
+  *result = ret;
 
   return 0;
 }
