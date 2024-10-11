@@ -275,21 +275,19 @@ gethostbyaddr(const void* addr, socklen_t len, int type) {
 
 struct hostent*
 gethostbyname(const char *name) {
-  static char ip[] = "000.000.000.000";
-  static char* ip_list[] = {ip, 0};
+  static struct in_addr inaddr;
   static char host[NI_MAXHOST];
+  static char* addr_list[] = {(char*)&inaddr, 0};
   static char* aliases[] = {0};
   static struct hostent h;
-  struct in_addr inaddr;
 
   h.h_name = host;
-  h.h_addr_list = ip_list;
+  h.h_addr_list = addr_list;
   h.h_aliases = aliases;
   h.h_addrtype = AF_INET;
   h.h_length = sizeof(inaddr);
 
   if(!resolve_ntoa(name, &inaddr.s_addr)) {
-    strncpy(ip, inet_ntoa(inaddr), sizeof(ip));
     strncpy(host, name, sizeof(host));
     return &h;
   }
