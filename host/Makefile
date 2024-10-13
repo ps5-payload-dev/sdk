@@ -23,6 +23,7 @@ TOOLCHAINS := toolchain/prospero.sh \
 
 TOOLS := bin/cmake-bin-wrapper \
          bin/llvm-bin-wrapper \
+         bin/meson-bin-wrapper \
          bin/llvm-config \
          bin/prospero-clang \
          bin/prospero-clang++ \
@@ -68,3 +69,4 @@ install-symlinks:
 	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/clang-cpp
 	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/ld.lld
 	ln -sf cmake-bin-wrapper $(DESTDIR)/bin/prospero-cmake
+	ln -sf meson-bin-wrapper $(DESTDIR)/bin/prospero-meson

@@ -41,6 +41,9 @@ MAKE_SAMPLES=("arbitrary_syscall"
 CMAKE_SAMPLES=("hello_cmake"
 	      )
 
+MESON_SAMPLES=("hello_meson"
+	      )
+
 source $PS5_PAYLOAD_SDK/toolchain/prospero.sh
 
 for SAMPLE in "${MAKE_SAMPLES[@]}"; do
@@ -53,4 +56,11 @@ for SAMPLE in "${CMAKE_SAMPLES[@]}"; do
 	-B $PS5_PAYLOAD_SDK/build/$SAMPLE \
 	-S $SCRIPTDIR/samples/$SAMPLE || exit 1
     ${MAKE} -C $PS5_PAYLOAD_SDK/build/$SAMPLE clean all
+done
+
+for SAMPLE in "${MESON_SAMPLES[@]}"; do
+    ${MESON} setup \
+	     $SCRIPTDIR/samples/$SAMPLE \
+	     $PS5_PAYLOAD_SDK/build/$SAMPLE
+    ${MESON} compile -C $PS5_PAYLOAD_SDK/build/$SAMPLE
 done

@@ -26,7 +26,7 @@ jobs:
     - name: Setup
       run: |
         sudo apt update
-        sudo apt install bash socat cmake pkg-config clang-15 lld-15
+        sudo apt install bash clang-15 lld-15 pkg-config cmake meson socat
 
     - name: Build
       run: |

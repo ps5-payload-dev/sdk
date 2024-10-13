@@ -35,6 +35,7 @@ export CXX=${PS5_PAYLOAD_SDK}/bin/prospero-clang++
 export AS=${PS5_PAYLOAD_SDK}/bin/prospero-clang
 export LD=${PS5_PAYLOAD_SDK}/bin/prospero-lld
 export CMAKE=${PS5_PAYLOAD_SDK}/bin/prospero-cmake
+export MESON=${PS5_PAYLOAD_SDK}/bin/prospero-meson
 export PKG_CONFIG=${PS5_PAYLOAD_SDK}/bin/prospero-pkg-config
 
 export AR=${PS5_PAYLOAD_SDK}/bin/llvm-ar
