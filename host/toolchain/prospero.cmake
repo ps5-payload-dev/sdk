@@ -54,8 +54,8 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON CACHE BOOL "")
 #
 # Set compilers
 #
+set(CMAKE_ASM_COMPILER ${PS5_PAYLOAD_SDK}/bin/prospero-as CACHE PATH "")
 set(CMAKE_C_COMPILER ${PS5_PAYLOAD_SDK}/bin/prospero-clang CACHE PATH "")
-set(CMAKE_ASM_COMPILER ${PS5_PAYLOAD_SDK}/bin/prospero-clang CACHE PATH "")
 set(CMAKE_CXX_COMPILER ${PS5_PAYLOAD_SDK}/bin/prospero-clang++ CACHE PATH "")
 
 #

@@ -70,3 +70,9 @@ install-symlinks:
 	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/ld.lld
 	ln -sf cmake-bin-wrapper $(DESTDIR)/bin/prospero-cmake
 	ln -sf meson-bin-wrapper $(DESTDIR)/bin/prospero-meson
+	ln -sf llvm-ar $(DESTDIR)/bin/prospero-ar
+	ln -sf llvm-nm $(DESTDIR)/bin/prospero-nm
+	ln -sf llvm-objcopy $(DESTDIR)/bin/prospero-objcopy
+	ln -sf llvm-ranlib $(DESTDIR)/bin/prospero-ranlib
+	ln -sf llvm-strip $(DESTDIR)/bin/prospero-strip
+	ln -sf prospero-clang $(DESTDIR)/bin/prospero-as

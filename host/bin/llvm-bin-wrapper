@@ -14,19 +14,33 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
-
 SCRIPT_PATH="${BASH_SOURCE[0]}"
 SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
 SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
+# ensure we are not invoking this script directly
+if ! [ -L "$0" ]; then
+    echo "error: $SCRIPT_NAME should not be invoked directly"
+    exit 1
+fi
+
+# check if script name matches an llvm tool
 LLVM_CONFIG="${SCRIPT_DIR}/llvm-config"
 LLVM_BINDIR=$("${LLVM_CONFIG}" --bindir)
-
 BIN_PATH="${LLVM_BINDIR}/${SCRIPT_NAME}"
 if [ -f "${BIN_PATH}" ]; then
     exec "${BIN_PATH}" "$@"
 fi
 
-BIN_NAME=$(echo $SCRIPT_NAME | rev | cut -d'-' -f1 | rev)
-BIN_PATH="${LLVM_BINDIR}/${BIN_NAME}"
+# check if symlink points to this script
+SCRIPT_LINK="$(readlink "${SCRIPT_PATH}")"
+SCRIPT_LINK="$(basename "${SCRIPT_LINK}")"
+if [ "$SCRIPT_LINK" = "llvm-bin-wrapper" ]; then
+    BIN_NAME=$(echo $SCRIPT_NAME | rev | cut -d'-' -f1 | rev)
+    BIN_PATH="${LLVM_BINDIR}/${BIN_NAME}"
+    exec -a "${SCRIPT_NAME}" "${BIN_PATH}" "$@"
+fi
+
+# assume the symlink points to another symlink in the script dir
+BIN_PATH="${SCRIPT_DIR}/${SCRIPT_LINK}"
 exec -a "${SCRIPT_NAME}" "${BIN_PATH}" "$@"

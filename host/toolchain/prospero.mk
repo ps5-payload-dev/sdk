@@ -23,15 +23,15 @@ PREFIX  ?= $(PS5_HBROOT)
 
 PS5_DEPLOY := $(PS5_PAYLOAD_SDK)/bin/prospero-deploy
 
-AS         := $(PS5_PAYLOAD_SDK)/bin/prospero-clang
+AS         := $(PS5_PAYLOAD_SDK)/bin/prospero-as
 CC         := $(PS5_PAYLOAD_SDK)/bin/prospero-clang
 CXX        := $(PS5_PAYLOAD_SDK)/bin/prospero-clang++
 LD         := $(PS5_PAYLOAD_SDK)/bin/prospero-lld
 PKG_CONFIG := $(PS5_PAYLOAD_SDK)/bin/prospero-pkg-config
-AR         := $(PS5_PAYLOAD_SDK)/bin/llvm-ar
-NM         := $(PS5_PAYLOAD_SDK)/bin/llvm-nm
-OBJCOPY    := $(PS5_PAYLOAD_SDK)/bin/llvm-objcopy
-RANLIB     := $(PS5_PAYLOAD_SDK)/bin/llvm-ranlib
-STRIP      := $(PS5_PAYLOAD_SDK)/bin/llvm-strip
+AR         := $(PS5_PAYLOAD_SDK)/bin/prospero-ar
+NM         := $(PS5_PAYLOAD_SDK)/bin/prospero-nm
+OBJCOPY    := $(PS5_PAYLOAD_SDK)/bin/prospero-objcopy
+RANLIB     := $(PS5_PAYLOAD_SDK)/bin/prospero-ranlib
+STRIP      := $(PS5_PAYLOAD_SDK)/bin/prospero-strip
 
 STRINGS := strings
