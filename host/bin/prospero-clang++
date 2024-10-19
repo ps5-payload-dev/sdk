@@ -25,7 +25,8 @@ LIBS_C="-lc"
 LIBS_CXX="-lunwind -lc++abi -lc++"
 LIBS_DEPS="-lSceLibcInternal -lSceNet"
 for ARG in "$@"; do
-    if [[ "$ARG" == "-c" || "$ARG" == "-nostdlib" ]]; then
+    if [[ "$ARG" == "-c" || "$ARG" == "-nostdlib" || "$ARG" == "-E" ||
+	"${ARG:0:2}" == "-M" ]]; then
 	LIBS_C=""
 	LIBS_CXX=""
 	LIBS_DEPS=""

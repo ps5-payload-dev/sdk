@@ -24,15 +24,16 @@ PS5_PAYLOAD_SDK="$(realpath "${SCRIPT_DIR}/..")"
 LIBS="-lc"
 DEPS="-lSceLibcInternal -lSceNet"
 for ARG in "$@"; do
-    if [[ "$ARG" == "-c" || "$ARG" == "-nostdlibc" ]]; then
+    if [[ "$ARG" == "-c" || "$ARG" == "-nostdlibc" || "$ARG" == "-E" ||
+	"${ARG:0:2}" == "-M" ]]; then
 	LIBS=""
 	DEPS=""
     fi
 done
 
 # ensure clang knows where prospero-lld is at
-
 export PATH=${SCRIPT_DIR}:$PATH
+
 exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang" \
      -target x86_64-sie-ps5 \
      -isysroot "${PS5_PAYLOAD_SDK}" \
