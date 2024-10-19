@@ -43,6 +43,8 @@ static char *state_abbrev[] = {
 };
 
 
+#define MiB(x) ((x) / (1024.0 * 1024))
+
 int
 main() {
   int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_PROC, 0};
@@ -69,8 +71,9 @@ main() {
     return -1;
   }
 
-  printf("     PID      PPID     PGID      SID      UID           AuthId     "
-	 "     Emul  State  AppId  TitleId  Command\n");
+
+  printf("\n     PID      PPID     PGID      SID      UID           AuthId"
+        "      State  AppId  TitleId     Memory (MiB)  Command\n");
   for(void *ptr=buf; ptr<(buf+buf_size);) {
     struct kinfo_proc *ki = (struct kinfo_proc*)ptr;
     ptr += ki->ki_structsize;
@@ -79,11 +82,12 @@ main() {
       memset(&appinfo, 0, sizeof(appinfo));
     }
 
-    printf("%8u  %8u %8u %8u %8u %016lx   %11s   %5s  %04x    %5s  %s\n",
+    printf("%8u  %8u %8u %8u %8u %016lx %10s   %04x  %s  %6.1f / %6.1f  %s\n",
 	   ki->ki_pid, ki->ki_ppid, ki->ki_pgid, ki->ki_sid,
 	   ki->ki_uid, kernel_get_ucred_authid(ki->ki_pid),
-	   ki->ki_emul, state_abbrev[(int)ki->ki_stat], appinfo.app_id,
-	   appinfo.title_id, ki->ki_comm);
+           state_abbrev[(int)ki->ki_stat], appinfo.app_id,
+	   appinfo.title_id, MiB(ki->ki_rssize * PAGE_SIZE),
+           MiB(ki->ki_size), ki->ki_comm);
   }
 
   free(buf);
