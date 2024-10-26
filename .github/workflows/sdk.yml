@@ -32,7 +32,8 @@ jobs:
       run: |
         make WIN=1 DESTDIR=${{ runner.tool_cache }}/ps5-payload-sdk install
         PS5_PAYLOAD_SDK=${{ runner.tool_cache }}/ps5-payload-sdk ./libcxx.sh
-        tar -zcf ps5-payload-sdk.tar.gz -C ${{ runner.tool_cache }}/ps5-payload-sdk .
+        cd ${{ runner.tool_cache }}
+        zip -r $GITHUB_WORKSPACE/ps5-payload-sdk.zip ps5-payload-sdk
 
     - name: Test
       run: bash ci.sh
@@ -41,6 +42,6 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: SDK
-        path: ./ps5-payload-sdk.tar.gz
+        path: $GITHUB_WORKSPACE/ps5-payload-sdk.zip
         if-no-files-found: error
 
