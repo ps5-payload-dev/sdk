@@ -52,14 +52,18 @@ set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "Shared libs not available")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON CACHE BOOL "")
 
 #
-# Set compilers
+# Set external tool dependencies
 #
-set(CMAKE_ASM_COMPILER ${PS5_PAYLOAD_SDK}/bin/prospero-as CACHE PATH "")
-set(CMAKE_C_COMPILER ${PS5_PAYLOAD_SDK}/bin/prospero-clang CACHE PATH "")
-set(CMAKE_CXX_COMPILER ${PS5_PAYLOAD_SDK}/bin/prospero-clang++ CACHE PATH "")
+if(WIN32)
+    set(CMAKE_ASM_COMPILER ${PS5_PAYLOAD_SDK}/win/prospero-clang.cmd CACHE PATH "")
+    set(CMAKE_C_COMPILER ${PS5_PAYLOAD_SDK}/win/prospero-clang.cmd CACHE PATH "")
+    set(CMAKE_CXX_COMPILER ${PS5_PAYLOAD_SDK}/win/prospero-clang++.cmd CACHE PATH "")
+else()
+    set(CMAKE_ASM_COMPILER ${PS5_PAYLOAD_SDK}/bin/prospero-as CACHE PATH "")
+    set(CMAKE_C_COMPILER ${PS5_PAYLOAD_SDK}/bin/prospero-clang CACHE PATH "")
+    set(CMAKE_CXX_COMPILER ${PS5_PAYLOAD_SDK}/bin/prospero-clang++ CACHE PATH "")
 
-#
-# Set path to pkg-config
-#
-set(PKG_CONFIG_EXECUTABLE ${PS5_PAYLOAD_SDK}/bin/prospero-pkg-config CACHE PATH "")
-set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
+    set(PKG_CONFIG_EXECUTABLE ${PS5_PAYLOAD_SDK}/bin/prospero-pkg-config CACHE PATH "")
+    set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
+endif()
+
