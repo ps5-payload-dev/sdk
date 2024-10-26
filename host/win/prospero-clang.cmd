@@ -11,7 +11,7 @@ set PATH=%PATH%;%PS5_PAYLOAD_SDK%\win
 
 :checkargs
     if "%1"=="" goto runcmd
-    else if "%1"=="-c" (
+    if "%1"=="-c" (
         set LIBS_C=""
         set LIBS_DEPS=""
     ) else if "%1"=="-nostdlibc" (
