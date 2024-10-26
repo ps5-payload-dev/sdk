@@ -16,7 +16,6 @@
 # <http://www.gnu.org/licenses/>.
 
 SCRIPT_PATH="${BASH_SOURCE[0]}"
-SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
 SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
 PS5_PAYLOAD_SDK="$(realpath "${SCRIPT_DIR}/..")"
