@@ -17,7 +17,8 @@
 CC := x86_64-w64-mingw32-gcc
 NINJA := https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-win.zip
 
-TOOLS := prospero-lld.exe prospero-clang.cmd prospero-clang++.cmd
+TOOLS := prospero-lld.exe ninja.exe \
+         prospero-clang.cmd prospero-clang++.cmd prospero-cmake.cmd
 
 all: prospero-lld.exe ninja.exe
 
