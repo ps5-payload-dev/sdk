@@ -17,15 +17,14 @@ main(int argc, char** argv, char** envp) {
     char libdir1[PATH_MAX];
     char libdir2[PATH_MAX];
     char crt1obj[PATH_MAX];
-
     char libkernel[0x100];
-    char cmd[0x1000];
+    char cmd[0x4000];
     const char* str;
 
     if((str=getenv("PS5_PAYLOAD_SDK"))) {
-        strncpy(sdkdir, str, sizeof(sdkdir));
+        strcpy(sdkdir, str);
     } else if((str=dirname(argv[0]))) {
-        _fullpath(sdkdir, str, PATH_MAX);
+        _fullpath(sdkdir, str, sizeof(sdkdir)-1);
         strcat(sdkdir, "/..");
     }
 
@@ -38,10 +37,10 @@ main(int argc, char** argv, char** envp) {
         }
     }
 
-    snprintf(ldscript, PATH_MAX, " %s"PATH_LDSCRIPT, sdkdir);
-    snprintf(libdir1, PATH_MAX, " %s"PATH_LIBDIR1, sdkdir);
-    snprintf(libdir2, PATH_MAX, " %s"PATH_LIBDIR2, sdkdir);
-    snprintf(crt1obj, PATH_MAX, " %s"PATH_CRT1OBJ, sdkdir);
+    sprintf(ldscript, " %s"PATH_LDSCRIPT, sdkdir);
+    sprintf(libdir1, " %s"PATH_LIBDIR1, sdkdir);
+    sprintf(libdir2, " %s"PATH_LIBDIR2, sdkdir);
+    sprintf(crt1obj, " %s"PATH_CRT1OBJ, sdkdir);
 
     memset(cmd, 0, sizeof(cmd));
     strcat(cmd, "ld.lld");
