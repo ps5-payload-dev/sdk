@@ -1,4 +1,4 @@
-#   Copyright (C) 2023 John Törnblom
+#   Copyright (C) 2024 John Törnblom
 #
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -14,22 +14,18 @@
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
 
-MAKE    ?= make
-DESTDIR ?= /opt/ps5-payload-sdk
+CC := x86_64-w64-mingw32-gcc
 
-TOPTARGETS := all clean install
-SUBDIRS    := crt sce_stubs libc include host
+TOOLS := prospero-lld.exe prospero-clang.cmd prospero-clang++.cmd
 
-ifdef WIN
-	SUBDIRS += host/win
-endif
+all: prospero-lld.exe
 
-$(TOPTARGETS): $(SUBDIRS)
+prospero-lld.exe: prospero-lld.c
+	$(CC) -o $@ $^
 
-$(SUBDIRS):
-	$(MAKE) -C $@ $(MAKECMDGOALS)
+clean:
+	rm -f *.exe *.o
 
-.PHONY: $(TOPTARGETS) $(SUBDIRS)
-
-install:
-	cp -r samples/. $(DESTDIR)/samples
+install: $(TOOLS)
+	install -d $(DESTDIR)/win
+	install $^ $(DESTDIR)/win

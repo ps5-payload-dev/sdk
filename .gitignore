@@ -3,6 +3,7 @@
 *.so
 *.o
 *.elf
+*.exe
 *.sprx
 nid_db.xml
 aerolib.csv
