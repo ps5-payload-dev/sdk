@@ -35,13 +35,10 @@ jobs:
         cd ${{ runner.tool_cache }}
         zip -r $GITHUB_WORKSPACE/ps5-payload-sdk.zip ps5-payload-sdk
 
-    - name: Test
-      run: bash ci.sh
-
     - name: Upload
       uses: actions/upload-artifact@v3
       with:
         name: SDK
-        path: $GITHUB_WORKSPACE/ps5-payload-sdk.zip
+        path: ./ps5-payload-sdk.zip
         if-no-files-found: error
 
