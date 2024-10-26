@@ -25,11 +25,12 @@ PS5_PAYLOAD_HBROOT="${PS5_PAYLOAD_SDK}/target/user/homebrew"
 LLVM_CONFIG="${SCRIPT_DIR}/llvm-config"
 LLVM_BINDIR=$("${LLVM_CONFIG}" --bindir)
 
-
-LIBKERNEL=-lkernel_web
+LIBKERNEL="-lkernel_web"
 for ARG in "$@"; do
-    if [[ "$ARG" == "-lkernel" || "$ARG" == "-lkernel_sys" ]]; then
-	LIBKERNEL=$ARG
+    if [[ "$ARG" == "-lkernel" ||
+          "$ARG" == "-lkernel_sys" ||
+          "$ARG" == "-lkernel_web" ]]; then
+	LIBKERNEL=""
     fi
 done
 
