@@ -7,7 +7,7 @@
 
 #define PATH_LDSCRIPT "/ldscripts/elf_x86_64.x"
 #define PATH_LIBDIR1 "/target/lib"
-#define PATH_LIBDIR2 "/target/user/homebrew"
+#define PATH_LIBDIR2 "/target/user/homebrew/lib"
 #define PATH_CRT1OBJ "/target/lib/crt1.o"
 
 int
