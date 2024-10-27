@@ -19,7 +19,8 @@ NINJA := https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-wi
 PLINK := https://the.earth.li/~sgtatham/putty/latest/w64/plink.exe
 
 TOOLS := prospero-lld.exe ninja.exe plink.exe \
-         prospero-clang.cmd prospero-clang++.cmd prospero-cmake.cmd
+         prospero-clang.cmd prospero-clang++.cmd prospero-cmake.cmd \
+         prospero-deploy.cmd
 
 all: prospero-lld.exe ninja.exe plink.exe
 
