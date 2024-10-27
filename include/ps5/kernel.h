@@ -17,7 +17,10 @@ along with this program; see the file COPYING. If not, see
 #ifndef PS5SDK_KERNEL_H
 #define PS5SDK_KERNEL_H
 
+#include <sys/cdefs.h>
 #include <sys/types.h>
+
+__BEGIN_DECLS
 
 // Absolute kernel pointers
 extern const intptr_t KERNEL_ADDRESS_DATA_BASE;
@@ -93,5 +96,7 @@ int32_t kernel_set_ucred_svuid(pid_t pid, uid_t svuid);
 
 int32_t kernel_set_ucred_rgid(pid_t pid, gid_t rgid);
 int32_t kernel_set_ucred_svgid(pid_t pid, gid_t svgid);
+
+__END_DECLS
 
 #endif // PS5SDK_KERNEL_H

@@ -16,9 +16,11 @@ along with this program; see the file COPYING. If not, see
 
 #pragma once
 
+#include <sys/cdefs.h>
 #include <stdint.h>
 #include <unistd.h>
 
+__BEGIN_DECLS
 
 /**
  * Copy data out from a process with the given pid at the given address.
@@ -36,3 +38,5 @@ int mdbg_setchar(pid_t pid, intptr_t addr, char val);
 int mdbg_setint(pid_t pid, intptr_t addr, int val);
 int mdbg_setlong(pid_t pid, intptr_t addr, long val);
 
+
+__END_DECLS

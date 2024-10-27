@@ -16,4 +16,10 @@ along with this program; see the file COPYING. If not, see
 
 #pragma once
 
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
+
 char* nid_encode(const char *sym, char buf[12]);
+
+__END_DECLS
