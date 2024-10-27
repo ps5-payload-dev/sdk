@@ -54,7 +54,7 @@ extern const off_t KERNEL_OFFSET_FILEDESC_FD_JDIR;
 uint32_t kernel_get_fw_version(void);
 
 int32_t  kernel_copyin(const void *udaddr, intptr_t kaddr, size_t len);
-int32_t  kernel_copyout(const intptr_t kaddr, void *udaddr, size_t  len);
+int32_t  kernel_copyout(intptr_t kaddr, void *udaddr, size_t  len);
 
 intptr_t kernel_get_proc(pid_t pid);
 intptr_t kernel_get_proc_ucred(pid_t pid);
