@@ -1,18 +1,10 @@
 @echo off
 setlocal
 
-set SCRIPT_PATH=%~dp0
-set PS5_PAYLOAD_SDK=%SCRIPT_PATH%..
+set PS5_PAYLOAD_SDK=%~dp0..
 
-set TOOLCHAIN=%PS5_PAYLOAD_SDK%\toolchain\prospero.cmake
-set PATH=%PATH%;%PS5_PAYLOAD_SDK%\win
+set CMAKE_GENERATOR=Ninja
+set CMAKE_TOOLCHAIN_FILE=%PS5_PAYLOAD_SDK%\toolchain\prospero.cmake
+set CMAKE_MAKE_PROGRAM=%PS5_PAYLOAD_SDK%\win\ninja.exe
 
-set BUILD_SYS_ARGS="-G Ninja"
-:checkargs
-    if "%1"=="" goto runcmd
-    if "%1"=="-G" set BUILD_SYS_ARGS=""
-shift
-goto checkargs
-
-:runcmd
-cmake -DCMAKE_TOOLCHAIN_FILE="%TOOLCHAIN%" %* %BUILD_SYS_ARGS%
+cmake %*
