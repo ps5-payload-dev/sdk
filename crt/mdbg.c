@@ -132,14 +132,53 @@ mdbg_setchar(int pid, unsigned long addr, char val) {
   return mdbg_copyin(pid, &val, addr, sizeof(val));
 }
 
+int
+mdbg_setshort(int pid, unsigned long addr, short val) {
+  return mdbg_copyin(pid, &val, addr, sizeof(val));
+}
 
 int
 mdbg_setint(int pid, unsigned long addr, int val) {
   return mdbg_copyin(pid, &val, addr, sizeof(val));
 }
 
-
 int
 mdbg_setlong(int pid, unsigned long addr, long val) {
   return mdbg_copyin(pid, &val, addr, sizeof(val));
+}
+
+long
+mdbg_getlong(int pid, unsigned long addr) {
+  long val = 0;
+
+  mdbg_copyout(pid, addr, &val, sizeof(val));
+
+  return val;
+}
+
+int
+mdbg_getint(int pid, unsigned long addr) {
+  int val = 0;
+
+  mdbg_copyout(pid, addr, &val, sizeof(val));
+
+  return val;
+}
+
+short
+mdbg_getshort(int pid, unsigned long addr) {
+  short val = 0;
+
+  mdbg_copyout(pid, addr, &val, sizeof(val));
+
+  return val;
+}
+
+char
+mdbg_getchar(int pid, unsigned long addr) {
+  char val = 0;
+
+  mdbg_copyout(pid, addr, &val, sizeof(val));
+
+  return val;
 }

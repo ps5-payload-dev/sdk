@@ -35,8 +35,13 @@ int mdbg_copyin(pid_t pid, const void *buf, intptr_t addr, size_t len);
 
 
 int mdbg_setchar(pid_t pid, intptr_t addr, char val);
+int mdbg_setshort(pid_t pid, intptr_t addr, short val);
 int mdbg_setint(pid_t pid, intptr_t addr, int val);
 int mdbg_setlong(pid_t pid, intptr_t addr, long val);
 
+long  mdbg_getlong(pid_t pid, intptr_t addr);
+int   mdbg_getint(pid_t pid, intptr_t addr);
+short mdbg_getshort(pid_t pid, intptr_t addr);
+char  mdbg_getchar(pid_t pid, intptr_t addr);
 
 __END_DECLS
