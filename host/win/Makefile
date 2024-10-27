@@ -16,17 +16,21 @@
 
 CC := x86_64-w64-mingw32-gcc
 NINJA := https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-win.zip
+PLINK := https://the.earth.li/~sgtatham/putty/latest/w64/plink.exe
 
-TOOLS := prospero-lld.exe ninja.exe \
+TOOLS := prospero-lld.exe ninja.exe plink.exe \
          prospero-clang.cmd prospero-clang++.cmd prospero-cmake.cmd
 
-all: prospero-lld.exe ninja.exe
+all: prospero-lld.exe ninja.exe plink.exe
 
 prospero-lld.exe: prospero-lld.c
 	$(CC) -o $@ $^
 
 ninja.exe:
 	wget -q -O - $(NINJA) | gunzip -c -d > $@
+
+plink.exe:
+	wget -q -O $@ $(PLINK)
 
 clean:
 	rm -f *.exe *.o
