@@ -348,6 +348,61 @@ kernel_copyout(unsigned long kaddr, void *uaddr, unsigned long len) {
   return 0;
 }
 
+int
+kernel_setlong(unsigned long addr, unsigned long val) {
+  return kernel_copyin(&val, addr, sizeof(val));
+}
+
+int
+kernel_setint(unsigned long addr, unsigned int val) {
+  return kernel_copyin(&val, addr, sizeof(val));
+}
+
+int
+kernel_setshort(unsigned long addr, unsigned short val) {
+  return kernel_copyin(&val, addr, sizeof(val));
+}
+
+int
+kernel_setchar(unsigned long addr, unsigned char val) {
+  return kernel_copyin(&val, addr, sizeof(val));
+}
+
+unsigned long
+kernel_getlong(unsigned long addr) {
+  unsigned long val = 0;
+
+  kernel_copyout(addr, &val, sizeof(val));
+
+  return val;
+}
+
+unsigned int
+kernel_getint(unsigned long addr) {
+  unsigned int val = 0;
+
+  kernel_copyout(addr, &val, sizeof(val));
+
+  return val;
+}
+
+unsigned short
+kernel_getshort(unsigned long addr) {
+  unsigned short val = 0;
+
+  kernel_copyout(addr, &val, sizeof(val));
+
+  return val;
+}
+
+unsigned char
+kernel_getchar(unsigned long addr) {
+  unsigned char val = 0;
+
+  kernel_copyout(addr, &val, sizeof(val));
+
+  return val;
+}
 
 int
 kernel_get_qaflags(unsigned char qaflags[16]) {

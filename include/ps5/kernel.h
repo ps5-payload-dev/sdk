@@ -56,6 +56,16 @@ uint32_t kernel_get_fw_version(void);
 int32_t  kernel_copyin(const void *udaddr, intptr_t kaddr, size_t len);
 int32_t  kernel_copyout(intptr_t kaddr, void *udaddr, size_t  len);
 
+int32_t kernel_setlong(intptr_t addr, uint64_t val);
+int32_t kernel_setint(intptr_t addr, uint32_t val);
+int32_t kernel_setshort(intptr_t addr, uint16_t val);
+int32_t kernel_setchar(intptr_t addr, uint8_t val);
+
+uint64_t kernel_getlong(intptr_t addr);
+uint32_t kernel_getint(intptr_t addr);
+uint16_t kernel_getshort(intptr_t addr);
+uint8_t  kernel_getchar(intptr_t addr);
+
 intptr_t kernel_get_proc(pid_t pid);
 intptr_t kernel_get_proc_ucred(pid_t pid);
 intptr_t kernel_get_proc_filedesc(pid_t pid);
