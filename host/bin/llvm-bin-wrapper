@@ -18,12 +18,6 @@ SCRIPT_PATH="${BASH_SOURCE[0]}"
 SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
 SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
-# ensure we are not invoking this script directly
-if ! [ -L "$0" ]; then
-    echo "error: $SCRIPT_NAME should not be invoked directly"
-    exit 1
-fi
-
 # check if script name matches an llvm tool
 LLVM_CONFIG="${SCRIPT_DIR}/llvm-config"
 LLVM_BINDIR=$("${LLVM_CONFIG}" --bindir)
