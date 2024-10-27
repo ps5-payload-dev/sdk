@@ -23,6 +23,7 @@ along with this program; see the file COPYING. If not, see
 __BEGIN_DECLS
 
 // Absolute kernel pointers
+extern const intptr_t KERNEL_ADDRESS_TEXT_BASE;
 extern const intptr_t KERNEL_ADDRESS_DATA_BASE;
 extern const intptr_t KERNEL_ADDRESS_ALLPROC;
 extern const intptr_t KERNEL_ADDRESS_PRISON0;
