@@ -23,6 +23,8 @@ john@localhost:tmp$ sudo unzip -d /opt ps5-payload-sdk.zip
 ```console
 john@localhost:ps5-payload-dev/sdk$ make
 john@localhost:ps5-payload-dev/sdk$ make DESTDIR=/opt/ps5-payload-sdk install
+john@localhost:ps5-payload-dev/sdk$ export PS5_PAYLOAD_SDK=/opt/ps5-payload-sdk
+john@localhost:ps5-payload-dev/sdk$ ./libcxx.sh # fetch, build, and install libcxx
 ```
 
 ## Usage
