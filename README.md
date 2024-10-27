@@ -15,9 +15,8 @@ john@localhost:ps5-payload-dev/sdk$ sudo apt-get install socat cmake meson pkg-c
 ## Quick-start
 To download and install a binary distribution for GNU/Linux:
 ```console
-john@localhost:tmp$ wget https://github.com/ps5-payload-dev/sdk/releases/download/v0.18/ps5-payload-sdk.tar.gz
-john@localhost:tmp$ mkdir -p /opt/ps5-payload-sdk-0.18/
-john@localhost:tmp$ tar xvf ps5-payload-sdk.tar.gz -C /opt/ps5-payload-sdk-0.18/
+john@localhost:tmp$ wget https://github.com/ps5-payload-dev/sdk/releases/download/v0.19/ps5-payload-sdk.zip
+john@localhost:tmp$ sudo unzip -d /opt ps5-payload-sdk.zip
 ```
 
 ## Building
