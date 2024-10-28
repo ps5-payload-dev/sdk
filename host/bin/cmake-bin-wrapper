@@ -21,5 +21,6 @@ SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
 TOOLCHAIN="${SCRIPT_NAME::-6}"
 
-exec cmake \
-  -DCMAKE_TOOLCHAIN_FILE="${SCRIPT_DIR}/../toolchain/${TOOLCHAIN}.cmake" "$@"
+export CMAKE_TOOLCHAIN_FILE="${SCRIPT_DIR}/../toolchain/${TOOLCHAIN}.cmake"
+
+exec cmake "$@"
