@@ -17,7 +17,6 @@ main(int argc, char** argv, char** envp) {
     char libdir1[PATH_MAX];
     char libdir2[PATH_MAX];
     char crt1obj[PATH_MAX];
-    char libkernel[0x100];
     char cmd[0x4000];
     const char* str;
 
@@ -26,15 +25,6 @@ main(int argc, char** argv, char** envp) {
     } else if((str=dirname(argv[0]))) {
         _fullpath(sdkdir, str, sizeof(sdkdir)-1);
         strcat(sdkdir, "/..");
-    }
-
-    strcpy(libkernel, " -lkernel_web");
-    for(int i=1; i<argc; i++) {
-        if(!strcmp(argv[i], "-lkernel_sys") ||
-           !strcmp(argv[i], "-lkernel_web") ||
-           !strcmp(argv[i], "-lkernel")) {
-            libkernel[0] = 0;
-        }
     }
 
     sprintf(ldscript, " %s"PATH_LDSCRIPT, sdkdir);
@@ -60,12 +50,7 @@ main(int argc, char** argv, char** envp) {
         strcat(cmd, argv[i]);
     }
 
-    if(*libkernel) {
-        strcat(cmd, libkernel);
-    }
-
     strcat(cmd, crt1obj);
 
     return system(cmd);
 }
-
