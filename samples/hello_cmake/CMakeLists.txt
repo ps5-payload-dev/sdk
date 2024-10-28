@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(hello_cmake C)
-add_executable(${PROJECT_NAME} main.c)
-set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "${PROJECT_NAME}.elf")
+project(hello_cmake C CXX)
+add_executable(hello_c main.c)
+add_executable(hello_cpp main.cpp)
+
+set_target_properties(hello_c PROPERTIES OUTPUT_NAME hello_c.elf)
+set_target_properties(hello_cpp PROPERTIES OUTPUT_NAME hello_cpp.elf)
