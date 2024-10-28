@@ -22,6 +22,12 @@ along with this program; see the file COPYING. If not, see
 /**
  *
  **/
+#define SCE_AUTHID_COREDUMP 0x4800000000000006l
+
+
+/**
+ *
+ **/
 #define MDBG_MEMOP_READ  0x12
 #define MDBG_MEMOP_WRITE 0x13
 
@@ -82,7 +88,7 @@ mdbg_memop(int memop, mdbg_memop_args_t *args) {
     return -1;
   }
 
-  if(kernel_set_ucred_authid(pid, 0x4800000000000006l)) {
+  if(kernel_set_ucred_authid(pid, SCE_AUTHID_COREDUMP)) {
     return -1;
   }
 
