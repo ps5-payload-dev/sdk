@@ -21,24 +21,44 @@ SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
 PS5_PAYLOAD_SDK="$(realpath "${SCRIPT_DIR}/..")"
 
-LIBS="-lc"
-DEPS="-lSceLibcInternal -lSceNet"
+LIBS_C="-lc"
+LIBS_DEPS="-lSceLibcInternal -lSceNet"
+LIBS_KERN="-lkernel_web"
+TU=""
 for ARG in "$@"; do
-    if [[ "$ARG" == "-c" ||
-          "$ARG" == "-nostdlibc" ||
-          "$ARG" == "-E" ||
-          "${ARG:0:2}" == "-M" ]]; then
-	LIBS=""
-	DEPS=""
+    if [[ "$ARG" == "-nostdlibc" ]]; then
+	LIBS_C=""
+	LIBS_DEPS=""
+	LIBS_KERN=""
+    fi
+    if [[ "$ARG" == "-lkernel" ||
+          "$ARG" == "-lkernel_sys" ||
+          "$ARG" == "-lkernel_web" ]]; then
+	LIBS_KERN=""
+    fi
+    if [[ ! "${ARG:0:1}" == "-" ]]; then
+	TU="${ARG}"
     fi
 done
+
+if [[ "${TU}" == "" ]]; then
+	LIBS_C=""
+	LIBS_DEPS=""
+	LIBS_KERN=""
+fi
 
 # ensure clang knows where prospero-lld is at
 export PATH="${SCRIPT_DIR}:${PATH}"
 
 exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang" \
+     --start-no-unused-arguments \
      -target x86_64-sie-ps5 \
      -isysroot "${PS5_PAYLOAD_SDK}" \
      -isystem "${PS5_PAYLOAD_SDK}/target/include" \
      -fno-stack-protector -fno-plt -femulated-tls \
-     $LIBS "$@" $DEPS
+     $LIBS_C \
+     --end-no-unused-arguments \
+     "$@" \
+     --start-no-unused-arguments \
+     $LIBS_DEPS $LIBS_KERN \
+     --end-no-unused-arguments
