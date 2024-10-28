@@ -55,7 +55,7 @@ for SAMPLE in "${CMAKE_SAMPLES[@]}"; do
 	-DCMAKE_VERBOSE_MAKEFILE=YES \
 	-B $PS5_PAYLOAD_SDK/build/$SAMPLE \
 	-S $SCRIPTDIR/samples/$SAMPLE || exit 1
-    ${MAKE} -C $PS5_PAYLOAD_SDK/build/$SAMPLE clean all
+    ${CMAKE} --build $PS5_PAYLOAD_SDK/build/$SAMPLE
 done
 
 for SAMPLE in "${MESON_SAMPLES[@]}"; do
