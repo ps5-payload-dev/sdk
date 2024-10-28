@@ -7,7 +7,7 @@ set PS5_PAYLOAD_SDK=%SCRIPT_PATH%..
 set LIBS_C="-lc"
 set LIBS_CXX="-lunwind -lc++abi -lc++"
 set LIBS_DEPS="-lSceLibcInternal -lSceNet"
-set "LIBS_KERN="
+set LIBS_KERN="-lkernel_web"
 
 :checkargs
     if "%1"=="" goto runcmd
