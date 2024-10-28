@@ -27,7 +27,8 @@ LIBS_DEPS="-lSceLibcInternal -lSceNet"
 LIBS_KERN="-lkernel_web"
 TU=""
 for ARG in "$@"; do
-    if [[ "$ARG" == "-nostdlib" ]]; then
+    if [[ "$ARG" == "-nostdlib" ||
+          "$ARG" == "-nodefaultlibs" ]]; then
 	LIBS_C=""
 	LIBS_CXX=""
 	LIBS_DEPS=""
