@@ -166,6 +166,7 @@ __kernel_init(payload_args_t* args) {
     KERNEL_ADDRESS_PRISON0        = KERNEL_ADDRESS_DATA_BASE + 0x1911E00;
     KERNEL_ADDRESS_ROOTVNODE      = KERNEL_ADDRESS_DATA_BASE + 0x6565540;
     break;
+
   case 0x1020000:
   case 0x1050000:
   case 0x1100000:
