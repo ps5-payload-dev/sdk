@@ -157,6 +157,7 @@ __kernel_init(payload_args_t* args) {
   switch(kernel_get_fw_version() & 0xffff0000) {
   case 0x1000000:
   case 0x1010000:
+  case 0x1020000:
     KERNEL_ADDRESS_TEXT_BASE      = KERNEL_ADDRESS_DATA_BASE - 0x1B40000;
     KERNEL_ADDRESS_ALLPROC        = KERNEL_ADDRESS_DATA_BASE + 0x26D1BF8;
     KERNEL_ADDRESS_SECURITY_FLAGS = KERNEL_ADDRESS_DATA_BASE + 0x6241074;
@@ -167,7 +168,6 @@ __kernel_init(payload_args_t* args) {
     KERNEL_ADDRESS_ROOTVNODE      = KERNEL_ADDRESS_DATA_BASE + 0x6565540;
     break;
 
-  case 0x1020000:
   case 0x1050000:
   case 0x1100000:
   case 0x1110000:
