@@ -20,6 +20,7 @@ along with this program; see the file COPYING. If not, see
 
 #define DLSYM(handle, sym) (sym=(void*)kernel_dynlib_dlsym(-1, handle, #sym))
 
+#define EINVAL 22
 
 /**
  * Dependencies provided by the ELF linker.
@@ -148,6 +149,12 @@ _start(payload_args_t *args) {
   } else {
     ptr_syscall = (long)args->sys_dynlib_dlsym;
   }
+
+  if(!ptr_syscall) {
+    *args->payloadout = -EINVAL;
+    return;
+  }
+
   ptr_syscall += 0xa; // jump directly to the syscall instruction
 
   if((*args->payloadout=pre_init(args))) {
