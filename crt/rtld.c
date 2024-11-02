@@ -22,6 +22,9 @@ along with this program; see the file COPYING. If not, see
 
 
 #define ELF64_R_SYM(info) ((info) >> 32)
+#define ELF64_ST_BIND(info) ((info) >> 4)
+
+#define STB_WEAK 2
 
 #define DT_NULL    0
 #define DT_NEEDED  1
@@ -558,6 +561,10 @@ r_glob_dat(Elf64_Rela* rela) {
     }
   }
 
+  if(ELF64_ST_BIND(sym->st_info) == STB_WEAK) {
+    return 0;
+  }
+
   klog_resolve_error(name);
 
   return -1;
@@ -610,6 +617,10 @@ r_direct_64(Elf64_Rela* rela) {
       val += rela->r_addend;
       return mdbg_copyin(-1, &val, loc, sizeof(val));
     }
+  }
+
+  if(ELF64_ST_BIND(sym->st_info) == STB_WEAK) {
+    return 0;
   }
 
   klog_resolve_error(name);
