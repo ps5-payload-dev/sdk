@@ -48,24 +48,6 @@ int __rtld_init(void);
 int __rtld_fini(void);
 
 
-static __attribute__ ((used)) long ptr_syscall = 0;
-
-asm(".intel_syntax noprefix\n"
-    ".global syscall\n"
-    ".type syscall @function\n"
-    "syscall:\n"
-    "  mov rax, rdi\n"
-    "  mov rdi, rsi\n"
-    "  mov rsi, rdx\n"
-    "  mov rdx, rcx\n"
-    "  mov r10, r8\n"
-    "  mov r8,  r9\n"
-    "  mov r9,  qword ptr [rsp + 8]\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
-    "  ret\n"
-    );
-
-
 static int
 pre_init(payload_args_t *args) {
   int *__isthreaded;
