@@ -27,7 +27,7 @@ LIBS_C="-lc"
 LIBS_CXX="-lunwind -lc++abi -lc++"
 LIBS_DEPS="-lSceLibcInternal -lSceNet"
 LIBS_KERN="-lkernel_web"
-TU=""
+
 for ARG in "$@"; do
     if [[ "$ARG" == "-nostdlib" ||
           "$ARG" == "-nodefaultlibs" ]]; then
@@ -63,7 +63,7 @@ exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang++" \
      -L "${PS5_PAYLOAD_HBROOT}/lib" \
      -fno-stack-protector -fno-plt -femulated-tls \
      -frtti -fexceptions \
-     $LIBS_CXX $LIBS_C \
+     $LIBS_CXX $LIBS_C $LIBS_CRT \
      --end-no-unused-arguments \
      "$@" \
      --start-no-unused-arguments \
