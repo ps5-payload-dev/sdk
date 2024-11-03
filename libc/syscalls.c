@@ -534,17 +534,6 @@ asm(".intel_syntax noprefix\n"
 
 
 asm(".intel_syntax noprefix\n"
-    ".global __syscall\n"
-    ".type __syscall @function\n"
-    "__syscall:\n"
-    "  mov rax, 198\n"
-    "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
-    "  ret\n"
-    );
-
-
-asm(".intel_syntax noprefix\n"
     ".global undelete\n"
     ".type undelete @function\n"
     "undelete:\n"
