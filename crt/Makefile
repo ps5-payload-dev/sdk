@@ -32,7 +32,7 @@ endif
 
 CFLAGS += -ffreestanding -fno-builtin -nostdlib -fPIC
 CFLAGS += -target x86_64-sie-ps5 -fno-plt -fno-stack-protector
-CFLAGS += -Wall -Werror
+CFLAGS += -fvisibility-nodllstorageclass=default -Wall -Werror
 
 ARCHIVE := libcrt.a
 

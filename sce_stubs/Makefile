@@ -33,7 +33,7 @@ endif
 
 CFLAGS := -ffreestanding -fno-builtin -nostdlib -fPIC
 CFLAGS += -target x86_64-sie-ps5 -fno-plt -fno-stack-protector
-CFLAGS += -Wall -Werror
+CFLAGS += -Wall -Werror -fvisibility-nodllstorageclass=default
 
 SPRXS := $(wildcard *.sprx)
 STUBS := $(SPRXS:.sprx=.c)
