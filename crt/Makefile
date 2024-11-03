@@ -23,28 +23,30 @@ ifndef CC
     $(error No suitable compiler found)
 endif
 
-LDS := ld.lld-18 ld.lld-17 ld.lld-16 ld.lld-15 ld.lld
-LDS := $(foreach LD,$(LDS),$(if $(shell command -v $(LD) 2> /dev/null),$(LD)))
-LD  := $(firstword $(LDS))
-ifndef LD
-    $(error No suitable linker found)
+ARS := llvm-ar-18 llvm-ar-17 llvm-ar-16 llvm-ar-15 llvm-ar ar
+ARS := $(foreach AR,$(ARS),$(if $(shell command -v $(AR) 2> /dev/null),$(AR)))
+AR  := $(firstword $(ARS))
+ifndef AR
+    $(error No suitable archiver found)
 endif
 
-CFLAGS := -ffreestanding -fno-builtin -nostdlib -fPIC
+CFLAGS += -ffreestanding -fno-builtin -nostdlib -fPIC
 CFLAGS += -target x86_64-sie-ps5 -fno-plt -fno-stack-protector
 CFLAGS += -Wall -Werror
 
-all: crt1.o
+ARCHIVE := libcrt.a
 
-crt1.o: crt.o klog.o nid.o kernel.o rtld.o patch.o mdbg.o
-	$(LD) -m elf_x86_64 -r -o $@ $^
+all: $(ARCHIVE)
+
+$(ARCHIVE): crt.o klog.o nid.o kernel.o rtld.o patch.o mdbg.o
+	$(AR) -rsc $@ $^
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $^
 
 clean:
-	rm -f *.o
+	rm -f *.o *.a
 
-install: crt1.o
+install: $(ARCHIVE)
 	install -d $(DESTDIR)/target/lib
 	install $^ $(DESTDIR)/target/lib

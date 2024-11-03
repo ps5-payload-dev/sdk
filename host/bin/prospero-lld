@@ -24,12 +24,16 @@ PS5_PAYLOAD_HBROOT="${PS5_PAYLOAD_SDK}/target/user/homebrew"
 LLVM_CONFIG="${SCRIPT_DIR}/llvm-config"
 LLVM_BINDIR=$("${LLVM_CONFIG}" --bindir)
 
+PIE="-pie"
+for ARG in "$@"; do
+    if [[ "$ARG" == "--shared" ]]; then
+	PIE=""
+    fi
+done
+
 BIN_PATH="${LLVM_BINDIR}/ld.lld"
 exec "${BIN_PATH}" \
-     -m elf_x86_64 -pie --eh-frame-hdr \
+     -m elf_x86_64 $PIE --eh-frame-hdr \
      -z max-page-size=0x4000 \
      -T "${PS5_PAYLOAD_SDK}/ldscripts/elf_x86_64.x" \
-     -L "${PS5_PAYLOAD_SDK}/target/lib" \
-     -L "${PS5_PAYLOAD_HBROOT}/lib" \
-     "$@" \
-     "${PS5_PAYLOAD_SDK}/target/lib/crt1.o"
+     "$@"

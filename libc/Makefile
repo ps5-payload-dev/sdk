@@ -23,7 +23,7 @@ ifndef CC
     $(error No suitable compiler found)
 endif
 
-ARS := llvm-ar-18 llvm-ar-17 llvm-ar-16 llvm-ar-15 llvm-ar
+ARS := llvm-ar-18 llvm-ar-17 llvm-ar-16 llvm-ar-15 llvm-ar ar
 ARS := $(foreach AR,$(ARS),$(if $(shell command -v $(AR) 2> /dev/null),$(AR)))
 AR  := $(firstword $(ARS))
 ifndef AR
