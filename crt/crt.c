@@ -18,9 +18,12 @@ along with this program; see the file COPYING. If not, see
 #include "klog.h"
 #include "payload.h"
 
+
+/**
+ * Convenient macro for loading symbols.
+ **/
 #define DLSYM(handle, sym) (sym=(void*)kernel_dynlib_dlsym(-1, handle, #sym))
 
-#define EINVAL 22
 
 /**
  * Dependencies provided by the ELF linker.
@@ -48,6 +51,9 @@ int __rtld_init(void);
 int __rtld_fini(void);
 
 
+/**
+ * Initialize C runtime.
+ **/
 static int
 pre_init(payload_args_t *args) {
   int *__isthreaded;
@@ -87,7 +93,6 @@ terminate(payload_args_t *args) {
 
   // we are running inside a hijacked process, just return
   if(kernel_dynlib_dlsym(-1, 0x2001, "sceKernelDlsym")) {
-    klog_puts("we are running inside a hijacked process, just return");
     return;
   }
 
