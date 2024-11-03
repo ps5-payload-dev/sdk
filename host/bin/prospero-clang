@@ -50,6 +50,7 @@ export PATH="${SCRIPT_DIR}:${PATH}"
 exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang" \
      --start-no-unused-arguments \
      -target x86_64-sie-ps5 \
+     -fvisibility-nodllstorageclass=default \
      -isysroot "${PS5_PAYLOAD_SDK}" \
      -isystem "${PS5_PAYLOAD_SDK}/target/include" \
      -L "${PS5_PAYLOAD_SDK}/target/lib" \
