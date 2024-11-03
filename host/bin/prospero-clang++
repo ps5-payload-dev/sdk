@@ -44,7 +44,8 @@ for ARG in "$@"; do
           "$ARG" == "-lkernel_web" ]]; then
 	LIBS_KERN=""
     fi
-    if [[ "$ARG" == "-nostartfiles" ]]; then
+    if [[ "$ARG" == "-nostartfiles" ||
+	  "$ARG" == "-shared" ]]; then
 	LIBS_CRT=""
     fi
 done
