@@ -123,7 +123,7 @@ kernel_get_fw_version(void) {
   unsigned long size = sizeof(mib);
   unsigned int version = 0;
 
-  if(syscall(SYS_sysctl, mib, 2, &version, &size, 0, 0)) {
+  if(__syscall(SYS_sysctl, mib, 2, &version, &size, 0, 0)) {
     return 0;
   }
 
@@ -287,13 +287,13 @@ kernel_write(unsigned long addr, unsigned long *data) {
   victim_buf[1] = 0;
   victim_buf[2] = 0;
 
-  if(syscall(SYS_setsockopt, MASTER_SOCK, IPPROTO_IPV6, IPV6_PKTINFO,
-	     victim_buf, 0x14)) {
+  if(__syscall(SYS_setsockopt, MASTER_SOCK, IPPROTO_IPV6, IPV6_PKTINFO,
+	       victim_buf, 0x14)) {
     return -1;
   }
 
-  if(syscall(SYS_setsockopt, VICTIM_SOCK, IPPROTO_IPV6, IPV6_PKTINFO,
-	     data, 0x14)) {
+  if(__syscall(SYS_setsockopt, VICTIM_SOCK, IPPROTO_IPV6, IPV6_PKTINFO,
+	       data, 0x14)) {
     return -1;
   }
 
@@ -326,7 +326,7 @@ kernel_copyin(const void *uaddr, unsigned long kaddr, unsigned long len) {
   }
 
   // Perform write across pipe
-  if(syscall(SYS_write, rw_pipe[1], uaddr, len) < 0) {
+  if(__syscall(SYS_write, rw_pipe[1], uaddr, len) < 0) {
     return -1;
   }
 
@@ -359,7 +359,7 @@ kernel_copyout(unsigned long kaddr, void *uaddr, unsigned long len) {
   }
 
   // Perform read across pipe
-  if(syscall(SYS_read, rw_pipe[0], uaddr, len) < 0) {
+  if(__syscall(SYS_read, rw_pipe[0], uaddr, len) < 0) {
     return -1;
   }
 
@@ -457,7 +457,7 @@ kernel_get_proc(int pid) {
   }
 
   if(pid <= 0) {
-    pid = syscall(SYS_getpid);
+    pid = __syscall(SYS_getpid);
   }
 
   while(addr) {

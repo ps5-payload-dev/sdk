@@ -341,27 +341,27 @@ rtld_find_sprx(const char* cwd, const char* filename, char *path) {
   } else {
     sprintf(path, "%s", filename);
   }
-  if(!syscall(SYS_access, path, 0)) {
+  if(!__syscall(SYS_access, path, 0)) {
     return 0;
   }
 
   sprintf(path, "/system/priv/lib/%s", filename);
-  if(!syscall(SYS_access, path, 0)) {
+  if(!__syscall(SYS_access, path, 0)) {
       return 0;
   }
 
   sprintf(path, "/system/common/lib/%s", filename);
-  if(!syscall(SYS_access, path, 0)) {
+  if(!__syscall(SYS_access, path, 0)) {
       return 0;
   }
 
   sprintf(path, "/system_ex/priv_ex/lib/%s", filename);
-  if(!syscall(SYS_access, path, 0)) {
+  if(!__syscall(SYS_access, path, 0)) {
       return 0;
   }
 
   sprintf(path, "/system_ex/common_ex/lib/%s", filename);
-  if(!syscall(SYS_access, path, 0)) {
+  if(!__syscall(SYS_access, path, 0)) {
       return 0;
   }
 
@@ -418,7 +418,7 @@ rtld_lib_new(int handle, int flags) {
 static rtld_lib_t*
 rtld_open(const char* cwd, const char* filename, int flags) {
   const char *basename = rtld_basename(filename);
-  int pid = syscall(SYS_getpid);
+  int pid = __syscall(SYS_getpid);
   unsigned int handle;
   char path[0x4000];
   int error;
@@ -707,7 +707,7 @@ rtld_load(void) {
  **/
 static int
 rtld_load_sysmodule(void) {
-  int pid = syscall(SYS_getpid);
+  int pid = __syscall(SYS_getpid);
   unsigned int handle;
 
   if(kernel_dynlib_handle(pid, "libSceSysmodule.sprx", &handle)) {
@@ -731,7 +731,7 @@ int
 __rtld_init(void) {
   static const unsigned char privcaps[16] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
 					     0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
-  int pid = syscall(SYS_getpid);
+  int pid = __syscall(SYS_getpid);
   unsigned long rootdir = 0;
   unsigned char caps[16];
   int error = 0;

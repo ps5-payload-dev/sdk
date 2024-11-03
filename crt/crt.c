@@ -25,8 +25,8 @@ along with this program; see the file COPYING. If not, see
 /**
  * Dependencies provided by the ELF linker.
  **/
-extern void (*__init_array_start[])(int, char**, char**) __attribute__((weak));
-extern void (*__init_array_end[])(int, char**, char**) __attribute__((weak));
+extern void (*__init_array_start[])(int, char**, char**, payload_args_t*) __attribute__((weak));
+extern void (*__init_array_end[])(int, char**, char**, payload_args_t*) __attribute__((weak));
 
 extern void (*__fini_array_start[])(void) __attribute__((weak));
 extern void (*__fini_array_end[])(void) __attribute__((weak));
@@ -41,18 +41,11 @@ extern unsigned char __bss_end[] __attribute__((weak));
 extern int main(int argc, char* argv[], char *envp[]);
 
 
+int __syscall_init(payload_args_t* args);
 int __kernel_init(payload_args_t* args);
 int __klog_init(void);
 int __rtld_init(void);
 int __rtld_fini(void);
-
-
-static payload_args_t* payload_args = 0;
-
-payload_args_t*
-payload_get_args(void) {
-  return payload_args;
-}
 
 
 static __attribute__ ((used)) long ptr_syscall = 0;
@@ -78,6 +71,9 @@ pre_init(payload_args_t *args) {
   int *__isthreaded;
   int error = 0;
 
+  if((error=__syscall_init(args))) {
+    return error;
+  }
   if((error=__kernel_init(args))) {
     return error;
   }
@@ -102,7 +98,7 @@ pre_init(payload_args_t *args) {
  * Terminate the payload.
  **/
 static void
-terminate(void) {
+terminate(payload_args_t *args) {
   void (*exit)(int) = 0;
 
   __rtld_fini();
@@ -114,7 +110,7 @@ terminate(void) {
   }
 
   if(DLSYM(0x2, exit)) {
-    exit(*payload_args->payloadout);
+    exit(*args->payloadout);
   }
 }
 
@@ -124,7 +120,6 @@ terminate(void) {
  **/
 void
 _start(payload_args_t *args) {
-  int (*sceKernelDlsym)(int, const char*, void*) = 0;
   char** (*getargv)(void) = 0;
   int (*getargc)(void) = 0;
   unsigned long count = 0;
@@ -138,27 +133,8 @@ _start(payload_args_t *args) {
   }
 
   // Init runtime
-  payload_args = args;
-  if(args->sys_dynlib_dlsym(0x1, "sceKernelDlsym", &sceKernelDlsym)) {
-    args->sys_dynlib_dlsym(0x2001, "sceKernelDlsym", &sceKernelDlsym);
-  }
-  if(sceKernelDlsym == args->sys_dynlib_dlsym) {
-    if(args->sys_dynlib_dlsym(0x1, "getpid", &ptr_syscall)) {
-      args->sys_dynlib_dlsym(0x2001, "getpid", &ptr_syscall);
-    }
-  } else {
-    ptr_syscall = (long)args->sys_dynlib_dlsym;
-  }
-
-  if(!ptr_syscall) {
-    *args->payloadout = -EINVAL;
-    return;
-  }
-
-  ptr_syscall += 0xa; // jump directly to the syscall instruction
-
   if((*args->payloadout=pre_init(args))) {
-    terminate();
+    terminate(args);
     return;
   }
 
@@ -173,7 +149,7 @@ _start(payload_args_t *args) {
   // Run .init functions.
   count = __init_array_end - __init_array_start;
   for(int i=0; i<count; i++) {
-    __init_array_start[i](argc, argv, environ);
+    __init_array_start[i](argc, argv, environ, args);
   }
 
   // Run the actual payload.
@@ -185,5 +161,5 @@ _start(payload_args_t *args) {
     __fini_array_start[count-i-1]();
   }
 
-  terminate();
+  terminate(args);
 }

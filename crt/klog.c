@@ -28,13 +28,13 @@ static int*  (*__error)(void) = 0;
 
 static char*
 klog_label(char *buf, unsigned long size) {
-  int pid = syscall(SYS_getpid);
+  int pid = __syscall(SYS_getpid);
 
   buf[0] = 0;
-  syscall(0x268, pid, buf, size);
+  __syscall(0x268, pid, buf, size);
 
   if(buf[0] == 0) {
-    snprintf(buf, size, "pid:%d", syscall(SYS_getpid));
+    snprintf(buf, size, "pid:%d", pid);
   }
 
   return buf;
@@ -54,7 +54,7 @@ klog_printf(const char *fmt, ...) {
 
   snprintf(buf, sizeof buf, "<118>[%s] %s", klog_label(lbl, sizeof(lbl)), sargs);
 
-  return (int)syscall(0x259, 7, buf, 0);
+  return (int)__syscall(0x259, 7, buf, 0);
 }
 
 
@@ -65,7 +65,7 @@ klog_puts(const char *s) {
 
   snprintf(buf, sizeof buf, "<118>[%s] %s\n", klog_label(lbl, sizeof(lbl)), s);
 
-  return (int)syscall(0x259, 7, buf, 0);
+  return (int)__syscall(0x259, 7, buf, 0);
 }
 
 
@@ -77,7 +77,7 @@ klog_perror(const char *s) {
   snprintf(buf, sizeof buf, "<118>[%s] %s: %s\n",
 	   klog_label(lbl, sizeof(lbl)), s, strerror(*__error()));
 
-  return (int)syscall(0x259, 7, buf, 0);
+  return (int)__syscall(0x259, 7, buf, 0);
 }
 
 

@@ -28,4 +28,4 @@ along with this program; see the file COPYING. If not, see
 #define SYS_sprx_unload 595
 
 
-long syscall(long sysno, ...);
+long __syscall(long sysno, ...);

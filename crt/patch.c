@@ -72,7 +72,7 @@ patch_sceKernelSpawn(void) {
 
 static int
 patch_kernel_ucred(void) {
-  int pid = syscall(SYS_getpid);
+  int pid = __syscall(SYS_getpid);
   unsigned char caps[16];
   unsigned long attrs;
 

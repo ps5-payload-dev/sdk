@@ -19,6 +19,24 @@ along with this program; see the file COPYING. If not, see
 
 static __attribute__ ((used)) long ptr_syscall = 0;
 
+static payload_args_t* payload_args = 0;
+
+
+asm(".intel_syntax noprefix\n"
+    ".global syscall\n"
+    ".type syscall @function\n"
+    "syscall:\n"
+    "  mov rax, rdi\n"
+    "  mov rdi, rsi\n"
+    "  mov rsi, rdx\n"
+    "  mov rdx, rcx\n"
+    "  mov r10, r8\n"
+    "  mov r8,  r9\n"
+    "  mov r9,  qword ptr [rsp + 8]\n"
+    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  ret\n"
+    );
+
 
 asm(".intel_syntax noprefix\n"
     ".global fork\n"
@@ -2629,10 +2647,15 @@ asm(".intel_syntax noprefix\n"
     );
 
 
+payload_args_t*
+payload_get_args(void) {
+  return payload_args;
+}
+
+
 __attribute__((constructor(105))) static void
-syscall_constructor(void) {
+syscall_constructor(int argc, char** argv, char** envp, payload_args_t *args) {
   int (*sceKernelDlsym)(int, const char*, void*) = 0;
-  payload_args_t* args = payload_get_args();
 
   if(args->sys_dynlib_dlsym(0x1, "sceKernelDlsym", &sceKernelDlsym)) {
     args->sys_dynlib_dlsym(0x2001, "sceKernelDlsym", &sceKernelDlsym);

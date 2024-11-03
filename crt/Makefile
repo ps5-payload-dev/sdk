@@ -38,7 +38,7 @@ ARCHIVE := libcrt.a
 
 all: $(ARCHIVE)
 
-$(ARCHIVE): crt.o klog.o nid.o kernel.o rtld.o patch.o mdbg.o
+$(ARCHIVE): crt.o syscall.o klog.o nid.o kernel.o rtld.o patch.o mdbg.o
 	$(AR) -rsc $@ $^
 
 %.o: %.c
