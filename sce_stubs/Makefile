@@ -58,7 +58,7 @@ $(NID_DB):
 	$(CC) -c $(CFLAGS) -o $@ $^
 
 %.so: %.o
-	$(LD) -m elf_x86_64 -shared -o $@ $<
+	$(LD) -m elf_x86_64 -shared -soname $*.sprx -o $@ $<
 
 clean:
 	rm -f *.o *.so $(NID_DB)
