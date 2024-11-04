@@ -315,21 +315,6 @@ rtld_basename(const char *path) {
 
 
 /**
- * Replace .so suffix with .sprx
- **/
-static void
-rtld_so2sprx(const char* filename, char* sprx) {
-  int len = strlen(filename);
-
-  strcpy(sprx, filename);
-  if(len >= 3 && !strcmp(sprx+len-3, ".so")) {
-    sprx[len-2] = 0;
-    strcat(sprx, "sprx");
-  }
-}
-
-
-/**
  * Figure out the absolute path to an sprx file.
  **/
 static int
@@ -528,12 +513,11 @@ rtld_close(rtld_lib_t* lib) {
  *
  **/
 static int
-dt_needed(const char* basename) {
+dt_needed(const char* filename) {
   char sprx[0x1000];
   rtld_lib_t* lib;
 
-  rtld_so2sprx(basename, sprx);
-  if((lib=rtld_open(0, sprx, RTLD_LAZY))) {
+  if((lib=rtld_open(0, filename, RTLD_LAZY))) {
     lib->next = libhead;
     libhead = lib;
     return 0;
@@ -851,7 +835,6 @@ __rtld_fini(void) {
 
 void*
 dlopen(const char *filename, int flags) {
-  char sprx[0x1000];
   char cwd[0x1000];
 
   dlerrno = 0;
@@ -873,8 +856,7 @@ dlopen(const char *filename, int flags) {
     return 0;
   }
 
-  rtld_so2sprx(filename, sprx);
-  return rtld_open(getcwd(cwd, sizeof(cwd)), sprx, flags);
+  return rtld_open(getcwd(cwd, sizeof(cwd)), filename, flags);
 }
 
 
