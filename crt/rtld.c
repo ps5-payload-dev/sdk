@@ -108,8 +108,6 @@ extern Elf64_Dyn _DYNAMIC[] __attribute__((weak));
  * global private variables.
  **/
 static rtld_lib_t* libhead = 0;
-static Elf64_Sym* symtab = 0;
-static char* strtab = 0;
 static int libkernel_handle = 0;
 static int dlerrno = 0;
 
@@ -532,8 +530,9 @@ dt_needed(const char* filename) {
  *
  **/
 static int
-r_glob_dat(Elf64_Rela* rela) {
-  unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
+r_glob_dat(unsigned char* image_start, Elf64_Sym* symtab, char* strtab,
+	   Elf64_Rela* rela) {
+  unsigned long loc = (unsigned long)(image_start + rela->r_offset);
   Elf64_Sym* sym = symtab + ELF64_R_SYM(rela->r_info);
   const char* name = strtab + sym->st_name;
   unsigned long val = 0;
@@ -558,8 +557,9 @@ r_glob_dat(Elf64_Rela* rela) {
  *
  **/
 static int
-r_jmp_slot(Elf64_Rela* rela) {
-  return r_glob_dat(rela);
+r_jmp_slot(unsigned char* image_start, Elf64_Sym* symtab, char* strtab,
+	   Elf64_Rela* rela) {
+  return r_glob_dat(image_start, symtab, strtab, rela);
 }
 
 
@@ -567,9 +567,9 @@ r_jmp_slot(Elf64_Rela* rela) {
  *
  **/
 static int
-r_relative(Elf64_Rela* rela) {
-  unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
-  unsigned long val = (unsigned long)(__image_start + rela->r_addend);
+r_relative(unsigned char* image_start, Elf64_Rela* rela) {
+  unsigned long loc = (unsigned long)(image_start + rela->r_offset);
+  unsigned long val = (unsigned long)(image_start + rela->r_addend);
 
   // ELF loader allready applied relocation
   if(*((unsigned long*)loc) == val) {
@@ -589,8 +589,9 @@ r_relative(Elf64_Rela* rela) {
  *
  **/
 static int
-r_direct_64(Elf64_Rela* rela) {
-  unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
+r_direct_64(unsigned char* image_start, Elf64_Sym* symtab, char* strtab,
+	    Elf64_Rela* rela) {
+  unsigned long loc = (unsigned long)(image_start + rela->r_offset);
   Elf64_Sym* sym = symtab + ELF64_R_SYM(rela->r_info);
   const char* name = strtab + sym->st_name;
   unsigned long val = 0;
@@ -616,36 +617,38 @@ r_direct_64(Elf64_Rela* rela) {
  *
  **/
 static int
-rtld_load(void) {
+rtld_load(unsigned char* image_start, Elf64_Dyn* dyn) {
+  Elf64_Sym* symtab = 0;
   Elf64_Rela* rela = 0;
+  char* strtab = 0;
   long relasz = 0;
 
   // find lookup tables
-  for(int i=0; _DYNAMIC[i].d_tag!=DT_NULL; i++) {
-    switch(_DYNAMIC[i].d_tag) {
+  for(int i=0; dyn[i].d_tag!=DT_NULL; i++) {
+    switch(dyn[i].d_tag) {
     case DT_SYMTAB:
-      symtab = (Elf64_Sym*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
+      symtab = (Elf64_Sym*)(image_start + dyn[i].d_un.d_ptr);
       break;
 
     case DT_STRTAB:
-      strtab = (char*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
+      strtab = (char*)(image_start + dyn[i].d_un.d_ptr);
       break;
 
     case DT_RELA:
-      rela = (Elf64_Rela*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
+      rela = (Elf64_Rela*)(image_start + dyn[i].d_un.d_ptr);
       break;
 
     case DT_RELASZ:
-      relasz = _DYNAMIC[i].d_un.d_val;
+      relasz = dyn[i].d_un.d_val;
       break;
     }
   }
 
   // load needed libraries
-  for(int i=0; _DYNAMIC[i].d_tag!=DT_NULL; i++) {
-    switch(_DYNAMIC[i].d_tag) {
+  for(int i=0; dyn[i].d_tag!=DT_NULL; i++) {
+    switch(dyn[i].d_tag) {
     case DT_NEEDED:
-      if(dt_needed(strtab + _DYNAMIC[i].d_un.d_val)) {
+      if(dt_needed(strtab + dyn[i].d_un.d_val)) {
 	return -1;
       }
       break;
@@ -656,25 +659,25 @@ rtld_load(void) {
   for(int i=0; i<relasz/sizeof(Elf64_Rela); i++) {
     switch(rela[i].r_info & 0xffffffffl) {
     case R_X86_64_JMP_SLOT:
-      if(r_jmp_slot(&rela[i])) {
+      if(r_jmp_slot(image_start, symtab, strtab, &rela[i])) {
 	return -1;
       }
       break;
 
     case R_X86_64_64:
-      if(r_direct_64(&rela[i])) {
+      if(r_direct_64(image_start, symtab, strtab, &rela[i])) {
 	return -1;
       }
       break;
 
     case R_X86_64_GLOB_DAT:
-      if(r_glob_dat(&rela[i])) {
+      if(r_glob_dat(image_start, symtab, strtab, &rela[i])) {
 	return -1;
       }
       break;
 
     case R_X86_64_RELATIVE:
-      if(r_relative(&rela[i])) {
+      if(r_relative(image_start, &rela[i])) {
 	return -1;
       }
       break;
@@ -804,7 +807,7 @@ __rtld_init(void) {
     return -1;
   }
 
-  error = rtld_load();
+  error = rtld_load(__image_start, _DYNAMIC);
 
   // restore jail and caps
   if(kernel_set_proc_rootdir(pid, rootdir)) {
