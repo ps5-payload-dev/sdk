@@ -318,7 +318,7 @@ rtld_basename(const char *path) {
  * Figure out the absolute path to an sprx file.
  **/
 static int
-rtld_find_sprx(const char* cwd, const char* filename, char *path) {
+sprx_find(const char* cwd, const char* filename, char *path) {
   if(*filename == '/') {
     sprintf(path, "%s", filename);
   } else if(cwd) {
@@ -358,7 +358,7 @@ rtld_find_sprx(const char* cwd, const char* filename, char *path) {
  *
  **/
 static rtld_lib_t*
-rtld_lib_new(const char* name, int handle, int flags) {
+sprx_lib_new(const char* name, int handle, int flags) {
   rtld_lib_t *lib = malloc(sizeof(rtld_lib_t));
   dynlib_dynsec_t dynsec;
   dynlib_obj_t obj;
@@ -401,7 +401,7 @@ rtld_lib_new(const char* name, int handle, int flags) {
  *
  **/
 static rtld_lib_t*
-rtld_open(const char* cwd, const char* filename, int flags) {
+sprx_open(const char* cwd, const char* filename, int flags) {
   const char *basename = rtld_basename(filename);
   int pid = __syscall(SYS_getpid);
   unsigned int handle;
@@ -409,7 +409,7 @@ rtld_open(const char* cwd, const char* filename, int flags) {
   int error;
 
   if(!filename) {
-    return rtld_lib_new("", 0, flags | RTLD_NODELETE);
+    return sprx_lib_new("", 0, flags | RTLD_NODELETE);
   }
 
   if(!strcmp(basename, "libkernel.sprx") ||
@@ -417,23 +417,23 @@ rtld_open(const char* cwd, const char* filename, int flags) {
      !strcmp(basename, "libkernel_sys.sprx") ||
      !strcmp(basename, "libdl.sprx") ||
      !strcmp(basename, "libpthread.sprx")) {
-    return rtld_lib_new(basename, libkernel_handle, flags | RTLD_NODELETE);
+    return sprx_lib_new(basename, libkernel_handle, flags | RTLD_NODELETE);
   }
 
   if(!strcmp(basename, "libSceLibcInternal.sprx") ||
      !strcmp(basename, "libm.sprx")) {
-    return rtld_lib_new(basename, 2, flags | RTLD_NODELETE);
+    return sprx_lib_new(basename, 2, flags | RTLD_NODELETE);
   }
 
   if(!kernel_dynlib_handle(pid, basename, &handle)) {
-    return rtld_lib_new(basename, handle, flags | RTLD_NODELETE);
+    return sprx_lib_new(basename, handle, flags | RTLD_NODELETE);
   }
 
   if(flags & RTLD_NOLOAD) {
     return 0;
   }
 
-  if(rtld_find_sprx(cwd, filename, path)) {
+  if(sprx_find(cwd, filename, path)) {
     dlerrno = ENOENT;
     return 0;
   }
@@ -452,7 +452,7 @@ rtld_open(const char* cwd, const char* filename, int flags) {
     return 0;
   }
 
-  return rtld_lib_new(basename, handle, flags);
+  return sprx_lib_new(basename, handle, flags);
 }
 
 
@@ -460,7 +460,7 @@ rtld_open(const char* cwd, const char* filename, int flags) {
  *
  **/
 static unsigned long
-rtld_sym(rtld_lib_t* lib, const char* name) {
+sprx_sym(rtld_lib_t* lib, const char* name) {
   unsigned long addr = 0;
   char nid[12];
 
@@ -485,7 +485,7 @@ rtld_sym(rtld_lib_t* lib, const char* name) {
  *
  **/
 static int
-rtld_close(rtld_lib_t* lib) {
+sprx_close(rtld_lib_t* lib) {
   int handle = lib->handle;
   int flags = lib->flags;
   int error = 0;
@@ -516,10 +516,35 @@ rtld_close(rtld_lib_t* lib) {
  *
  **/
 static int
+sprx_load_sysmodule(void) {
+  int pid = __syscall(SYS_getpid);
+  unsigned int handle;
+
+  if(kernel_dynlib_handle(pid, "libSceSysmodule.sprx", &handle)) {
+    if((handle=sceKernelLoadStartModule("/system/common/lib/libSceSysmodule.sprx",
+					0, 0, 0, 0, 0)) <= 0) {
+      klog_libload_error("libSceSysmodule.sprx");
+      return -1;
+    }
+  }
+
+  if(!DLSYM(handle, sceSysmoduleLoadModuleInternal)) {
+    klog_resolve_error("sceSysmoduleLoadModuleInternal");
+    return -1;
+  }
+
+  return 0;
+}
+
+
+/**
+ *
+ **/
+static int
 dt_needed(const char* filename) {
   rtld_lib_t* lib;
 
-  if((lib=rtld_open(0, filename, RTLD_LAZY))) {
+  if((lib=sprx_open(0, filename, RTLD_LAZY))) {
     lib->next = libhead;
     libhead = lib;
     return 0;
@@ -543,7 +568,7 @@ r_glob_dat(unsigned char* image_start, Elf64_Sym* symtab, char* strtab,
   unsigned long val = 0;
 
   for(rtld_lib_t *lib=libhead; lib!=0; lib=lib->next) {
-    if((val=rtld_sym(lib, name))) {
+    if((val=sprx_sym(lib, name))) {
       return mdbg_copyin(-1, &val, loc, sizeof(val));
     }
   }
@@ -602,7 +627,7 @@ r_direct_64(unsigned char* image_start, Elf64_Sym* symtab, char* strtab,
   unsigned long val = 0;
 
   for(rtld_lib_t *lib=libhead; lib!=0; lib=lib->next) {
-    if((val=rtld_sym(lib, name))) {
+    if((val=sprx_sym(lib, name))) {
       val += rela->r_addend;
       return mdbg_copyin(-1, &val, loc, sizeof(val));
     }
@@ -687,31 +712,6 @@ rtld_load(unsigned char* image_start, Elf64_Dyn* dyn) {
       }
       break;
     }
-  }
-
-  return 0;
-}
-
-
-/**
- *
- **/
-static int
-rtld_load_sysmodule(void) {
-  int pid = __syscall(SYS_getpid);
-  unsigned int handle;
-
-  if(kernel_dynlib_handle(pid, "libSceSysmodule.sprx", &handle)) {
-    if((handle=sceKernelLoadStartModule("/system/common/lib/libSceSysmodule.sprx",
-					0, 0, 0, 0, 0)) <= 0) {
-      klog_libload_error("libSceSysmodule.sprx");
-      return -1;
-    }
-  }
-
-  if(!DLSYM(handle, sceSysmoduleLoadModuleInternal)) {
-    klog_resolve_error("sceSysmoduleLoadModuleInternal");
-    return -1;
   }
 
   return 0;
@@ -811,7 +811,7 @@ __rtld_init(void) {
     return -1;
   }
 
-  if(rtld_load_sysmodule()) {
+  if(sprx_load_sysmodule()) {
     klog_puts("load_sysmodule failed");
     return -1;
   }
@@ -838,7 +838,7 @@ __rtld_fini(void) {
 
   while(libhead) {
     next = libhead->next;
-    rtld_close(libhead);
+    sprx_close(libhead);
     libhead = next;
   }
 }
@@ -867,21 +867,21 @@ dlopen(const char *filename, int flags) {
     return 0;
   }
 
-  return rtld_open(getcwd(cwd, sizeof(cwd)), filename, flags);
+  return sprx_open(getcwd(cwd, sizeof(cwd)), filename, flags);
 }
 
 
 void*
 dlsym(void *ptr, const char *name) {
   dlerrno = 0;
-  return (void*)rtld_sym((rtld_lib_t*)ptr, name);
+  return (void*)sprx_sym((rtld_lib_t*)ptr, name);
 }
 
 
 int
 dlclose(void *ptr) {
   dlerrno = 0;
-  return rtld_close((rtld_lib_t*)ptr);
+  return sprx_close((rtld_lib_t*)ptr);
 }
 
 
