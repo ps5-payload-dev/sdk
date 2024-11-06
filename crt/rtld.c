@@ -514,7 +514,6 @@ rtld_close(rtld_lib_t* lib) {
  **/
 static int
 dt_needed(const char* filename) {
-  char sprx[0x1000];
   rtld_lib_t* lib;
 
   if((lib=rtld_open(0, filename, RTLD_LAZY))) {
@@ -523,7 +522,7 @@ dt_needed(const char* filename) {
     return 0;
   }
 
-  klog_libload_error(sprx);
+  klog_libload_error(filename);
 
   return -1;
 }
