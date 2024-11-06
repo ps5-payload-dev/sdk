@@ -81,6 +81,7 @@ typedef struct {
 
 
 typedef struct rtld_lib {
+  char            *name;
   int              handle;
   int              flags;
   unsigned long    mapbase;
@@ -117,6 +118,7 @@ static int dlerrno = 0;
  **/
 static void* (*malloc)(unsigned long) = 0;
 static void  (*free)(void*) = 0;
+static char* (*strdup)(const char*) = 0;
 static char* (*strcat)(char*, const char*) = 0;
 static char* (*strcpy)(char*, const char*) = 0;
 static int   (*strcmp)(const char*, const char*) = 0;
@@ -356,11 +358,12 @@ rtld_find_sprx(const char* cwd, const char* filename, char *path) {
  *
  **/
 static rtld_lib_t*
-rtld_lib_new(int handle, int flags) {
+rtld_lib_new(const char* name, int handle, int flags) {
   rtld_lib_t *lib = malloc(sizeof(rtld_lib_t));
   dynlib_dynsec_t dynsec;
   dynlib_obj_t obj;
 
+  lib->name = strdup(name);
   lib->handle = handle;
   lib->flags = flags;
   lib->mapbase = 0;
@@ -407,7 +410,7 @@ rtld_open(const char* cwd, const char* filename, int flags) {
   int error;
 
   if(!filename) {
-    return rtld_lib_new(0, flags | RTLD_NODELETE);
+    return rtld_lib_new("", 0, flags | RTLD_NODELETE);
   }
 
   if(!strcmp(basename, "libkernel.sprx") ||
@@ -415,16 +418,16 @@ rtld_open(const char* cwd, const char* filename, int flags) {
      !strcmp(basename, "libkernel_sys.sprx") ||
      !strcmp(basename, "libdl.sprx") ||
      !strcmp(basename, "libpthread.sprx")) {
-    return rtld_lib_new(libkernel_handle, flags | RTLD_NODELETE);
+    return rtld_lib_new(basename, libkernel_handle, flags | RTLD_NODELETE);
   }
 
   if(!strcmp(basename, "libSceLibcInternal.sprx") ||
      !strcmp(basename, "libm.sprx")) {
-    return rtld_lib_new(2, flags | RTLD_NODELETE);
+    return rtld_lib_new(basename, 2, flags | RTLD_NODELETE);
   }
 
   if(!kernel_dynlib_handle(pid, basename, &handle)) {
-    return rtld_lib_new(handle, flags | RTLD_NODELETE);
+    return rtld_lib_new(basename, handle, flags | RTLD_NODELETE);
   }
 
   if(flags & RTLD_NOLOAD) {
@@ -450,7 +453,7 @@ rtld_open(const char* cwd, const char* filename, int flags) {
     return 0;
   }
 
-  return rtld_lib_new(handle, flags);
+  return rtld_lib_new(basename, handle, flags);
 }
 
 
@@ -488,6 +491,9 @@ rtld_close(rtld_lib_t* lib) {
   int flags = lib->flags;
   int error = 0;
 
+  if(lib->name) {
+    free(lib->name);
+  }
   if(lib->symtab) {
     free(lib->symtab);
   }
@@ -739,6 +745,10 @@ __rtld_init(void) {
   }
   if(!DLSYM(0x2, free)) {
     klog_resolve_error("free");
+    return -1;
+  }
+  if(!DLSYM(0x2, strdup)) {
+    klog_resolve_error("strdup");
     return -1;
   }
   if(!DLSYM(0x2, strcat)) {
