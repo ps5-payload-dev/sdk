@@ -363,36 +363,35 @@ rtld_lib_new(const char* name, int handle, int flags) {
   dynlib_dynsec_t dynsec;
   dynlib_obj_t obj;
 
+  if(kernel_dynlib_obj(-1, handle, &obj) < 0) {
+    return 0;
+  }
+  if(kernel_copyout(obj.dynsec, &dynsec, sizeof(dynsec)) < 0) {
+    return 0;
+  }
+  if(!(lib->strtab=malloc(dynsec.strtabsize))) {
+    return 0;
+  }
+  if(kernel_copyout(dynsec.strtab, lib->strtab, dynsec.strtabsize) < 0) {
+    free(lib->strtab);
+    return 0;
+  }
+  if(!(lib->symtab=malloc(dynsec.symtabsize))) {
+    free(lib->strtab);
+    return 0;
+  }
+  if(kernel_copyout(dynsec.symtab, lib->symtab, dynsec.symtabsize) < 0) {
+    free(lib->strtab);
+    free(lib->symtab);
+    return 0;
+  }
+
   lib->name = strdup(name);
   lib->handle = handle;
   lib->flags = flags;
-  lib->mapbase = 0;
-  lib->symtab = 0;
-  lib->symtabsize = 0;
-  lib->strtab = 0;
-  lib->next = 0;
-
-  if(kernel_dynlib_obj(-1, handle, &obj)) {
-    return lib;
-  }
-  if(kernel_copyout(obj.dynsec, &dynsec, sizeof(dynsec)) < 0) {
-    return lib;
-  }
-  if(!(lib->strtab=malloc(dynsec.strtabsize))) {
-    return lib;
-  }
-  if(kernel_copyout(dynsec.strtab, lib->strtab, dynsec.strtabsize) < 0) {
-    return lib;
-  }
-  if(!(lib->symtab=malloc(dynsec.symtabsize))) {
-    return lib;
-  }
-  if(kernel_copyout(dynsec.symtab, lib->symtab, dynsec.symtabsize) < 0) {
-    return lib;
-  }
-
   lib->mapbase = obj.mapbase;
   lib->symtabsize = dynsec.symtabsize;
+  lib->next = 0;
 
   return lib;
 }
