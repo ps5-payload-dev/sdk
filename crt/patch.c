@@ -103,9 +103,16 @@ patch_kernel_ucred(void) {
 }
 
 
-__attribute__((used))
-__attribute__((constructor(105))) static void
-patch_constructor(void) {
-  patch_sceKernelSpawn();
-  patch_kernel_ucred();
+int
+__patch_init(void) {
+  int error;
+
+  if((error=patch_sceKernelSpawn())) {
+    return error;
+  }
+  if((error=patch_kernel_ucred())) {
+    return error;
+  }
+
+  return 0;
 }

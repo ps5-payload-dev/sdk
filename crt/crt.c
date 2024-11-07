@@ -47,6 +47,7 @@ extern int main(int argc, char* argv[], char *envp[]);
 int __syscall_init(payload_args_t* args);
 int __kernel_init(payload_args_t* args);
 int __klog_init(void);
+int __patch_init(void);
 int __rtld_init(void);
 int __rtld_fini(void);
 
@@ -70,6 +71,10 @@ pre_init(payload_args_t *args) {
   }
   if((error=__rtld_init())) {
     klog_puts("Unable to initialize rtld");
+    return error;
+  }
+  if((error=__patch_init())) {
+    klog_puts("Unable to initialize patches");
     return error;
   }
   if(!DLSYM(0x2, __isthreaded)) {
