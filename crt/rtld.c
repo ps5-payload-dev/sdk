@@ -108,9 +108,9 @@ extern Elf64_Dyn _DYNAMIC[] __attribute__((weak));
 /**
  * global private variables.
  **/
-static rtld_lib_t* libhead = 0;
-static int libkernel_handle = 0;
-static int dlerrno = 0;
+static rtld_lib_t* g_libhead = 0;
+static int g_libkernel_handle = 0;
+static int g_dlerrno = 0;
 
 
 /**
@@ -417,7 +417,7 @@ sprx_open(const char* cwd, const char* filename, int flags) {
      !strcmp(basename, "libkernel_sys.sprx") ||
      !strcmp(basename, "libdl.sprx") ||
      !strcmp(basename, "libpthread.sprx")) {
-    return sprx_lib_new(basename, libkernel_handle, flags | RTLD_NODELETE);
+    return sprx_lib_new(basename, g_libkernel_handle, flags | RTLD_NODELETE);
   }
 
   if(!strcmp(basename, "libSceLibcInternal.sprx") ||
@@ -434,21 +434,21 @@ sprx_open(const char* cwd, const char* filename, int flags) {
   }
 
   if(sprx_find(cwd, filename, path)) {
-    dlerrno = ENOENT;
+    g_dlerrno = ENOENT;
     return 0;
   }
 
   for(int i=0; i<sizeof(sysmodtab)/sizeof(sysmodtab[0]); i++) {
     if(!strcmp(basename, sysmodtab[i].name)) {
       if((error=sceSysmoduleLoadModuleInternal(sysmodtab[i].handle))) {
-	dlerrno = error;
+	g_dlerrno = error;
 	return 0;
       }
     }
   }
 
   if((handle=sceKernelLoadStartModule(path, 0, 0, 0, 0, 0)) < 0) {
-    dlerrno = handle;
+    g_dlerrno = handle;
     return 0;
   }
 
@@ -460,7 +460,7 @@ sprx_open(const char* cwd, const char* filename, int flags) {
  *
  **/
 static unsigned long
-sprx_sym(rtld_lib_t* lib, const char* name) {
+sprx_sym(const rtld_lib_t* lib, const char* name) {
   unsigned long addr = 0;
   char nid[12];
 
@@ -504,7 +504,7 @@ sprx_close(rtld_lib_t* lib) {
 
   if(!(flags & RTLD_NODELETE)) {
     if((error=sceKernelStopUnloadModule(handle, 0, 0, 0, 0, 0))) {
-      dlerrno = error;
+      g_dlerrno = error;
     }
   }
 
@@ -541,12 +541,12 @@ sprx_load_sysmodule(void) {
  *
  **/
 static int
-dt_needed(const char* filename) {
+dt_needed(rtld_lib_t** libhead, const char* filename) {
   rtld_lib_t* lib;
 
   if((lib=sprx_open(0, filename, RTLD_LAZY))) {
-    lib->next = libhead;
-    libhead = lib;
+    lib->next = *libhead;
+    *libhead = lib;
     return 0;
   }
 
@@ -560,14 +560,14 @@ dt_needed(const char* filename) {
  *
  **/
 static int
-r_glob_dat(unsigned char* image_start, Elf64_Sym* symtab, char* strtab,
-	   Elf64_Rela* rela) {
+r_glob_dat(const rtld_lib_t* libhead, unsigned char* image_start,
+	   Elf64_Sym* symtab, char* strtab, Elf64_Rela* rela) {
   unsigned long loc = (unsigned long)(image_start + rela->r_offset);
   Elf64_Sym* sym = symtab + ELF64_R_SYM(rela->r_info);
   const char* name = strtab + sym->st_name;
   unsigned long val = 0;
 
-  for(rtld_lib_t *lib=libhead; lib!=0; lib=lib->next) {
+  for(const rtld_lib_t *lib=libhead; lib!=0; lib=lib->next) {
     if((val=sprx_sym(lib, name))) {
       return mdbg_copyin(-1, &val, loc, sizeof(val));
     }
@@ -587,9 +587,9 @@ r_glob_dat(unsigned char* image_start, Elf64_Sym* symtab, char* strtab,
  *
  **/
 static int
-r_jmp_slot(unsigned char* image_start, Elf64_Sym* symtab, char* strtab,
-	   Elf64_Rela* rela) {
-  return r_glob_dat(image_start, symtab, strtab, rela);
+r_jmp_slot(const rtld_lib_t* libhead, unsigned char* image_start,
+	   Elf64_Sym* symtab, char* strtab, Elf64_Rela* rela) {
+  return r_glob_dat(libhead, image_start, symtab, strtab, rela);
 }
 
 
@@ -619,14 +619,14 @@ r_relative(unsigned char* image_start, Elf64_Rela* rela) {
  *
  **/
 static int
-r_direct_64(unsigned char* image_start, Elf64_Sym* symtab, char* strtab,
-	    Elf64_Rela* rela) {
+r_direct_64(const rtld_lib_t* libhead, unsigned char* image_start,
+	    Elf64_Sym* symtab, char* strtab, Elf64_Rela* rela) {
   unsigned long loc = (unsigned long)(image_start + rela->r_offset);
   Elf64_Sym* sym = symtab + ELF64_R_SYM(rela->r_info);
   const char* name = strtab + sym->st_name;
   unsigned long val = 0;
 
-  for(rtld_lib_t *lib=libhead; lib!=0; lib=lib->next) {
+  for(const rtld_lib_t *lib=libhead; lib!=0; lib=lib->next) {
     if((val=sprx_sym(lib, name))) {
       val += rela->r_addend;
       return mdbg_copyin(-1, &val, loc, sizeof(val));
@@ -647,7 +647,7 @@ r_direct_64(unsigned char* image_start, Elf64_Sym* symtab, char* strtab,
  *
  **/
 static int
-rtld_load(unsigned char* image_start, Elf64_Dyn* dyn) {
+rtld_load(rtld_lib_t** libhead, unsigned char* image_start, Elf64_Dyn* dyn) {
   Elf64_Sym* symtab = 0;
   Elf64_Rela* rela = 0;
   char* strtab = 0;
@@ -678,7 +678,7 @@ rtld_load(unsigned char* image_start, Elf64_Dyn* dyn) {
   for(int i=0; dyn[i].d_tag!=DT_NULL; i++) {
     switch(dyn[i].d_tag) {
     case DT_NEEDED:
-      if(dt_needed(strtab + dyn[i].d_un.d_val)) {
+      if(dt_needed(libhead, strtab + dyn[i].d_un.d_val)) {
 	return -1;
       }
       break;
@@ -689,19 +689,19 @@ rtld_load(unsigned char* image_start, Elf64_Dyn* dyn) {
   for(int i=0; i<relasz/sizeof(Elf64_Rela); i++) {
     switch(rela[i].r_info & 0xffffffffl) {
     case R_X86_64_JMP_SLOT:
-      if(r_jmp_slot(image_start, symtab, strtab, &rela[i])) {
+      if(r_jmp_slot(*libhead, image_start, symtab, strtab, &rela[i])) {
 	return -1;
       }
       break;
 
     case R_X86_64_64:
-      if(r_direct_64(image_start, symtab, strtab, &rela[i])) {
+      if(r_direct_64(*libhead, image_start, symtab, strtab, &rela[i])) {
 	return -1;
       }
       break;
 
     case R_X86_64_GLOB_DAT:
-      if(r_glob_dat(image_start, symtab, strtab, &rela[i])) {
+      if(r_glob_dat(*libhead, image_start, symtab, strtab, &rela[i])) {
 	return -1;
       }
       break;
@@ -729,9 +729,9 @@ __rtld_init(void) {
 
   // determine libkernel handle
   if(kernel_dynlib_dlsym(pid, 0x1, "sceKernelDlsym")) {
-    libkernel_handle = 0x1;
+    g_libkernel_handle = 0x1;
   } else if(kernel_dynlib_dlsym(pid, 0x2001, "sceKernelDlsym")) {
-    libkernel_handle = 0x2001;
+    g_libkernel_handle = 0x2001;
   } else {
     klog_puts("Unable to determine libkernel handle");
     return -1;
@@ -784,11 +784,11 @@ __rtld_init(void) {
   }
 
   // load deps to libkernel
-  if(!DLSYM(libkernel_handle, sceKernelLoadStartModule)) {
+  if(!DLSYM(g_libkernel_handle, sceKernelLoadStartModule)) {
     klog_resolve_error("sceKernelLoadStartModule");
     return -1;
   }
-  if(!DLSYM(libkernel_handle, sceKernelStopUnloadModule)) {
+  if(!DLSYM(g_libkernel_handle, sceKernelStopUnloadModule)) {
     klog_resolve_error("sceKernelStopUnloadModule");
     return -1;
   }
@@ -816,7 +816,7 @@ __rtld_init(void) {
     return -1;
   }
 
-  error = rtld_load(__image_start, _DYNAMIC);
+  error = rtld_load(&g_libhead, __image_start, _DYNAMIC);
 
   // restore jail and caps
   if(kernel_set_proc_rootdir(pid, rootdir)) {
@@ -836,10 +836,10 @@ void
 __rtld_fini(void) {
   rtld_lib_t* next;
 
-  while(libhead) {
-    next = libhead->next;
-    sprx_close(libhead);
-    libhead = next;
+  while(g_libhead) {
+    next = g_libhead->next;
+    sprx_close(g_libhead);
+    g_libhead = next;
   }
 }
 
@@ -848,22 +848,22 @@ void*
 dlopen(const char *filename, int flags) {
   char cwd[0x1000];
 
-  dlerrno = 0;
+  g_dlerrno = 0;
 
   if(!(flags & RTLD_MODEMASK)) {
-    dlerrno = EINVAL;
+    g_dlerrno = EINVAL;
     return 0;
   }
   if(flags & RTLD_GLOBAL) {
-    dlerrno = ENOSYS;
+    g_dlerrno = ENOSYS;
     return 0;
   }
   if(flags & RTLD_TRACE) {
-    dlerrno = ENOSYS;
+    g_dlerrno = ENOSYS;
     return 0;
   }
   if(flags & RTLD_NOW) {
-    dlerrno = ENOSYS;
+    g_dlerrno = ENOSYS;
     return 0;
   }
 
@@ -873,22 +873,22 @@ dlopen(const char *filename, int flags) {
 
 void*
 dlsym(void *ptr, const char *name) {
-  dlerrno = 0;
+  g_dlerrno = 0;
   return (void*)sprx_sym((rtld_lib_t*)ptr, name);
 }
 
 
 int
 dlclose(void *ptr) {
-  dlerrno = 0;
+  g_dlerrno = 0;
   return sprx_close((rtld_lib_t*)ptr);
 }
 
 
 char*
 dlerror(void) {
-  if(dlerrno) {
-    return _Strerror(dlerrno, 0);
+  if(g_dlerrno) {
+    return _Strerror(g_dlerrno, 0);
   }
 
   return 0;
