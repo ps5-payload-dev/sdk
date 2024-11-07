@@ -103,6 +103,7 @@ patch_kernel_ucred(void) {
 }
 
 
+__attribute__((used))
 __attribute__((constructor(105))) static void
 patch_constructor(void) {
   patch_sceKernelSpawn();
