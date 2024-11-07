@@ -2642,6 +2642,7 @@ payload_get_args(void) {
 }
 
 
+__attribute__((used))
 __attribute__((constructor(105))) static void
 syscall_constructor(int argc, char** argv, char** envp, payload_args_t *args) {
   int (*sceKernelDlsym)(int, const char*, void*) = 0;
