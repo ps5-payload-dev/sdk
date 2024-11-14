@@ -17,6 +17,7 @@ along with this program; see the file COPYING. If not, see
 #include "elf.h"
 #include "kernel.h"
 #include "klog.h"
+#include "mdbg.h"
 #include "syscall.h"
 #include "rtld.h"
 
@@ -25,6 +26,7 @@ along with this program; see the file COPYING. If not, see
  * Dependencies to standard libraries.
  **/
 static void* (*memcpy)(void*, const void*, unsigned long) = 0;
+static char* (*_Strerror)(int, char*) = 0;
 
 
 /**
@@ -79,15 +81,14 @@ dt_needed(const char* soname) {
  **/
 static int
 r_glob_dat(Elf64_Rela* rela) {
+  unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
   Elf64_Sym* sym = g_symtab + ELF64_R_SYM(rela->r_info);
   const char* name = g_strtab + sym->st_name;
-  void* loc = __image_start + rela->r_offset;
   void* val = 0;
 
   for(rtld_lib_t *lib=g_libhead; lib; lib=lib->next) {
     if((val=__rtld_lib_sym(lib, name))) {
-      memcpy(loc, &val, sizeof(val));
-      return 0;
+      return mdbg_copyin(-1, &val, loc, sizeof(val));
     }
   }
 
@@ -115,16 +116,15 @@ r_jmp_slot(Elf64_Rela* rela) {
  **/
 static int
 r_direct_64(Elf64_Rela* rela) {
+  unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
   Elf64_Sym* sym = g_symtab + ELF64_R_SYM(rela->r_info);
   const char* name = g_strtab + sym->st_name;
-  void* loc = __image_start + rela->r_offset;
   void* val = 0;
 
   for(rtld_lib_t *lib=g_libhead; lib!=0; lib=lib->next) {
     if((val=__rtld_lib_sym(lib, name))) {
       val += rela->r_addend;
-      memcpy(loc, &val, sizeof(val));
-      return 0;
+      return mdbg_copyin(-1, &val, loc, sizeof(val));
     }
   }
 
@@ -143,10 +143,18 @@ r_direct_64(Elf64_Rela* rela) {
  **/
 static int
 r_relative(Elf64_Rela* rela) {
-  void* loc = __image_start + rela->r_offset;
-  void* val = __image_start + rela->r_addend;
+  unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
+  unsigned long val = (unsigned long)(__image_start + rela->r_addend);
 
-  memcpy(loc, &val, sizeof(val));
+  // ELF loader allready applied relocation
+  if(*((unsigned long*)loc) == val) {
+      return 0;
+  }
+
+  if(mdbg_copyin(-1, &val, loc, sizeof(val))) {
+    klog_perror("mdbg_copyin");
+    return -1;
+  }
 
   return 0;
 }
@@ -250,6 +258,9 @@ __rtld_payload_init(void) {
   if(!KERNEL_DLSYM(0x2, memcpy)) {
     return -1;
   }
+  if(!KERNEL_DLSYM(0x2, _Strerror)) {
+      return -1;
+  }
 
   err = payload_load();
 
@@ -272,4 +283,114 @@ __rtld_payload_fini(void) {
   __rtld_lib_destroy(g_libhead);
 
   return err;
+}
+
+#define RTLD_NEXT    ((void*)-1)
+#define RTLD_DEFAULT ((void*)-2)
+#define RTLD_SELF    ((void*)-3)
+
+#define RTLD_LAZY     0x0001
+#define RTLD_NOW      0x0002
+#define RTLD_MODEMASK 0x0003
+#define RTLD_GLOBAL   0x0100
+#define RTLD_LOCAL    0x0000
+#define RTLD_TRACE    0x0200
+#define RTLD_NODELETE 0x1000
+#define RTLD_NOLOAD   0x2000
+
+#define ENOENT 2
+#define ENOMEM 12
+#define EINVAL 22
+#define ENOSYS 78
+
+
+static int g_dlerrno = 0;
+
+
+
+void*
+dlopen(const char *filename, int flags) {
+  rtld_lib_t* lib;
+
+  klog_printf("dlopen: %s (%x)\n", filename, flags);
+  
+  if(!(flags & RTLD_MODEMASK)) {
+    g_dlerrno = EINVAL;
+    return 0;
+  }
+  if(flags & RTLD_TRACE) {
+    g_dlerrno = ENOSYS;
+    return 0;
+  }
+  if(flags & RTLD_NOW) {
+    g_dlerrno = ENOSYS;
+    return 0;
+  }
+  if(flags & RTLD_GLOBAL) {
+    g_dlerrno = ENOSYS;
+    return 0;
+  }
+
+  if(!(lib=__rtld_lib_new(0, filename))) {
+    g_dlerrno = ENOMEM;
+    return 0;
+  }
+  if((g_dlerrno=__rtld_lib_open(lib))) {
+    __rtld_lib_destroy(lib);
+    return 0;
+  }
+
+  g_dlerrno = 0;
+  return lib;
+}
+
+
+void*
+dlsym(void *handle, const char *symbol) {
+  void* addr;
+
+  if(handle == 0) {
+    g_dlerrno = ENOSYS;
+    return 0;
+  }
+  if(handle == RTLD_DEFAULT) {
+    g_dlerrno = ENOSYS;
+    return 0;
+  }
+  if(handle == RTLD_NEXT) {
+    g_dlerrno = ENOSYS;
+    return 0;
+  }
+  if(handle == RTLD_SELF) {
+    g_dlerrno = ENOSYS;
+    return 0;
+  }
+
+  if(!(addr=__rtld_lib_sym(handle, symbol))) {
+    g_dlerrno = EINVAL;
+    return 0;
+  }
+
+  g_dlerrno = 0;
+  return addr;
+}
+
+
+int
+dlclose(void *handle) {
+  if(!(g_dlerrno=__rtld_lib_close(handle))) {
+    __rtld_lib_destroy(handle);
+  }
+
+  return g_dlerrno;
+}
+
+
+char*
+dlerror(void) {
+  if(g_dlerrno) {
+    return _Strerror(g_dlerrno, 0);
+  }
+
+  return 0;
 }
