@@ -48,7 +48,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON CACHE BOOL "")
 #
 # We only support positional independent executables
 #
-set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "Shared libs not available")
+set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "Shared libs turned off by default")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON CACHE BOOL "")
 
 #

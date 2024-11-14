@@ -47,7 +47,7 @@ SECTIONS {
 	    PROVIDE_HIDDEN(__fini_array_end = .);
 	} : ph_rodata
 
-	.eh_frame_hdr : {
+	.eh_frame_hdr : ALIGN(CONSTANT(MAXPAGESIZE)) {
 	    PROVIDE_HIDDEN(__eh_frame_hdr_start = .);
 	    KEEP(*(.eh_frame_hdr))
 	    PROVIDE_HIDDEN(__eh_frame_hdr_end = .);

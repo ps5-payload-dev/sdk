@@ -33,12 +33,17 @@ endif
 CFLAGS += -ffreestanding -fno-builtin -nostdlib -fPIC
 CFLAGS += -target x86_64-sie-ps5 -fno-plt -fno-stack-protector
 CFLAGS += -fvisibility-nodllstorageclass=default -Wall -Werror
+CFLAGS += -fms-extensions -Wno-microsoft-anon-tag
+CFLAGS += -g
+
+OBJ := crt.o syscall.o klog.o nid.o kernel.o rtld.o rtld_so.o rtld_sprx.o \
+       rtld_payload.o patch.o mdbg.o
 
 ARCHIVE := libcrt.a
 
 all: $(ARCHIVE)
 
-$(ARCHIVE): crt.o syscall.o klog.o nid.o kernel.o rtld.o patch.o mdbg.o
+$(ARCHIVE): $(OBJ)
 	$(AR) -rsc $@ $^
 
 %.o: %.c

@@ -17,6 +17,10 @@ along with this program; see the file COPYING. If not, see
 #pragma once
 
 
+#define KERNEL_DLSYM(handle, sym) \
+    (sym=(void*)kernel_dynlib_dlsym(-1, handle, #sym))
+
+
 /**
  * dynamic library loaded in kernel memory.
  **/

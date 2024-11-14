@@ -20,12 +20,6 @@ along with this program; see the file COPYING. If not, see
 
 
 /**
- * Convenient macro for loading symbols.
- **/
-#define DLSYM(handle, sym) (sym=(void*)kernel_dynlib_dlsym(-1, handle, #sym))
-
-
-/**
  * Dependencies provided by the ELF linker.
  **/
 extern void (*__init_array_start[])(int, char**, char**, payload_args_t*) __attribute__((weak));
@@ -44,6 +38,9 @@ extern unsigned char __bss_end[] __attribute__((weak));
 extern int main(int argc, char* argv[], char *envp[]);
 
 
+/**
+ * Init functrions for crt modules.
+ **/
 int __syscall_init(payload_args_t* args);
 int __kernel_init(payload_args_t* args);
 int __klog_init(void);
@@ -77,7 +74,7 @@ pre_init(payload_args_t *args) {
     klog_puts("Unable to initialize patches");
     return error;
   }
-  if(!DLSYM(0x2, __isthreaded)) {
+  if(!KERNEL_DLSYM(0x2, __isthreaded)) {
     klog_puts("Unable to resolve the symbol '__isthreaded'");
     return -1;
   }
@@ -101,7 +98,7 @@ terminate(payload_args_t *args) {
     return;
   }
 
-  if(DLSYM(0x2, exit)) {
+  if(KERNEL_DLSYM(0x2, exit)) {
     exit(*args->payloadout);
   }
 }
@@ -124,16 +121,16 @@ _start(payload_args_t *args) {
     *bss = 0;
   }
 
-  // Init runtime
+  // Init runtime.
   if((*args->payloadout=pre_init(args))) {
     terminate(args);
     return;
   }
 
-  // Obtain argc, argv and envp from libkernel
-  if((DLSYM(0x1, getargc) || DLSYM(0x2001, getargc)) &&
-     (DLSYM(0x1, getargv) || DLSYM(0x2001, getargv)) &&
-     (DLSYM(0x1, environ) || DLSYM(0x2001, environ))) {
+  // Obtain argc, argv and envp from libkernel.
+  if((KERNEL_DLSYM(0x1, getargc) || KERNEL_DLSYM(0x2001, getargc)) &&
+     (KERNEL_DLSYM(0x1, getargv) || KERNEL_DLSYM(0x2001, getargv)) &&
+     (KERNEL_DLSYM(0x1, environ) || KERNEL_DLSYM(0x2001, environ))) {
     argc = getargc();
     argv = getargv();
   }
