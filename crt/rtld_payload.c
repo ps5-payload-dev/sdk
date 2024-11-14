@@ -312,8 +312,6 @@ void*
 dlopen(const char *filename, int flags) {
   rtld_lib_t* lib;
 
-  klog_printf("dlopen: %s (%x)\n", filename, flags);
-  
   if(!(flags & RTLD_MODEMASK)) {
     g_dlerrno = EINVAL;
     return 0;

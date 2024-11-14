@@ -560,7 +560,7 @@ so_load(rtld_so_lib_t* lib, const char* path) {
     }
 
     rela = (Elf64_Rela*)(lib->image + lib->shdr[i].sh_offset);
-    for(int j=0; j<lib->shdr[i].sh_size/sizeof(Elf64_Rela); j++) {
+    for(int j=0; j<lib->shdr[i].sh_size/sizeof(Elf64_Rela) && !error; j++) {
       switch(rela[j].r_info & 0xffffffffl) {
 
       case R_X86_64_GLOB_DAT:
