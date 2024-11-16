@@ -76,7 +76,7 @@ endswith(const char *string, const char* suffix) {
 
 static int
 ref_open(rtld_lib_t* ctx) {
-  return 0;
+  return 0; // ref is already opened
 }
 
 
@@ -89,7 +89,7 @@ ref_sym(rtld_lib_t* ctx, const char* name) {
 
 static int
 ref_close(rtld_lib_t* ctx) {
-  return 0;
+  return 0; // ref is closed by original owner
 }
 
 
@@ -105,10 +105,12 @@ __rtld_lib_new(rtld_lib_t* prev, const char* soname) {
   rtld_ref_lib_t* lib = 0;
   rtld_lib_t* ref = 0;
 
+  // find the last lib in the linked list
   while(prev && prev->prev) {
     prev = prev->prev;
   }
 
+  // check if the lib is already loaded
   for(ref=prev; ref; ref=ref->next) {
     if(!strcmp(ref->soname, soname)) {
       lib = calloc(1, sizeof(rtld_ref_lib_t));
@@ -124,6 +126,7 @@ __rtld_lib_new(rtld_lib_t* prev, const char* soname) {
     }
   }
 
+  // .sprx and .so files have different loaders
   if(endswith(soname, ".sprx")) {
     return __rtld_sprx_new(prev, soname);
   } else {
@@ -148,6 +151,8 @@ int
 __rtld_lib_close(rtld_lib_t* ctx) {
   int err;
 
+  // close libs loaded by us
+  // TODO: refcount so we don't close a lib that is still used by rtld_ref_lib_t
   if(ctx->next && (err=__rtld_lib_close(ctx->next))) {
     return err;
   }
@@ -159,6 +164,7 @@ __rtld_lib_close(rtld_lib_t* ctx) {
 void
 __rtld_lib_destroy(rtld_lib_t* ctx) {
   if(ctx->next) {
+    // TODO: refcount
     __rtld_lib_destroy(ctx->next);
   }
 

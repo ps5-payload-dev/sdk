@@ -63,7 +63,7 @@ typedef struct rtld_sprx_lib {
 
 
 /**
- *
+ * Data structure needed for sysmod table
  **/
 typedef struct sysmodtab {
   const char* name;
@@ -267,17 +267,17 @@ sprx_open(rtld_lib_t* ctx) {
   int unload = 0;
   int error = 0;
 
-  // check if lib is is an alias for libkernel
+  // check if the lib is an alias for libkernel
   if(!strcmp(lib->soname, "libkernel.sprx") ||
      !strcmp(lib->soname, "libkernel_web.sprx") ||
      !strcmp(lib->soname, "libkernel_sys.sprx") ||
      !strcmp(lib->soname, "libdl.sprx") ||
      !strcmp(lib->soname, "libpthread.sprx")) {
-      if(kernel_dynlib_dlsym(-1, 0x1, "sceKernelDlsym")) {
-          handle = 1;
-      } else {
-          handle = 0x2001;
-      }
+    if(kernel_dynlib_dlsym(-1, 0x1, "sceKernelDlsym")) {
+      handle = 1;
+    } else {
+      handle = 0x2001;
+    }
   }
   // check if lib is already opened
   else if(kernel_dynlib_handle(-1, lib->soname, &handle) < 0) {
@@ -477,5 +477,3 @@ __rtld_sprx_init(void) {
 
   return 0;
 }
-
-
