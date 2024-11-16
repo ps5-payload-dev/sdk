@@ -166,6 +166,7 @@ r_direct_64(Elf64_Rela* rela) {
   const char* name = g_this.strtab + sym->st_name;
   void* val = 0;
 
+  // check if symbol is provided by a child
   for(rtld_lib_t *lib=g_this.next; lib!=0; lib=lib->next) {
     if((val=__rtld_lib_sym(lib, name))) {
       val += rela->r_addend;
@@ -173,6 +174,7 @@ r_direct_64(Elf64_Rela* rela) {
     }
   }
 
+  // ignore unresolved weak symbols
   if(ELF64_ST_BIND(sym->st_info) == STB_WEAK) {
     return 0;
   }
@@ -275,13 +277,11 @@ payload_load(void) {
     }
   }
 
-  // figure out the symtab size
+  // symtab size is determined using DT_GNU_HASH
   if(gnu_hash) {
     g_this.symtab_size = dynsym_count(gnu_hash) * sizeof(Elf64_Sym);
   }
 
-
-  
   // load needed libraries
   for(int i=0; _DYNAMIC[i].d_tag!=DT_NULL; i++) {
     switch(_DYNAMIC[i].d_tag) {

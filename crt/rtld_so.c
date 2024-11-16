@@ -259,7 +259,7 @@ r_glob_dat(rtld_so_lib_t* lib, Elf64_Rela* rela) {
   void* loc = lib->base_addr + rela->r_offset;
   void* val = 0;
 
-
+  // check if symbol is provided by a parent
   for(rtld_lib_t *l=(rtld_lib_t *)lib->prev; l!=0; l=l->prev) {
     if((val=__rtld_lib_sym(l, name))) {
       memcpy(loc, &val, sizeof(val));
@@ -267,6 +267,7 @@ r_glob_dat(rtld_so_lib_t* lib, Elf64_Rela* rela) {
     }
   }
 
+  // check if symbol is provided by a child
   for(rtld_lib_t *l=(rtld_lib_t *)lib; l!=0; l=l->next) {
     if((val=__rtld_lib_sym(l, name))) {
       memcpy(loc, &val, sizeof(val));
@@ -274,6 +275,7 @@ r_glob_dat(rtld_so_lib_t* lib, Elf64_Rela* rela) {
     }
   }
 
+  // ignore unresolved weak symbols
   if(ELF64_ST_BIND(sym->st_info) == STB_WEAK) {
     return 0;
   }
@@ -303,6 +305,7 @@ r_direct_64(rtld_so_lib_t* lib, Elf64_Rela* rela) {
   void* loc = lib->base_addr + rela->r_offset;
   void* val = 0;
 
+  // check if symbol is provided by a parent
   for(rtld_lib_t *l=(rtld_lib_t *)lib->prev; l!=0; l=l->prev) {
     if((val=__rtld_lib_sym(l, name))) {
       val += rela->r_addend;
@@ -311,6 +314,7 @@ r_direct_64(rtld_so_lib_t* lib, Elf64_Rela* rela) {
     }
   }
 
+  // check if symbol is provided by a child
   for(rtld_lib_t *l=(rtld_lib_t *)lib; l!=0; l=l->next) {
     if((val=__rtld_lib_sym(l, name))) {
       val += rela->r_addend;
@@ -319,6 +323,7 @@ r_direct_64(rtld_so_lib_t* lib, Elf64_Rela* rela) {
     }
   }
 
+  // ignore unresolved weak symbols
   if(ELF64_ST_BIND(sym->st_info) == STB_WEAK) {
     return 0;
   }
@@ -361,6 +366,7 @@ dt_needed(rtld_so_lib_t *lib, const char* soname) {
     return -1;
   }
 
+  // append child at the end of our deps
   while(it->next) {
     it = it->next;
   }
@@ -415,42 +421,42 @@ pt_reload(rtld_so_lib_t *lib, Elf64_Phdr *phdr) {
   void* addrx = 0;
   void* addrw = 0;
 
-  // Backup data.
+  // backup data
   if(!(data=malloc(memsz))) {
     klog_perror("malloc");
     return -1;
   }
   memcpy(data, addr, memsz);
 
-  // Create shm with executable permissions.
+  // create shm with executable permissions
   if((shm_fd=jitshm_create(0, memsz, prot | PROT_WRITE | PROT_EXEC)) < 0) {
     klog_perror("jitshm_create");
     error = -1;
   }
-  // Create an shm alias fd with write permissions.
+  // create an shm alias fd with write permissions
   else if((alias_fd=jitshm_alias(shm_fd, PROT_WRITE)) < 0) {
     klog_perror("jitshm_alias");
     error = -1;
   }
-  // Map shm into an executable address space.
+  // map shm into an executable address space
   else if((addrx=mmap(addr, memsz, prot, MAP_FIXED | MAP_PRIVATE,
                       shm_fd, 0)) == MAP_FAILED) {
     klog_perror("mmap");
     error = -1;
   }
-  // Map shm alias into a writable address space.
+  // map shm alias into a writable address space
   else if((addrw=mmap(0, memsz, PROT_WRITE, MAP_SHARED,
                       alias_fd, 0)) == MAP_FAILED) {
     klog_perror("mmap");
     error = -1;
   }
-  // Resore data.
+  // resore data
   else {
     memcpy(addrw, data, memsz);
     munmap(addrw, memsz);
   }
 
-  // Cleanup.
+  // cleanup
   free(data);
   if(alias_fd != -1) {
     __syscall(SYS_close, alias_fd);
@@ -527,6 +533,7 @@ pt_dynamic(rtld_so_lib_t *lib, Elf64_Phdr *phdr) {
     }
   }
 
+  // symtab size is determined using DT_GNU_HASH
   if(gnu_hash) {
     lib->symtab_size = dynsym_count(gnu_hash) * sizeof(Elf64_Sym);
   }
