@@ -39,7 +39,7 @@ static char* (*getenv)(const char*) = 0;
 
 
 /**
- * Standard libc macros.
+ * Standard posix macros.
  **/
 #define PROT_NONE  0x00
 #define PROT_READ  0x01
@@ -259,7 +259,15 @@ r_glob_dat(rtld_so_lib_t* lib, Elf64_Rela* rela) {
   void* loc = lib->base_addr + rela->r_offset;
   void* val = 0;
 
-  for(rtld_lib_t *l=(rtld_lib_t *)lib->next; l!=0; l=l->next) {
+
+  for(rtld_lib_t *l=(rtld_lib_t *)lib->prev; l!=0; l=l->prev) {
+    if((val=__rtld_lib_sym(l, name))) {
+      memcpy(loc, &val, sizeof(val));
+      return 0;
+    }
+  }
+
+  for(rtld_lib_t *l=(rtld_lib_t *)lib; l!=0; l=l->next) {
     if((val=__rtld_lib_sym(l, name))) {
       memcpy(loc, &val, sizeof(val));
       return 0;
@@ -295,7 +303,15 @@ r_direct_64(rtld_so_lib_t* lib, Elf64_Rela* rela) {
   void* loc = lib->base_addr + rela->r_offset;
   void* val = 0;
 
-  for(rtld_lib_t *l=(rtld_lib_t *)lib->next; l!=0; l=l->next) {
+  for(rtld_lib_t *l=(rtld_lib_t *)lib->prev; l!=0; l=l->prev) {
+    if((val=__rtld_lib_sym(l, name))) {
+      val += rela->r_addend;
+      memcpy(loc, &val, sizeof(val));
+      return 0;
+    }
+  }
+
+  for(rtld_lib_t *l=(rtld_lib_t *)lib; l!=0; l=l->next) {
     if((val=__rtld_lib_sym(l, name))) {
       val += rela->r_addend;
       memcpy(loc, &val, sizeof(val));
@@ -448,6 +464,42 @@ pt_reload(rtld_so_lib_t *lib, Elf64_Phdr *phdr) {
 
 
 /**
+ *  Figure out the symtab size.
+ **/
+static unsigned int
+dynsym_count(unsigned int *gnu_hash) {
+  unsigned int nbuckets = gnu_hash[0];
+  unsigned int symoffset = gnu_hash[1];
+  unsigned int bloom_size = gnu_hash[2];
+  unsigned long *bloom = (unsigned long *)(gnu_hash + 4);
+  unsigned int *buckets = (unsigned int *)(bloom + bloom_size);
+  unsigned int *chain = buckets + nbuckets;
+  unsigned int max_index = 0;
+  unsigned int index;
+
+  for(unsigned int i=0; i<nbuckets; i++) {
+    if(buckets[i] == 0) {
+      continue;
+    }
+
+    index = buckets[i];
+    while(1) {
+      if(chain[index-symoffset] & 1) {
+        break;
+      }
+      index++;
+    }
+
+    if(index > max_index) {
+      max_index = index;
+    }
+  }
+
+  return max_index + 1;
+}
+
+
+/**
  * Process a program header with the entry type PT_DYNAMIC.
  **/
 static int
@@ -475,10 +527,8 @@ pt_dynamic(rtld_so_lib_t *lib, Elf64_Phdr *phdr) {
     }
   }
 
-  // figure out the symtab size
   if(gnu_hash) {
-    lib->symtab_size = gnu_hash[0] + gnu_hash[1] + gnu_hash[2];
-    lib->symtab_size *= sizeof(Elf64_Sym);
+    lib->symtab_size = dynsym_count(gnu_hash) * sizeof(Elf64_Sym);
   }
 
   // load needed libraries

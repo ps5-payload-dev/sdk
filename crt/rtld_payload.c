@@ -23,8 +23,31 @@ along with this program; see the file COPYING. If not, see
 
 
 /**
+ * Standard posix macros.
+ **/
+#define RTLD_NEXT    ((void*)-1)
+#define RTLD_DEFAULT ((void*)-2)
+#define RTLD_SELF    ((void*)-3)
+
+#define RTLD_LAZY     0x0001
+#define RTLD_NOW      0x0002
+#define RTLD_MODEMASK 0x0003
+#define RTLD_GLOBAL   0x0100
+#define RTLD_LOCAL    0x0000
+#define RTLD_TRACE    0x0200
+#define RTLD_NODELETE 0x1000
+#define RTLD_NOLOAD   0x2000
+
+#define ENOENT 2
+#define ENOMEM 12
+#define EINVAL 22
+#define ENOSYS 78
+
+
+/**
  * Dependencies to standard libraries.
  **/
+static int (*strcmp)(const char*, const char*) = 0;
 static void* (*memcpy)(void*, const void*, unsigned long) = 0;
 static char* (*_Strerror)(int, char*) = 0;
 
@@ -37,11 +60,37 @@ extern Elf64_Dyn _DYNAMIC[];
 
 
 /**
- * Global variables.
+ * Foward declaration needed to initialze g_this.
  **/
-static rtld_lib_t* g_libhead = 0;
-static Elf64_Sym* g_symtab = 0;
-static char* g_strtab = 0;
+static int   this_open(rtld_lib_t* ctx);
+static void* this_sym(rtld_lib_t* ctx, const char* name);
+static int   this_close(rtld_lib_t* ctx);
+static void  this_destroy(rtld_lib_t* ctx);
+
+
+/**
+ * Extend rtld_lib_t anonymously with auxiliary parameters needed
+ * for resolving symbols in the payload needed by shared objects.
+ **/
+static struct {
+  struct rtld_lib;
+
+  Elf64_Sym* symtab;
+  char* strtab;
+  unsigned long symtab_size;
+} g_this = {
+  .soname  = "",
+  .open    = this_open,
+  .sym     = this_sym,
+  .close   = this_close,
+  .destroy = this_destroy
+};
+
+
+/**
+ * Used by dlerror();
+ **/
+static int g_dlerrno = 0;
 
 
 /**
@@ -49,10 +98,10 @@ static char* g_strtab = 0;
  **/
 static int
 dt_needed(const char* soname) {
-  rtld_lib_t* it = g_libhead;
+  rtld_lib_t* it = (rtld_lib_t*)&g_this;
   rtld_lib_t* lib;
 
-  while(it && it->next) {
+  while(it->next) {
     it = it->next;
   }
 
@@ -64,13 +113,9 @@ dt_needed(const char* soname) {
     klog_printf("unable to load '%s'\n", soname);
     __rtld_lib_destroy(lib);
     return -1;
-
-  } else if(!g_libhead) {
-    g_libhead = lib;
-
-  } else if(it) {
-    it->next = lib;
   }
+
+  it->next = lib;
 
   return 0;
 }
@@ -82,11 +127,11 @@ dt_needed(const char* soname) {
 static int
 r_glob_dat(Elf64_Rela* rela) {
   unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
-  Elf64_Sym* sym = g_symtab + ELF64_R_SYM(rela->r_info);
-  const char* name = g_strtab + sym->st_name;
+  Elf64_Sym* sym = g_this.symtab + ELF64_R_SYM(rela->r_info);
+  const char* name = g_this.strtab + sym->st_name;
   void* val = 0;
 
-  for(rtld_lib_t *lib=g_libhead; lib; lib=lib->next) {
+  for(rtld_lib_t *lib=g_this.next; lib; lib=lib->next) {
     if((val=__rtld_lib_sym(lib, name))) {
       return mdbg_copyin(-1, &val, loc, sizeof(val));
     }
@@ -117,11 +162,11 @@ r_jmp_slot(Elf64_Rela* rela) {
 static int
 r_direct_64(Elf64_Rela* rela) {
   unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
-  Elf64_Sym* sym = g_symtab + ELF64_R_SYM(rela->r_info);
-  const char* name = g_strtab + sym->st_name;
+  Elf64_Sym* sym = g_this.symtab + ELF64_R_SYM(rela->r_info);
+  const char* name = g_this.strtab + sym->st_name;
   void* val = 0;
 
-  for(rtld_lib_t *lib=g_libhead; lib!=0; lib=lib->next) {
+  for(rtld_lib_t *lib=g_this.next; lib!=0; lib=lib->next) {
     if((val=__rtld_lib_sym(lib, name))) {
       val += rela->r_addend;
       return mdbg_copyin(-1, &val, loc, sizeof(val));
@@ -161,10 +206,47 @@ r_relative(Elf64_Rela* rela) {
 
 
 /**
+ *  Figure out the symtab size.
+ **/
+static unsigned int
+dynsym_count(unsigned int *gnu_hash) {
+  unsigned int nbuckets = gnu_hash[0];
+  unsigned int symoffset = gnu_hash[1];
+  unsigned int bloom_size = gnu_hash[2];
+  unsigned long *bloom = (unsigned long *)(gnu_hash + 4);
+  unsigned int *buckets = (unsigned int *)(bloom + bloom_size);
+  unsigned int *chain = buckets + nbuckets;
+  unsigned int max_index = 0;
+  unsigned int index;
+
+  for(unsigned int i=0; i<nbuckets; i++) {
+    if(buckets[i] == 0) {
+      continue;
+    }
+
+    index = buckets[i];
+    while(1) {
+      if(chain[index-symoffset] & 1) {
+        break;
+      }
+      index++;
+    }
+
+    if(index > max_index) {
+      max_index = index;
+    }
+  }
+
+  return max_index + 1;
+}
+
+
+/**
  *
  **/
 static int
 payload_load(void) {
+  unsigned int *gnu_hash = 0;
   Elf64_Rela* rela = 0;
   long relasz = 0;
 
@@ -172,11 +254,15 @@ payload_load(void) {
   for(int i=0; _DYNAMIC[i].d_tag!=DT_NULL; i++) {
     switch(_DYNAMIC[i].d_tag) {
     case DT_SYMTAB:
-      g_symtab = (Elf64_Sym*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
+      g_this.symtab = (Elf64_Sym*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
       break;
 
     case DT_STRTAB:
-      g_strtab = (char*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
+      g_this.strtab = (char*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
+      break;
+
+    case DT_GNU_HASH:
+      gnu_hash = (unsigned int*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
       break;
 
     case DT_RELA:
@@ -189,11 +275,18 @@ payload_load(void) {
     }
   }
 
+  // figure out the symtab size
+  if(gnu_hash) {
+    g_this.symtab_size = dynsym_count(gnu_hash) * sizeof(Elf64_Sym);
+  }
+
+
+  
   // load needed libraries
   for(int i=0; _DYNAMIC[i].d_tag!=DT_NULL; i++) {
     switch(_DYNAMIC[i].d_tag) {
     case DT_NEEDED:
-      if(dt_needed(g_strtab + _DYNAMIC[i].d_un.d_val)) {
+      if(dt_needed(g_this.strtab + _DYNAMIC[i].d_un.d_val)) {
 	return -1;
       }
       break;
@@ -255,6 +348,9 @@ __rtld_payload_init(void) {
     return -1;
   }
 
+  if(!KERNEL_DLSYM(0x2, strcmp)) {
+    return -1;
+  }
   if(!KERNEL_DLSYM(0x2, memcpy)) {
     return -1;
   }
@@ -277,39 +373,61 @@ __rtld_payload_init(void) {
 
 int
 __rtld_payload_fini(void) {
-  int err;
+  int err = 0;
 
-  err =__rtld_lib_close(g_libhead);
-  __rtld_lib_destroy(g_libhead);
+  if(g_this.next) {
+    err =__rtld_lib_close(g_this.next);
+    __rtld_lib_destroy(g_this.next);
+  }
 
   return err;
 }
 
-#define RTLD_NEXT    ((void*)-1)
-#define RTLD_DEFAULT ((void*)-2)
-#define RTLD_SELF    ((void*)-3)
-
-#define RTLD_LAZY     0x0001
-#define RTLD_NOW      0x0002
-#define RTLD_MODEMASK 0x0003
-#define RTLD_GLOBAL   0x0100
-#define RTLD_LOCAL    0x0000
-#define RTLD_TRACE    0x0200
-#define RTLD_NODELETE 0x1000
-#define RTLD_NOLOAD   0x2000
-
-#define ENOENT 2
-#define ENOMEM 12
-#define EINVAL 22
-#define ENOSYS 78
+static int
+this_open(rtld_lib_t* ctx) {
+  return 0;
+}
 
 
-static int g_dlerrno = 0;
+static void*
+this_sym(rtld_lib_t* ctx, const char* name) {
+  if(ctx != (rtld_lib_t*)&g_this) {
+    return 0;
+  }
+
+  if(!g_this.symtab || !g_this.strtab) {
+    return 0;
+  }
+
+  for(unsigned long i=0; i<g_this.symtab_size/sizeof(Elf64_Sym); i++) {
+    if(!g_this.symtab[i].st_size) {
+      continue;
+    }
+
+    if(!strcmp(name, g_this.strtab + g_this.symtab[i].st_name)) {
+      return __image_start + g_this.symtab[i].st_value;
+    }
+  }
+
+  return 0;
+}
+
+
+static int
+this_close(rtld_lib_t* ctx) {
+  return 0;
+}
+
+
+static void
+this_destroy(rtld_lib_t* ctx) {
+}
 
 
 
 void*
 dlopen(const char *filename, int flags) {
+  rtld_lib_t* prev = 0;
   rtld_lib_t* lib;
 
   if(!(flags & RTLD_MODEMASK)) {
@@ -320,22 +438,34 @@ dlopen(const char *filename, int flags) {
     g_dlerrno = ENOSYS;
     return 0;
   }
-  if(flags & RTLD_NOW) {
-    g_dlerrno = ENOSYS;
-    return 0;
-  }
-  if(flags & RTLD_GLOBAL) {
+  if(flags & RTLD_NOLOAD) {
     g_dlerrno = ENOSYS;
     return 0;
   }
 
-  if(!(lib=__rtld_lib_new(0, filename))) {
+  /*
+  if(flags & RTLD_LAZY) {
+    g_dlerrno = ENOSYS;
+    return 0;
+  }
+  */
+
+  prev = (rtld_lib_t*)&g_this;
+  while(prev && prev->next) {
+      prev = prev->next;
+  }
+
+  if(!(lib=__rtld_lib_new(prev, filename))) {
     g_dlerrno = ENOMEM;
     return 0;
   }
   if((g_dlerrno=__rtld_lib_open(lib))) {
     __rtld_lib_destroy(lib);
     return 0;
+  }
+
+  if((flags & RTLD_LOCAL) || !(flags & RTLD_GLOBAL)) {
+    prev->next = 0;
   }
 
   g_dlerrno = 0;
@@ -345,13 +475,10 @@ dlopen(const char *filename, int flags) {
 
 void*
 dlsym(void *handle, const char *symbol) {
+  rtld_lib_t* lib = handle;
   void* addr;
 
   if(handle == 0) {
-    g_dlerrno = ENOSYS;
-    return 0;
-  }
-  if(handle == RTLD_DEFAULT) {
     g_dlerrno = ENOSYS;
     return 0;
   }
@@ -363,14 +490,19 @@ dlsym(void *handle, const char *symbol) {
     g_dlerrno = ENOSYS;
     return 0;
   }
-
-  if(!(addr=__rtld_lib_sym(handle, symbol))) {
-    g_dlerrno = EINVAL;
-    return 0;
+  if(handle == RTLD_DEFAULT) {
+    lib = (rtld_lib_t*)&g_this;
   }
 
-  g_dlerrno = 0;
-  return addr;
+  while(lib) {
+    if((addr=__rtld_lib_sym(lib, symbol))) {
+      return addr;
+    }
+    lib = lib->next;
+  }
+
+  g_dlerrno = EINVAL;
+  return 0;
 }
 
 

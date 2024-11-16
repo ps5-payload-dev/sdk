@@ -45,8 +45,9 @@ random_hexdump(uint8_t* buf, size_t size) {
 }
 
 
-int main() {
-  void* libSceRandom;
+static int
+test_random() {
+ void* libSceRandom;
   uint8_t buf[0x40];
 
   if(!(libSceRandom=dlopen("libSceRandom.sprx", RTLD_LAZY))) {
@@ -59,11 +60,53 @@ int main() {
   } else {
     random_hexdump(buf, sizeof(buf));
   }
-  
+
   if(dlclose(libSceRandom)) {
     puts(dlerror());
     return -1;
   }
-  
+
+  return 0;
+}
+
+
+int main();
+
+static int
+test_main() {
+  void* p;
+    
+  if(!(p=dlsym(RTLD_DEFAULT, "main"))) {
+    puts(dlerror());
+    return -1;
+  } else {
+      printf("main: %p\n", &main);
+      printf("p: %p\n", p);
+      return 0;
+  }
+}
+
+
+static int
+test_printf() {
+  void* p;
+    
+  if(!(p=dlsym(RTLD_DEFAULT, "printf"))) {
+    puts(dlerror());
+    return -1;
+  } else {
+      printf("printf: %p\n", &printf);
+      printf("p: %p\n", p);
+      return 0;
+  }
+}
+
+
+int main() {
+
+  test_random();
+  test_main();
+  test_printf();
+
   return 0;
 }
