@@ -39,6 +39,8 @@ OBJS := $(SRCS:.c=.o)
 
 ARCHIVE := libc.a
 
+.PHONY: all clean install
+
 all: $(ARCHIVE)
 
 $(ARCHIVE): $(OBJS)

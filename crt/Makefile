@@ -41,6 +41,8 @@ OBJ := crt.o syscall.o klog.o nid.o kernel.o rtld.o rtld_so.o rtld_sprx.o \
 
 ARCHIVE := libcrt.a
 
+.PHONY: all clean install
+
 all: $(ARCHIVE)
 
 $(ARCHIVE): $(OBJ)

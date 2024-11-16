@@ -36,6 +36,8 @@ TOOLS := bin/cmake-bin-wrapper \
 
 LDSCRIPTS := elf_x86_64.x
 
+.PHONY: all clean install
+
 all: bin/prospero-nid
 
 clean:

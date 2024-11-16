@@ -44,6 +44,8 @@ SHARED   := $(SOURCES:.c=.so)
 NID_DB     := aerolib.csv
 NID_DB_URL := https://raw.githubusercontent.com/zecoxao/sce_symbols/main/$(NID_DB)
 
+.PHONY: all clean install
+
 all: $(SOURCES) $(SHARED)
 
 stubs: $(NID_DB) $(STUBS)
