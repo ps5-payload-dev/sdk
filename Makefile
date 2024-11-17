@@ -29,7 +29,7 @@ endif
 $(TOPTARGETS): $(SUBDIRS)
 
 $(SUBDIRS):
-	$(MAKE) -C $@ $(MAKECMDGOALS)
+	$(MAKE) -j1 -C $@ $(MAKECMDGOALS)
 
 install:
 	cp -r samples/. $(DESTDIR)/samples
