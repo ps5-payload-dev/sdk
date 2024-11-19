@@ -38,6 +38,6 @@ qsort_adapt_cmp(const void *x, const void *y, void *ctx) {
 void
 qsort_r(void* base, size_t nmemb, size_t size, void* ctx,
 	int (*cmp)(void *, const void *, const void *)) {
-  qsort_adapt_t qsort_adapt_ctx = {ctx, cmp};
-  qsort_s(base, nmemb, size, &qsort_adapt_cmp, &qsort_adapt_ctx);
+  qsort_adapt_t qsort_adapt = {ctx, cmp};
+  qsort_s(base, nmemb, size, &qsort_adapt_cmp, &qsort_adapt);
 }
