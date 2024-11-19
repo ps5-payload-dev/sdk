@@ -17,16 +17,27 @@ along with this program; see the file COPYING. If not, see
 #include <stdlib.h>
 
 
-void qsort_s(void *base, size_t nmemb, size_t size,
-	     int (*cmp)(void *, const void *, const void *), void* arg);
+typedef struct qsort_adapt {
+  void *ctx;
+  int (*cmp)(void* ctx, const void* x, const void* y);
+} qsort_adapt_t;
 
 
-/**
- * Note, the order of the last two args is different from GNU and C11.
- * This was fixed in FreeBSD 14.
- **/
+void qsort_s(void* base, size_t nmemb, size_t size,
+	     int (*cmp)(const void *, const void *, void *),
+	     void* ctx);
+
+
+static int
+qsort_adapt_cmp(const void *x, const void *y, void *ctx) {
+  qsort_adapt_t* adapt = (qsort_adapt_t*)ctx;
+  return adapt->cmp(adapt->ctx, x, y);
+}
+
+
 void
-qsort_r(void *base, size_t nmemb, size_t size, void *arg,
+qsort_r(void* base, size_t nmemb, size_t size, void* ctx,
 	int (*cmp)(void *, const void *, const void *)) {
-  qsort_s(base, nmemb, size, cmp, arg);
+  qsort_adapt_t qsort_adapt_ctx = {ctx, cmp};
+  qsort_s(base, nmemb, size, &qsort_adapt_cmp, &qsort_adapt_ctx);
 }
