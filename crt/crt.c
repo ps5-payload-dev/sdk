@@ -87,7 +87,7 @@ pre_init(payload_args_t *args) {
 /**
  * Terminate the payload.
  **/
-static void
+static int
 terminate(payload_args_t *args) {
   void (*exit)(int) = 0;
 
@@ -95,12 +95,16 @@ terminate(payload_args_t *args) {
 
   // we are running inside a hijacked process, just return
   if(kernel_dynlib_dlsym(-1, 0x2001, "sceKernelDlsym")) {
-    return;
+    return 0;
   }
 
   if(KERNEL_DLSYM(0x2, exit)) {
     exit(*args->payloadout);
   }
+
+  __builtin_trap();
+
+  return -1;
 }
 
 
