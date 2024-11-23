@@ -12,6 +12,12 @@ john@localhost:ps5-payload-dev/sdk$ sudo apt-get install bash clang-15 lld-15 # 
 john@localhost:ps5-payload-dev/sdk$ sudo apt-get install socat cmake meson pkg-config # optional
 ```
 
+If you are using Fedora, you can install dependencies as follows (tested with version 41):
+```console
+john@localhost:ps5-payload-dev/sdk$ sudo dnf install bash clang lld # required
+john@localhost:ps5-payload-dev/sdk$ sudo dnf install socat cmake meson pkg-config # optional
+```
+
 ## Quick-start
 To download and install a binary distribution for GNU/Linux:
 ```console
