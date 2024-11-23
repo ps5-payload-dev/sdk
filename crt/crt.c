@@ -95,7 +95,7 @@ terminate(payload_args_t *args) {
 
   // we are running inside a hijacked process, just return
   if(kernel_dynlib_dlsym(-1, 0x2001, "sceKernelDlsym")) {
-    return 0;
+    return *args->payloadout;
   }
 
   if(KERNEL_DLSYM(0x2, exit)) {
