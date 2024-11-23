@@ -1,0 +1,5 @@
+{
+	"cmake.configureEnvironment": {
+		"CMAKE_TOOLCHAIN_FILE": "${env:PS5_PAYLOAD_SDK}/toolchain/prospero.cmake"
+	}
+}
