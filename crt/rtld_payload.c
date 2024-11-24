@@ -335,6 +335,14 @@ __rtld_payload_init(void) {
   unsigned long rootdir;
   int err;
 
+  // Some jailbreak entry points does not apply relocations to the designated
+  // initializer of g_this, so we apply them here again just in case.
+  g_this.soname  = "";
+  g_this.open    = this_open;
+  g_this.sym     = this_sym;
+  g_this.close   = this_close;
+  g_this.destroy = this_destroy;
+
   if(!(rootdir=kernel_get_proc_rootdir(pid))) {
     return -1;
   }
