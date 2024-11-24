@@ -111,7 +111,7 @@ terminate(payload_args_t *args) {
 /**
  * Entry-point invoked by the ELF loader.
  **/
-void
+int
 _start(payload_args_t *args) {
   char** (*getargv)(void) = 0;
   int (*getargc)(void) = 0;
@@ -127,8 +127,7 @@ _start(payload_args_t *args) {
 
   // Init runtime.
   if((*args->payloadout=pre_init(args))) {
-    terminate(args);
-    return;
+    return terminate(args);
   }
 
   // Obtain argc, argv and envp from libkernel.
@@ -154,5 +153,5 @@ _start(payload_args_t *args) {
     __fini_array_start[count-i-1]();
   }
 
-  terminate(args);
+  return terminate(args);
 }

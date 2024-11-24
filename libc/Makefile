@@ -33,6 +33,7 @@ endif
 CFLAGS := -target x86_64-sie-ps5 -fPIC  -fno-plt -fno-stack-protector
 CFLAGS += -nobuiltininc -isystem ../include/freebsd
 CFLAGS += -fvisibility-nodllstorageclass=default
+CFLAGS += -O1
 
 SRCS := $(wildcard *.c)
 OBJS := $(SRCS:.c=.o)
