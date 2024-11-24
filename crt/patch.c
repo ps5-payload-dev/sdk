@@ -41,6 +41,7 @@ patch_sceKernelSpawn(void) {
 
   if(!(loc=kernel_dynlib_dlsym(-1, 0x1, "sceKernelSpawn"))) {
     if(!(loc=kernel_dynlib_dlsym(-1, 0x2001, "sceKernelSpawn"))) {
+      klog_puts("patch_sceKernelSpawn: unable to resolve sceKernelSpawn");
       return -1;
     }
   }
