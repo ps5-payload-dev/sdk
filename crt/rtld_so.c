@@ -635,6 +635,11 @@ so_load(rtld_so_lib_t* lib, const char* path) {
       case R_X86_64_RELATIVE:
 	error = r_relative(lib, &rela[j]);
 	break;
+
+      default:
+        klog_printf("Unsupported relocation type %x\n",
+                    rela[i].r_info);
+        return -1;
       }
     }
   }

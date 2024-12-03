@@ -63,18 +63,12 @@ typedef struct rtld_sprx_lib {
 
 
 /**
- * Data structure needed for sysmod table
- **/
-typedef struct sysmodtab {
-  const char* name;
-  unsigned int handle;
-} sysmodtab_t;
-
-
-/**
  * Lookup table for sceSysmoduleLoadModuleInternal().
  **/
-static const sysmodtab_t sysmodtab[] = {
+struct sysmodtab {
+  const char* name;
+  unsigned int handle;
+} sysmodtab[] = {
   {"libSceAbstractLocal.sprx", 0x8000005f},
   {"libSceAbstractStorage.sprx", 0x80000058},
   {"libSceAbstractTcs.sprx", 0x800000a1},
