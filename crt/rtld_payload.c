@@ -321,9 +321,9 @@ payload_load(void) {
       break;
 
     default:
-        klog_printf("Unsupported relocation type %x\n",
-                    rela[i].r_info);
-        return -1;
+      klog_printf("Unsupported relocation type %x\n",
+                  rela[i].r_info);
+      return -1;
     }
   }
 
