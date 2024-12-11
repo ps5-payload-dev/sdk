@@ -440,6 +440,9 @@ this_destroy(rtld_lib_t* ctx) {
 
 void*
 dlopen(const char *filename, int flags) {
+  unsigned char privcaps[16] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
+                                0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
+  unsigned char caps[16];
   rtld_lib_t* prev = 0;
   rtld_lib_t* lib;
 
@@ -472,8 +475,24 @@ dlopen(const char *filename, int flags) {
     g_dlerrno = ENOMEM;
     return 0;
   }
+
+  if(kernel_get_ucred_caps(-1, caps)) {
+    g_dlerrno = -1;
+    return 0;
+  }
+  if(kernel_set_ucred_caps(-1, privcaps)) {
+    g_dlerrno = -1;
+    return 0;
+  }
+
   if((g_dlerrno=__rtld_lib_open(lib))) {
     __rtld_lib_destroy(lib);
+    kernel_get_ucred_caps(-1, caps);
+    return 0;
+  }
+
+  if(kernel_set_ucred_caps(-1, caps)) {
+    g_dlerrno = -1;
     return 0;
   }
 
