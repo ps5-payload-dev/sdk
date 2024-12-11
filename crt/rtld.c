@@ -156,6 +156,9 @@ __rtld_lib_close(rtld_lib_t* ctx) {
   if(ctx->next && (err=__rtld_lib_close(ctx->next))) {
     return err;
   }
+  if(ctx->prev) {
+    ctx->prev->next = 0;
+  }
 
   return ctx->close(ctx);
 }
