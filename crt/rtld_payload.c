@@ -466,6 +466,10 @@ dlopen(const char *filename, int flags) {
   }
   */
 
+  if(!filename) {
+      return &g_this;
+  }
+
   prev = (rtld_lib_t*)&g_this;
   while(prev && prev->next) {
       prev = prev->next;
