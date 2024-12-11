@@ -25,6 +25,7 @@ along with this program; see the file COPYING. If not, see
 #define SYS_munmap      73
 #define SYS_mprotect    74
 #define SYS_setsockopt  105
+#define SYS_stat        188
 #define SYS_sysctl      202
 #define SYS_mmap        477
 #define SYS_lseek       478

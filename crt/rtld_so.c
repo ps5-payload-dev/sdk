@@ -200,6 +200,7 @@ static int
 so_find(const char* cwd, const char *soname, char* path) {
   unsigned long off = 0;
   const char *ldpaths;
+  char buf[0x100];
   int err = 0;
 
   if(!soname || !*soname || !path) {
@@ -208,7 +209,7 @@ so_find(const char* cwd, const char *soname, char* path) {
 
   path[0] = 0;
   if(soname[0] == '/') {
-      if(!(err=__syscall(SYS_access, soname, 0))) {
+    if(!(err=__syscall(SYS_stat, soname, buf))) {
       strcpy(path, soname);
     }
     return err;
@@ -218,7 +219,7 @@ so_find(const char* cwd, const char *soname, char* path) {
     strcpy(path, cwd);
     strcat(path, "/");
     strcat(path, soname);
-    if(!__syscall(SYS_access, path, 0)) {
+    if(!__syscall(SYS_stat, path, buf)) {
       return 0;
     }
   }
@@ -231,7 +232,7 @@ so_find(const char* cwd, const char *soname, char* path) {
 	path[off+1] = 0;
 	strcat(path, soname);
 	off = 0;
-	if(!__syscall(SYS_access, path, 0)) {
+	if(!__syscall(SYS_stat, path, buf)) {
 	  return 0;
 	}
       }
