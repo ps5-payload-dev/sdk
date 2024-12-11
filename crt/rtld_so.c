@@ -676,14 +676,15 @@ so_open(rtld_lib_t* ctx) {
   rtld_so_lib_t* lib = (rtld_so_lib_t*)ctx;
   char path[0x400];
   char cwd[0x400];
+  int err;
 
   if(!getcwd(cwd, sizeof(cwd))) {
     klog_perror("getcwd");
     return -1;
   }
 
-  if(so_find(cwd, lib->soname, path)) {
-    return -1;
+  if((err=so_find(cwd, lib->soname, path))) {
+    return err;
   }
 
   return so_load(lib, path);
