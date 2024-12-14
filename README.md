@@ -66,4 +66,4 @@ the GPLv3+.
 [issues]: https://github.com/ps5-payload-dev/sdk/issues/new
 [elfldr]: https://github.com/ps5-payload-dev/elfldr
 [PS5SDK]: https://github.com/PS5Dev/PS5SDK
-[webkit]: https://github.com/Cryptogenic/PS5-IPV6-Kernel-Exploit
+[webkit]: https://github.com/PS5Dev/PS5-UMTX-Jailbreak
