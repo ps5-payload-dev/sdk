@@ -102,16 +102,17 @@ ref_destroy(rtld_lib_t* ctx) {
 
 rtld_lib_t*
 __rtld_lib_new(rtld_lib_t* prev, const char* soname) {
+  rtld_lib_t* first = prev;
   rtld_ref_lib_t* lib = 0;
   rtld_lib_t* ref = 0;
 
   // find the last lib in the linked list
-  while(prev && prev->prev) {
-    prev = prev->prev;
+  while(first->prev) {
+    first = first->prev;
   }
 
   // check if the lib is already loaded
-  for(ref=prev; ref; ref=ref->next) {
+  for(ref=first; ref; ref=ref->next) {
     if(!strcmp(ref->soname, soname)) {
       lib = calloc(1, sizeof(rtld_ref_lib_t));
       lib->soname  = strdup(soname);
