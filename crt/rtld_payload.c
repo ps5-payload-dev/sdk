@@ -386,13 +386,13 @@ __rtld_payload_init(void) {
 
 int
 __rtld_payload_fini(void) {
+  rtld_lib_t* next = g_this.next;
   int err = 0;
 
-  if(g_this.next) {
-    err =__rtld_lib_close(g_this.next);
-    __rtld_lib_destroy(g_this.next);
+  if(next) {
+    err = __rtld_lib_close(next);
+    __rtld_lib_destroy(next);
   }
-
   return err;
 }
 
