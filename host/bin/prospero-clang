@@ -40,7 +40,8 @@ for ARG in "$@"; do
 	LIBS_KERN=""
     fi
     if [[ "$ARG" == "-nostartfiles" ||
-	  "$ARG" == "-shared" ]]; then
+          "$ARG" == "-c" ||
+          "$ARG" == "-shared" ]]; then
 	LIBS_CRT=""
     fi
 done
