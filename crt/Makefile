@@ -23,11 +23,11 @@ ifndef CC
     $(error No suitable compiler found)
 endif
 
-ARS := llvm-ar-19 llvm-ar-18 llvm-ar-17 llvm-ar-16 llvm-ar-15 llvm-ar ar
-ARS := $(foreach AR,$(ARS),$(if $(shell command -v $(AR) 2> /dev/null),$(AR)))
-AR  := $(firstword $(ARS))
-ifndef AR
-    $(error No suitable archiver found)
+LDS := ld.lld-19 ld.lld-18 ld.lld-17 ld.lld-16 ld.lld-15 ld.lld ld
+LDS := $(foreach LD,$(LDS),$(if $(shell command -v $(LD) 2> /dev/null),$(LD)))
+LD  := $(firstword $(LDS))
+ifndef LD
+    $(error No suitable linker found)
 endif
 
 CFLAGS += -ffreestanding -fno-builtin -nostdlib -fPIC
@@ -39,14 +39,12 @@ CFLAGS += -O1
 OBJ := crt.o syscall.o klog.o nid.o kernel.o rtld.o rtld_so.o rtld_sprx.o \
        rtld_payload.o patch.o mdbg.o
 
-ARCHIVE := libcrt.a
-
 .PHONY: all clean install
 
-all: $(ARCHIVE)
+all: crt1.o
 
-$(ARCHIVE): $(OBJ)
-	$(AR) -rsc $@ $^
+crt1.o: $(OBJ)
+	$(LD) -m elf_x86_64 -r -o $@ $^
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $^
@@ -54,6 +52,6 @@ $(ARCHIVE): $(OBJ)
 clean:
 	rm -f *.o *.a
 
-install: $(ARCHIVE)
+install: crt1.o
 	install -d $(DESTDIR)/target/lib
 	install $^ $(DESTDIR)/target/lib
