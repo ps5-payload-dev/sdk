@@ -65,7 +65,7 @@ exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang++" \
      -frtti -fexceptions \
      $LIBS_CXX $LIBS_C \
      --end-no-unused-arguments \
-     "$@" $LIBS_CRT \
+     "$@" \
      --start-no-unused-arguments \
-     $LIBS_DEPS $LIBS_KERN \
+     $LIBS_CRT $LIBS_DEPS $LIBS_KERN \
      --end-no-unused-arguments
