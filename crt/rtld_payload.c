@@ -83,7 +83,8 @@ static struct {
   .open    = this_open,
   .sym     = this_sym,
   .close   = this_close,
-  .destroy = this_destroy
+  .destroy = this_destroy,
+  .refcnt  = 0
 };
 
 
@@ -347,6 +348,7 @@ __rtld_payload_init(void) {
   g_this.sym     = this_sym;
   g_this.close   = this_close;
   g_this.destroy = this_destroy;
+  g_this.refcnt  = 0;
 
   if(!(rootdir=kernel_get_proc_rootdir(pid))) {
     return -1;
@@ -391,7 +393,6 @@ __rtld_payload_fini(void) {
 
   if(next) {
     err = __rtld_lib_close(next);
-    __rtld_lib_destroy(next);
   }
   return err;
 }
@@ -443,7 +444,7 @@ dlopen(const char *filename, int flags) {
   unsigned char privcaps[16] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
                                 0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
   unsigned char caps[16];
-  rtld_lib_t* prev = 0;
+  rtld_lib_t* last = 0;
   rtld_lib_t* lib;
 
   if(!(flags & RTLD_MODEMASK)) {
@@ -470,12 +471,12 @@ dlopen(const char *filename, int flags) {
       return &g_this;
   }
 
-  prev = (rtld_lib_t*)&g_this;
-  while(prev && prev->next) {
-      prev = prev->next;
+  last = (rtld_lib_t*)&g_this;
+  while(last && last->next) {
+      last = last->next;
   }
 
-  if(!(lib=__rtld_lib_new(prev, filename))) {
+  if(!(lib=__rtld_lib_new(last, filename))) {
     g_dlerrno = ENOMEM;
     return 0;
   }
@@ -491,17 +492,18 @@ dlopen(const char *filename, int flags) {
 
   if((g_dlerrno=__rtld_lib_open(lib))) {
     __rtld_lib_destroy(lib);
-    kernel_get_ucred_caps(-1, caps);
+    kernel_set_ucred_caps(-1, caps);
     return 0;
   }
 
   if(kernel_set_ucred_caps(-1, caps)) {
+    __rtld_lib_close(lib);
     g_dlerrno = -1;
     return 0;
   }
 
   if((flags & RTLD_LOCAL) || !(flags & RTLD_GLOBAL)) {
-    prev->next = 0;
+    last->next = 0;
   }
 
   g_dlerrno = 0;
@@ -544,8 +546,10 @@ dlsym(void *handle, const char *symbol) {
 
 int
 dlclose(void *handle) {
-  if(!(g_dlerrno=__rtld_lib_close(handle))) {
-    __rtld_lib_destroy(handle);
+  if(&g_this == handle) {
+    g_dlerrno = -1;
+  } else {
+    g_dlerrno = __rtld_lib_close(handle);
   }
 
   return g_dlerrno;

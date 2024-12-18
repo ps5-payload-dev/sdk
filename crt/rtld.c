@@ -76,7 +76,8 @@ endswith(const char *string, const char* suffix) {
 
 static int
 ref_open(rtld_lib_t* ctx) {
-  return 0; // ref is already opened
+  rtld_ref_lib_t* lib = (rtld_ref_lib_t*)ctx;
+  return __rtld_lib_open(lib->ref);
 }
 
 
@@ -89,7 +90,8 @@ ref_sym(rtld_lib_t* ctx, const char* name) {
 
 static int
 ref_close(rtld_lib_t* ctx) {
-  return 0; // ref is closed by original owner
+  rtld_ref_lib_t* lib = (rtld_ref_lib_t*)ctx;
+  return __rtld_lib_close(lib->ref);
 }
 
 
@@ -122,6 +124,7 @@ __rtld_lib_new(rtld_lib_t* prev, const char* soname) {
       lib->sym     = ref_sym;
       lib->close   = ref_close;
       lib->destroy = ref_destroy;
+      lib->refcnt  = 0;
 
       return (rtld_lib_t*)lib;
     }
@@ -138,7 +141,11 @@ __rtld_lib_new(rtld_lib_t* prev, const char* soname) {
 
 int
 __rtld_lib_open(rtld_lib_t* ctx) {
-  return ctx->open(ctx);
+  ctx->refcnt++;
+  if(ctx->refcnt == 1) {
+    return ctx->open(ctx);
+  }
+  return 0;
 }
 
 
@@ -152,8 +159,11 @@ int
 __rtld_lib_close(rtld_lib_t* ctx) {
   int err;
 
-  // close libs loaded by us
-  // TODO: refcount so we don't close a lib that is still used by rtld_ref_lib_t
+  ctx->refcnt--;
+  if(ctx->refcnt > 0) {
+    return 0;
+  }
+
   if(ctx->next && (err=__rtld_lib_close(ctx->next))) {
     return err;
   }
@@ -161,17 +171,16 @@ __rtld_lib_close(rtld_lib_t* ctx) {
     ctx->prev->next = 0;
   }
 
-  return ctx->close(ctx);
+  if(!(err=ctx->close(ctx))) {
+    __rtld_lib_destroy(ctx);
+  }
+
+  return err;
 }
 
 
 void
 __rtld_lib_destroy(rtld_lib_t* ctx) {
-  if(ctx->next) {
-    // TODO: refcount
-    __rtld_lib_destroy(ctx->next);
-  }
-
   ctx->destroy(ctx);
 }
 

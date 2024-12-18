@@ -758,6 +758,7 @@ __rtld_so_new(rtld_lib_t* prev, const char *soname) {
   lib->sym     = so_sym;
   lib->close   = so_close;
   lib->destroy = so_destroy;
+  lib->refcnt  = 0;
 
   return (rtld_lib_t*)lib;
 }

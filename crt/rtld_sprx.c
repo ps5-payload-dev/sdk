@@ -413,6 +413,7 @@ __rtld_sprx_new(rtld_lib_t* prev, const char *soname) {
   lib->sym     = sprx_sym;
   lib->close   = sprx_close;
   lib->destroy = sprx_destroy;
+  lib->refcnt  = 0;
 
   return (rtld_lib_t*)lib;
 }
