@@ -77,6 +77,7 @@ int kernel_overlap_sockets(pid_t pid, int master_sock, int victim_sock);
 int kernel_dynlib_handle(pid_t pid, const char* basename, uint32_t *handle);
 intptr_t kernel_dynlib_dlsym(pid_t pid, uint32_t handle, const char *sym);
 intptr_t kernel_dynlib_resolve(pid_t pid, uint32_t handle, const char *nid);
+intptr_t kernel_dynlib_mapbase_addr(pid_t pid, uint32_t handle);
 intptr_t kernel_dynlib_entry_addr(pid_t pid, uint32_t handle);
 intptr_t kernel_dynlib_init_addr(pid_t pid, uint32_t handle);
 intptr_t kernel_dynlib_fini_addr(pid_t pid, uint32_t handle);
