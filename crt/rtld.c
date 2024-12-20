@@ -108,7 +108,7 @@ __rtld_lib_new(rtld_lib_t* prev, const char* soname) {
   rtld_ref_lib_t* lib = 0;
   rtld_lib_t* ref = 0;
 
-  // find the last lib in the linked list
+  // find the first lib in the linked list
   while(first->prev) {
     first = first->prev;
   }
