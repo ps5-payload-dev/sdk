@@ -39,7 +39,7 @@ extern int main(int argc, char* argv[], char *envp[]);
 
 
 /**
- * Init functrions for crt modules.
+ * Init and fini functions for crt modules.
  **/
 int __syscall_init(payload_args_t* args);
 int __kernel_init(payload_args_t* args);
@@ -54,7 +54,7 @@ int __rtld_fini(void);
  **/
 static int
 pre_init(payload_args_t *args) {
-  int *__isthreaded;
+  int *__isthreaded = 0;
   int error = 0;
 
   if((error=__syscall_init(args))) {
