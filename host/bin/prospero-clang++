@@ -27,6 +27,7 @@ LIBS_C="-lc"
 LIBS_CXX="-lunwind -lc++abi -lc++"
 LIBS_DEPS="-lSceLibcInternal -lSceNet"
 LIBS_KERN="-lkernel_web"
+TU=""
 
 for ARG in "$@"; do
     if [[ "$ARG" == "-nostdlib" ||
@@ -49,7 +50,17 @@ for ARG in "$@"; do
 	  "$ARG" == "-shared" ]]; then
 	LIBS_CRT=""
     fi
+    if [[ ! "${ARG:0:1}" == "-" ]]; then
+	TU="${ARG}"
+    fi
 done
+if [[ "${TU}" == "" ]]; then
+    LIBS_CRT=""
+    LIBS_C=""
+    LIBS_CXX=""
+    LIBS_DEPS=""
+    LIBS_KERN=""
+fi
 
 # ensure clang++ knows where prospero-lld is at
 export PATH="${SCRIPT_DIR}:${PATH}"
