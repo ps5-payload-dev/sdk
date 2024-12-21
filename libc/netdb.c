@@ -344,6 +344,7 @@ int
 getnameinfo(const struct sockaddr *sa, socklen_t salen, char *hostname,
 	    size_t hostlen, char *servname, size_t servlen, int flags) {
   struct sockaddr_in *addr_in = (struct sockaddr_in *)sa;
+  int port;
 
   if(!hostname && !servname) {
     return EAI_NONAME;
@@ -365,7 +366,31 @@ getnameinfo(const struct sockaddr *sa, socklen_t salen, char *hostname,
   }
 
   if(servname) {
-    snprintf(servname, servlen, "%d", ntohs(addr_in->sin_port));
+    switch((port=ntohs(addr_in->sin_port))) {
+    case 21:
+      strncpy(servname, "ftp", servlen);
+      break;
+
+    case 22:
+      strncpy(servname, "ssh", servlen);
+      break;
+
+    case 23:
+      strncpy(servname, "telnet", servlen);
+      break;
+
+    case 80:
+      strncpy(servname, "http", servlen);
+      break;
+
+    case 443:
+      strncpy(servname, "https", servlen);
+      break;
+
+    default:
+      snprintf(servname, servlen, "%d", port);
+      break;
+    }
   }
 
   return 0;
