@@ -19,8 +19,6 @@ along with this program; see the file COPYING. If not, see
 
 static __attribute__ ((used)) long ptr_syscall = 0;
 
-static payload_args_t* payload_args = 0;
-
 
 asm(".intel_syntax noprefix\n"
     ".global syscall\n"
@@ -2634,12 +2632,6 @@ asm(".intel_syntax noprefix\n"
     "  jmp qword ptr [rip + ptr_syscall]\n"
     "  ret\n"
     );
-
-
-payload_args_t*
-payload_get_args(void) {
-  return payload_args;
-}
 
 
 __attribute__((used))

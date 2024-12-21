@@ -50,6 +50,12 @@ int __rtld_fini(void);
 
 
 /**
+ * Remember the args passed to _start.
+ **/
+static payload_args_t* payload_args = 0;
+
+
+/**
  * Initialize C runtime.
  **/
 static int
@@ -109,6 +115,15 @@ terminate(payload_args_t *args) {
 
 
 /**
+ *
+ **/
+payload_args_t*
+payload_get_args(void) {
+  return payload_args;
+}
+
+
+/**
  * Entry-point invoked by the ELF loader.
  **/
 int
@@ -119,6 +134,8 @@ _start(payload_args_t *args) {
   char** environ = 0;
   char** argv = 0;
   int argc = 0;
+
+  payload_args = args;
 
   // Clear .bss section.
   for(unsigned char* bss=__bss_start; bss<__bss_end; bss++) {
