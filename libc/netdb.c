@@ -555,6 +555,15 @@ freeaddrinfo(struct addrinfo *res) {
   }
 }
 
+
+int
+getservbyname_r(const char *name, const char *prots, struct servent *se,
+                char *buf, size_t buflen, struct servent **res) {
+#warning "getservbyname_r() not implemented"
+  return -1;
+}
+
+
 int
 getservbyport_r(int port, const char *prots, struct servent *se, char *buf,
                 size_t buflen, struct servent **res) {
@@ -620,6 +629,20 @@ getservbyport_r(int port, const char *prots, struct servent *se, char *buf,
   *res = se;
 
   return 0;
+}
+
+
+struct servent*
+getservbyname(const char *name, const char *prots) {
+  static struct servent se;
+  static char *buf[2];
+  struct servent *res;
+
+  if(getservbyname_r(name, prots, &se, (void *)buf, sizeof buf, &res)) {
+    return 0;
+  }
+
+  return &se;
 }
 
 
