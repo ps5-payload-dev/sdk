@@ -55,9 +55,6 @@ typedef struct rtld_sprx_lib {
   Elf64_Sym* symtab;
   unsigned long symtab_size;
 
-  void* base_addr;
-  unsigned long base_size;
-
   int unload_on_close;
 } rtld_sprx_lib_t;
 
@@ -327,7 +324,8 @@ sprx_open(rtld_lib_t* ctx) {
 
   lib->handle          = handle;
   lib->unload_on_close = unload;
-  lib->base_addr       = (void*)obj.mapbase;
+  lib->mapbase         = (void*)obj.mapbase;
+  lib->mapsize         = obj.mapsize;
   lib->symtab_size     = dynsec.symtabsize;
 
   return 0;
@@ -339,7 +337,7 @@ sprx_sym(rtld_lib_t* ctx, const char* name) {
   rtld_sprx_lib_t* lib = (rtld_sprx_lib_t*)ctx;
   char nid[12];
 
-  if(!lib->symtab || !lib->strtab || !lib->base_addr) {
+  if(!lib->symtab || !lib->strtab || !lib->mapbase) {
     return 0;
   }
 
@@ -351,7 +349,7 @@ sprx_sym(rtld_lib_t* ctx, const char* name) {
     }
 
     if(!strncmp(nid, lib->strtab + lib->symtab[i].st_name, 11)) {
-      return lib->base_addr + lib->symtab[i].st_value;
+      return lib->mapbase + lib->symtab[i].st_value;
     }
   }
 
@@ -381,8 +379,8 @@ sprx_close(rtld_lib_t* ctx) {
   lib->strtab          = 0;
   lib->symtab          = 0;
   lib->symtab_size     = 0;
-  lib->base_addr       = 0;
-  lib->base_size       = 0;
+  lib->mapbase         = 0;
+  lib->mapsize         = 0;
   lib->unload_on_close = 0;
 
   return 0;

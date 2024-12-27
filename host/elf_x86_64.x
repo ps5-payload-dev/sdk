@@ -76,4 +76,6 @@ SECTIONS {
 	    *(COMMON)
 	    PROVIDE_HIDDEN (__bss_end = .);
 	} : ph_data
+
+	PROVIDE_HIDDEN (__image_end = .);
 }

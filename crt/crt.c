@@ -47,19 +47,22 @@ int __klog_init(void);
 int __patch_init(void);
 int __rtld_init(void);
 int __rtld_fini(void);
+int __stacktrace_init(void);
+int __stacktrace_fini(void);
 
 
 /**
- * Remember the args passed to _start.
+ * Remember the args passed to _start and the cpu state.
  **/
 static payload_args_t* payload_args = 0;
+static void* jmpbuf[32];
 
 
 /**
- * Initialize C runtime.
+ * Initialize payload runtime.
  **/
 static int
-pre_init(payload_args_t *args) {
+payload_init(payload_args_t *args) {
   int *__isthreaded = 0;
   int error = 0;
 
@@ -80,6 +83,10 @@ pre_init(payload_args_t *args) {
     klog_puts("Unable to initialize patches");
     return error;
   }
+  if((error=__stacktrace_init())) {
+    klog_puts("Unable to initialize stacktrace");
+    return error;
+  }
   if(!KERNEL_DLSYM(0x2, __isthreaded)) {
     klog_puts("Unable to resolve the symbol '__isthreaded'");
     return -1;
@@ -94,23 +101,34 @@ pre_init(payload_args_t *args) {
  * Terminate the payload.
  **/
 static int
-terminate(payload_args_t *args) {
+payload_terminate(void) {
   void (*exit)(int) = 0;
 
+  __stacktrace_fini();
   __rtld_fini();
 
   // we are running inside a hijacked process, just return
   if(kernel_dynlib_dlsym(-1, 0x2001, "sceKernelDlsym")) {
-    return *args->payloadout;
+    return 0;
   }
 
   if(KERNEL_DLSYM(0x2, exit)) {
-    exit(*args->payloadout);
+    exit(*payload_args->payloadout);
   }
 
   __builtin_trap();
 
   return -1;
+}
+
+
+/**
+ *
+ **/
+void
+payload_exit(int exit_code) {
+  *payload_args->payloadout = exit_code;
+  __builtin_longjmp(jmpbuf, 1);
 }
 
 
@@ -135,16 +153,16 @@ _start(payload_args_t *args) {
   char** argv = 0;
   int argc = 0;
 
-  payload_args = args;
-
   // Clear .bss section.
   for(unsigned char* bss=__bss_start; bss<__bss_end; bss++) {
     *bss = 0;
   }
 
-  // Init runtime.
-  if((*args->payloadout=pre_init(args))) {
-    return terminate(args);
+  payload_args = args;
+
+  // Init payload runtime.
+  if((*args->payloadout=payload_init(args))) {
+    return payload_terminate();
   }
 
   // Obtain argc, argv and envp from libkernel.
@@ -155,20 +173,22 @@ _start(payload_args_t *args) {
     argv = getargv();
   }
 
-  // Run .init functions.
-  count = __init_array_end - __init_array_start;
-  for(int i=0; i<count; i++) {
-    __init_array_start[i](argc, argv, environ, args);
+  if(!__builtin_setjmp(jmpbuf)) {
+    // Run .init functions.
+    count = __init_array_end - __init_array_start;
+    for(int i=0; i<count; i++) {
+      __init_array_start[i](argc, argv, environ, args);
+    }
+
+    // Run the actual payload.
+    *args->payloadout = main(argc, argv, environ);
+
+    // Run .fini functions.
+    count = __fini_array_end - __fini_array_start;
+    for(int i=0; i<count; i++) {
+      __fini_array_start[count-i-1]();
+    }
   }
 
-  // Run the actual payload.
-  *args->payloadout = main(argc, argv, environ);
-
-  // Run .fini functions.
-  count = __fini_array_end - __fini_array_start;
-  for(int i=0; i<count; i++) {
-    __fini_array_start[count-i-1]();
-  }
-
-  return terminate(args);
+  return payload_terminate();
 }

@@ -143,5 +143,7 @@ int           kernel_set_proc_rootdir(int pid, unsigned long vnode);
 
 int kernel_dynlib_obj(int pid, unsigned int handle, dynlib_obj_t* obj);
 int kernel_dynlib_handle(int pid, const char* basename, unsigned int *handle);
-
+int kernel_dynlib_find_handle(int pid, unsigned long addr, unsigned int* handle);
+unsigned long kernel_dynlib_mapbase_addr(int pid, unsigned int handle);
 unsigned long kernel_dynlib_dlsym(int pid, unsigned int handle, const char* sym);
+int kernel_dynlib_path(int pid, unsigned int handle, char* path, unsigned long size);

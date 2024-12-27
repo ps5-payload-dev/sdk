@@ -19,6 +19,9 @@ along with this program; see the file COPYING. If not, see
 #include <stdint.h>
 
 
+/**
+ *
+ **/
 typedef struct payload_args {
   int (*sys_dynlib_dlsym)(int, const char*, void*);
   int* rwpipe;
@@ -32,7 +35,15 @@ typedef struct payload_args {
 
 
 /**
- *
+ * Get the arguments that was passed to _start().
  **/
 payload_args_t* payload_get_args(void);
 
+
+/**
+ * Exit the payload.
+ *
+ * If the payload is running inside a hijacked process,
+ * the process will continue to run from where it left off.
+ **/
+void payload_exit(int exit_code);

@@ -19,6 +19,7 @@ along with this program; see the file COPYING. If not, see
 #include "payload.h"
 #include "syscall.h"
 
+
 /**
  * standard macros.
  **/
@@ -517,6 +518,54 @@ kernel_dynlib_obj(int pid, unsigned int handle, dynlib_obj_t* obj) {
 
 
 int
+kernel_dynlib_find_handle(int pid, unsigned long addr, unsigned int* handle) {
+  unsigned long mapbase;
+  unsigned long mapsize;
+  unsigned long kproc;
+  unsigned long kaddr;
+  unsigned long h;
+
+  if(!(kproc=kernel_get_proc(pid))) {
+    return -1;
+  }
+
+  if(kernel_copyout(kproc + 0x3e8, &kaddr, sizeof(kaddr)) < 0) {
+    return -1;
+  }
+
+  while(1) {
+    if(kernel_copyout(kaddr, &kaddr, sizeof(kaddr)) < 0) {
+      return -1;
+    }
+    if(!kaddr) {
+      return -1;
+    }
+
+    if(kernel_copyout(kaddr + __builtin_offsetof(dynlib_obj_t, mapbase),
+		      &mapbase, sizeof(mapbase)) < 0) {
+      return -1;
+    }
+
+    if(kernel_copyout(kaddr + __builtin_offsetof(dynlib_obj_t, mapsize),
+		      &mapsize, sizeof(mapsize)) < 0) {
+      return -1;
+    }
+
+    if(mapbase <= addr && addr <= mapbase + mapsize) {
+      if(kernel_copyout(kaddr + __builtin_offsetof(dynlib_obj_t, handle),
+                        &h, sizeof(h)) < 0) {
+        return -1;
+      }
+      *handle = (unsigned int)h;
+      return 0;
+    }
+  }
+
+  return -1;
+}
+
+
+int
 kernel_dynlib_handle(int pid, const char* basename, unsigned int *handle) {
   unsigned long kproc;
   unsigned long kaddr;
@@ -582,6 +631,26 @@ kernel_dynlib_fini_addr(int pid, unsigned int handle) {
   }
 
   return obj.fini;
+}
+
+
+int
+kernel_dynlib_path(int pid, unsigned int handle, char* path, unsigned long size) {
+  dynlib_obj_t obj;
+
+  if(size > 1024) {
+    size = 1024;
+  }
+  if(kernel_dynlib_obj(pid, handle, &obj)) {
+    return -1;
+  }
+  if(kernel_copyout(obj.path, path, size) < 0) {
+    return -1;
+  }
+
+  path[size-1] = 0;
+
+  return 0;
 }
 
 

@@ -83,9 +83,8 @@ typedef struct rtld_so_lib {
   char* strtab;
   Elf64_Sym* symtab;
   unsigned long symtab_size;
-
-  void*  base_addr;
-  unsigned long base_size;
+  Elf64_Rela* plt;
+  unsigned long plt_size;
 } rtld_so_lib_t;
 
 
@@ -257,7 +256,7 @@ static int
 r_glob_dat(rtld_so_lib_t* lib, Elf64_Rela* rela) {
   Elf64_Sym* sym = lib->symtab + ELF64_R_SYM(rela->r_info);
   const char* name = lib->strtab + sym->st_name;
-  void* loc = lib->base_addr + rela->r_offset;
+  void* loc = lib->mapbase + rela->r_offset;
   void* val = 0;
 
   // check if symbol is provided by a parent
@@ -303,7 +302,7 @@ static int
 r_direct_64(rtld_so_lib_t* lib, Elf64_Rela* rela) {
   Elf64_Sym* sym = lib->symtab + ELF64_R_SYM(rela->r_info);
   const char* name = lib->strtab + sym->st_name;
-  void* loc = lib->base_addr + rela->r_offset;
+  void* loc = lib->mapbase + rela->r_offset;
   void* val = 0;
 
   // check if symbol is provided by a parent
@@ -340,8 +339,8 @@ r_direct_64(rtld_so_lib_t* lib, Elf64_Rela* rela) {
  **/
 static int
 r_relative(rtld_so_lib_t *lib, Elf64_Rela* rela) {
-  void* loc = lib->base_addr + rela->r_offset;
-  void* val = lib->base_addr + rela->r_addend;
+  void* loc = lib->mapbase + rela->r_offset;
+  void* val = lib->mapbase + rela->r_addend;
 
   memcpy(loc, &val, sizeof(val));
 
@@ -390,7 +389,7 @@ pt_load(rtld_so_lib_t *lib, Elf64_Phdr *phdr) {
     return 0;
   }
 
-  memcpy(lib->base_addr + phdr->p_vaddr,
+  memcpy(lib->mapbase + phdr->p_vaddr,
 	 lib->image + phdr->p_offset,
 	 phdr->p_filesz);
 
@@ -413,7 +412,7 @@ pt_load(rtld_so_lib_t *lib, Elf64_Phdr *phdr) {
 static int
 pt_reload(rtld_so_lib_t *lib, Elf64_Phdr *phdr) {
   unsigned long memsz = ROUND_PG(phdr->p_memsz);
-  void* addr = lib->base_addr + phdr->p_vaddr;
+  void* addr = lib->mapbase + phdr->p_vaddr;
   int prot = PFLAGS(phdr->p_flags);
   int alias_fd = -1;
   int shm_fd = -1;
@@ -585,7 +584,7 @@ so_load(rtld_so_lib_t* lib, const char* path) {
 
   min_vaddr = TRUNC_PG(min_vaddr);
   max_vaddr = ROUND_PG(max_vaddr);
-  lib->base_size = max_vaddr - min_vaddr;
+  lib->mapsize = max_vaddr - min_vaddr;
 
   int flags = MAP_PRIVATE | MAP_ANON;
   int prot = PROT_READ | PROT_WRITE;
@@ -595,8 +594,7 @@ so_load(rtld_so_lib_t* lib, const char* path) {
   }
 
   // reserve an address space of sufficient size
-  if((lib->base_addr=mmap(0, lib->base_size, prot, flags,
-                          -1, 0)) == MAP_FAILED) {
+  if((lib->mapbase=mmap(0, lib->mapsize, prot, flags, -1, 0)) == MAP_FAILED) {
     return -1;
   }
 
@@ -654,7 +652,7 @@ so_load(rtld_so_lib_t* lib, const char* path) {
     if(lib->phdr[i].p_flags & PF_X) {
       error = pt_reload(lib, &lib->phdr[i]);
     } else {
-      if(mprotect(lib->base_addr + lib->phdr[i].p_vaddr,
+      if(mprotect(lib->mapbase + lib->phdr[i].p_vaddr,
 		  ROUND_PG(lib->phdr[i].p_memsz),
 		  PFLAGS(lib->phdr[i].p_flags))) {
         klog_perror("mprotect");
@@ -698,8 +696,8 @@ so_close(rtld_lib_t* ctx) {
   if(lib->image) {
     free(lib->image);
   }
-  if(lib->base_addr) {
-    munmap(lib->base_addr, lib->base_size);
+  if(lib->mapbase) {
+    munmap(lib->mapbase, lib->mapsize);
   }
 
   lib->image = 0;
@@ -709,8 +707,8 @@ so_close(rtld_lib_t* ctx) {
   lib->strtab = 0;
   lib->symtab = 0;
   lib->symtab_size = 0;
-  lib->base_addr = 0;
-  lib->base_size = 0;
+  lib->mapbase = 0;
+  lib->mapsize = 0;
 
   return 0;
 }
@@ -720,7 +718,7 @@ static void*
 so_sym(rtld_lib_t* ctx, const char* name) {
   rtld_so_lib_t* lib = (rtld_so_lib_t*)ctx;
 
-  if(!lib->symtab || !lib->strtab || !lib->base_addr) {
+  if(!lib->symtab || !lib->strtab || !lib->mapbase) {
     return 0;
   }
 
@@ -729,7 +727,7 @@ so_sym(rtld_lib_t* ctx, const char* name) {
       continue;
     }
     if(!strcmp(name, lib->strtab + lib->symtab[i].st_name)) {
-      return lib->base_addr + lib->symtab[i].st_value;
+      return lib->mapbase + lib->symtab[i].st_value;
     }
   }
 

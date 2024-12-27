@@ -56,6 +56,7 @@ static char* (*_Strerror)(int, char*) = 0;
  * Dependencies provided by the ELF linker.
  **/
 extern unsigned char __image_start[] __attribute__((weak));
+extern unsigned char __image_end[] __attribute__((weak));
 extern Elf64_Dyn _DYNAMIC[];
 
 
@@ -78,14 +79,7 @@ static struct {
   Elf64_Sym* symtab;
   char* strtab;
   unsigned long symtab_size;
-} g_this = {
-  .soname  = "",
-  .open    = this_open,
-  .sym     = this_sym,
-  .close   = this_close,
-  .destroy = this_destroy,
-  .refcnt  = 0
-};
+} g_this;
 
 
 /**
@@ -336,19 +330,11 @@ int
 __rtld_payload_init(void) {
   static const unsigned char privcaps[16] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
 					     0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
+  void* (*malloc)(unsigned long) = 0;
   int pid = __syscall(SYS_getpid);
   unsigned char caps[16];
   unsigned long rootdir;
   int err;
-
-  // Some jailbreak entry points does not apply relocations to the designated
-  // initializer of g_this, so we apply them here again just in case.
-  g_this.soname  = "";
-  g_this.open    = this_open;
-  g_this.sym     = this_sym;
-  g_this.close   = this_close;
-  g_this.destroy = this_destroy;
-  g_this.refcnt  = 0;
 
   if(!(rootdir=kernel_get_proc_rootdir(pid))) {
     return -1;
@@ -363,6 +349,9 @@ __rtld_payload_init(void) {
     return -1;
   }
 
+  if(!KERNEL_DLSYM(0x2, malloc)) {
+    return -1;
+  }
   if(!KERNEL_DLSYM(0x2, strcmp)) {
     return -1;
   }
@@ -372,6 +361,17 @@ __rtld_payload_init(void) {
   if(!KERNEL_DLSYM(0x2, _Strerror)) {
       return -1;
   }
+
+  g_this.soname  = malloc(1024);
+  g_this.open    = this_open;
+  g_this.sym     = this_sym;
+  g_this.close   = this_close;
+  g_this.destroy = this_destroy;
+  g_this.refcnt  = 0;
+  g_this.mapbase = __image_start;
+  g_this.mapsize = __image_end - __image_start;
+
+  __syscall(0x268, pid, g_this.soname, 1024);
 
   err = payload_load();
 
@@ -383,6 +383,21 @@ __rtld_payload_init(void) {
   }
 
   return err;
+}
+
+
+/**
+ * Find a lib that occupies the given address
+ **/
+rtld_lib_t*
+__rtld_payload_find(void* addr) {
+    for(rtld_lib_t* lib = (rtld_lib_t*)&g_this; lib; lib=lib->next) {
+        if(addr >= lib->mapbase && addr <= lib->mapbase+lib->mapsize) {
+            return lib;
+        }
+    }
+
+    return 0;
 }
 
 
