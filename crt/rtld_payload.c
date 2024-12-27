@@ -244,8 +244,10 @@ dynsym_count(unsigned int *gnu_hash) {
 static int
 payload_load(void) {
   unsigned int *gnu_hash = 0;
+  unsigned long relasz = 0;
+  unsigned long pltsz = 0;
   Elf64_Rela* rela = 0;
-  long relasz = 0;
+  Elf64_Rela* plt = 0;
 
   // find lookup tables
   for(int i=0; _DYNAMIC[i].d_tag!=DT_NULL; i++) {
@@ -268,6 +270,14 @@ payload_load(void) {
 
     case DT_RELASZ:
       relasz = _DYNAMIC[i].d_un.d_val;
+      break;
+
+    case DT_JMPREL:
+      plt = (Elf64_Rela*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
+      break;
+
+    case DT_PLTRELSZ:
+      pltsz = _DYNAMIC[i].d_un.d_val;
       break;
     }
   }
@@ -319,6 +329,21 @@ payload_load(void) {
       klog_printf("Unsupported relocation type %x\n",
                   rela[i].r_info);
       return -1;
+    }
+  }
+
+  for(int i=0; i<pltsz/sizeof(Elf64_Rela); i++) {
+    switch(plt[i].r_info & 0xffffffffl) {
+    case R_X86_64_JMP_SLOT:
+      if(r_jmp_slot(&plt[i])) {
+	return -1;
+      }
+      break;
+
+    default:
+      klog_printf("Unsupported plt type %x\n",
+                  plt[i].r_info);
+      break;
     }
   }
 

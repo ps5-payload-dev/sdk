@@ -67,7 +67,7 @@ exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang" \
      -isystem "${PS5_PAYLOAD_SDK}/target/include" \
      -L "${PS5_PAYLOAD_SDK}/target/lib" \
      -L "${PS5_PAYLOAD_HBROOT}/lib" \
-     -fno-stack-protector -fno-plt -femulated-tls \
+     -fno-stack-protector -femulated-tls \
      $LIBS_C \
      --end-no-unused-arguments \
      "$@" \

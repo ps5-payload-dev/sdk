@@ -530,6 +530,15 @@ pt_dynamic(rtld_so_lib_t *lib, Elf64_Phdr *phdr) {
       lib->strtab = (char*)(lib->image + lib->phdr->p_offset +
                             dyn[i].d_un.d_ptr);
       break;
+
+    case DT_JMPREL:
+      lib->plt = (Elf64_Rela*)(lib->image + lib->phdr->p_offset +
+                               dyn[i].d_un.d_ptr);
+      break;
+
+    case DT_PLTRELSZ:
+      lib->plt_size = dyn[i].d_un.d_val;
+      break;
     }
   }
 
@@ -640,6 +649,21 @@ so_load(rtld_so_lib_t* lib, const char* path) {
                     rela[i].r_info);
         return -1;
       }
+    }
+  }
+
+  for(int i=0; i<lib->plt_size/sizeof(Elf64_Rela); i++) {
+    switch(lib->plt[i].r_info & 0xffffffffl) {
+    case R_X86_64_JMP_SLOT:
+      if(r_jmp_slot(lib, &lib->plt[i])) {
+	return -1;
+      }
+      break;
+
+    default:
+      klog_printf("Unsupported plt relocation type %x\n",
+                  lib->plt[i].r_info);
+      break;
     }
   }
 

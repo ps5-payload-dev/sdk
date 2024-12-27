@@ -73,7 +73,7 @@ exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang++" \
      -stdlib++-isystem "${PS5_PAYLOAD_SDK}/target/include/c++/v1" \
      -L "${PS5_PAYLOAD_SDK}/target/lib" \
      -L "${PS5_PAYLOAD_HBROOT}/lib" \
-     -fno-stack-protector -fno-plt -femulated-tls \
+     -fno-stack-protector -femulated-tls \
      -frtti -fexceptions \
      $LIBS_CXX $LIBS_C \
      --end-no-unused-arguments \

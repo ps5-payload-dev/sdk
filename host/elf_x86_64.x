@@ -33,6 +33,8 @@ SECTIONS {
 	    PROVIDE_HIDDEN (__text_end = .);
 	} : ph_text
 
+	.plt : { *(.plt) }
+
 	.rodata : ALIGN(CONSTANT(MAXPAGESIZE)) {
 	    *(.rodata .rodata.*)
 
@@ -47,6 +49,8 @@ SECTIONS {
 	    PROVIDE_HIDDEN(__fini_array_end = .);
 	} : ph_rodata
 
+	.gcc_except_table : { *(.gcc_except_table*) }
+
 	.eh_frame_hdr : ALIGN(CONSTANT(MAXPAGESIZE)) {
 	    PROVIDE_HIDDEN(__eh_frame_hdr_start = .);
 	    KEEP(*(.eh_frame_hdr))
@@ -59,7 +63,9 @@ SECTIONS {
 	    PROVIDE_HIDDEN(__eh_frame_end = .);
 	}
 
-	.rela : { *(.rela *.rela.*) }
+	.data.rel.ro : { *(.data.rel.ro .data.rel.ro.*); }
+	.got : { *(.got) }
+	.got.plt : { *(.got.plt) }
 
 	.data : ALIGN(CONSTANT(MAXPAGESIZE)) {
 	    *(.data .data.*)
