@@ -51,6 +51,9 @@ static int (*strcmp)(const char*, const char*) = 0;
 static void* (*memcpy)(void*, const void*, unsigned long) = 0;
 static char* (*_Strerror)(int, char*) = 0;
 
+static void* (*calloc)(unsigned long, unsigned long) = 0;
+static void (*free)(void*) = 0;
+
 
 /**
  * Dependencies provided by the ELF linker.
@@ -73,13 +76,15 @@ static void  this_destroy(rtld_lib_t* ctx);
  * Extend rtld_lib_t anonymously with auxiliary parameters needed
  * for resolving symbols in the payload needed by shared objects.
  **/
-static struct {
+typedef struct rtld_payload_lib {
   struct rtld_lib;
 
   Elf64_Sym* symtab;
   char* strtab;
   unsigned long symtab_size;
-} g_this;
+} rtld_payload_lib_t;
+
+static rtld_payload_lib_t* g_this = 0;
 
 
 /**
@@ -93,7 +98,7 @@ static int g_dlerrno = 0;
  **/
 static int
 dt_needed(const char* soname) {
-  rtld_lib_t* it = (rtld_lib_t*)&g_this;
+  rtld_lib_t* it = (rtld_lib_t*)g_this;
   rtld_lib_t* lib;
 
   while(it->next) {
@@ -122,11 +127,11 @@ dt_needed(const char* soname) {
 static int
 r_glob_dat(Elf64_Rela* rela) {
   unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
-  Elf64_Sym* sym = g_this.symtab + ELF64_R_SYM(rela->r_info);
-  const char* name = g_this.strtab + sym->st_name;
+  Elf64_Sym* sym = g_this->symtab + ELF64_R_SYM(rela->r_info);
+  const char* name = g_this->strtab + sym->st_name;
   void* val = 0;
 
-  for(rtld_lib_t *lib=g_this.next; lib; lib=lib->next) {
+  for(rtld_lib_t *lib=g_this->next; lib; lib=lib->next) {
     if((val=__rtld_lib_sym(lib, name))) {
       return mdbg_copyin(-1, &val, loc, sizeof(val));
     }
@@ -157,12 +162,12 @@ r_jmp_slot(Elf64_Rela* rela) {
 static int
 r_direct_64(Elf64_Rela* rela) {
   unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
-  Elf64_Sym* sym = g_this.symtab + ELF64_R_SYM(rela->r_info);
-  const char* name = g_this.strtab + sym->st_name;
+  Elf64_Sym* sym = g_this->symtab + ELF64_R_SYM(rela->r_info);
+  const char* name = g_this->strtab + sym->st_name;
   void* val = 0;
 
   // check if symbol is provided by a child
-  for(rtld_lib_t *lib=g_this.next; lib!=0; lib=lib->next) {
+  for(rtld_lib_t *lib=g_this->next; lib!=0; lib=lib->next) {
     if((val=__rtld_lib_sym(lib, name))) {
       val += rela->r_addend;
       return mdbg_copyin(-1, &val, loc, sizeof(val));
@@ -253,11 +258,11 @@ payload_load(void) {
   for(int i=0; _DYNAMIC[i].d_tag!=DT_NULL; i++) {
     switch(_DYNAMIC[i].d_tag) {
     case DT_SYMTAB:
-      g_this.symtab = (Elf64_Sym*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
+      g_this->symtab = (Elf64_Sym*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
       break;
 
     case DT_STRTAB:
-      g_this.strtab = (char*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
+      g_this->strtab = (char*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
       break;
 
     case DT_GNU_HASH:
@@ -284,14 +289,14 @@ payload_load(void) {
 
   // symtab size is determined using DT_GNU_HASH
   if(gnu_hash) {
-    g_this.symtab_size = dynsym_count(gnu_hash) * sizeof(Elf64_Sym);
+    g_this->symtab_size = dynsym_count(gnu_hash) * sizeof(Elf64_Sym);
   }
 
   // load needed libraries
   for(int i=0; _DYNAMIC[i].d_tag!=DT_NULL; i++) {
     switch(_DYNAMIC[i].d_tag) {
     case DT_NEEDED:
-      if(dt_needed(g_this.strtab + _DYNAMIC[i].d_un.d_val)) {
+      if(dt_needed(g_this->strtab + _DYNAMIC[i].d_un.d_val)) {
 	return -1;
       }
       break;
@@ -355,7 +360,6 @@ int
 __rtld_payload_init(void) {
   static const unsigned char privcaps[16] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
 					     0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
-  void* (*malloc)(unsigned long) = 0;
   int pid = __syscall(SYS_getpid);
   unsigned char caps[16];
   unsigned long rootdir;
@@ -374,7 +378,10 @@ __rtld_payload_init(void) {
     return -1;
   }
 
-  if(!KERNEL_DLSYM(0x2, malloc)) {
+  if(!KERNEL_DLSYM(0x2, calloc)) {
+    return -1;
+  }
+  if(!KERNEL_DLSYM(0x2, free)) {
     return -1;
   }
   if(!KERNEL_DLSYM(0x2, strcmp)) {
@@ -387,16 +394,17 @@ __rtld_payload_init(void) {
       return -1;
   }
 
-  g_this.soname  = malloc(1024);
-  g_this.open    = this_open;
-  g_this.sym     = this_sym;
-  g_this.close   = this_close;
-  g_this.destroy = this_destroy;
-  g_this.refcnt  = 0;
-  g_this.mapbase = __image_start;
-  g_this.mapsize = __image_end - __image_start;
+  g_this  = calloc(1, sizeof(rtld_payload_lib_t));
+  g_this->soname  = calloc(1024, sizeof(char));
+  g_this->open    = this_open;
+  g_this->sym     = this_sym;
+  g_this->close   = this_close;
+  g_this->destroy = this_destroy;
+  g_this->refcnt  = 1;
+  g_this->mapbase = __image_start;
+  g_this->mapsize = __image_end - __image_start;
 
-  __syscall(0x268, pid, g_this.soname, 1024);
+  __syscall(0x268, pid, g_this->soname, 1024);
 
   err = payload_load();
 
@@ -416,7 +424,7 @@ __rtld_payload_init(void) {
  **/
 rtld_lib_t*
 __rtld_payload_find(void* addr) {
-    for(rtld_lib_t* lib = (rtld_lib_t*)&g_this; lib; lib=lib->next) {
+    for(rtld_lib_t* lib = (rtld_lib_t*)g_this; lib; lib=lib->next) {
         if(addr >= lib->mapbase && addr <= lib->mapbase+lib->mapsize) {
             return lib;
         }
@@ -428,14 +436,19 @@ __rtld_payload_find(void* addr) {
 
 int
 __rtld_payload_fini(void) {
-  rtld_lib_t* next = g_this.next;
   int err = 0;
 
-  if(next) {
-    err = __rtld_lib_close(next);
+  if(g_this) {
+    if(g_this->next) {
+      err = __rtld_lib_close(g_this->next);
+    }
+    free(g_this->soname);
+    free(g_this);
   }
+
   return err;
 }
+
 
 static int
 this_open(rtld_lib_t* ctx) {
@@ -445,21 +458,21 @@ this_open(rtld_lib_t* ctx) {
 
 static void*
 this_sym(rtld_lib_t* ctx, const char* name) {
-  if(ctx != (rtld_lib_t*)&g_this) {
+  if(ctx != (rtld_lib_t*)g_this) {
     return 0;
   }
 
-  if(!g_this.symtab || !g_this.strtab) {
+  if(!g_this->symtab || !g_this->strtab) {
     return 0;
   }
 
-  for(unsigned long i=0; i<g_this.symtab_size/sizeof(Elf64_Sym); i++) {
-    if(!g_this.symtab[i].st_size) {
+  for(unsigned long i=0; i<g_this->symtab_size/sizeof(Elf64_Sym); i++) {
+    if(!g_this->symtab[i].st_size) {
       continue;
     }
 
-    if(!strcmp(name, g_this.strtab + g_this.symtab[i].st_name)) {
-      return __image_start + g_this.symtab[i].st_value;
+    if(!strcmp(name, g_this->strtab + g_this->symtab[i].st_name)) {
+      return __image_start + g_this->symtab[i].st_value;
     }
   }
 
@@ -508,10 +521,10 @@ dlopen(const char *filename, int flags) {
   */
 
   if(!filename) {
-      return &g_this;
+      return g_this;
   }
 
-  last = (rtld_lib_t*)&g_this;
+  last = (rtld_lib_t*)g_this;
   while(last && last->next) {
       last = last->next;
   }
@@ -569,7 +582,7 @@ dlsym(void *handle, const char *symbol) {
     return 0;
   }
   if(handle == RTLD_DEFAULT) {
-    lib = (rtld_lib_t*)&g_this;
+    lib = (rtld_lib_t*)g_this;
   }
 
   while(lib) {
@@ -586,7 +599,7 @@ dlsym(void *handle, const char *symbol) {
 
 int
 dlclose(void *handle) {
-  if(&g_this == handle) {
+  if(g_this == handle) {
     g_dlerrno = -1;
   } else {
     g_dlerrno = __rtld_lib_close(handle);
