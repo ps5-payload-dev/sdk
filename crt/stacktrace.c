@@ -131,7 +131,7 @@ static unsigned char term_sigmap[] = {
 /**
  * Remember the default signal handlers.
  **/
-static void* default_sigmap[sizeof(term_sigmap)] = {0};
+static struct sigaction default_sigmap[sizeof(term_sigmap)];
 
 
 /**
@@ -223,16 +223,16 @@ __stacktrace_init(void) {
     }
   }
 
-  for(int signo=0; signo<sizeof(term_sigmap); signo++) {
-    if(term_sigmap[signo] != 1) {
+  for(int signo=1; signo<sizeof(term_sigmap); signo++) {
+    if(!term_sigmap[signo]) {
       continue;
     }
     if(sigemptyset(&sa.sa_mask)) {
       klog_perror("sigemptyset");
       return -1;
     }
-    if(sigaction(signo, &sa, default_sigmap[signo])) {
-      klog_printf("sigaction %d\n", signo);
+    if(sigaction(signo, &sa, &default_sigmap[signo])) {
+      klog_perror("sigaction");
       return -1;
     }
   }
@@ -246,20 +246,12 @@ __stacktrace_init(void) {
  **/
 int
 __stacktrace_fini(void) {
-  struct sigaction sa = {
-    .sa_flags = SA_SIGINFO,
-    .sa_sigaction = on_term_signal
-  };
-
-  for(int signo=0; signo<sizeof(default_sigmap); signo++) {
-    if(!default_sigmap[signo]) {
+  for(int signo=1; signo<sizeof(term_sigmap); signo++) {
+    if(!term_sigmap[signo]) {
       continue;
     }
-    if(sigemptyset(&sa.sa_mask)) {
-      klog_perror("sigemptyset");
-      return -1;
-    }
-    if(sigaction(signo, &sa, 0)) {
+
+    if(sigaction(signo, &default_sigmap[signo], 0)) {
       klog_perror("sigaction");
       return -1;
     }
