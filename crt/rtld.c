@@ -15,6 +15,7 @@ along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
 #include "kernel.h"
+#include "syscall.h"
 #include "rtld.h"
 
 
@@ -25,6 +26,11 @@ static char* (*strcpy)(char*, const char*) = 0;
 static int (*strcmp)(const char*, const char*) = 0;
 static int (*strncmp)(const char*, const char*, unsigned long) = 0;
 static unsigned long (*strlen)(const char*) = 0;
+static char* (*strcat)(char*, const char*) = 0;
+static int (*sprintf)(char*, const char*, ...) = 0;
+
+static char* (*getenv)(const char*) = 0;
+static char* (*getcwd)(char*, unsigned long) = 0;
 
 static void* (*calloc)(unsigned long, unsigned long) = 0;
 static void (*free)(void*) = 0;
@@ -108,21 +114,101 @@ ref_destroy(rtld_lib_t* ctx) {
 }
 
 
+int
+__rtld_find_file(const char* cwd, const char *name, char* path) {
+  unsigned long off = 0;
+  const char *ldpaths;
+  char buf[0x100];
+  int err = 0;
+
+  if(!name || !*name || !path) {
+    return -1;
+  }
+
+  path[0] = 0;
+  if(name[0] == '/') {
+    if(!(err=__syscall(SYS_stat, name, buf))) {
+      strcpy(path, name);
+    }
+    return err;
+  }
+
+  if(cwd && *cwd) {
+    strcpy(path, cwd);
+    strcat(path, "/");
+    strcat(path, name);
+    if(!__syscall(SYS_stat, path, buf)) {
+      return 0;
+    }
+  }
+
+  sprintf(path, "/system/priv/lib/%s", name);
+  if(!__syscall(SYS_access, path, 0)) {
+    return 0;
+  }
+
+  sprintf(path, "/system/common/lib/%s", name);
+  if(!__syscall(SYS_access, path, 0)) {
+    return 0;
+  }
+
+  sprintf(path, "/system_ex/priv_ex/lib/%s", name);
+  if(!__syscall(SYS_access, path, 0)) {
+    return 0;
+  }
+
+  sprintf(path, "/system_ex/common_ex/lib/%s", name);
+  if(!__syscall(SYS_access, path, 0)) {
+    return 0;
+  }
+
+  if((ldpaths=getenv("LD_LIBRARY_PATH"))) {
+    for(int i=0; ldpaths[i]; i++) {
+      path[off++] = ldpaths[i];
+      if(path[off] == ':' || ldpaths[i+1] == 0) {
+	path[off] = '/';
+	path[off+1] = 0;
+	strcat(path, name);
+	off = 0;
+	if(!__syscall(SYS_stat, path, buf)) {
+	  return 0;
+	}
+      }
+    }
+  }
+
+  strcpy(path, "/user/homebrew/lib/");
+  strcat(path, name);
+    if(!__syscall(SYS_access, path, 0)) {
+      return 0;
+    }
+
+  path[0] = 0;
+  return -1;
+}
+
+
 rtld_lib_t*
 __rtld_lib_new(rtld_lib_t* prev, const char* soname) {
   rtld_lib_t* first = prev;
   rtld_ref_lib_t* lib = 0;
   rtld_lib_t* ref = 0;
+  char path[1024];
+  char cwd[1024];
 
   // find the first lib in the linked list
   while(first->prev) {
     first = first->prev;
   }
 
+  getcwd(cwd, sizeof(cwd));
+  if(__rtld_find_file(cwd, soname, path)) {
+    strcpy(path, soname);
+  }
+
   // check if the lib is already loaded
   for(ref=first; ref; ref=ref->next) {
-    // TODO: resolve path to soname and match exactly
-    if(endswith(ref->soname, soname)) {
+    if(!strcmp(ref->soname, path)) {
       lib = calloc(1, sizeof(rtld_ref_lib_t));
       lib->prev     = prev;
       lib->ref      = ref;
@@ -217,6 +303,9 @@ __rtld_init(void) {
   if(!KERNEL_DLSYM(0x2, strcpy)) {
     return -1;
   }
+  if(!KERNEL_DLSYM(0x2, strcat)) {
+    return -1;
+  }
   if(!KERNEL_DLSYM(0x2, strcmp)) {
     return -1;
   }
@@ -226,10 +315,19 @@ __rtld_init(void) {
   if(!KERNEL_DLSYM(0x2, strlen)) {
     return -1;
   }
+  if(!KERNEL_DLSYM(0x2, sprintf)) {
+    return -1;
+  }
   if(!KERNEL_DLSYM(0x2, calloc)) {
     return -1;
   }
   if(!KERNEL_DLSYM(0x2, free)) {
+    return -1;
+  }
+  if(!KERNEL_DLSYM(0x2, getenv)) {
+    return -1;
+  }
+  if(!KERNEL_DLSYM(0x2, getcwd)) {
     return -1;
   }
 

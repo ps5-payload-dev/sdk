@@ -79,6 +79,22 @@ int __rtld_init(void);
 
 
 /**
+ * Find the path to a file with the given name.
+ *
+ * The search order is as follows:
+ *   1 - absolute path
+ *   2 - current work dir (cwd)
+ *   3 - /system/priv/lib/
+ *   4 - /system/common/lib/
+ *   5 - /system_ex/priv_ex/lib/
+ *   6 - /system_ex/common_ex/lib/
+ *   7 - paths in the env var LD_LIBRARY_PATH
+ *   8 - /user/homebrew/lib/
+ **/
+int __rtld_find_file(const char* cwd, const char *name, char* path);
+
+
+/**
  * Finalize the lib loader.
  **/
 int __rtld_fini(void);

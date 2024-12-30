@@ -35,7 +35,6 @@ static void* (*memcpy)(void*, const void*, unsigned long) = 0;
 static void (*free)(void*) = 0;
 
 static char* (*getcwd)(char*, unsigned long) = 0;
-static char* (*getenv)(const char*) = 0;
 
 
 /**
@@ -182,70 +181,6 @@ readfile(const char* path) {
   }
 
   return buf;
-}
-
-
-
-/**
- * Find a shared object image with the given soname.
- *
- * The search order is as follows:
- *   1 - absolute path
- *   2 - current work dir (cwd)
- *   3 - paths in the env var LD_LIBRARY_PATH
- *   4 - /user/homebrew/lib/
- **/
-static int
-so_find(const char* cwd, const char *soname, char* path) {
-  unsigned long off = 0;
-  const char *ldpaths;
-  char buf[0x100];
-  int err = 0;
-
-  if(!soname || !*soname || !path) {
-    return -1;
-  }
-
-  path[0] = 0;
-  if(soname[0] == '/') {
-    if(!(err=__syscall(SYS_stat, soname, buf))) {
-      strcpy(path, soname);
-    }
-    return err;
-  }
-
-  if(cwd && *cwd) {
-    strcpy(path, cwd);
-    strcat(path, "/");
-    strcat(path, soname);
-    if(!__syscall(SYS_stat, path, buf)) {
-      return 0;
-    }
-  }
-
-  if((ldpaths=getenv("LD_LIBRARY_PATH"))) {
-    for(int i=0; ldpaths[i]; i++) {
-      path[off++] = ldpaths[i];
-      if(path[off] == ':' || ldpaths[i+1] == 0) {
-	path[off] = '/';
-	path[off+1] = 0;
-	strcat(path, soname);
-	off = 0;
-	if(!__syscall(SYS_stat, path, buf)) {
-	  return 0;
-	}
-      }
-    }
-  }
-
-  strcpy(path, "/user/homebrew/lib/");
-  strcat(path, soname);
-    if(!__syscall(SYS_access, path, 0)) {
-      return 0;
-    }
-
-  path[0] = 0;
-  return -1;
 }
 
 
@@ -707,7 +642,7 @@ so_open(rtld_lib_t* ctx) {
     return -1;
   }
 
-  if((err=so_find(cwd, lib->soname, path))) {
+  if((err=__rtld_find_file(cwd, lib->soname, path))) {
     return err;
   }
 
@@ -846,9 +781,6 @@ __rtld_so_init(void) {
     return -1;
   }
   if(!KERNEL_DLSYM(libc, getcwd)) {
-    return -1;
-  }
-  if(!KERNEL_DLSYM(libc, getenv)) {
     return -1;
   }
 

@@ -28,7 +28,6 @@ along with this program; see the file COPYING. If not, see
 static char* (*strcpy)(char*, const char*) = 0;
 static int (*strcmp)(const char*, const char*) = 0;
 static int (*strncmp)(const char*, const char*, unsigned long) = 0;
-static int (*sprintf)(char*, const char*, ...) = 0;
 
 static void* (*calloc)(unsigned long, unsigned long) = 0;
 static void* (*malloc)(unsigned long) = 0;
@@ -206,47 +205,6 @@ struct sysmodtab {
 };
 
 
-/**
- * Figure out the absolute path to an sprx file.
- **/
-static int
-sprx_find(const char* cwd, const char* soname, char *path) {
-  if(*soname == '/') {
-    sprintf(path, "%s", soname);
-  } else if(cwd) {
-    sprintf(path, "%s/%s", cwd, soname);
-  } else {
-    sprintf(path, "%s", soname);
-  }
-
-  if(!__syscall(SYS_access, path, 0)) {
-    return 0;
-  }
-
-  sprintf(path, "/system/priv/lib/%s", soname);
-  if(!__syscall(SYS_access, path, 0)) {
-      return 0;
-  }
-
-  sprintf(path, "/system/common/lib/%s", soname);
-  if(!__syscall(SYS_access, path, 0)) {
-      return 0;
-  }
-
-  sprintf(path, "/system_ex/priv_ex/lib/%s", soname);
-  if(!__syscall(SYS_access, path, 0)) {
-      return 0;
-  }
-
-  sprintf(path, "/system_ex/common_ex/lib/%s", soname);
-  if(!__syscall(SYS_access, path, 0)) {
-      return 0;
-  }
-
-  return -1;
-}
-
-
 static int
 sprx_open(rtld_lib_t* ctx) {
   rtld_sprx_lib_t* lib = (rtld_sprx_lib_t*)ctx;
@@ -261,9 +219,7 @@ sprx_open(rtld_lib_t* ctx) {
   // check if the lib is an alias for libkernel
   if(!strcmp(lib->soname, "libkernel.sprx") ||
      !strcmp(lib->soname, "libkernel_web.sprx") ||
-     !strcmp(lib->soname, "libkernel_sys.sprx") ||
-     !strcmp(lib->soname, "libdl.sprx") ||
-     !strcmp(lib->soname, "libpthread.sprx")) {
+     !strcmp(lib->soname, "libkernel_sys.sprx")) {
     if(kernel_dynlib_dlsym(-1, 0x1, "sceKernelDlsym")) {
       handle = 1;
     } else {
@@ -276,7 +232,7 @@ sprx_open(rtld_lib_t* ctx) {
       klog_perror("getcwd");
       return -1;
     }
-    if(sprx_find(cwd, lib->soname, path)) {
+    if(__rtld_find_file(cwd, lib->soname, path)) {
       return -1;
     }
 
@@ -474,9 +430,6 @@ __rtld_sprx_init(void) {
     return -1;
   }
   if(!KERNEL_DLSYM(libc, strncmp)) {
-    return -1;
-  }
-  if(!KERNEL_DLSYM(libc, sprintf)) {
     return -1;
   }
   if(!KERNEL_DLSYM(libc, calloc)) {
