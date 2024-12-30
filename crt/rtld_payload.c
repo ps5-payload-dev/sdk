@@ -89,7 +89,7 @@ static rtld_payload_lib_t* g_this = 0;
 
 
 /**
- * Needed by dlerror() and dladdr().
+ * Define variables needed by dlerror() and dladdr().
  **/
 static int g_dlerrno = 0;
 static rtld_lib_seq_t* g_libseq = 0;
@@ -246,7 +246,7 @@ dynsym_count(unsigned int *gnu_hash) {
 
 
 /**
- *
+ * Load payload data into memory.
  **/
 static int
 payload_load(void) {

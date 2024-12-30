@@ -18,6 +18,10 @@ along with this program; see the file COPYING. If not, see
 
 #include "rtld.h"
 
+
+/**
+ * Define macros needed by dlopen() and dlsym().
+ **/
 #define RTLD_NEXT    ((void*)-1)
 #define RTLD_DEFAULT ((void*)-2)
 #define RTLD_SELF    ((void*)-3)
@@ -32,6 +36,9 @@ along with this program; see the file COPYING. If not, see
 #define RTLD_NOLOAD   0x2000
 
 
+/**
+ * Define data structure needed by dladdr().
+ **/
 typedef struct dl_info {
   const char *dli_fname;
   void *dli_fbase;
@@ -40,11 +47,23 @@ typedef struct dl_info {
 } Dl_info;
 
 
+/**
+ * Declare prototypes for dynamic loading functions typically provided by libc.
+ **/
 void* dlopen(const char *filename, int flags);
 int dladdr(void *addr, Dl_info *info);
 void* dlsym(void *handle, const char *symbol);
 int dlclose(void *handle);
 char* dlerror(void);
 
+
+/**
+ * Initialize payload loader dependencies.
+ **/
 int __rtld_payload_init(void);
+
+
+/**
+ * Close and destroy sprx and so objects loaded by the payload.
+ **/
 int __rtld_payload_fini(void);

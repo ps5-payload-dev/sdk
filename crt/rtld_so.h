@@ -20,12 +20,12 @@ along with this program; see the file COPYING. If not, see
 
 
 /**
- *
+ * Create a new so loader.
  **/
-int __rtld_so_init(void);
+rtld_lib_t* __rtld_so_new(rtld_lib_t* prev, const char *soname);
 
 
 /**
- *
+ * Initialize so loader dependencies.
  **/
-rtld_lib_t* __rtld_so_new(rtld_lib_t* prev, const char *soname);
+int __rtld_so_init(void);
