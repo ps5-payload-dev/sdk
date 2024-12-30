@@ -16,8 +16,10 @@ along with this program; see the file COPYING. If not, see
 
 #include "kernel.h"
 #include "klog.h"
+#include "patch.h"
 #include "payload.h"
 #include "rtld.h"
+#include "stacktrace.h"
 #include "syscall.h"
 
 
@@ -39,13 +41,6 @@ extern unsigned char __bss_end[] __attribute__((weak));
  **/
 extern int main(int argc, char* argv[], char *envp[]);
 
-
-/**
- * Init and fini functions for crt modules.
- **/
-int __patch_init(void);
-int __stacktrace_init(void);
-int __stacktrace_fini(void);
 
 
 /**
