@@ -62,6 +62,9 @@ typedef struct {
 } SHA1_CTX;
 
 
+/**
+ * we need strlen() before we can resolve symbols.
+ **/
 static unsigned long
 strlen(const char *str) {
   const char *start = str;
@@ -74,6 +77,9 @@ strlen(const char *str) {
 }
 
 
+/**
+ * we need memcpy() before we can resolve symbols.
+ **/
 static void*
 memcpy(void *__restrict dst0, const void *__restrict src0,
        unsigned long len0) {
@@ -89,6 +95,9 @@ memcpy(void *__restrict dst0, const void *__restrict src0,
 }
 
 
+/**
+ * we need memset() before we can resolve symbols.
+ **/
 static void*
 memset(void *m, int c, unsigned long n) {
   char *s = (char*)m;

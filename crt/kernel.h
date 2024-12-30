@@ -151,4 +151,3 @@ unsigned long kernel_dynlib_dlsym(int pid, unsigned int handle, const char* sym)
 int kernel_dynlib_path(int pid, unsigned int handle, char* path, unsigned long size);
 
 int __kernel_init(payload_args_t* args);
-

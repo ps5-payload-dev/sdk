@@ -15,6 +15,7 @@ along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
 #include "kernel.h"
+#include "klog.h"
 #include "syscall.h"
 
 
