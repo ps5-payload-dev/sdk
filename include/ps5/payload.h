@@ -20,7 +20,7 @@ along with this program; see the file COPYING. If not, see
 
 
 /**
- *
+ * Data structure that capture the args passed to _start().
  **/
 typedef struct payload_args {
   int (*sys_dynlib_dlsym)(int, const char*, void*);

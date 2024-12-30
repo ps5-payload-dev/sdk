@@ -20,6 +20,9 @@ along with this program; see the file COPYING. If not, see
 
 __BEGIN_DECLS
 
+/**
+ * Encode the name of a symbol provided by Sony SCE libs into a NID.
+ **/
 char* nid_encode(const char *sym, char buf[12]);
 
 __END_DECLS

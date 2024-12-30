@@ -14,8 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
-#ifndef PS5SDK_KERNEL_H
-#define PS5SDK_KERNEL_H
+#pragma once
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
@@ -111,4 +110,3 @@ int32_t kernel_set_ucred_svgid(pid_t pid, gid_t svgid);
 
 __END_DECLS
 
-#endif // PS5SDK_KERNEL_H
