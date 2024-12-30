@@ -72,6 +72,9 @@ patch_sceKernelSpawn(void) {
 }
 
 
+/**
+ * Patch the credentials of the currently running process.
+ **/
 static int
 patch_kernel_ucred(void) {
   int pid = __syscall(SYS_getpid);

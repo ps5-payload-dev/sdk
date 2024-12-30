@@ -67,6 +67,9 @@ endswith(const char *string, const char* suffix) {
 }
 
 
+/**
+ *
+ **/
 static int
 ref_open(rtld_lib_t* ctx) {
   rtld_ref_lib_t* lib = (rtld_ref_lib_t*)ctx;
@@ -74,6 +77,9 @@ ref_open(rtld_lib_t* ctx) {
 }
 
 
+/**
+ *
+ **/
 static void*
 ref_sym2addr(rtld_lib_t* ctx, const char* name) {
   rtld_ref_lib_t* lib = (rtld_ref_lib_t*)ctx;
@@ -81,6 +87,9 @@ ref_sym2addr(rtld_lib_t* ctx, const char* name) {
 }
 
 
+/**
+ *
+ **/
 static const char*
 ref_addr2sym(rtld_lib_t* ctx, void* addr) {
   rtld_ref_lib_t* lib = (rtld_ref_lib_t*)ctx;
@@ -88,6 +97,9 @@ ref_addr2sym(rtld_lib_t* ctx, void* addr) {
 }
 
 
+/**
+ *
+ **/
 static int
 ref_close(rtld_lib_t* ctx) {
   rtld_ref_lib_t* lib = (rtld_ref_lib_t*)ctx;
@@ -95,6 +107,9 @@ ref_close(rtld_lib_t* ctx) {
 }
 
 
+/**
+ *
+ **/
 static void
 ref_destroy(rtld_lib_t* ctx) {
   free(ctx);

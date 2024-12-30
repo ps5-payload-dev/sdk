@@ -110,6 +110,9 @@ memset(void *m, int c, unsigned long n) {
 }
 
 
+/**
+ *
+ **/
 static void
 SHA1Decode(unsigned int *output, const unsigned char *input, unsigned int len) {
   unsigned int i, j;
