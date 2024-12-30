@@ -115,10 +115,11 @@ ref_destroy(rtld_lib_t* ctx) {
 
 
 int
-__rtld_find_file(const char* cwd, const char *name, char* path) {
+__rtld_find_file(const char *name, char* path) {
   unsigned long off = 0;
   const char *ldpaths;
   char buf[0x100];
+  char cwd[1024];
   int err = 0;
 
   if(!name || !*name || !path) {
@@ -133,7 +134,7 @@ __rtld_find_file(const char* cwd, const char *name, char* path) {
     return err;
   }
 
-  if(cwd && *cwd) {
+  if(getcwd(cwd, sizeof(cwd))) {
     strcpy(path, cwd);
     strcat(path, "/");
     strcat(path, name);
@@ -194,15 +195,13 @@ __rtld_lib_new(rtld_lib_t* prev, const char* soname) {
   rtld_ref_lib_t* lib = 0;
   rtld_lib_t* ref = 0;
   char path[1024];
-  char cwd[1024];
 
   // find the first lib in the linked list
   while(first->prev) {
     first = first->prev;
   }
 
-  getcwd(cwd, sizeof(cwd));
-  if(__rtld_find_file(cwd, soname, path)) {
+  if(__rtld_find_file(soname, path)) {
     strcpy(path, soname);
   }
 

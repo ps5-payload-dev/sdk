@@ -33,8 +33,6 @@ static void* (*calloc)(unsigned long, unsigned long) = 0;
 static void* (*malloc)(unsigned long) = 0;
 static void (*free)(void*) = 0;
 
-static char* (*getcwd)(char*, unsigned long) = 0;
-
 static int   (*sceKernelLoadStartModule)(const char*, unsigned long, const void*,
 					 unsigned int, void*, int*) = 0;
 static int   (*sceKernelStopUnloadModule)(int, unsigned long, const void*, unsigned int,
@@ -211,8 +209,7 @@ sprx_open(rtld_lib_t* ctx) {
   unsigned int handle = 0;
   dynlib_dynsec_t dynsec;
   dynlib_obj_t obj;
-  char path[0x400];
-  char cwd[0x400];
+  char path[1024];
   int unload = 0;
   int error = 0;
 
@@ -228,11 +225,7 @@ sprx_open(rtld_lib_t* ctx) {
   }
   // check if lib is already opened
   else if(kernel_dynlib_handle(-1, lib->soname, &handle) < 0) {
-    if(!getcwd(cwd, sizeof(cwd))) {
-      klog_perror("getcwd");
-      return -1;
-    }
-    if(__rtld_find_file(cwd, lib->soname, path)) {
+    if(__rtld_find_file(lib->soname, path)) {
       return -1;
     }
 
@@ -439,9 +432,6 @@ __rtld_sprx_init(void) {
     return -1;
   }
   if(!KERNEL_DLSYM(libc, free)) {
-    return -1;
-  }
-  if(!KERNEL_DLSYM(libc, getcwd)) {
     return -1;
   }
 

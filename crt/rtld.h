@@ -83,7 +83,7 @@ int __rtld_init(void);
  *
  * The search order is as follows:
  *   1 - absolute path
- *   2 - current work dir (cwd)
+ *   2 - current work dir
  *   3 - /system/priv/lib/
  *   4 - /system/common/lib/
  *   5 - /system_ex/priv_ex/lib/
@@ -91,7 +91,7 @@ int __rtld_init(void);
  *   7 - paths in the env var LD_LIBRARY_PATH
  *   8 - /user/homebrew/lib/
  **/
-int __rtld_find_file(const char* cwd, const char *name, char* path);
+int __rtld_find_file(const char *name, char* path);
 
 
 /**

@@ -24,17 +24,13 @@ along with this program; see the file COPYING. If not, see
 /**
  * Dependencies to standard libraries.
  **/
-static char* (*strdup)(const char*) = 0;
 static int (*strcmp)(const char*, const char*) = 0;
-static char* (*strcat)(char*, const char*) = 0;
 static char* (*strcpy)(char*, const char*) = 0;
 
 static void* (*malloc)(unsigned long) = 0;
 static void* (*calloc)(unsigned long, unsigned long) = 0;
 static void* (*memcpy)(void*, const void*, unsigned long) = 0;
 static void (*free)(void*) = 0;
-
-static char* (*getcwd)(char*, unsigned long) = 0;
 
 
 /**
@@ -633,16 +629,10 @@ so_load(rtld_so_lib_t* lib, const char* path) {
 static int
 so_open(rtld_lib_t* ctx) {
   rtld_so_lib_t* lib = (rtld_so_lib_t*)ctx;
-  char path[0x400];
-  char cwd[0x400];
+  char path[1024];
   int err;
 
-  if(!getcwd(cwd, sizeof(cwd))) {
-    klog_perror("getcwd");
-    return -1;
-  }
-
-  if((err=__rtld_find_file(cwd, lib->soname, path))) {
+  if((err=__rtld_find_file(lib->soname, path))) {
     return err;
   }
 
@@ -756,13 +746,7 @@ int
 __rtld_so_init(void) {
   unsigned int libc = 0x2;
 
-  if(!KERNEL_DLSYM(libc, strdup)) {
-    return -1;
-  }
   if(!KERNEL_DLSYM(libc, strcmp)) {
-    return -1;
-  }
-  if(!KERNEL_DLSYM(libc, strcat)) {
     return -1;
   }
   if(!KERNEL_DLSYM(libc, strcpy)) {
@@ -778,9 +762,6 @@ __rtld_so_init(void) {
     return -1;
   }
   if(!KERNEL_DLSYM(libc, free)) {
-    return -1;
-  }
-  if(!KERNEL_DLSYM(libc, getcwd)) {
     return -1;
   }
 
