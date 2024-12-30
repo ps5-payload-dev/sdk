@@ -18,7 +18,7 @@ along with this program; see the file COPYING. If not, see
 #include "klog.h"
 #include "kernel.h"
 #include "nid.h"
-#include "rtld.h"
+#include "rtld_sprx.h"
 #include "syscall.h"
 
 

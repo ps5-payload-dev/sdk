@@ -19,7 +19,6 @@ along with this program; see the file COPYING. If not, see
 #include "klog.h"
 #include "mdbg.h"
 #include "syscall.h"
-#include "rtld.h"
 #include "rtld_payload.h"
 
 

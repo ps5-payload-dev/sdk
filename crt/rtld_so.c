@@ -17,7 +17,7 @@ along with this program; see the file COPYING. If not, see
 #include "elf.h"
 #include "kernel.h"
 #include "klog.h"
-#include "rtld.h"
+#include "rtld_so.h"
 #include "syscall.h"
 
 

@@ -16,6 +16,8 @@ along with this program; see the file COPYING. If not, see
 
 #pragma once
 
+#include "rtld.h"
+
 #define RTLD_NEXT    ((void*)-1)
 #define RTLD_DEFAULT ((void*)-2)
 #define RTLD_SELF    ((void*)-3)

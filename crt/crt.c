@@ -17,6 +17,8 @@ along with this program; see the file COPYING. If not, see
 #include "kernel.h"
 #include "klog.h"
 #include "payload.h"
+#include "rtld.h"
+#include "syscall.h"
 
 
 /**
@@ -41,12 +43,7 @@ extern int main(int argc, char* argv[], char *envp[]);
 /**
  * Init and fini functions for crt modules.
  **/
-int __syscall_init(payload_args_t* args);
-int __kernel_init(payload_args_t* args);
-int __klog_init(void);
 int __patch_init(void);
-int __rtld_init(void);
-int __rtld_fini(void);
 int __stacktrace_init(void);
 int __stacktrace_fini(void);
 

@@ -16,6 +16,8 @@ along with this program; see the file COPYING. If not, see
 
 #pragma once
 
+#include "payload.h"
+
 
 #define KERNEL_DLSYM(handle, sym) \
     (sym=(void*)kernel_dynlib_dlsym(-1, handle, #sym))
@@ -147,3 +149,6 @@ int kernel_dynlib_find_handle(int pid, unsigned long addr, unsigned int* handle)
 unsigned long kernel_dynlib_mapbase_addr(int pid, unsigned int handle);
 unsigned long kernel_dynlib_dlsym(int pid, unsigned int handle, const char* sym);
 int kernel_dynlib_path(int pid, unsigned int handle, char* path, unsigned long size);
+
+int __kernel_init(payload_args_t* args);
+
