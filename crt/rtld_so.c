@@ -795,7 +795,6 @@ so_destroy(rtld_lib_t* ctx) {
 
   so_close(ctx);
 
-  free(lib->soname);
   free(lib);
 }
 
@@ -804,7 +803,6 @@ rtld_lib_t*
 __rtld_so_new(rtld_lib_t* prev, const char *soname) {
   rtld_so_lib_t* lib = calloc(1, sizeof(rtld_so_lib_t));
 
-  lib->soname   = calloc(1024, sizeof(char));
   lib->prev     = prev;
   lib->open     = so_open;
   lib->sym2addr = so_sym2addr;

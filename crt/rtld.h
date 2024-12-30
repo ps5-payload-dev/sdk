@@ -27,7 +27,7 @@ typedef struct rtld_lib {
   int (*close)(struct rtld_lib* ctx);
   void (*destroy)(struct rtld_lib* ctx);
 
-  char *soname;
+  char soname[1024];
   void *mapbase;
   unsigned long mapsize;
   int refcnt;

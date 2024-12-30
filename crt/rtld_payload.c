@@ -398,7 +398,6 @@ __rtld_payload_init(void) {
   }
 
   g_this  = calloc(1, sizeof(rtld_payload_lib_t));
-  g_this->soname   = calloc(1024, sizeof(char));
   g_this->open     = this_open;
   g_this->sym2addr = this_sym2addr;
   g_this->addr2sym = this_addr2sym;
@@ -431,7 +430,6 @@ __rtld_payload_fini(void) {
     if(g_this->next) {
       err = __rtld_lib_close(g_this->next);
     }
-    free(g_this->soname);
     free(g_this);
   }
 

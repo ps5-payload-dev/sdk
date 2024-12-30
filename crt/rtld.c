@@ -21,7 +21,7 @@ along with this program; see the file COPYING. If not, see
 /**
  * Dependencies to standard libraries.
  **/
-static char* (*strdup)(const char*) = 0;
+static char* (*strcpy)(char*, const char*) = 0;
 static int (*strcmp)(const char*, const char*) = 0;
 static int (*strncmp)(const char*, const char*, unsigned long) = 0;
 static unsigned long (*strlen)(const char*) = 0;
@@ -104,7 +104,6 @@ ref_close(rtld_lib_t* ctx) {
 
 static void
 ref_destroy(rtld_lib_t* ctx) {
-  free(ctx->soname);
   free(ctx);
 }
 
@@ -122,9 +121,9 @@ __rtld_lib_new(rtld_lib_t* prev, const char* soname) {
 
   // check if the lib is already loaded
   for(ref=first; ref; ref=ref->next) {
-    if(!strcmp(ref->soname, soname)) {
+    // TODO: resolve path to soname and match exactly
+    if(endswith(ref->soname, soname)) {
       lib = calloc(1, sizeof(rtld_ref_lib_t));
-      lib->soname   = strdup(soname);
       lib->prev     = prev;
       lib->ref      = ref;
       lib->open     = ref_open;
@@ -133,6 +132,10 @@ __rtld_lib_new(rtld_lib_t* prev, const char* soname) {
       lib->close    = ref_close;
       lib->destroy  = ref_destroy;
       lib->refcnt   = 0;
+      lib->mapbase  = ref->mapbase;
+      lib->mapsize  = ref->mapsize;
+
+      strcpy(lib->soname, ref->soname);
 
       return (rtld_lib_t*)lib;
     }
@@ -211,7 +214,7 @@ int
 __rtld_init(void) {
   int err;
 
-  if(!KERNEL_DLSYM(0x2, strdup)) {
+  if(!KERNEL_DLSYM(0x2, strcpy)) {
     return -1;
   }
   if(!KERNEL_DLSYM(0x2, strcmp)) {
