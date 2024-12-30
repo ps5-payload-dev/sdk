@@ -333,7 +333,7 @@ sprx_open(rtld_lib_t* ctx) {
 
 
 static void*
-sprx_sym(rtld_lib_t* ctx, const char* name) {
+sprx_sym2addr(rtld_lib_t* ctx, const char* name) {
   rtld_sprx_lib_t* lib = (rtld_sprx_lib_t*)ctx;
   char nid[12];
 
@@ -348,12 +348,50 @@ sprx_sym(rtld_lib_t* ctx, const char* name) {
       continue;
     }
 
-    if(!strncmp(nid, lib->strtab + lib->symtab[i].st_name, 11)) {
+    if(!strncmp(nid, lib->strtab + lib->symtab[i].st_name, 11) ||
+       !strncmp(name, lib->strtab + lib->symtab[i].st_name, 11)) {
       return lib->mapbase + lib->symtab[i].st_value;
     }
   }
 
   return 0;
+}
+
+
+
+static const char*
+sprx_addr2sym(rtld_lib_t* ctx, void* addr) {
+  rtld_sprx_lib_t* lib = (rtld_sprx_lib_t*)ctx;
+  unsigned long min_offset = ctx->mapsize;
+  const char* sym = 0;
+  unsigned long l;
+
+  if(!lib->symtab || !lib->strtab || !lib->mapbase) {
+    return 0;
+  }
+
+  if(addr < lib->mapbase ||
+     addr > lib->mapbase + lib->mapsize) {
+    return 0;
+  }
+
+  l = (long)addr - (long)ctx->mapbase;
+  for(unsigned long i=0; i<lib->symtab_size/sizeof(Elf64_Sym); i++) {
+    if(!lib->symtab[i].st_size) {
+      continue;
+    }
+
+    if(l < lib->symtab[i].st_value) {
+      continue;
+    }
+
+    if(l < min_offset) {
+      min_offset = l;
+      sym = lib->strtab + lib->symtab[i].st_name;
+    }
+  }
+
+  return sym;
 }
 
 
@@ -405,13 +443,14 @@ rtld_lib_t*
 __rtld_sprx_new(rtld_lib_t* prev, const char *soname) {
   rtld_sprx_lib_t* lib = calloc(1, sizeof(rtld_sprx_lib_t));
 
-  lib->soname  = strdup(soname);
-  lib->prev    = prev;
-  lib->open    = sprx_open;
-  lib->sym     = sprx_sym;
-  lib->close   = sprx_close;
-  lib->destroy = sprx_destroy;
-  lib->refcnt  = 0;
+  lib->soname   = strdup(soname);
+  lib->prev     = prev;
+  lib->open     = sprx_open;
+  lib->sym2addr = sprx_sym2addr;
+  lib->addr2sym = sprx_addr2sym;
+  lib->close    = sprx_close;
+  lib->destroy  = sprx_destroy;
+  lib->refcnt   = 0;
 
   return (rtld_lib_t*)lib;
 }

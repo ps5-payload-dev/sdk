@@ -17,7 +17,7 @@ along with this program; see the file COPYING. If not, see
 #include "kernel.h"
 #include "klog.h"
 #include "payload.h"
-#include "rtld.h"
+#include "rtld_payload.h"
 
 
 /**
@@ -142,12 +142,6 @@ static int (*sigemptyset)(sigset_t*) = 0;
 
 
 /**
- * Prototype for finding which shared object mapped a given address.
- **/
-rtld_lib_t* __rtld_payload_find(void* addr);
-
-
-/**
  * When recieving a termination signal, print a stacktrace to /dev/klog
  * and exit gracefully.
  **/
@@ -157,8 +151,8 @@ on_term_signal(int sig, siginfo_t *info, void *context) {
   void *addr = info->si_addr;
   unsigned long mapbase;
   unsigned int handle;
-  rtld_lib_t* lib;
   char path[1024];
+  Dl_info dli;
   int i = 0;
 
   // skip interupt frames
@@ -169,23 +163,26 @@ on_term_signal(int sig, siginfo_t *info, void *context) {
     frame = (void**)*frame;
   }
 
-  klog_printf("Caught the termination POSIX signal %d\n", sig);
-  klog_printf("Stack trace:\n");
+  klog_printf("Caught the POSIX signal %d:\n", sig);
   while(frame) {
-    // Address is mapped by the kernel
-    if(!kernel_dynlib_find_handle(-1, (long)addr, &handle)) {
+    if(dladdr(addr, &dli)) {
+      // Address is mapped by crt
+      if(dli.dli_sname) {
+        klog_printf("[%d] %s(%s+0x%lx)[0x%lx]\n", i, dli.dli_fname, dli.dli_sname,
+                    (long)(addr - dli.dli_fbase), (long)addr);
+      } else {
+        klog_printf("[%d] %s(+0x%lx)[0x%lx]\n", i, dli.dli_fname,
+                    (long)(addr - dli.dli_fbase), (long)addr);
+      }
+    } else if(!kernel_dynlib_find_handle(-1, (long)addr, &handle)) {
+      // Address is mapped by the kernel
       mapbase = kernel_dynlib_mapbase_addr(-1, handle);
       kernel_dynlib_path(-1, handle, path, sizeof(path));
       klog_printf("[%d] %s(+0x%lx)[0x%lx]\n", i, path, addr - mapbase,
                   (long)addr);
 
-    // Address is mapped by crt rtld
-    } else if((lib=__rtld_payload_find(addr))) {
-      klog_printf("[%d] %s(+0x%lx)[0x%lx]\n", i, lib->soname,
-                  (long)(addr - lib->mapbase), (long)addr);
-
-    // Address is mapped by payload
     } else {
+      // Address is mapped by payload
       klog_printf("[%d] ?[0x%lx]\n", i, (long)addr);
     }
 

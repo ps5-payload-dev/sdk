@@ -261,7 +261,7 @@ r_glob_dat(rtld_so_lib_t* lib, Elf64_Rela* rela) {
 
   // check if symbol is provided by a parent
   for(rtld_lib_t *l=(rtld_lib_t *)lib->prev; l!=0; l=l->prev) {
-    if((val=__rtld_lib_sym(l, name))) {
+    if((val=__rtld_lib_sym2addr(l, name))) {
       memcpy(loc, &val, sizeof(val));
       return 0;
     }
@@ -269,7 +269,7 @@ r_glob_dat(rtld_so_lib_t* lib, Elf64_Rela* rela) {
 
   // check if symbol is provided by a child
   for(rtld_lib_t *l=(rtld_lib_t *)lib; l!=0; l=l->next) {
-    if((val=__rtld_lib_sym(l, name))) {
+    if((val=__rtld_lib_sym2addr(l, name))) {
       memcpy(loc, &val, sizeof(val));
       return 0;
     }
@@ -307,7 +307,7 @@ r_direct_64(rtld_so_lib_t* lib, Elf64_Rela* rela) {
 
   // check if symbol is provided by a parent
   for(rtld_lib_t *l=(rtld_lib_t *)lib->prev; l!=0; l=l->prev) {
-    if((val=__rtld_lib_sym(l, name))) {
+    if((val=__rtld_lib_sym2addr(l, name))) {
       val += rela->r_addend;
       memcpy(loc, &val, sizeof(val));
       return 0;
@@ -316,7 +316,7 @@ r_direct_64(rtld_so_lib_t* lib, Elf64_Rela* rela) {
 
   // check if symbol is provided by a child
   for(rtld_lib_t *l=(rtld_lib_t *)lib; l!=0; l=l->next) {
-    if((val=__rtld_lib_sym(l, name))) {
+    if((val=__rtld_lib_sym2addr(l, name))) {
       val += rela->r_addend;
       memcpy(loc, &val, sizeof(val));
       return 0;
@@ -739,7 +739,7 @@ so_close(rtld_lib_t* ctx) {
 
 
 static void*
-so_sym(rtld_lib_t* ctx, const char* name) {
+so_sym2addr(rtld_lib_t* ctx, const char* name) {
   rtld_so_lib_t* lib = (rtld_so_lib_t*)ctx;
 
   if(!lib->symtab || !lib->strtab || !lib->mapbase) {
@@ -752,6 +752,34 @@ so_sym(rtld_lib_t* ctx, const char* name) {
     }
     if(!strcmp(name, lib->strtab + lib->symtab[i].st_name)) {
       return lib->mapbase + lib->symtab[i].st_value;
+    }
+  }
+
+  return 0;
+}
+
+
+static const char*
+so_addr2sym(rtld_lib_t* ctx, void* addr) {
+  rtld_so_lib_t* lib = (rtld_so_lib_t*)ctx;
+
+  if(!lib->symtab || !lib->strtab || !lib->mapbase) {
+    return 0;
+  }
+
+  if(addr < lib->mapbase ||
+     addr > lib->mapbase + lib->mapsize) {
+    return 0;
+  }
+
+  for(unsigned long i=0; i<lib->symtab_size/sizeof(Elf64_Sym); i++) {
+    if(!lib->symtab[i].st_size) {
+      continue;
+    }
+
+    if(addr >= lib->mapbase + lib->symtab[i].st_value &&
+       addr <= lib->mapbase + lib->symtab[i].st_value + lib->symtab[i].st_size) {
+      return lib->strtab + lib->symtab[i].st_name;
     }
   }
 
@@ -774,13 +802,14 @@ rtld_lib_t*
 __rtld_so_new(rtld_lib_t* prev, const char *soname) {
   rtld_so_lib_t* lib = calloc(1, sizeof(rtld_so_lib_t));
 
-  lib->soname  = strdup(soname);
-  lib->prev    = prev;
-  lib->open    = so_open;
-  lib->sym     = so_sym;
-  lib->close   = so_close;
-  lib->destroy = so_destroy;
-  lib->refcnt  = 0;
+  lib->soname   = strdup(soname);
+  lib->prev     = prev;
+  lib->open     = so_open;
+  lib->sym2addr = so_sym2addr;
+  lib->addr2sym = so_addr2sym;
+  lib->close    = so_close;
+  lib->destroy  = so_destroy;
+  lib->refcnt   = 0;
 
   return (rtld_lib_t*)lib;
 }

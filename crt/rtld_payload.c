@@ -20,28 +20,38 @@ along with this program; see the file COPYING. If not, see
 #include "mdbg.h"
 #include "syscall.h"
 #include "rtld.h"
+#include "rtld_payload.h"
 
 
 /**
  * Standard posix macros.
  **/
-#define RTLD_NEXT    ((void*)-1)
-#define RTLD_DEFAULT ((void*)-2)
-#define RTLD_SELF    ((void*)-3)
-
-#define RTLD_LAZY     0x0001
-#define RTLD_NOW      0x0002
-#define RTLD_MODEMASK 0x0003
-#define RTLD_GLOBAL   0x0100
-#define RTLD_LOCAL    0x0000
-#define RTLD_TRACE    0x0200
-#define RTLD_NODELETE 0x1000
-#define RTLD_NOLOAD   0x2000
-
 #define ENOENT 2
 #define ENOMEM 12
 #define EINVAL 22
 #define ENOSYS 78
+
+
+/**
+ * Extend rtld_lib_t anonymously with auxiliary parameters needed
+ * for resolving symbols in the payload needed by shared objects.
+ **/
+typedef struct rtld_payload_lib {
+  struct rtld_lib;
+
+  Elf64_Sym* symtab;
+  char* strtab;
+  unsigned long symtab_size;
+} rtld_payload_lib_t;
+
+
+/**
+ * Data structure used by dladdr().
+ **/
+typedef struct rtld_lib_seq {
+  struct rtld_lib *lib;
+  struct rtld_lib_seq *next;
+} rtld_lib_seq_t;
 
 
 /**
@@ -66,31 +76,24 @@ extern Elf64_Dyn _DYNAMIC[];
 /**
  * Foward declaration needed to initialze g_this.
  **/
-static int   this_open(rtld_lib_t* ctx);
-static void* this_sym(rtld_lib_t* ctx, const char* name);
-static int   this_close(rtld_lib_t* ctx);
-static void  this_destroy(rtld_lib_t* ctx);
+static int this_open(rtld_lib_t* ctx);
+static void* this_sym2addr(rtld_lib_t* ctx, const char* name);
+static const char* this_addr2sym(rtld_lib_t* ctx, void* addr);
+static int this_close(rtld_lib_t* ctx);
+static void this_destroy(rtld_lib_t* ctx);
 
 
 /**
- * Extend rtld_lib_t anonymously with auxiliary parameters needed
- * for resolving symbols in the payload needed by shared objects.
+ * Handle to the root node in the lib dependency graph.
  **/
-typedef struct rtld_payload_lib {
-  struct rtld_lib;
-
-  Elf64_Sym* symtab;
-  char* strtab;
-  unsigned long symtab_size;
-} rtld_payload_lib_t;
-
 static rtld_payload_lib_t* g_this = 0;
 
 
 /**
- * Used by dlerror();
+ * Needed by dlerror() and dladdr().
  **/
 static int g_dlerrno = 0;
+static rtld_lib_seq_t* g_libseq = 0;
 
 
 /**
@@ -132,7 +135,7 @@ r_glob_dat(Elf64_Rela* rela) {
   void* val = 0;
 
   for(rtld_lib_t *lib=g_this->next; lib; lib=lib->next) {
-    if((val=__rtld_lib_sym(lib, name))) {
+    if((val=__rtld_lib_sym2addr(lib, name))) {
       return mdbg_copyin(-1, &val, loc, sizeof(val));
     }
   }
@@ -168,7 +171,7 @@ r_direct_64(Elf64_Rela* rela) {
 
   // check if symbol is provided by a child
   for(rtld_lib_t *lib=g_this->next; lib!=0; lib=lib->next) {
-    if((val=__rtld_lib_sym(lib, name))) {
+    if((val=__rtld_lib_sym2addr(lib, name))) {
       val += rela->r_addend;
       return mdbg_copyin(-1, &val, loc, sizeof(val));
     }
@@ -395,14 +398,15 @@ __rtld_payload_init(void) {
   }
 
   g_this  = calloc(1, sizeof(rtld_payload_lib_t));
-  g_this->soname  = calloc(1024, sizeof(char));
-  g_this->open    = this_open;
-  g_this->sym     = this_sym;
-  g_this->close   = this_close;
-  g_this->destroy = this_destroy;
-  g_this->refcnt  = 1;
-  g_this->mapbase = __image_start;
-  g_this->mapsize = __image_end - __image_start;
+  g_this->soname   = calloc(1024, sizeof(char));
+  g_this->open     = this_open;
+  g_this->sym2addr = this_sym2addr;
+  g_this->addr2sym = this_addr2sym;
+  g_this->close    = this_close;
+  g_this->destroy  = this_destroy;
+  g_this->refcnt   = 1;
+  g_this->mapbase  = __image_start;
+  g_this->mapsize  = __image_end - __image_start;
 
   __syscall(0x268, pid, g_this->soname, 1024);
 
@@ -416,21 +420,6 @@ __rtld_payload_init(void) {
   }
 
   return err;
-}
-
-
-/**
- * Find a lib that occupies the given address
- **/
-rtld_lib_t*
-__rtld_payload_find(void* addr) {
-    for(rtld_lib_t* lib = (rtld_lib_t*)g_this; lib; lib=lib->next) {
-        if(addr >= lib->mapbase && addr <= lib->mapbase+lib->mapsize) {
-            return lib;
-        }
-    }
-
-    return 0;
 }
 
 
@@ -457,7 +446,7 @@ this_open(rtld_lib_t* ctx) {
 
 
 static void*
-this_sym(rtld_lib_t* ctx, const char* name) {
+this_sym2addr(rtld_lib_t* ctx, const char* name) {
   if(ctx != (rtld_lib_t*)g_this) {
     return 0;
   }
@@ -480,6 +469,37 @@ this_sym(rtld_lib_t* ctx, const char* name) {
 }
 
 
+static const char*
+this_addr2sym(rtld_lib_t* ctx, void* addr) {
+  rtld_payload_lib_t* lib = (rtld_payload_lib_t*)ctx;
+
+  if(lib != g_this) {
+    return 0;
+  }
+  if(!lib->symtab || !lib->strtab) {
+    return 0;
+  }
+
+  if(addr < lib->mapbase ||
+     addr > lib->mapbase + lib->mapsize) {
+    return 0;
+  }
+
+  for(unsigned long i=0; i<lib->symtab_size/sizeof(Elf64_Sym); i++) {
+    if(!g_this->symtab[i].st_size) {
+      continue;
+    }
+
+    if(addr >= lib->mapbase + lib->symtab[i].st_value &&
+       addr <= lib->mapbase + lib->symtab[i].st_value + lib->symtab[i].st_size) {
+      return lib->strtab + lib->symtab[i].st_name;
+    }
+  }
+
+  return 0;
+}
+
+
 static int
 this_close(rtld_lib_t* ctx) {
   return 0;
@@ -491,13 +511,13 @@ this_destroy(rtld_lib_t* ctx) {
 }
 
 
-
 void*
 dlopen(const char *filename, int flags) {
   unsigned char privcaps[16] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
                                 0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
   unsigned char caps[16];
-  rtld_lib_t* last = 0;
+  rtld_lib_seq_t *seq;
+  rtld_lib_t* last;
   rtld_lib_t* lib;
 
   if(!(flags & RTLD_MODEMASK)) {
@@ -559,8 +579,45 @@ dlopen(const char *filename, int flags) {
     last->next = 0;
   }
 
+  seq = calloc(1, sizeof(rtld_lib_seq_t));
+  seq->next = g_libseq;
+  g_libseq = seq;
+
   g_dlerrno = 0;
+
   return lib;
+}
+
+
+int
+dladdr(void *addr, Dl_info *info) {
+  rtld_lib_t* lib;
+
+  for(lib=(rtld_lib_t*)g_this; lib; lib=lib->next) {
+    if(addr >= lib->mapbase &&
+       addr <= lib->mapbase + lib->mapsize) {
+      info->dli_fname = lib->soname;
+      info->dli_fbase = lib->mapbase;
+      info->dli_sname = __rtld_lib_addr2sym(lib, addr);
+      info->dli_saddr = __rtld_lib_sym2addr(lib, info->dli_sname);
+      return 1;
+    }
+  }
+
+  for(rtld_lib_seq_t* seq=g_libseq; seq; seq=seq->next) {
+    if(addr >= seq->lib->mapbase &&
+       addr <= seq->lib->mapbase + seq->lib->mapsize) {
+      info->dli_fname = seq->lib->soname;
+      info->dli_fbase = seq->lib->mapbase;
+      info->dli_sname = __rtld_lib_addr2sym(seq->lib, addr);
+      info->dli_saddr = __rtld_lib_sym2addr(seq->lib, info->dli_sname);
+      return 1;
+    }
+  }
+
+  g_dlerrno = EINVAL;
+
+  return 0;
 }
 
 
@@ -586,7 +643,7 @@ dlsym(void *handle, const char *symbol) {
   }
 
   while(lib) {
-    if((addr=__rtld_lib_sym(lib, symbol))) {
+    if((addr=__rtld_lib_sym2addr(lib, symbol))) {
       return addr;
     }
     lib = lib->next;
@@ -599,10 +656,30 @@ dlsym(void *handle, const char *symbol) {
 
 int
 dlclose(void *handle) {
+  rtld_lib_seq_t *seq = g_libseq;
+  rtld_lib_seq_t *prev = 0;
+
   if(g_this == handle) {
     g_dlerrno = -1;
   } else {
     g_dlerrno = __rtld_lib_close(handle);
+  }
+
+  while(seq) {
+    if(seq->lib != handle) {
+      prev = seq;
+      seq = seq->next;
+
+    } else if(prev) {
+      prev->next = seq->next;
+      free(seq);
+      break;
+
+    } else {
+      g_libseq = seq->next;
+      free(seq);
+      break;
+    }
   }
 
   return g_dlerrno;
