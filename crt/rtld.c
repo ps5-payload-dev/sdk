@@ -17,6 +17,9 @@ along with this program; see the file COPYING. If not, see
 #include "kernel.h"
 #include "syscall.h"
 #include "rtld.h"
+#include "rtld_payload.h"
+#include "rtld_so.h"
+#include "rtld_sprx.h"
 
 
 /**
@@ -45,22 +48,6 @@ typedef struct rtld_ref_lib {
 
   rtld_lib_t* ref;
 } rtld_ref_lib_t;
-
-
-/**
- * Declare init/fini functions for the different runtime loaders.
- **/
-int __rtld_so_init(void);
-int __rtld_sprx_init(void);
-int __rtld_payload_init(void);
-int __rtld_payload_fini(void);
-
-
-/**
- * Declare constructors for the different type of libs.
- **/
-rtld_lib_t* __rtld_sprx_new(rtld_lib_t* prev, const char* soname);
-rtld_lib_t* __rtld_so_new(rtld_lib_t* prev, const char* soname);
 
 
 /**

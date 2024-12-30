@@ -27,5 +27,8 @@ typedef struct payload_args {
 } payload_args_t;
 
 
+/**
+ * Implemented in crt.c
+ **/
 payload_args_t* payload_get_args(void);
 void payload_exit(int exit_code);

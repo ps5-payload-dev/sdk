@@ -16,4 +16,8 @@ along with this program; see the file COPYING. If not, see
 
 #pragma once
 
+
+/**
+ * Apply a couple of patches to the kernel and sprx libs.
+ **/
 int __patch_init(void);

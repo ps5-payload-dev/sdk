@@ -16,4 +16,8 @@ along with this program; see the file COPYING. If not, see
 
 #pragma once
 
+
+/**
+ * Encode a symbol into a NID.
+ **/
 char* nid_encode(const char *sym, char buf[12]);
