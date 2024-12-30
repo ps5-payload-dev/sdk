@@ -16,5 +16,15 @@ along with this program; see the file COPYING. If not, see
 
 #pragma once
 
+
+/**
+ * Initialize the stacktrace module be assigning custom POSIX signal handlers.
+ **/
 int __stacktrace_init(void);
+
+
+/**
+ * Restore POSIX signal handlers so hijacked processes keep working after the
+ * payload terminates.
+ **/
 int __stacktrace_fini(void);

@@ -19,6 +19,9 @@ along with this program; see the file COPYING. If not, see
 #include "payload.h"
 
 
+/**
+ * syscall number definitions.
+ **/
 #define SYS_read        3
 #define SYS_write       4
 #define SYS_open        5
@@ -39,12 +42,12 @@ along with this program; see the file COPYING. If not, see
 
 
 /**
- *
+ * Make a syscall.
  **/
 long __syscall(long sysno, ...);
 
 
 /**
- *
+ * Initialize the syscall function.
  **/
 int __syscall_init(payload_args_t* args);

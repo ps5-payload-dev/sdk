@@ -90,7 +90,7 @@ struct sigaction {
 
 
 /**
- * Map of signals to install termination signal handler.
+ * Define a map of signals to install signal handler for.
  **/
 static unsigned char term_sigmap[] = {
   0, // NOSIG
@@ -135,14 +135,14 @@ static struct sigaction default_sigmap[sizeof(term_sigmap)];
 
 
 /**
- * Dependencies to libkernel
+ * Declare dependencies to libkernel.
  **/
 static int (*sigaction)(int, const struct sigaction*, struct sigaction *) = 0;
 static int (*sigemptyset)(sigset_t*) = 0;
 
 
 /**
- * When recieving a termination signal, print a stacktrace to /dev/klog
+ * When we recieve a POSIX signal, print a stacktrace to /dev/klog
  * and exit gracefully.
  **/
 static void
@@ -196,9 +196,6 @@ on_term_signal(int sig, siginfo_t *info, void *context) {
 }
 
 
-/**
- * Assign custom signal handlers so we can do our own stacktrace.
- **/
 int
 __stacktrace_init(void) {
   struct sigaction sa = {
@@ -237,9 +234,6 @@ __stacktrace_init(void) {
 }
 
 
-/**
- * Restore signal handlers.
- **/
 int
 __stacktrace_fini(void) {
   for(int signo=1; signo<sizeof(term_sigmap); signo++) {

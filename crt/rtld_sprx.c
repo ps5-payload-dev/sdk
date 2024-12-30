@@ -203,6 +203,9 @@ struct sysmodtab {
 };
 
 
+/**
+ * Open up a new sprx object and initialize its members.
+ **/
 static int
 sprx_open(rtld_lib_t* ctx) {
   rtld_sprx_lib_t* lib = (rtld_sprx_lib_t*)ctx;
@@ -284,6 +287,9 @@ sprx_open(rtld_lib_t* ctx) {
 }
 
 
+/**
+ * Resolve the address of a symbol provided by the given sprx object-
+ **/
 static void*
 sprx_sym2addr(rtld_lib_t* ctx, const char* name) {
   rtld_sprx_lib_t* lib = (rtld_sprx_lib_t*)ctx;
@@ -310,7 +316,9 @@ sprx_sym2addr(rtld_lib_t* ctx, const char* name) {
 }
 
 
-
+/**
+ * Figure out the symbol name associated with the given address.
+ **/
 static const char*
 sprx_addr2sym(rtld_lib_t* ctx, void* addr) {
   rtld_sprx_lib_t* lib = (rtld_sprx_lib_t*)ctx;
@@ -339,6 +347,9 @@ sprx_addr2sym(rtld_lib_t* ctx, void* addr) {
 }
 
 
+/**
+ * Close the given sprx object and free memory associated with its members.
+ **/
 static int
 sprx_close(rtld_lib_t* ctx) {
   rtld_sprx_lib_t* lib = (rtld_sprx_lib_t*)ctx;
@@ -369,6 +380,9 @@ sprx_close(rtld_lib_t* ctx) {
 }
 
 
+/**
+ * Free all memory associated the given sprx object.
+ **/
 static void
 sprx_destroy(rtld_lib_t* ctx) {
   rtld_sprx_lib_t* lib = (rtld_sprx_lib_t*)ctx;

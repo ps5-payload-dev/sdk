@@ -101,7 +101,7 @@ static rtld_lib_seq_t* g_libseq = 0;
 static int
 dt_needed(const char* soname) {
   rtld_lib_t* it = (rtld_lib_t*)g_this;
-  rtld_lib_t* lib;
+  rtld_lib_t* lib = 0;
 
   while(it->next) {
     it = it->next;
@@ -221,7 +221,7 @@ dynsym_count(unsigned int *gnu_hash) {
   unsigned int *buckets = (unsigned int *)(bloom + bloom_size);
   unsigned int *chain = buckets + nbuckets;
   unsigned int max_index = 0;
-  unsigned int index;
+  unsigned int index = 0;
 
   for(unsigned int i=0; i<nbuckets; i++) {
     if(buckets[i] == 0) {
@@ -396,7 +396,7 @@ __rtld_payload_init(void) {
       return -1;
   }
 
-  g_this  = calloc(1, sizeof(rtld_payload_lib_t));
+  g_this = calloc(1, sizeof(rtld_payload_lib_t));
   g_this->open     = this_open;
   g_this->sym2addr = this_sym2addr;
   g_this->addr2sym = this_addr2sym;
@@ -621,7 +621,7 @@ dladdr(void *addr, Dl_info *info) {
 void*
 dlsym(void *handle, const char *symbol) {
   rtld_lib_t* lib = handle;
-  void* addr;
+  void* addr = 0;
 
   if(handle == 0) {
     g_dlerrno = ENOSYS;

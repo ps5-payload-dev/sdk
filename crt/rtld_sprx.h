@@ -20,12 +20,13 @@ along with this program; see the file COPYING. If not, see
 
 
 /**
- *
+ * Create a new sprx loader.
  **/
-int __rtld_sprx_init(void);
+rtld_lib_t* __rtld_sprx_new(rtld_lib_t* prev, const char *soname);
 
 
 /**
- *
+ * Initialize sprx loader dependencies.
  **/
-rtld_lib_t* __rtld_sprx_new(rtld_lib_t* prev, const char *soname);
+int __rtld_sprx_init(void);
+

@@ -412,7 +412,7 @@ dynsym_count(unsigned int *gnu_hash) {
   unsigned int *buckets = (unsigned int *)(bloom + bloom_size);
   unsigned int *chain = buckets + nbuckets;
   unsigned int max_index = 0;
-  unsigned int index;
+  unsigned int index = 0;
 
   for(unsigned int i=0; i<nbuckets; i++) {
     if(buckets[i] == 0) {
@@ -500,7 +500,7 @@ static int
 so_load(rtld_so_lib_t* lib, const char* path) {
   unsigned long min_vaddr = -1;
   unsigned long max_vaddr = 0;
-  Elf64_Rela* rela;
+  Elf64_Rela* rela = 0;
   int error = 0;
 
   if(!(lib->image=readfile(path))) {
