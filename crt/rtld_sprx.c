@@ -25,7 +25,7 @@ along with this program; see the file COPYING. If not, see
 /**
  * Dependencies to standard libraries.
  **/
-static char* (*strdup)(const char*) = 0;
+static char* (*strcpy)(char*, const char*) = 0;
 static int (*strcmp)(const char*, const char*) = 0;
 static int (*strncmp)(const char*, const char*, unsigned long) = 0;
 static int (*sprintf)(char*, const char*, ...) = 0;
@@ -299,6 +299,9 @@ sprx_open(rtld_lib_t* ctx) {
   if(kernel_dynlib_obj(-1, handle, &obj) < 0) {
     error = 1;
   }
+  else if(kernel_copyout(obj.path, lib->soname, 1024) < 0) {
+    error = 1;
+  }
   else if(kernel_copyout(obj.dynsec, &dynsec, sizeof(dynsec)) < 0) {
     error = 1;
   }
@@ -362,9 +365,6 @@ sprx_sym2addr(rtld_lib_t* ctx, const char* name) {
 static const char*
 sprx_addr2sym(rtld_lib_t* ctx, void* addr) {
   rtld_sprx_lib_t* lib = (rtld_sprx_lib_t*)ctx;
-  unsigned long min_offset = ctx->mapsize;
-  const char* sym = 0;
-  unsigned long l;
 
   if(!lib->symtab || !lib->strtab || !lib->mapbase) {
     return 0;
@@ -375,23 +375,18 @@ sprx_addr2sym(rtld_lib_t* ctx, void* addr) {
     return 0;
   }
 
-  l = (long)addr - (long)ctx->mapbase;
   for(unsigned long i=0; i<lib->symtab_size/sizeof(Elf64_Sym); i++) {
     if(!lib->symtab[i].st_size) {
       continue;
     }
 
-    if(l < lib->symtab[i].st_value) {
-      continue;
-    }
-
-    if(l < min_offset) {
-      min_offset = l;
-      sym = lib->strtab + lib->symtab[i].st_name;
+    if(addr >= lib->mapbase + lib->symtab[i].st_value &&
+       addr <= lib->mapbase + lib->symtab[i].st_value + lib->symtab[i].st_size) {
+      return lib->strtab + lib->symtab[i].st_name;
     }
   }
 
-  return sym;
+  return 0;
 }
 
 
@@ -443,7 +438,7 @@ rtld_lib_t*
 __rtld_sprx_new(rtld_lib_t* prev, const char *soname) {
   rtld_sprx_lib_t* lib = calloc(1, sizeof(rtld_sprx_lib_t));
 
-  lib->soname   = strdup(soname);
+  lib->soname   = calloc(1024, sizeof(char));
   lib->prev     = prev;
   lib->open     = sprx_open;
   lib->sym2addr = sprx_sym2addr;
@@ -451,6 +446,8 @@ __rtld_sprx_new(rtld_lib_t* prev, const char *soname) {
   lib->close    = sprx_close;
   lib->destroy  = sprx_destroy;
   lib->refcnt   = 0;
+
+  strcpy(lib->soname, soname);
 
   return (rtld_lib_t*)lib;
 }
@@ -472,7 +469,7 @@ __rtld_sprx_init(void) {
     return -1;
   }
 
-  if(!KERNEL_DLSYM(libc, strdup)) {
+  if(!KERNEL_DLSYM(libc, strcpy)) {
     return -1;
   }
   if(!KERNEL_DLSYM(libc, strcmp)) {

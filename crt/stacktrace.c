@@ -180,7 +180,6 @@ on_term_signal(int sig, siginfo_t *info, void *context) {
       kernel_dynlib_path(-1, handle, path, sizeof(path));
       klog_printf("[%d] %s(+0x%lx)[0x%lx]\n", i, path, addr - mapbase,
                   (long)addr);
-
     } else {
       // Address is mapped by payload
       klog_printf("[%d] ?[0x%lx]\n", i, (long)addr);

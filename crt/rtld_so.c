@@ -689,6 +689,8 @@ so_load(rtld_so_lib_t* lib, const char* path) {
     return -1;
   }
 
+  strcpy(lib->soname, path);
+
   return 0;
 }
 
@@ -802,7 +804,7 @@ rtld_lib_t*
 __rtld_so_new(rtld_lib_t* prev, const char *soname) {
   rtld_so_lib_t* lib = calloc(1, sizeof(rtld_so_lib_t));
 
-  lib->soname   = strdup(soname);
+  lib->soname   = calloc(1024, sizeof(char));
   lib->prev     = prev;
   lib->open     = so_open;
   lib->sym2addr = so_sym2addr;
@@ -810,6 +812,8 @@ __rtld_so_new(rtld_lib_t* prev, const char *soname) {
   lib->close    = so_close;
   lib->destroy  = so_destroy;
   lib->refcnt   = 0;
+
+  strcpy(lib->soname, soname);
 
   return (rtld_lib_t*)lib;
 }
