@@ -42,7 +42,6 @@ extern unsigned char __bss_end[] __attribute__((weak));
 extern int main(int argc, char* argv[], char *envp[]);
 
 
-
 /**
  * Remember the args passed to _start and the cpu state.
  **/
@@ -115,7 +114,7 @@ payload_terminate(void) {
 
 
 /**
- *
+ * Exit the payload by transfering the flow of control back to _start().
  **/
 void
 payload_exit(int exit_code) {
@@ -125,7 +124,7 @@ payload_exit(int exit_code) {
 
 
 /**
- *
+ * Provide a convenience function for accessing the payload args.
  **/
 payload_args_t*
 payload_get_args(void) {

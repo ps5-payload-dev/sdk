@@ -16,7 +16,6 @@ along with this program; see the file COPYING. If not, see
 
 #include "kernel.h"
 #include "nid.h"
-#include "payload.h"
 #include "syscall.h"
 
 
@@ -86,6 +85,9 @@ static int rw_pair[2] = {-1, -1};
 #define VICTIM_SOCK rw_pair[1]
 
 
+/**
+ * we need strcmp() before we can resolve symbols.
+ **/
 static int
 strncmp(const char *s1, const char *s2, unsigned long n) {
   if(n == 0) {
@@ -106,6 +108,9 @@ strncmp(const char *s1, const char *s2, unsigned long n) {
 }
 
 
+/**
+ * we need strlen() before we can resolve symbols.
+ **/
 static unsigned long
 strlen(const char *str) {
   const char *start = str;

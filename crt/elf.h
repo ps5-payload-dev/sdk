@@ -14,6 +14,8 @@ You should have received a copy of the GNU General Public License
 along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
+#pragma once
+
 #define ELF64_R_SYM(info) ((info) >> 32)
 #define ELF64_ST_BIND(info) ((info) >> 4)
 
@@ -114,4 +116,3 @@ typedef struct {
   unsigned long r_info;
   long          r_addend;
 } Elf64_Rela;
-
