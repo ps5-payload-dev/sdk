@@ -578,7 +578,8 @@ dlopen(const char *filename, int flags) {
 
   seq = calloc(1, sizeof(rtld_lib_seq_t));
   seq->next = g_libseq;
-  g_libseq = seq;
+  seq->lib  = lib;
+  g_libseq  = seq;
 
   g_dlerrno = 0;
 
@@ -653,31 +654,32 @@ dlsym(void *handle, const char *symbol) {
 
 int
 dlclose(void *handle) {
-  rtld_lib_seq_t *seq = g_libseq;
   rtld_lib_seq_t *prev = 0;
+  rtld_lib_seq_t *seq = 0;
 
   if(g_this == handle) {
     g_dlerrno = -1;
-  } else {
-    g_dlerrno = __rtld_lib_close(handle);
+    return g_dlerrno;
   }
 
-  while(seq) {
-    if(seq->lib != handle) {
-      prev = seq;
-      seq = seq->next;
+  for(seq=g_libseq; seq; prev=seq, seq=seq->next) {
+      if(seq->lib == handle) {
+          break;
+      }
+  }
 
-    } else if(prev) {
+  if(!seq) {
+      g_dlerrno = -1;
+      return g_dlerrno;
+  }
+
+  if(prev) {
       prev->next = seq->next;
-      free(seq);
-      break;
-
-    } else {
+  } else {
       g_libseq = seq->next;
-      free(seq);
-      break;
-    }
   }
+
+  g_dlerrno = __rtld_lib_close(handle);
 
   return g_dlerrno;
 }

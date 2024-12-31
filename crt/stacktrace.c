@@ -90,6 +90,24 @@ struct sigaction {
 
 
 /**
+ *
+ **/
+typedef struct vmem_query {
+  void* unk01;
+  void* unk02;
+  unsigned long offset;
+  int unk04;
+  int unk05;
+  unsigned isFlexibleMemory : 1;
+  unsigned isDirectMemory : 1;
+  unsigned isStack : 1;
+  unsigned isPooledMemory : 1;
+  unsigned isCommitted : 1;
+  char name[32];
+} vmem_query_t;
+
+
+/**
  * Define a map of signals to install signal handler for.
  **/
 static unsigned char term_sigmap[] = {
@@ -139,6 +157,7 @@ static struct sigaction default_sigmap[sizeof(term_sigmap)];
  **/
 static int (*sigaction)(int, const struct sigaction*, struct sigaction *) = 0;
 static int (*sigemptyset)(sigset_t*) = 0;
+static int (*sceKernelVirtualQuery)(void*, int, vmem_query_t*, unsigned long) = 0;
 
 
 /**
@@ -152,6 +171,7 @@ on_term_signal(int sig, siginfo_t *info, void *context) {
   unsigned long mapbase;
   unsigned int handle;
   char path[1024];
+  vmem_query_t q;
   Dl_info dli;
   int i = 0;
 
@@ -186,6 +206,9 @@ on_term_signal(int sig, siginfo_t *info, void *context) {
     }
 
     frame = (void**)*frame;
+    if(sceKernelVirtualQuery(frame, 0, &q, sizeof(q))) {
+      break;
+    }
     if(frame) {
       addr = *(frame+1);
     }
@@ -212,6 +235,12 @@ __stacktrace_init(void) {
   if(!KERNEL_DLSYM(0x1, sigemptyset)) {
     if(!KERNEL_DLSYM(0x2001, sigemptyset)) {
       klog_puts("Unable to resolve the symbol 'sigemptyset'");
+      return -1;
+    }
+  }
+  if(!KERNEL_DLSYM(0x1, sceKernelVirtualQuery)) {
+    if(!KERNEL_DLSYM(0x2001, sceKernelVirtualQuery)) {
+      klog_puts("Unable to resolve the symbol 'sceKernelVirtualQuery'");
       return -1;
     }
   }
