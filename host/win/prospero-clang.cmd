@@ -58,9 +58,9 @@ clang ^
     -L "%PS5_PAYLOAD_SDK%\target\lib" ^
     -L "%PS5_PAYLOAD_SDK%\target\user\homebrew\lib" ^
     -fno-stack-protector -fno-plt -femulated-tls ^
-    %LIBS_C% ^
+    %LIBS_C% %LIBS_KERN% ^
     --end-no-unused-arguments ^
     %* ^
     --start-no-unused-arguments ^
-    %LIBS_CRT% %LIBS_DEPS% %LIBS_KERN% ^
+    %LIBS_CRT% %LIBS_DEPS% ^
      --end-no-unused-arguments
