@@ -146,22 +146,22 @@ __rtld_find_file(const char *name, char* path) {
   }
 
   sprintf(path, "/system/priv/lib/%s", name);
-  if(!__syscall(SYS_access, path, 0)) {
+  if(!__syscall(SYS_stat, path, buf)) {
     return 0;
   }
 
   sprintf(path, "/system/common/lib/%s", name);
-  if(!__syscall(SYS_access, path, 0)) {
+  if(!__syscall(SYS_stat, path, buf)) {
     return 0;
   }
 
   sprintf(path, "/system_ex/priv_ex/lib/%s", name);
-  if(!__syscall(SYS_access, path, 0)) {
+  if(!__syscall(SYS_stat, path, buf)) {
     return 0;
   }
 
   sprintf(path, "/system_ex/common_ex/lib/%s", name);
-  if(!__syscall(SYS_access, path, 0)) {
+  if(!__syscall(SYS_stat, path, buf)) {
     return 0;
   }
 
@@ -182,7 +182,7 @@ __rtld_find_file(const char *name, char* path) {
 
   strcpy(path, "/user/homebrew/lib/");
   strcat(path, name);
-    if(!__syscall(SYS_access, path, 0)) {
+    if(!__syscall(SYS_stat, path, buf)) {
       return 0;
     }
 

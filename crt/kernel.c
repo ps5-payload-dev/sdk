@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
+#include "elf.h"
 #include "kernel.h"
 #include "nid.h"
 #include "syscall.h"
@@ -28,19 +29,6 @@ along with this program; see the file COPYING. If not, see
 #define EBADF  9
 #define EFAULT 14
 #define ENOSYS 78
-
-
-/**
- * an ELF symbol loaded in kernel memory.
- **/
-typedef struct {
-  unsigned int st_name;
-  unsigned char st_info;
-  unsigned char st_other;
-  unsigned short st_shndx;
-  unsigned long st_value;
-  unsigned long st_size;
-} Elf64_Sym;
 
 
 /**
