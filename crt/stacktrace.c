@@ -115,7 +115,7 @@ static unsigned char term_sigmap[] = {
   1, // SIGHUP
   1, // SIGINT
   1, // SIGQUIT
-  0, // SIGILL
+  1, // SIGILL
   1, // SIGTRAP
   1, // SIGABRT
   1, // SIGEMT
