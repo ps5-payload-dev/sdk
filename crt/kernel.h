@@ -150,4 +150,6 @@ unsigned long kernel_dynlib_mapbase_addr(int pid, unsigned int handle);
 unsigned long kernel_dynlib_dlsym(int pid, unsigned int handle, const char* sym);
 int kernel_dynlib_path(int pid, unsigned int handle, char* path, unsigned long size);
 
+int kernel_mprotect(int pid, unsigned long addr, unsigned long size, int prot);
+
 int __kernel_init(payload_args_t* args);
