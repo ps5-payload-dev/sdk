@@ -16,7 +16,7 @@ along with this program; see the file COPYING. If not, see
 
 #pragma once
 
-#define ELF64_R_SYM(info) ((info) >> 32)
+#define ELF64_R_SYM(info)   ((info) >> 32)
 #define ELF64_ST_BIND(info) ((info) >> 4)
 
 #define PT_LOAD    1

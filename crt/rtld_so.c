@@ -57,8 +57,8 @@ static void (*free)(void*) = 0;
 #define PAGE_SIZE 0x4000
 #define ROUND_PG(x) (((x) + (PAGE_SIZE - 1)) & ~(PAGE_SIZE - 1))
 #define TRUNC_PG(x) ((x) & ~(PAGE_SIZE - 1))
-#define PFLAGS(x)   ((((x) & PF_R) ? PROT_READ  : 0) | \
-		     (((x) & PF_W) ? PROT_WRITE : 0) | \
+#define PFLAGS(x)   ((((x) & PF_R) ? PROT_READ  : 0) |  \
+		     (((x) & PF_W) ? PROT_WRITE : 0) |  \
 		     (((x) & PF_X) ? PROT_EXEC  : 0))
 
 
@@ -89,7 +89,7 @@ typedef struct rtld_so_lib {
  **/
 static int
 jitshm_create(const char* name, unsigned long size, int flags) {
-    return (int)__syscall(0x215, name, size, flags);
+  return (int)__syscall(0x215, name, size, flags);
 }
 
 
@@ -118,7 +118,7 @@ mmap(void* addr, unsigned long len, int prot, int flags, int fd,
  **/
 static int
 mprotect(void* addr, unsigned long len, int prot) {
-    return (int)__syscall(SYS_mprotect, addr, len, prot);
+  return (int)__syscall(SYS_mprotect, addr, len, prot);
 }
 
 
