@@ -36,6 +36,7 @@ extern const intptr_t KERNEL_ADDRESS_TARGETID;
 extern const off_t KERNEL_OFFSET_PROC_P_UCRED;
 extern const off_t KERNEL_OFFSET_PROC_P_FD;
 extern const off_t KERNEL_OFFSET_PROC_P_PID;
+extern const off_t KERNEL_OFFSET_PROC_P_VMSPACE;
 
 // Ucred field offsets
 extern const off_t KERNEL_OFFSET_UCRED_CR_UID;
@@ -70,6 +71,8 @@ intptr_t kernel_get_proc(pid_t pid);
 intptr_t kernel_get_proc_ucred(pid_t pid);
 intptr_t kernel_get_proc_filedesc(pid_t pid);
 intptr_t kernel_get_proc_file(pid_t pid, int fd);
+
+int kernel_mprotect(pid_t pid, intptr_t addr, size_t size, int prot);
 
 int kernel_overlap_sockets(pid_t pid, int master_sock, int victim_sock);
 

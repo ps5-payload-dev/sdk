@@ -44,9 +44,10 @@ unsigned long KERNEL_ADDRESS_UTOKEN_FLAGS   = 0;
 unsigned long KERNEL_ADDRESS_QA_FLAGS       = 0;
 unsigned long KERNEL_ADDRESS_TARGETID       = 0;
 
-const unsigned long KERNEL_OFFSET_PROC_P_UCRED = 0x40;
-const unsigned long KERNEL_OFFSET_PROC_P_FD    = 0x48;
-const unsigned long KERNEL_OFFSET_PROC_P_PID   = 0xBC;
+const unsigned long KERNEL_OFFSET_PROC_P_UCRED   = 0x40;
+const unsigned long KERNEL_OFFSET_PROC_P_FD      = 0x48;
+const unsigned long KERNEL_OFFSET_PROC_P_PID     = 0xBC;
+const unsigned long KERNEL_OFFSET_PROC_P_VMSPACE = 0x200;
 
 const unsigned long KERNEL_OFFSET_UCRED_CR_UID   = 0x04;
 const unsigned long KERNEL_OFFSET_UCRED_CR_RUID  = 0x08;
@@ -949,6 +950,78 @@ kernel_get_proc_filedesc(int pid) {
   }
 
   return filedesc;
+}
+
+
+int
+kernel_mprotect(int pid, unsigned long addr, unsigned long len, int prot) {
+  unsigned long vm_map_entry_addr;
+  unsigned long vmspace_addr;
+  unsigned long vm_map_addr;
+  unsigned long proc_addr;
+  unsigned char vm_prot;
+  unsigned long start;
+  unsigned long end;
+
+  if(!(proc_addr=kernel_get_proc(pid))) {
+    return -1;
+  }
+  if(kernel_copyout(proc_addr + KERNEL_OFFSET_PROC_P_VMSPACE,
+                    &vmspace_addr, sizeof(vmspace_addr))) {
+    return -1;
+  }
+  if(kernel_copyout(vmspace_addr, &vm_map_addr, sizeof(vm_map_addr))) {
+    return -1;
+  }
+  if(kernel_copyout(vm_map_addr, &vm_map_entry_addr,
+                    sizeof(vm_map_entry_addr))) {
+    return -1;
+  }
+
+  while(vm_map_entry_addr) {
+    if(kernel_copyout(vm_map_entry_addr + 0x20, &start, sizeof(start))) {
+      return -1;
+    }
+    if(kernel_copyout(vm_map_entry_addr + 0x28, &end, sizeof(end))) {
+      return -1;
+    }
+
+    if(addr < start) {
+      // prev
+      if(kernel_copyout(vm_map_entry_addr, &vm_map_entry_addr,
+                        sizeof(vm_map_entry_addr))) {
+        return -1;
+      }
+      vm_map_entry_addr = kernel_getlong(vm_map_entry_addr + 0);
+    } else if(addr > end) {
+      // next
+      if(kernel_copyout(vm_map_entry_addr + 8, &vm_map_entry_addr,
+                        sizeof(vm_map_entry_addr))) {
+        return -1;
+      }
+    } else {
+      // protection
+      if(kernel_copyout(vm_map_entry_addr + 0x64, &vm_prot, sizeof(vm_prot))) {
+        return -1;
+      }
+      vm_prot |= prot;
+      if(kernel_copyin(&vm_prot, vm_map_entry_addr + 0x64, sizeof(vm_prot))) {
+        return -1;
+      }
+
+      // max_protection
+      if(kernel_copyout(vm_map_entry_addr + 0x65, &vm_prot, sizeof(vm_prot))) {
+        return -1;
+      }
+      vm_prot |= prot;
+      if(kernel_copyin(&vm_prot, vm_map_entry_addr + 0x65, sizeof(vm_prot))) {
+        return -1;
+      }
+
+      return 0;
+    }
+  }
+  return -1;
 }
 
 
