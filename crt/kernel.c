@@ -993,7 +993,7 @@ kernel_mprotect(int pid, unsigned long addr, unsigned long len, int prot) {
         return -1;
       }
       vm_map_entry_addr = kernel_getlong(vm_map_entry_addr + 0);
-    } else if(addr > end) {
+    } else if(addr >= end) {
       // next
       if(kernel_copyout(vm_map_entry_addr + 8, &vm_map_entry_addr,
                         sizeof(vm_map_entry_addr))) {
