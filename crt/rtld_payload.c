@@ -593,7 +593,7 @@ dladdr(void *addr, Dl_info *info) {
 
   for(lib=(rtld_lib_t*)g_this; lib; lib=lib->next) {
     if(addr >= lib->mapbase &&
-       addr <= lib->mapbase + lib->mapsize) {
+       addr < lib->mapbase + lib->mapsize) {
       info->dli_fname = lib->soname;
       info->dli_fbase = lib->mapbase;
       info->dli_sname = __rtld_lib_addr2sym(lib, addr);
@@ -604,7 +604,7 @@ dladdr(void *addr, Dl_info *info) {
 
   for(rtld_lib_seq_t* seq=g_libseq; seq; seq=seq->next) {
     if(addr >= seq->lib->mapbase &&
-       addr <= seq->lib->mapbase + seq->lib->mapsize) {
+       addr < seq->lib->mapbase + seq->lib->mapsize) {
       info->dli_fname = seq->lib->soname;
       info->dli_fbase = seq->lib->mapbase;
       info->dli_sname = __rtld_lib_addr2sym(seq->lib, addr);
