@@ -84,26 +84,6 @@ typedef struct rtld_so_lib {
 
 
 /**
- * Convenient function for a custom sony syscall that allocates shared memory
- * with JIT code execution permissions.
- **/
-static int
-jitshm_create(const char* name, unsigned long size, int flags) {
-  return (int)__syscall(0x215, name, size, flags);
-}
-
-
-/**
- * Convenient function for a custom sony syscall that creates an alias to
- * JIT memory for write permissions.
- **/
-static int
-jitshm_alias(int fd, int flags) {
-  return (int)__syscall(0x216, fd, flags);
-}
-
-
-/**
  * Convenient function for the standard mmap syscall.
  **/
 static void*
@@ -117,8 +97,12 @@ mmap(void* addr, unsigned long len, int prot, int flags, int fd,
  * Convenient function for the standard mprotect syscall.
  **/
 static int
-mprotect(void* addr, unsigned long len, int prot) {
-  return (int)__syscall(SYS_mprotect, addr, len, prot);
+mprotect(void* addr, unsigned long size, int prot) {
+  if((prot & PROT_EXEC)) {
+    return kernel_mprotect(-1, (unsigned long)addr, size, prot);
+  } else {
+    return (int)__syscall(SYS_mprotect, addr, size, prot);
+  }
 }
 
 
@@ -328,77 +312,6 @@ pt_load(rtld_so_lib_t *lib, Elf64_Phdr *phdr) {
 }
 
 
-/**
- * Reload a PT_LOAD program header that needs executable permissions.
- *
- * This is required to circumvent restrictions Sony put into place when user
- * space processes attempts to allocate memory with execute permissions.
- * We circumvent the protection using JIT capabillities provided by a couple of
- * custom Sony syscalls.
- *
- * Note: code allocated via JIT are not permitted to run syscall instructions.
- *       To make syscalls, payloads can instead slide into a page that can,
- *       e.g., at getpid+0xa in libkernel.sprx.
- **/
-static int
-pt_reload(rtld_so_lib_t *lib, Elf64_Phdr *phdr) {
-  unsigned long memsz = ROUND_PG(phdr->p_memsz);
-  void* addr = lib->mapbase + phdr->p_vaddr;
-  int prot = PFLAGS(phdr->p_flags);
-  int alias_fd = -1;
-  int shm_fd = -1;
-  int error = 0;
-  void* data;
-  void* addrx = 0;
-  void* addrw = 0;
-
-  // backup data
-  if(!(data=malloc(memsz))) {
-    klog_perror("malloc");
-    return -1;
-  }
-  memcpy(data, addr, memsz);
-
-  // create shm with executable permissions
-  if((shm_fd=jitshm_create(0, memsz, prot | PROT_WRITE | PROT_EXEC)) < 0) {
-    klog_perror("jitshm_create");
-    error = -1;
-  }
-  // create an shm alias fd with write permissions
-  else if((alias_fd=jitshm_alias(shm_fd, PROT_WRITE)) < 0) {
-    klog_perror("jitshm_alias");
-    error = -1;
-  }
-  // map shm into an executable address space
-  else if((addrx=mmap(addr, memsz, prot, MAP_FIXED | MAP_PRIVATE,
-                      shm_fd, 0)) == MAP_FAILED) {
-    klog_perror("mmap");
-    error = -1;
-  }
-  // map shm alias into a writable address space
-  else if((addrw=mmap(0, memsz, PROT_WRITE, MAP_SHARED,
-                      alias_fd, 0)) == MAP_FAILED) {
-    klog_perror("mmap");
-    error = -1;
-  }
-  // resore data
-  else {
-    memcpy(addrw, data, memsz);
-    munmap(addrw, memsz);
-  }
-
-  // cleanup
-  free(data);
-  if(alias_fd != -1) {
-    __syscall(SYS_close, alias_fd);
-  }
-  if(shm_fd != -1) {
-    __syscall(SYS_close, shm_fd);
-  }
-
-  return error;
-}
-
 
 /**
  *  Figure out the symtab size.
@@ -603,16 +516,11 @@ so_load(rtld_so_lib_t* lib, const char* path) {
     if(lib->phdr[i].p_type != PT_LOAD || lib->phdr[i].p_memsz == 0) {
       continue;
     }
-
-    if(lib->phdr[i].p_flags & PF_X) {
-      error = pt_reload(lib, &lib->phdr[i]);
-    } else {
-      if(mprotect(lib->mapbase + lib->phdr[i].p_vaddr,
-		  ROUND_PG(lib->phdr[i].p_memsz),
-		  PFLAGS(lib->phdr[i].p_flags))) {
-        klog_perror("mprotect");
-	error = 1;
-      }
+    if(mprotect(lib->mapbase + lib->phdr[i].p_vaddr,
+                ROUND_PG(lib->phdr[i].p_memsz),
+                PFLAGS(lib->phdr[i].p_flags))) {
+      klog_perror("mprotect");
+      error = 1;
     }
   }
 
