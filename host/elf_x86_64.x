@@ -35,7 +35,24 @@ SECTIONS {
 
 	.plt : { *(.plt) }
 
-	.rodata : ALIGN(CONSTANT(MAXPAGESIZE)) {
+	.eh_frame_hdr : ALIGN(CONSTANT(MAXPAGESIZE)) {
+	    PROVIDE_HIDDEN(__eh_frame_hdr_start = .);
+	    KEEP(*(.eh_frame_hdr))
+	    PROVIDE_HIDDEN(__eh_frame_hdr_end = .);
+	} : ph_rodata
+
+	.eh_frame : {
+	    PROVIDE_HIDDEN(__eh_frame_start = .);
+	    KEEP(*(.eh_frame))
+	    PROVIDE_HIDDEN(__eh_frame_end = .);
+	}
+
+	.gcc_except_table : { *(.gcc_except_table*) }
+	.data.rel.ro : { *(.data.rel.ro .data.rel.ro.*); }
+	.got : { *(.got) }
+	.got.plt : { *(.got.plt) }
+
+	.rodata : {
 	    *(.rodata .rodata.*)
 
 	    PROVIDE_HIDDEN(__init_array_start = .);
@@ -47,36 +64,15 @@ SECTIONS {
 	    KEEP(*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
 	    KEEP(*(.fini_array .dtors))
 	    PROVIDE_HIDDEN(__fini_array_end = .);
-	} : ph_rodata
-
-	.gcc_except_table : { *(.gcc_except_table*) }
-
-	.eh_frame_hdr : ALIGN(CONSTANT(MAXPAGESIZE)) {
-	    PROVIDE_HIDDEN(__eh_frame_hdr_start = .);
-	    KEEP(*(.eh_frame_hdr))
-	    PROVIDE_HIDDEN(__eh_frame_hdr_end = .);
 	}
-
-	.eh_frame : {
-	    PROVIDE_HIDDEN(__eh_frame_start = .);
-	    KEEP(*(.eh_frame))
-	    PROVIDE_HIDDEN(__eh_frame_end = .);
-	}
-
-	.data.rel.ro : { *(.data.rel.ro .data.rel.ro.*); }
-	.got : { *(.got) }
-	.got.plt : { *(.got.plt) }
-
-	.data : ALIGN(CONSTANT(MAXPAGESIZE)) {
-	    *(.data .data.*)
-	} : ph_data
 
 	.dynamic : ALIGN(CONSTANT(MAXPAGESIZE)) {
 	    PROVIDE_HIDDEN (_DYNAMIC = .);
 	    *(.dynamic)
-	} : ph_data : ph_dyn
+	} : ph_rodata : ph_dyn
 
-	.bss (NOLOAD) : ALIGN(CONSTANT(MAXPAGESIZE)) {
+	.data : ALIGN(CONSTANT(MAXPAGESIZE)) {
+	    *(.data .data.*)
 	    PROVIDE_HIDDEN (__bss_start = .);
 	    *(.bss .bss.*);
 	    *(COMMON)
