@@ -19,10 +19,9 @@ along with this program; see the file COPYING. If not, see
 
 static __attribute__ ((used)) long ptr_syscall = 0;
 
+
+void __syscall() {
 asm(".intel_syntax noprefix\n"
-    ".global __syscall\n"
-    ".type __syscall @function\n"
-    "__syscall:\n"
     "  mov rax, rdi\n"
     "  mov rdi, rsi\n"
     "  mov rsi, rdx\n"
@@ -33,6 +32,7 @@ asm(".intel_syntax noprefix\n"
     "  jmp qword ptr [rip + ptr_syscall]\n"
     "  ret\n"
     );
+}
 
 
 int
