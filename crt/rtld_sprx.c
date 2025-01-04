@@ -59,7 +59,7 @@ typedef struct rtld_sprx_lib {
 /**
  * Lookup table for sceSysmoduleLoadModuleInternal().
  **/
-struct sysmodtab {
+static struct sysmodtab {
   const char* name;
   unsigned int handle;
 } sysmodtab[] = {
