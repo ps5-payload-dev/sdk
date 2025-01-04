@@ -150,6 +150,7 @@ static unsigned char term_sigmap[] = {
  * Remember the default signal handlers.
  **/
 static struct sigaction default_sigmap[sizeof(term_sigmap)];
+static int default_cnt = 0;
 
 
 /**
@@ -257,6 +258,7 @@ __stacktrace_init(void) {
       klog_perror("sigaction");
       return -1;
     }
+    default_cnt++;
   }
 
   return 0;
@@ -265,7 +267,7 @@ __stacktrace_init(void) {
 
 int
 __stacktrace_fini(void) {
-  for(int signo=1; signo<sizeof(term_sigmap); signo++) {
+  for(int signo=1; signo<sizeof(term_sigmap) && default_cnt; signo++) {
     if(!term_sigmap[signo]) {
       continue;
     }
@@ -274,6 +276,7 @@ __stacktrace_fini(void) {
       klog_perror("sigaction");
       return -1;
     }
+    default_cnt--;
   }
 
   return 0;
