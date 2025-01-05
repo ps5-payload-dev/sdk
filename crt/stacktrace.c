@@ -218,7 +218,7 @@ on_term_signal(int sig, siginfo_t *info, void *context) {
 
   memset(&nr, 0, sizeof(nr));
   if(sig > 0 && sig < 32) {
-    sprintf(nr.message, "Terminating due to the fatal POSIX signal %s (%d)", sigtab[sig], sig);
+    sprintf(nr.message, "Terminating due to the fatal POSIX signal SIG%s (%d)", sigtab[sig], sig);
   } else {
     sprintf(nr.message, "Terminating due to the fatal POSIX signal %d", sig);
   }
