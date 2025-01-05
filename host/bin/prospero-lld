@@ -33,7 +33,7 @@ done
 
 BIN_PATH="${LLVM_BINDIR}/ld.lld"
 exec "${BIN_PATH}" \
-     -m elf_x86_64 $PIE --export-dynamic --eh-frame-hdr \
+     -m elf_x86_64 $PIE --eh-frame-hdr \
      -z max-page-size=0x4000 \
      -T "${PS5_PAYLOAD_SDK}/ldscripts/elf_x86_64.x" \
      "$@"
