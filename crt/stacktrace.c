@@ -107,6 +107,12 @@ typedef struct vmem_query {
 } vmem_query_t;
 
 
+typedef struct notify_request {
+  char useless1[45];
+  char message[3075];
+} notify_request_t;
+
+
 /**
  * Define a map of signals to install signal handler for.
  **/
@@ -159,6 +165,31 @@ static int default_cnt = 0;
 static int (*sigaction)(int, const struct sigaction*, struct sigaction *) = 0;
 static int (*sigemptyset)(sigset_t*) = 0;
 static int (*sceKernelVirtualQuery)(void*, int, vmem_query_t*, unsigned long) = 0;
+static int (*sceKernelSendNotificationRequest)(int, notify_request_t*, unsigned long, int) = 0;
+
+static int (*sprintf)(char*, const char*, ...) = 0;
+
+/**
+ * we need memset() before we can resolve symbols.
+ **/
+static void*
+memset(void *m, int c, unsigned long n) {
+  char *s = (char*)m;
+
+  while(n--) {
+    *s++ = (char)c;
+  }
+
+  return m;
+}
+
+
+static const char *const sigtab[] = {
+  "", "HUP", "INT", "QUIT", "ILL", "TRAP", "ABRT", "EMT", "FPE", "KILL", "BUS",
+  "SEGV", "SYS", "PIPE", "ALRM", "TERM", "URG", "STOP", "TSTP", "CONT", "CHLD",
+  "TTIN", "TTOU", "IO", "XCPU", "XFSZ", "VTALRM", "PROF", "WINCH", "INFO",
+  "USR1", "USR2"
+};
 
 
 /**
@@ -171,6 +202,7 @@ on_term_signal(int sig, siginfo_t *info, void *context) {
   void *addr = info->si_addr;
   unsigned long mapbase;
   unsigned int handle;
+  notify_request_t nr;
   char path[1024];
   vmem_query_t q;
   Dl_info dli;
@@ -184,7 +216,15 @@ on_term_signal(int sig, siginfo_t *info, void *context) {
     frame = (void**)*frame;
   }
 
-  klog_printf("Caught the POSIX signal %d:\n", sig);
+  memset(&nr, 0, sizeof(nr));
+  if(sig > 0 && sig < 32) {
+    sprintf(nr.message, "Terminating due to the fatal POSIX signal %s (%d)", sigtab[sig], sig);
+  } else {
+    sprintf(nr.message, "Terminating due to the fatal POSIX signal %d", sig);
+  }
+  sceKernelSendNotificationRequest(0, &nr, sizeof(nr), 0);
+  klog_puts(nr.message);
+
   while(frame) {
     if(dladdr(addr, &dli)) {
       // Address is mapped by crt
@@ -244,6 +284,16 @@ __stacktrace_init(void) {
       klog_puts("Unable to resolve the symbol 'sceKernelVirtualQuery'");
       return -1;
     }
+  }
+  if(!KERNEL_DLSYM(0x1, sceKernelSendNotificationRequest)) {
+    if(!KERNEL_DLSYM(0x2001, sceKernelSendNotificationRequest)) {
+      klog_puts("Unable to resolve the symbol 'sceKernelSendNotificationRequest'");
+      return -1;
+    }
+  }
+
+  if(!KERNEL_DLSYM(0x2, sprintf)) {
+    return -1;
   }
 
   for(int signo=1; signo<sizeof(term_sigmap); signo++) {
