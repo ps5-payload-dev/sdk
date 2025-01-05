@@ -33,7 +33,6 @@ static char* (*strcat)(char*, const char*) = 0;
 static int (*sprintf)(char*, const char*, ...) = 0;
 
 static char* (*getenv)(const char*) = 0;
-static char* (*getcwd)(char*, unsigned long) = 0;
 
 static void* (*calloc)(unsigned long, unsigned long) = 0;
 static void (*free)(void*) = 0;
@@ -136,7 +135,9 @@ __rtld_find_file(const char *name, char* path) {
     return err;
   }
 
-  if(getcwd(cwd, sizeof(cwd))) {
+  cwd[0] = 0;
+  __syscall(SYS___getcwd, cwd, sizeof(cwd));
+  if(cwd[0]) {
     strcpy(path, cwd);
     strcat(path, "/");
     strcat(path, name);
@@ -326,9 +327,6 @@ __rtld_init(void) {
     return -1;
   }
   if(!KERNEL_DLSYM(0x2, getenv)) {
-    return -1;
-  }
-  if(!KERNEL_DLSYM(0x2, getcwd)) {
     return -1;
   }
 

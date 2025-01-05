@@ -33,6 +33,7 @@ along with this program; see the file COPYING. If not, see
 #define SYS_setsockopt  105
 #define SYS_stat        188
 #define SYS_sysctl      202
+#define SYS___getcwd    326
 #define SYS_mmap        477
 #define SYS_lseek       478
 #define SYS_mdbg_call   573
