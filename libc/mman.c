@@ -19,7 +19,12 @@ along with this program; see the file COPYING. If not, see
 #include <sys/mman.h>
 #include <sys/syscall.h>
 
-#include "../include/ps5/kernel.h"
+
+/**
+ * shared objects do not link with crt1.o, declare deps as weak.
+ **/
+__attribute__((weak)) long __syscall(long, ...);
+__attribute__((weak)) int kernel_mprotect(pid_t, intptr_t, size_t, int);
 
 
 int
