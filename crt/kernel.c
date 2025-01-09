@@ -973,7 +973,8 @@ kernel_mprotect(int pid, unsigned long addr, unsigned long len, int prot) {
     return -1;
   }
 
-  if(kernel_copyout(vmspace_addr + KERNEL_OFFSET_VMSPACE_P_ROOT, &vm_map_entry_addr, sizeof(vm_map_entry_addr))) {
+  if(kernel_copyout(vmspace_addr + KERNEL_OFFSET_VMSPACE_P_ROOT,
+		    &vm_map_entry_addr, sizeof(vm_map_entry_addr))) {
     return -1;
   }
 
