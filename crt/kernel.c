@@ -991,7 +991,6 @@ kernel_mprotect(int pid, unsigned long addr, unsigned long len, int prot) {
                         sizeof(vm_map_entry_addr))) {
         return -1;
       }
-      vm_map_entry_addr = kernel_getlong(vm_map_entry_addr + 0);
     } else if(addr >= end) {
       // right
       if(kernel_copyout(vm_map_entry_addr + 0x18, &vm_map_entry_addr,
