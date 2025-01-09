@@ -49,6 +49,8 @@ const unsigned long KERNEL_OFFSET_PROC_P_FD      = 0x48;
 const unsigned long KERNEL_OFFSET_PROC_P_PID     = 0xBC;
 const unsigned long KERNEL_OFFSET_PROC_P_VMSPACE = 0x200;
 
+const unsigned long KERNEL_OFFSET_VMSPACE_P_ROOT = 0x1c8;
+
 const unsigned long KERNEL_OFFSET_UCRED_CR_UID   = 0x04;
 const unsigned long KERNEL_OFFSET_UCRED_CR_RUID  = 0x08;
 const unsigned long KERNEL_OFFSET_UCRED_CR_SVUID = 0x0C;
@@ -957,7 +959,6 @@ int
 kernel_mprotect(int pid, unsigned long addr, unsigned long len, int prot) {
   unsigned long vm_map_entry_addr;
   unsigned long vmspace_addr;
-  unsigned long vm_map_addr;
   unsigned long proc_addr;
   unsigned char vm_prot;
   unsigned long start;
@@ -966,15 +967,13 @@ kernel_mprotect(int pid, unsigned long addr, unsigned long len, int prot) {
   if(!(proc_addr=kernel_get_proc(pid))) {
     return -1;
   }
+
   if(kernel_copyout(proc_addr + KERNEL_OFFSET_PROC_P_VMSPACE,
                     &vmspace_addr, sizeof(vmspace_addr))) {
     return -1;
   }
-  if(kernel_copyout(vmspace_addr, &vm_map_addr, sizeof(vm_map_addr))) {
-    return -1;
-  }
-  if(kernel_copyout(vm_map_addr, &vm_map_entry_addr,
-                    sizeof(vm_map_entry_addr))) {
+
+  if(kernel_copyout(vmspace_addr + KERNEL_OFFSET_VMSPACE_P_ROOT, &vm_map_entry_addr, sizeof(vm_map_entry_addr))) {
     return -1;
   }
 
@@ -984,18 +983,18 @@ kernel_mprotect(int pid, unsigned long addr, unsigned long len, int prot) {
     }
     if(kernel_copyout(vm_map_entry_addr + 0x28, &end, sizeof(end))) {
       return -1;
-    }
+    } 
 
     if(addr < start) {
-      // prev
-      if(kernel_copyout(vm_map_entry_addr, &vm_map_entry_addr,
+      // left
+      if(kernel_copyout(vm_map_entry_addr + 0x10, &vm_map_entry_addr,
                         sizeof(vm_map_entry_addr))) {
         return -1;
       }
       vm_map_entry_addr = kernel_getlong(vm_map_entry_addr + 0);
     } else if(addr >= end) {
-      // next
-      if(kernel_copyout(vm_map_entry_addr + 8, &vm_map_entry_addr,
+      // right
+      if(kernel_copyout(vm_map_entry_addr + 0x18, &vm_map_entry_addr,
                         sizeof(vm_map_entry_addr))) {
         return -1;
       }
@@ -1021,6 +1020,7 @@ kernel_mprotect(int pid, unsigned long addr, unsigned long len, int prot) {
       return 0;
     }
   }
+
   return -1;
 }
 
