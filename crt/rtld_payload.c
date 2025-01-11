@@ -509,7 +509,7 @@ this_destroy(rtld_lib_t* ctx) {
 
 
 void*
-dlopen(const char *filename, int flags) {
+__dlopen(const char *filename, int flags) {
   unsigned char privcaps[16] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
                                 0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
   unsigned char caps[16];
@@ -588,7 +588,7 @@ dlopen(const char *filename, int flags) {
 
 
 int
-dladdr(void *addr, Dl_info *info) {
+__dladdr(void *addr, Dl_info *info) {
   rtld_lib_t* lib;
 
   for(lib=(rtld_lib_t*)g_this; lib; lib=lib->next) {
@@ -620,7 +620,7 @@ dladdr(void *addr, Dl_info *info) {
 
 
 void*
-dlsym(void *handle, const char *symbol) {
+__dlsym(void *handle, const char *symbol) {
   rtld_lib_t* lib = handle;
   void* addr = 0;
 
@@ -653,7 +653,7 @@ dlsym(void *handle, const char *symbol) {
 
 
 int
-dlclose(void *handle) {
+__dlclose(void *handle) {
   rtld_lib_seq_t *prev = 0;
   rtld_lib_seq_t *seq = 0;
 
@@ -686,7 +686,7 @@ dlclose(void *handle) {
 
 
 char*
-dlerror(void) {
+__dlerror(void) {
   if(g_dlerrno) {
     return _Strerror(g_dlerrno, 0);
   }
