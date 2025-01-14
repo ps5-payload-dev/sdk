@@ -16,8 +16,10 @@ along with this program; see the file COPYING. If not, see
 
 #pragma once
 
+#include <sys/cdefs.h>
 #include <stdint.h>
 
+__BEGIN_DECLS
 
 /**
  * Data structure that capture the args passed to _start().
@@ -47,3 +49,5 @@ payload_args_t* payload_get_args(void);
  * the process will continue to run from where it left off.
  **/
 void payload_exit(int exit_code);
+
+__END_DECLS
