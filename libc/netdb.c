@@ -68,6 +68,16 @@ static const char *g_errlist[] = {
 };
 
 
+static struct protoent g_protent[] = {
+  {"ip", (char*[]){"IP", 0}, IPPROTO_IP},
+  {"icmp", (char*[]){"ICMP", 0}, IPPROTO_ICMP},
+  {"tcp", (char*[]){"TCP", 0}, IPPROTO_TCP},
+  {"udp", (char*[]){"UDP", 0}, IPPROTO_UDP},
+  {"ipv6", (char*[]){"IPV6", 0}, IPPROTO_IPV6},
+  {0, 0, 0}
+};
+
+
 const char*
 gai_strerror(int err) {
   if(0 <= err && err < EAI_MAX) {
@@ -657,4 +667,26 @@ getservbyport(int port, const char *prots) {
   }
 
   return &se;
+}
+
+
+struct protoent*
+getprotobyname(const char *name) {
+  if(!name) {
+    return 0;
+  }
+
+  for(struct protoent *p=g_protent; p->p_name; p++) {
+    if(strcmp(name, p->p_name) == 0) {
+      return p;
+    }
+
+    for(char **alias=p->p_aliases; *alias; alias++) {
+      if(strcmp(name, *alias) == 0) {
+        return p;
+      }
+    }
+  }
+
+  return 0;
 }
