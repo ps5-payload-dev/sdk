@@ -66,23 +66,25 @@ payload_init(payload_args_t *args) {
   if((error=__klog_init())) {
     return error;
   }
-  if((error=__rtld_init())) {
-    klog_puts("Unable to initialize rtld");
+
+  if(!KERNEL_DLSYM(0x2, __isthreaded)) {
+    klog_puts("Unable to resolve the symbol '__isthreaded'");
+    return -1;
+  }
+  *__isthreaded = 1;
+
+  if((error=__stacktrace_init())) {
+    klog_puts("Unable to initialize stacktrace");
     return error;
   }
   if((error=__patch_init())) {
     klog_puts("Unable to initialize patches");
     return error;
   }
-  if((error=__stacktrace_init())) {
-    klog_puts("Unable to initialize stacktrace");
+  if((error=__rtld_init())) {
+    klog_puts("Unable to initialize rtld");
     return error;
   }
-  if(!KERNEL_DLSYM(0x2, __isthreaded)) {
-    klog_puts("Unable to resolve the symbol '__isthreaded'");
-    return -1;
-  }
-  *__isthreaded = 1;
 
   return 0;
 }
@@ -95,8 +97,8 @@ static int
 payload_terminate(void) {
   void (*exit)(int) = 0;
 
-  __stacktrace_fini();
   __rtld_fini();
+  __stacktrace_fini();
 
   // we are running inside a hijacked process, just return
   if(kernel_dynlib_dlsym(-1, 0x2001, "sceKernelDlsym")) {

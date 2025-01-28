@@ -22,8 +22,10 @@ along with this program; see the file COPYING. If not, see
  **/
 typedef struct rtld_lib {
   int (*open)(struct rtld_lib* ctx);
+  int (*init)(struct rtld_lib* ctx);
   void* (*sym2addr)(struct rtld_lib* ctx, const char* name);
   const char* (*addr2sym)(struct rtld_lib* ctx, void* addr);
+  int (*fini)(struct rtld_lib* ctx);
   int (*close)(struct rtld_lib* ctx);
   void (*destroy)(struct rtld_lib* ctx);
 
@@ -43,9 +45,15 @@ rtld_lib_t* __rtld_lib_new(rtld_lib_t* prev, const char* soname);
 
 
 /**
- * Open a lib and run its constructor.
+ * Open a lib.
  **/
 int __rtld_lib_open(rtld_lib_t* ctx);
+
+
+/**
+ * Run lib constructors.
+ **/
+int __rtld_lib_init(rtld_lib_t* ctx);
 
 
 /**
@@ -58,6 +66,12 @@ void* __rtld_lib_sym2addr(rtld_lib_t* ctx, const char* name);
  * Find the symbol name closest to the given address.
  **/
 const char* __rtld_lib_addr2sym(rtld_lib_t* ctx, void* addr);
+
+
+/**
+ * Run lib destructors.
+ **/
+int __rtld_lib_fini(rtld_lib_t* ctx);
 
 
 /**

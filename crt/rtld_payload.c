@@ -76,8 +76,10 @@ extern Elf64_Dyn _DYNAMIC[];
  * Foward declaration needed to initialze g_this.
  **/
 static int this_open(rtld_lib_t* ctx);
+static int this_init(rtld_lib_t* ctx);
 static void* this_sym2addr(rtld_lib_t* ctx, const char* name);
 static const char* this_addr2sym(rtld_lib_t* ctx, void* addr);
+static int this_fini(rtld_lib_t* ctx);
 static int this_close(rtld_lib_t* ctx);
 static void this_destroy(rtld_lib_t* ctx);
 
@@ -360,25 +362,8 @@ payload_load(void) {
 
 int
 __rtld_payload_init(void) {
-  static const unsigned char privcaps[16] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
-					     0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
   int pid = __syscall(SYS_getpid);
-  unsigned char caps[16];
-  unsigned long rootdir;
   int err;
-
-  if(!(rootdir=kernel_get_proc_rootdir(pid))) {
-    return -1;
-  }
-  if(kernel_get_ucred_caps(pid, caps)) {
-    return -1;
-  }
-  if(kernel_set_proc_rootdir(pid, kernel_get_root_vnode())) {
-    return -1;
-  }
-  if(kernel_set_ucred_caps(pid, privcaps)) {
-    return -1;
-  }
 
   if(!KERNEL_DLSYM(0x2, calloc)) {
     return -1;
@@ -398,8 +383,10 @@ __rtld_payload_init(void) {
 
   g_this = calloc(1, sizeof(rtld_payload_lib_t));
   g_this->open     = this_open;
+  g_this->init     = this_init;
   g_this->sym2addr = this_sym2addr;
   g_this->addr2sym = this_addr2sym;
+  g_this->fini     = this_fini;
   g_this->close    = this_close;
   g_this->destroy  = this_destroy;
   g_this->refcnt   = 1;
@@ -409,13 +396,6 @@ __rtld_payload_init(void) {
   __syscall(0x268, pid, g_this->soname, 1024);
 
   err = payload_load();
-
-  if(kernel_set_proc_rootdir(pid, rootdir)) {
-    return -1;
-  }
-  if(kernel_set_ucred_caps(pid, caps)) {
-    return -1;
-  }
 
   return err;
 }
@@ -438,6 +418,24 @@ __rtld_payload_fini(void) {
 
 static int
 this_open(rtld_lib_t* ctx) {
+  return 0;
+}
+
+
+/**
+ * TODO: this_init
+ **/
+static int
+this_init(rtld_lib_t* ctx) {
+  return 0;
+}
+
+
+/**
+ * TODO: this_fini
+ **/
+static int
+this_fini(rtld_lib_t* ctx) {
   return 0;
 }
 

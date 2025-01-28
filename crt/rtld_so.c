@@ -80,6 +80,12 @@ typedef struct rtld_so_lib {
   unsigned long symtab_size;
   Elf64_Rela* plt;
   unsigned long plt_size;
+
+  void (**init_array)(void);
+  unsigned long init_array_size;
+
+  void (**fini_array)(void);
+  unsigned long fini_array_size;
 } rtld_so_lib_t;
 
 
@@ -383,6 +389,22 @@ pt_dynamic(rtld_so_lib_t *lib, Elf64_Phdr *phdr) {
     case DT_PLTRELSZ:
       lib->plt_size = dyn[i].d_un.d_val;
       break;
+
+    case DT_INIT_ARRAY:
+      lib->init_array = (void*)(lib->mapbase + dyn[i].d_un.d_ptr);
+      break;
+
+    case DT_INIT_ARRAYSZ:
+      lib->init_array_size = dyn[i].d_un.d_val;
+      break;
+
+    case DT_FINI_ARRAY:
+      lib->fini_array = (void*)(lib->mapbase + dyn[i].d_un.d_ptr);
+      break;
+
+    case DT_FINI_ARRAYSZ:
+      lib->fini_array_size = dyn[i].d_un.d_val;
+      break;
     }
   }
 
@@ -549,25 +571,12 @@ so_open(rtld_lib_t* ctx) {
 
 
 static int
-so_close(rtld_lib_t* ctx) {
+so_init(rtld_lib_t* ctx) {
   rtld_so_lib_t* lib = (rtld_so_lib_t*)ctx;
 
-  if(lib->image) {
-    free(lib->image);
+  for(unsigned long i=0; i<lib->init_array_size/sizeof(void*); i++) {
+    lib->init_array[i]();
   }
-  if(lib->mapbase) {
-    munmap(lib->mapbase, lib->mapsize);
-  }
-
-  lib->image = 0;
-  lib->ehdr = 0;
-  lib->phdr = 0;
-  lib->shdr = 0;
-  lib->strtab = 0;
-  lib->symtab = 0;
-  lib->symtab_size = 0;
-  lib->mapbase = 0;
-  lib->mapsize = 0;
 
   return 0;
 }
@@ -622,6 +631,43 @@ so_addr2sym(rtld_lib_t* ctx, void* addr) {
 }
 
 
+static int
+so_fini(rtld_lib_t* ctx) {
+  rtld_so_lib_t* lib = (rtld_so_lib_t*)ctx;
+
+  for(unsigned long i=0; i<lib->fini_array_size/sizeof(void*); i++) {
+    lib->fini_array[i]();
+  }
+
+  return 0;
+}
+
+
+static int
+so_close(rtld_lib_t* ctx) {
+  rtld_so_lib_t* lib = (rtld_so_lib_t*)ctx;
+
+  if(lib->image) {
+    free(lib->image);
+  }
+  if(lib->mapbase) {
+    munmap(lib->mapbase, lib->mapsize);
+  }
+
+  lib->image = 0;
+  lib->ehdr = 0;
+  lib->phdr = 0;
+  lib->shdr = 0;
+  lib->strtab = 0;
+  lib->symtab = 0;
+  lib->symtab_size = 0;
+  lib->mapbase = 0;
+  lib->mapsize = 0;
+
+  return 0;
+}
+
+
 static void
 so_destroy(rtld_lib_t* ctx) {
   rtld_so_lib_t* lib = (rtld_so_lib_t*)ctx;
@@ -638,8 +684,10 @@ __rtld_so_new(rtld_lib_t* prev, const char *soname) {
 
   lib->prev     = prev;
   lib->open     = so_open;
+  lib->init     = so_init;
   lib->sym2addr = so_sym2addr;
   lib->addr2sym = so_addr2sym;
+  lib->fini     = so_fini;
   lib->close    = so_close;
   lib->destroy  = so_destroy;
   lib->refcnt   = 0;

@@ -79,6 +79,15 @@ ref_open(rtld_lib_t* ctx) {
 /**
  *
  **/
+static int
+ref_init(rtld_lib_t* ctx) {
+  return 0;
+}
+
+
+/**
+ *
+ **/
 static void*
 ref_sym2addr(rtld_lib_t* ctx, const char* name) {
   rtld_ref_lib_t* lib = (rtld_ref_lib_t*)ctx;
@@ -93,6 +102,15 @@ static const char*
 ref_addr2sym(rtld_lib_t* ctx, void* addr) {
   rtld_ref_lib_t* lib = (rtld_ref_lib_t*)ctx;
   return __rtld_lib_addr2sym(lib->ref, addr);
+}
+
+
+/**
+ *
+ **/
+static int
+ref_fini(rtld_lib_t* ctx) {
+  return 0;
 }
 
 
@@ -215,8 +233,10 @@ __rtld_lib_new(rtld_lib_t* prev, const char* soname) {
       lib->prev     = prev;
       lib->ref      = ref;
       lib->open     = ref_open;
+      lib->init     = ref_init;
       lib->sym2addr = ref_sym2addr;
       lib->addr2sym = ref_addr2sym;
+      lib->fini     = ref_fini;
       lib->close    = ref_close;
       lib->destroy  = ref_destroy;
       lib->refcnt   = 0;
@@ -248,6 +268,18 @@ __rtld_lib_open(rtld_lib_t* ctx) {
 }
 
 
+int
+__rtld_lib_init(rtld_lib_t* ctx) {
+  int err;
+
+  if(ctx->next && (err=__rtld_lib_init(ctx->next))) {
+    return err;
+  }
+
+  return ctx->init(ctx);
+}
+
+
 void*
 __rtld_lib_sym2addr(rtld_lib_t* ctx, const char* name) {
   if(name) {
@@ -265,6 +297,22 @@ __rtld_lib_addr2sym(rtld_lib_t* ctx, void* addr) {
   } else {
     return 0;
   }
+}
+
+
+int
+__rtld_lib_fini(rtld_lib_t* ctx) {
+  int err;
+
+  if((err=ctx->fini(ctx))) {
+    return err;
+  }
+
+  if(ctx->next && (err=__rtld_lib_fini(ctx->next))) {
+    return err;
+  }
+
+  return 0;
 }
 
 

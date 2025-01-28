@@ -22,15 +22,21 @@ along with this program; see the file COPYING. If not, see
 #define PT_LOAD    1
 #define PT_DYNAMIC 2
 
-#define DT_NULL     0
-#define DT_NEEDED   1
-#define DT_PLTRELSZ 2
-#define DT_STRTAB   5
-#define DT_SYMTAB   6
-#define DT_RELA     7
-#define DT_RELASZ   8
-#define DT_JMPREL   23
-#define DT_GNU_HASH 0x6ffffef5
+#define DT_NULL            0
+#define DT_NEEDED          1
+#define DT_PLTRELSZ        2
+#define DT_STRTAB          5
+#define DT_SYMTAB          6
+#define DT_RELA            7
+#define DT_RELASZ          8
+#define DT_JMPREL          23
+#define DT_INIT_ARRAY      25
+#define DT_FINI_ARRAY      26
+#define DT_INIT_ARRAYSZ    27
+#define DT_FINI_ARRAYSZ    28
+#define DT_PREINIT_ARRAY   32
+#define DT_PREINIT_ARRAYSZ 33
+#define DT_GNU_HASH         0x6ffffef5
 
 #define R_X86_64_64       1
 #define R_X86_64_GLOB_DAT 6

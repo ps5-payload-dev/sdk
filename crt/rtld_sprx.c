@@ -288,6 +288,24 @@ sprx_open(rtld_lib_t* ctx) {
 
 
 /**
+ * TODO: sprx_init
+ **/
+static int
+sprx_init(rtld_lib_t* ctx) {
+  return 0;
+}
+
+
+/**
+ * TODO: sprx_fini
+ **/
+static int
+sprx_fini(rtld_lib_t* ctx) {
+  return 0;
+}
+
+
+/**
  * Resolve the address of a symbol provided by the given sprx object-
  **/
 static void*
@@ -402,8 +420,10 @@ __rtld_sprx_new(rtld_lib_t* prev, const char *soname) {
 
   lib->prev     = prev;
   lib->open     = sprx_open;
+  lib->init     = sprx_init;
   lib->sym2addr = sprx_sym2addr;
   lib->addr2sym = sprx_addr2sym;
+  lib->fini     = sprx_fini;
   lib->close    = sprx_close;
   lib->destroy  = sprx_destroy;
   lib->refcnt   = 0;
