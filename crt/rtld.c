@@ -80,7 +80,7 @@ ref_open(rtld_lib_t* ctx) {
  *
  **/
 static int
-ref_init(rtld_lib_t* ctx) {
+ref_init(rtld_lib_t* ctx, int argc, char** argv, char** envp, payload_args_t* argp) {
   return 0;
 }
 
@@ -269,14 +269,14 @@ __rtld_lib_open(rtld_lib_t* ctx) {
 
 
 int
-__rtld_lib_init(rtld_lib_t* ctx) {
+__rtld_lib_init(rtld_lib_t* ctx, int argc, char** argv, char** envp, payload_args_t* argp) {
   int err;
 
-  if(ctx->next && (err=__rtld_lib_init(ctx->next))) {
+  if(ctx->next && (err=__rtld_lib_init(ctx->next, argc, argv, envp, argp))) {
     return err;
   }
 
-  return ctx->init(ctx);
+  return ctx->init(ctx, argc, argv, envp, argp);
 }
 
 
@@ -391,8 +391,3 @@ __rtld_init(void) {
   return 0;
 }
 
-
-int
-__rtld_fini(void) {
-  return __rtld_payload_fini();
-}

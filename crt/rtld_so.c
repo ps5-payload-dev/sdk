@@ -81,7 +81,7 @@ typedef struct rtld_so_lib {
   Elf64_Rela* plt;
   unsigned long plt_size;
 
-  void (**init_array)(void);
+  void (**init_array)(int, char**, char**, payload_args_t*);
   unsigned long init_array_size;
 
   void (**fini_array)(void);
@@ -571,11 +571,11 @@ so_open(rtld_lib_t* ctx) {
 
 
 static int
-so_init(rtld_lib_t* ctx) {
+so_init(rtld_lib_t* ctx, int argc, char** argv, char** envp, payload_args_t* argp) {
   rtld_so_lib_t* lib = (rtld_so_lib_t*)ctx;
 
   for(unsigned long i=0; i<lib->init_array_size/sizeof(void*); i++) {
-    lib->init_array[i]();
+    lib->init_array[i](argc, argv, envp, argp);
   }
 
   return 0;

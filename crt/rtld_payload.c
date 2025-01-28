@@ -67,21 +67,16 @@ static void (*free)(void*) = 0;
 /**
  * Dependencies provided by the ELF linker.
  **/
+extern void (*__init_array_start[])(int, char**, char**, payload_args_t*) __attribute__((weak));
+extern void (*__init_array_end[])(int, char**, char**, payload_args_t*) __attribute__((weak));
+
+extern void (*__fini_array_start[])(void) __attribute__((weak));
+extern void (*__fini_array_end[])(void) __attribute__((weak));
+
 extern unsigned char __image_start[] __attribute__((weak));
 extern unsigned char __image_end[] __attribute__((weak));
+
 extern Elf64_Dyn _DYNAMIC[];
-
-
-/**
- * Foward declaration needed to initialze g_this.
- **/
-static int this_open(rtld_lib_t* ctx);
-static int this_init(rtld_lib_t* ctx);
-static void* this_sym2addr(rtld_lib_t* ctx, const char* name);
-static const char* this_addr2sym(rtld_lib_t* ctx, void* addr);
-static int this_fini(rtld_lib_t* ctx);
-static int this_close(rtld_lib_t* ctx);
-static void this_destroy(rtld_lib_t* ctx);
 
 
 /**
@@ -250,23 +245,28 @@ dynsym_count(unsigned int *gnu_hash) {
 /**
  * Load payload data into memory.
  **/
+
 static int
-payload_load(void) {
+this_open(rtld_lib_t* ctx) {
+  rtld_payload_lib_t* lib = (rtld_payload_lib_t*)ctx;
+  int pid = __syscall(SYS_getpid);
   unsigned int *gnu_hash = 0;
   unsigned long relasz = 0;
   unsigned long pltsz = 0;
   Elf64_Rela* rela = 0;
   Elf64_Rela* plt = 0;
 
+  __syscall(0x268, pid, ctx->soname, 1024);
+
   // find lookup tables
   for(int i=0; _DYNAMIC[i].d_tag!=DT_NULL; i++) {
     switch(_DYNAMIC[i].d_tag) {
     case DT_SYMTAB:
-      g_this->symtab = (Elf64_Sym*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
+      lib->symtab = (Elf64_Sym*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
       break;
 
     case DT_STRTAB:
-      g_this->strtab = (char*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
+      lib->strtab = (char*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
       break;
 
     case DT_GNU_HASH:
@@ -293,14 +293,14 @@ payload_load(void) {
 
   // symtab size is determined using DT_GNU_HASH
   if(gnu_hash) {
-    g_this->symtab_size = dynsym_count(gnu_hash) * sizeof(Elf64_Sym);
+    lib->symtab_size = dynsym_count(gnu_hash) * sizeof(Elf64_Sym);
   }
 
   // load needed libraries
   for(int i=0; _DYNAMIC[i].d_tag!=DT_NULL; i++) {
     switch(_DYNAMIC[i].d_tag) {
     case DT_NEEDED:
-      if(dt_needed(g_this->strtab + _DYNAMIC[i].d_un.d_val)) {
+      if(dt_needed(lib->strtab + _DYNAMIC[i].d_un.d_val)) {
 	return -1;
       }
       break;
@@ -360,82 +360,23 @@ payload_load(void) {
 }
 
 
-int
-__rtld_payload_init(void) {
-  int pid = __syscall(SYS_getpid);
-  int err;
-
-  if(!KERNEL_DLSYM(0x2, calloc)) {
-    return -1;
-  }
-  if(!KERNEL_DLSYM(0x2, free)) {
-    return -1;
-  }
-  if(!KERNEL_DLSYM(0x2, strcmp)) {
-    return -1;
-  }
-  if(!KERNEL_DLSYM(0x2, memcpy)) {
-    return -1;
-  }
-  if(!KERNEL_DLSYM(0x2, _Strerror)) {
-      return -1;
-  }
-
-  g_this = calloc(1, sizeof(rtld_payload_lib_t));
-  g_this->open     = this_open;
-  g_this->init     = this_init;
-  g_this->sym2addr = this_sym2addr;
-  g_this->addr2sym = this_addr2sym;
-  g_this->fini     = this_fini;
-  g_this->close    = this_close;
-  g_this->destroy  = this_destroy;
-  g_this->refcnt   = 1;
-  g_this->mapbase  = __image_start;
-  g_this->mapsize  = __image_end - __image_start;
-
-  __syscall(0x268, pid, g_this->soname, 1024);
-
-  err = payload_load();
-
-  return err;
-}
-
-
-int
-__rtld_payload_fini(void) {
-  int err = 0;
-
-  if(g_this) {
-    if(g_this->next) {
-      err = __rtld_lib_close(g_this->next);
-    }
-    free(g_this);
-  }
-
-  return err;
-}
-
-
 static int
-this_open(rtld_lib_t* ctx) {
+this_init(rtld_lib_t* ctx, int argc, char** argv, char** envp, payload_args_t* argp) {
+  unsigned long count = __init_array_end - __init_array_start;
+
+  for(unsigned long i=0; i<count; i++) {
+    __init_array_start[i](argc, argv, envp, argp);
+  }
   return 0;
 }
 
 
-/**
- * TODO: this_init
- **/
-static int
-this_init(rtld_lib_t* ctx) {
-  return 0;
-}
-
-
-/**
- * TODO: this_fini
- **/
 static int
 this_fini(rtld_lib_t* ctx) {
+  unsigned long count = __fini_array_end - __fini_array_start;
+  for(unsigned long i=0; i<count; i++) {
+    __fini_array_start[count-i-1]();
+  }
   return 0;
 }
 
@@ -503,7 +444,64 @@ this_close(rtld_lib_t* ctx) {
 
 static void
 this_destroy(rtld_lib_t* ctx) {
+  free(ctx);
 }
+
+
+rtld_lib_t*
+__rtld_payload_new(void) {
+  g_this = calloc(1, sizeof(rtld_payload_lib_t));
+  g_this->open     = this_open;
+  g_this->init     = this_init;
+  g_this->sym2addr = this_sym2addr;
+  g_this->addr2sym = this_addr2sym;
+  g_this->fini     = this_fini;
+  g_this->close    = this_close;
+  g_this->destroy  = this_destroy;
+  g_this->refcnt   = 0;
+  g_this->mapbase  = __image_start;
+  g_this->mapsize  = __image_end - __image_start;
+
+  return (rtld_lib_t*)g_this;
+}
+
+
+int
+__rtld_payload_init(void) {
+  if(!KERNEL_DLSYM(0x2, calloc)) {
+    return -1;
+  }
+  if(!KERNEL_DLSYM(0x2, free)) {
+    return -1;
+  }
+  if(!KERNEL_DLSYM(0x2, strcmp)) {
+    return -1;
+  }
+  if(!KERNEL_DLSYM(0x2, memcpy)) {
+    return -1;
+  }
+  if(!KERNEL_DLSYM(0x2, _Strerror)) {
+      return -1;
+  }
+
+  return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 void*

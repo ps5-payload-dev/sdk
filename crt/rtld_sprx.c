@@ -291,7 +291,7 @@ sprx_open(rtld_lib_t* ctx) {
  * TODO: sprx_init
  **/
 static int
-sprx_init(rtld_lib_t* ctx) {
+sprx_init(rtld_lib_t* ctx, int argc, char** argv, char** envp, payload_args_t* argp) {
   return 0;
 }
 

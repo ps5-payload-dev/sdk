@@ -57,13 +57,14 @@ int dlclose(void *handle);
 char* dlerror(void);
 
 
+
 /**
- * Initialize payload loader dependencies.
+ * Create a new payload loader.
+ **/
+rtld_lib_t* __rtld_payload_new(void);
+
+
+/**
+ * Initialize so loader dependencies.
  **/
 int __rtld_payload_init(void);
-
-
-/**
- * Close and destroy sprx and so objects loaded by the payload.
- **/
-int __rtld_payload_fini(void);

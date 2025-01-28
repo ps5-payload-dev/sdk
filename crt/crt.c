@@ -19,6 +19,7 @@ along with this program; see the file COPYING. If not, see
 #include "patch.h"
 #include "payload.h"
 #include "rtld.h"
+#include "rtld_payload.h"
 #include "stacktrace.h"
 #include "syscall.h"
 
@@ -26,12 +27,6 @@ along with this program; see the file COPYING. If not, see
 /**
  * Dependencies provided by the ELF linker.
  **/
-extern void (*__init_array_start[])(int, char**, char**, payload_args_t*) __attribute__((weak));
-extern void (*__init_array_end[])(int, char**, char**, payload_args_t*) __attribute__((weak));
-
-extern void (*__fini_array_start[])(void) __attribute__((weak));
-extern void (*__fini_array_end[])(void) __attribute__((weak));
-
 extern unsigned char __bss_start[] __attribute__((weak));
 extern unsigned char __bss_end[] __attribute__((weak));
 
@@ -97,7 +92,6 @@ static int
 payload_terminate(void) {
   void (*exit)(int) = 0;
 
-  __rtld_fini();
   __stacktrace_fini();
 
   // we are running inside a hijacked process, just return
@@ -141,7 +135,7 @@ int
 _start(payload_args_t *args) {
   char** (*getargv)(void) = 0;
   int (*getargc)(void) = 0;
-  unsigned long count = 0;
+  rtld_lib_t* lib;
   char** environ = 0;
   char** argv = 0;
   int argc = 0;
@@ -167,20 +161,25 @@ _start(payload_args_t *args) {
   }
 
   if(!__builtin_setjmp(jmpbuf)) {
-    // Run .init functions.
-    count = __init_array_end - __init_array_start;
-    for(int i=0; i<count; i++) {
-      __init_array_start[i](argc, argv, environ, args);
+    if(!(lib=__rtld_payload_new())) {
+      payload_exit(-1);
+    }
+    if(__rtld_lib_open(lib)) {
+      __rtld_lib_destroy(lib);
+      payload_exit(-1);
+    }
+    if(__rtld_lib_init(lib, argc, argv, environ, args)) {
+      __rtld_lib_destroy(lib);
     }
 
-    // Run the actual payload.
     *args->payloadout = main(argc, argv, environ);
+    __rtld_lib_fini(lib);
 
-    // Run .fini functions.
-    count = __fini_array_end - __fini_array_start;
-    for(int i=0; i<count; i++) {
-      __fini_array_start[count-i-1]();
+    if(__rtld_lib_close(lib)) {
+      __rtld_lib_destroy(lib);
+      payload_exit(-1);
     }
+    __rtld_lib_destroy(lib);
   }
 
   return payload_terminate();

@@ -16,13 +16,15 @@ along with this program; see the file COPYING. If not, see
 
 #pragma once
 
+#include "payload.h"
+
 
 /**
  * Prototypes for different kinds of libs (.sprx or .so).
  **/
 typedef struct rtld_lib {
   int (*open)(struct rtld_lib* ctx);
-  int (*init)(struct rtld_lib* ctx);
+  int (*init)(struct rtld_lib* ctx, int, char**, char**, payload_args_t*);
   void* (*sym2addr)(struct rtld_lib* ctx, const char* name);
   const char* (*addr2sym)(struct rtld_lib* ctx, void* addr);
   int (*fini)(struct rtld_lib* ctx);
@@ -53,7 +55,7 @@ int __rtld_lib_open(rtld_lib_t* ctx);
 /**
  * Run lib constructors.
  **/
-int __rtld_lib_init(rtld_lib_t* ctx);
+int __rtld_lib_init(rtld_lib_t* ctx, int argc, char** argv, char** envp, payload_args_t* argp);
 
 
 /**
@@ -107,8 +109,3 @@ int __rtld_init(void);
  **/
 int __rtld_find_file(const char *name, char* path);
 
-
-/**
- * Finalize the lib loader.
- **/
-int __rtld_fini(void);
