@@ -170,6 +170,7 @@ _start(payload_args_t *args) {
     }
     if(__rtld_lib_init(lib, argc, argv, environ, args)) {
       __rtld_lib_destroy(lib);
+      payload_exit(-1);
     }
 
     *args->payloadout = main(argc, argv, environ);

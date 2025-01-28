@@ -332,11 +332,7 @@ __rtld_lib_close(rtld_lib_t* ctx) {
     ctx->prev->next = 0;
   }
 
-  if(!(err=ctx->close(ctx))) {
-    __rtld_lib_destroy(ctx);
-  }
-
-  return err;
+  return ctx->close(ctx);
 }
 
 
