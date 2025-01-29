@@ -17,6 +17,7 @@ along with this program; see the file COPYING. If not, see
 #include "kernel.h"
 #include "syscall.h"
 #include "rtld.h"
+#include "rtld_dlfcn.h"
 #include "rtld_payload.h"
 #include "rtld_so.h"
 #include "rtld_sprx.h"
@@ -381,6 +382,9 @@ __rtld_init(void) {
     return err;
   }
   if((err=__rtld_payload_init())) {
+    return err;
+  }
+  if((err=__rtld_dlfcn_init())) {
     return err;
   }
 

@@ -23,15 +23,6 @@ along with this program; see the file COPYING. If not, see
 
 
 /**
- * Standard posix macros.
- **/
-#define ENOENT 2
-#define ENOMEM 12
-#define EINVAL 22
-#define ENOSYS 78
-
-
-/**
  * Extend rtld_lib_t anonymously with auxiliary parameters needed
  * for resolving symbols in the payload needed by shared objects.
  **/
@@ -45,20 +36,10 @@ typedef struct rtld_payload_lib {
 
 
 /**
- * Data structure used by dladdr().
- **/
-typedef struct rtld_lib_seq {
-  struct rtld_lib *lib;
-  struct rtld_lib_seq *next;
-} rtld_lib_seq_t;
-
-
-/**
  * Dependencies to standard libraries.
  **/
 static int (*strcmp)(const char*, const char*) = 0;
-static void* (*memcpy)(void*, const void*, unsigned long) = 0;
-static char* (*_Strerror)(int, char*) = 0;
+static int (*strcpy)(char*, const char*) = 0;
 
 static void* (*calloc)(unsigned long, unsigned long) = 0;
 static void (*free)(void*) = 0;
@@ -80,24 +61,11 @@ extern Elf64_Dyn _DYNAMIC[];
 
 
 /**
- * Handle to the root node in the lib dependency graph.
- **/
-static rtld_payload_lib_t* g_this = 0;
-
-
-/**
- * Define variables needed by dlerror() and dladdr().
- **/
-static int g_dlerrno = 0;
-static rtld_lib_seq_t* g_libseq = 0;
-
-
-/**
  * Process the DT_NEEDED entry in the .dynamic section.
  **/
 static int
-dt_needed(const char* soname) {
-  rtld_lib_t* it = (rtld_lib_t*)g_this;
+dt_needed(rtld_lib_t* ctx, const char* soname) {
+  rtld_lib_t* it = ctx;
   rtld_lib_t* lib = 0;
 
   while(it->next) {
@@ -124,14 +92,15 @@ dt_needed(const char* soname) {
  * Process the R_X86_64_GLOB_DAT relocation type.
  **/
 static int
-r_glob_dat(Elf64_Rela* rela) {
-  unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
-  Elf64_Sym* sym = g_this->symtab + ELF64_R_SYM(rela->r_info);
-  const char* name = g_this->strtab + sym->st_name;
+r_glob_dat(rtld_lib_t* ctx, Elf64_Rela* rela) {
+  rtld_payload_lib_t* lib = (rtld_payload_lib_t*)ctx;
+  unsigned long loc = (unsigned long)(lib->mapbase + rela->r_offset);
+  Elf64_Sym* sym = lib->symtab + ELF64_R_SYM(rela->r_info);
+  const char* name = lib->strtab + sym->st_name;
   void* val = 0;
 
-  for(rtld_lib_t *lib=g_this->next; lib; lib=lib->next) {
-    if((val=__rtld_lib_sym2addr(lib, name))) {
+  for(rtld_lib_t *it=lib->next; it; it=it->next) {
+    if((val=__rtld_lib_sym2addr(it, name))) {
       return mdbg_copyin(-1, &val, loc, sizeof(val));
     }
   }
@@ -150,8 +119,8 @@ r_glob_dat(Elf64_Rela* rela) {
  * Process the R_X86_64_JMP_SLOT relocation type.
  **/
 static int
-r_jmp_slot(Elf64_Rela* rela) {
-  return r_glob_dat(rela);
+r_jmp_slot(rtld_lib_t* ctx, Elf64_Rela* rela) {
+  return r_glob_dat(ctx, rela);
 }
 
 
@@ -159,15 +128,16 @@ r_jmp_slot(Elf64_Rela* rela) {
  * Process the R_X86_64_64 relocation type.
  **/
 static int
-r_direct_64(Elf64_Rela* rela) {
-  unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
-  Elf64_Sym* sym = g_this->symtab + ELF64_R_SYM(rela->r_info);
-  const char* name = g_this->strtab + sym->st_name;
+r_direct_64(rtld_lib_t* ctx, Elf64_Rela* rela) {
+  rtld_payload_lib_t* lib = (rtld_payload_lib_t*)ctx;
+  unsigned long loc = (unsigned long)(lib->mapbase + rela->r_offset);
+  Elf64_Sym* sym = lib->symtab + ELF64_R_SYM(rela->r_info);
+  const char* name = lib->strtab + sym->st_name;
   void* val = 0;
 
   // check if symbol is provided by a child
-  for(rtld_lib_t *lib=g_this->next; lib!=0; lib=lib->next) {
-    if((val=__rtld_lib_sym2addr(lib, name))) {
+  for(rtld_lib_t *it=lib->next; it; it=it->next) {
+    if((val=__rtld_lib_sym2addr(it, name))) {
       val += rela->r_addend;
       return mdbg_copyin(-1, &val, loc, sizeof(val));
     }
@@ -188,9 +158,10 @@ r_direct_64(Elf64_Rela* rela) {
  * Process the R_X86_64_RELATIVE relocation type.
  **/
 static int
-r_relative(Elf64_Rela* rela) {
-  unsigned long loc = (unsigned long)(__image_start + rela->r_offset);
-  unsigned long val = (unsigned long)(__image_start + rela->r_addend);
+r_relative(rtld_lib_t* ctx, Elf64_Rela* rela) {
+  rtld_payload_lib_t* lib = (rtld_payload_lib_t*)ctx;
+  unsigned long loc = (unsigned long)(lib->mapbase + rela->r_offset);
+  unsigned long val = (unsigned long)(lib->mapbase + rela->r_addend);
 
   // ELF loader allready applied relocation
   if(*((unsigned long*)loc) == val) {
@@ -242,39 +213,32 @@ dynsym_count(unsigned int *gnu_hash) {
 }
 
 
-/**
- * Load payload data into memory.
- **/
-
 static int
-this_open(rtld_lib_t* ctx) {
+payload_open(rtld_lib_t* ctx) {
   rtld_payload_lib_t* lib = (rtld_payload_lib_t*)ctx;
-  int pid = __syscall(SYS_getpid);
   unsigned int *gnu_hash = 0;
   unsigned long relasz = 0;
   unsigned long pltsz = 0;
   Elf64_Rela* rela = 0;
   Elf64_Rela* plt = 0;
 
-  __syscall(0x268, pid, ctx->soname, 1024);
-
   // find lookup tables
   for(int i=0; _DYNAMIC[i].d_tag!=DT_NULL; i++) {
     switch(_DYNAMIC[i].d_tag) {
     case DT_SYMTAB:
-      lib->symtab = (Elf64_Sym*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
+      lib->symtab = (Elf64_Sym*)(lib->mapbase + _DYNAMIC[i].d_un.d_ptr);
       break;
 
     case DT_STRTAB:
-      lib->strtab = (char*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
+      lib->strtab = (char*)(lib->mapbase + _DYNAMIC[i].d_un.d_ptr);
       break;
 
     case DT_GNU_HASH:
-      gnu_hash = (unsigned int*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
+      gnu_hash = (unsigned int*)(lib->mapbase + _DYNAMIC[i].d_un.d_ptr);
       break;
 
     case DT_RELA:
-      rela = (Elf64_Rela*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
+      rela = (Elf64_Rela*)(lib->mapbase + _DYNAMIC[i].d_un.d_ptr);
       break;
 
     case DT_RELASZ:
@@ -282,7 +246,7 @@ this_open(rtld_lib_t* ctx) {
       break;
 
     case DT_JMPREL:
-      plt = (Elf64_Rela*)(__image_start + _DYNAMIC[i].d_un.d_ptr);
+      plt = (Elf64_Rela*)(lib->mapbase + _DYNAMIC[i].d_un.d_ptr);
       break;
 
     case DT_PLTRELSZ:
@@ -300,7 +264,7 @@ this_open(rtld_lib_t* ctx) {
   for(int i=0; _DYNAMIC[i].d_tag!=DT_NULL; i++) {
     switch(_DYNAMIC[i].d_tag) {
     case DT_NEEDED:
-      if(dt_needed(lib->strtab + _DYNAMIC[i].d_un.d_val)) {
+      if(dt_needed(ctx, lib->strtab + _DYNAMIC[i].d_un.d_val)) {
 	return -1;
       }
       break;
@@ -311,25 +275,25 @@ this_open(rtld_lib_t* ctx) {
   for(int i=0; i<relasz/sizeof(Elf64_Rela); i++) {
     switch(rela[i].r_info & 0xffffffffl) {
     case R_X86_64_JMP_SLOT:
-      if(r_jmp_slot(&rela[i])) {
+      if(r_jmp_slot(ctx, &rela[i])) {
 	return -1;
       }
       break;
 
     case R_X86_64_64:
-      if(r_direct_64(&rela[i])) {
+      if(r_direct_64(ctx, &rela[i])) {
 	return -1;
       }
       break;
 
     case R_X86_64_GLOB_DAT:
-      if(r_glob_dat(&rela[i])) {
+      if(r_glob_dat(ctx, &rela[i])) {
 	return -1;
       }
       break;
 
     case R_X86_64_RELATIVE:
-      if(r_relative(&rela[i])) {
+      if(r_relative(ctx, &rela[i])) {
 	return -1;
       }
       break;
@@ -344,7 +308,7 @@ this_open(rtld_lib_t* ctx) {
   for(int i=0; i<pltsz/sizeof(Elf64_Rela); i++) {
     switch(plt[i].r_info & 0xffffffffl) {
     case R_X86_64_JMP_SLOT:
-      if(r_jmp_slot(&plt[i])) {
+      if(r_jmp_slot(ctx, &plt[i])) {
 	return -1;
       }
       break;
@@ -361,43 +325,44 @@ this_open(rtld_lib_t* ctx) {
 
 
 static int
-this_init(rtld_lib_t* ctx, int argc, char** argv, char** envp, payload_args_t* argp) {
+payload_init(rtld_lib_t* ctx, int argc, char** argv, char** envp, payload_args_t* argp) {
   unsigned long count = __init_array_end - __init_array_start;
 
   for(unsigned long i=0; i<count; i++) {
     __init_array_start[i](argc, argv, envp, argp);
   }
+
   return 0;
 }
 
 
 static int
-this_fini(rtld_lib_t* ctx) {
+payload_fini(rtld_lib_t* ctx) {
   unsigned long count = __fini_array_end - __fini_array_start;
+
   for(unsigned long i=0; i<count; i++) {
     __fini_array_start[count-i-1]();
   }
+
   return 0;
 }
 
 
 static void*
-this_sym2addr(rtld_lib_t* ctx, const char* name) {
-  if(ctx != (rtld_lib_t*)g_this) {
+payload_sym2addr(rtld_lib_t* ctx, const char* name) {
+  rtld_payload_lib_t* lib = (rtld_payload_lib_t*)ctx;
+
+  if(!lib->symtab || !lib->strtab) {
     return 0;
   }
 
-  if(!g_this->symtab || !g_this->strtab) {
-    return 0;
-  }
-
-  for(unsigned long i=0; i<g_this->symtab_size/sizeof(Elf64_Sym); i++) {
-    if(!g_this->symtab[i].st_size) {
+  for(unsigned long i=0; i<lib->symtab_size/sizeof(Elf64_Sym); i++) {
+    if(!lib->symtab[i].st_size) {
       continue;
     }
 
-    if(!strcmp(name, g_this->strtab + g_this->symtab[i].st_name)) {
-      return __image_start + g_this->symtab[i].st_value;
+    if(!strcmp(name, lib->strtab + lib->symtab[i].st_name)) {
+      return lib->mapbase + lib->symtab[i].st_value;
     }
   }
 
@@ -406,12 +371,9 @@ this_sym2addr(rtld_lib_t* ctx, const char* name) {
 
 
 static const char*
-this_addr2sym(rtld_lib_t* ctx, void* addr) {
+payload_addr2sym(rtld_lib_t* ctx, void* addr) {
   rtld_payload_lib_t* lib = (rtld_payload_lib_t*)ctx;
 
-  if(lib != g_this) {
-    return 0;
-  }
   if(!lib->symtab || !lib->strtab) {
     return 0;
   }
@@ -422,7 +384,7 @@ this_addr2sym(rtld_lib_t* ctx, void* addr) {
   }
 
   for(unsigned long i=0; i<lib->symtab_size/sizeof(Elf64_Sym); i++) {
-    if(!g_this->symtab[i].st_size) {
+    if(!lib->symtab[i].st_size) {
       continue;
     }
 
@@ -437,32 +399,37 @@ this_addr2sym(rtld_lib_t* ctx, void* addr) {
 
 
 static int
-this_close(rtld_lib_t* ctx) {
+payload_close(rtld_lib_t* ctx) {
   return 0;
 }
 
 
 static void
-this_destroy(rtld_lib_t* ctx) {
+payload_destroy(rtld_lib_t* ctx) {
   free(ctx);
 }
 
 
 rtld_lib_t*
-__rtld_payload_new(void) {
-  g_this = calloc(1, sizeof(rtld_payload_lib_t));
-  g_this->open     = this_open;
-  g_this->init     = this_init;
-  g_this->sym2addr = this_sym2addr;
-  g_this->addr2sym = this_addr2sym;
-  g_this->fini     = this_fini;
-  g_this->close    = this_close;
-  g_this->destroy  = this_destroy;
-  g_this->refcnt   = 0;
-  g_this->mapbase  = __image_start;
-  g_this->mapsize  = __image_end - __image_start;
+__rtld_payload_new(const char *soname) {
+  rtld_payload_lib_t* lib = calloc(1, sizeof(rtld_payload_lib_t));
+  int pid = __syscall(SYS_getpid);
 
-  return (rtld_lib_t*)g_this;
+  lib->open     = payload_open;
+  lib->init     = payload_init;
+  lib->sym2addr = payload_sym2addr;
+  lib->addr2sym = payload_addr2sym;
+  lib->fini     = payload_fini;
+  lib->close    = payload_close;
+  lib->destroy  = payload_destroy;
+  lib->refcnt   = 0;
+  lib->mapbase  = __image_start;
+  lib->mapsize  = __image_end - __image_start;
+
+  strcpy(lib->soname, soname);
+  __syscall(0x268, pid, lib->soname, 1024);
+
+  return (rtld_lib_t*)lib;
 }
 
 
@@ -474,218 +441,13 @@ __rtld_payload_init(void) {
   if(!KERNEL_DLSYM(0x2, free)) {
     return -1;
   }
+  if(!KERNEL_DLSYM(0x2, strcpy)) {
+    return -1;
+  }
   if(!KERNEL_DLSYM(0x2, strcmp)) {
     return -1;
   }
-  if(!KERNEL_DLSYM(0x2, memcpy)) {
-    return -1;
-  }
-  if(!KERNEL_DLSYM(0x2, _Strerror)) {
-      return -1;
-  }
 
   return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void*
-__dlopen(const char *filename, int flags) {
-  unsigned char privcaps[16] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
-                                0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
-  unsigned char caps[16];
-  rtld_lib_seq_t *seq;
-  rtld_lib_t* last;
-  rtld_lib_t* lib;
-
-  if(!(flags & RTLD_MODEMASK)) {
-    g_dlerrno = EINVAL;
-    return 0;
-  }
-  if(flags & RTLD_TRACE) {
-    g_dlerrno = ENOSYS;
-    return 0;
-  }
-  if(flags & RTLD_NOLOAD) {
-    g_dlerrno = ENOSYS;
-    return 0;
-  }
-
-  /*
-  if(flags & RTLD_LAZY) {
-    g_dlerrno = ENOSYS;
-    return 0;
-  }
-  */
-
-  if(!filename) {
-      return g_this;
-  }
-
-  last = (rtld_lib_t*)g_this;
-  while(last && last->next) {
-      last = last->next;
-  }
-
-  if(!(lib=__rtld_lib_new(last, filename))) {
-    g_dlerrno = ENOMEM;
-    return 0;
-  }
-
-  if(kernel_get_ucred_caps(-1, caps)) {
-    g_dlerrno = -1;
-    return 0;
-  }
-  if(kernel_set_ucred_caps(-1, privcaps)) {
-    g_dlerrno = -1;
-    return 0;
-  }
-
-  if((g_dlerrno=__rtld_lib_open(lib))) {
-    __rtld_lib_destroy(lib);
-    kernel_set_ucred_caps(-1, caps);
-    return 0;
-  }
-
-  if(kernel_set_ucred_caps(-1, caps)) {
-    __rtld_lib_close(lib);
-    g_dlerrno = -1;
-    return 0;
-  }
-
-  if((flags & RTLD_LOCAL) || !(flags & RTLD_GLOBAL)) {
-    last->next = 0;
-  }
-
-  seq = calloc(1, sizeof(rtld_lib_seq_t));
-  seq->next = g_libseq;
-  seq->lib  = lib;
-  g_libseq  = seq;
-
-  g_dlerrno = 0;
-
-  return lib;
-}
-
-
-int
-__dladdr(void *addr, Dl_info *info) {
-  rtld_lib_t* lib;
-
-  for(lib=(rtld_lib_t*)g_this; lib; lib=lib->next) {
-    if(addr >= lib->mapbase &&
-       addr < lib->mapbase + lib->mapsize) {
-      info->dli_fname = lib->soname;
-      info->dli_fbase = lib->mapbase;
-      info->dli_sname = __rtld_lib_addr2sym(lib, addr);
-      info->dli_saddr = __rtld_lib_sym2addr(lib, info->dli_sname);
-      return 1;
-    }
-  }
-
-  for(rtld_lib_seq_t* seq=g_libseq; seq; seq=seq->next) {
-    if(addr >= seq->lib->mapbase &&
-       addr < seq->lib->mapbase + seq->lib->mapsize) {
-      info->dli_fname = seq->lib->soname;
-      info->dli_fbase = seq->lib->mapbase;
-      info->dli_sname = __rtld_lib_addr2sym(seq->lib, addr);
-      info->dli_saddr = __rtld_lib_sym2addr(seq->lib, info->dli_sname);
-      return 1;
-    }
-  }
-
-  g_dlerrno = EINVAL;
-
-  return 0;
-}
-
-
-void*
-__dlsym(void *handle, const char *symbol) {
-  rtld_lib_t* lib = handle;
-  void* addr = 0;
-
-  if(handle == 0) {
-    g_dlerrno = ENOSYS;
-    return 0;
-  }
-  if(handle == RTLD_NEXT) {
-    g_dlerrno = ENOSYS;
-    return 0;
-  }
-  if(handle == RTLD_SELF) {
-    g_dlerrno = ENOSYS;
-    return 0;
-  }
-  if(handle == RTLD_DEFAULT) {
-    lib = (rtld_lib_t*)g_this;
-  }
-
-  while(lib) {
-    if((addr=__rtld_lib_sym2addr(lib, symbol))) {
-      return addr;
-    }
-    lib = lib->next;
-  }
-
-  g_dlerrno = EINVAL;
-  return 0;
-}
-
-
-int
-__dlclose(void *handle) {
-  rtld_lib_seq_t *prev = 0;
-  rtld_lib_seq_t *seq = 0;
-
-  if(g_this == handle) {
-    g_dlerrno = -1;
-    return g_dlerrno;
-  }
-
-  for(seq=g_libseq; seq; prev=seq, seq=seq->next) {
-      if(seq->lib == handle) {
-          break;
-      }
-  }
-
-  if(!seq) {
-      g_dlerrno = -1;
-      return g_dlerrno;
-  }
-
-  if(prev) {
-      prev->next = seq->next;
-  } else {
-      g_libseq = seq->next;
-  }
-
-  g_dlerrno = __rtld_lib_close(handle);
-
-  return g_dlerrno;
-}
-
-
-char*
-__dlerror(void) {
-  if(g_dlerrno) {
-    return _Strerror(g_dlerrno, 0);
-  }
-
-  return 0;
-}

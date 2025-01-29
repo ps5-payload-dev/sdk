@@ -17,7 +17,7 @@ along with this program; see the file COPYING. If not, see
 #include "kernel.h"
 #include "klog.h"
 #include "payload.h"
-#include "rtld_payload.h"
+#include "rtld_dlfcn.h"
 
 
 /**
@@ -226,7 +226,7 @@ on_term_signal(int sig, siginfo_t *info, void *context) {
   klog_puts(nr.message);
 
   while(frame) {
-    if(dladdr(addr, &dli)) {
+    if(__dladdr(addr, &dli)) {
       // Address is mapped by crt
       if(dli.dli_sname) {
         klog_printf("[%d] %s(%s+0x%lx)[0x%lx]\n", i, dli.dli_fname, dli.dli_sname,

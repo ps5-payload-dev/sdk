@@ -1,4 +1,4 @@
-/* Copyright (C) 2024 John Törnblom
+/* Copyright (C) 2025 John Törnblom
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -19,13 +19,24 @@ along with this program; see the file COPYING. If not, see
 #include "rtld.h"
 
 
-/**
- * Create a new payload loader.
- **/
-rtld_lib_t* __rtld_payload_new(const char* soname);
+typedef struct dl_info {
+  const char *dli_fname;
+  void *dli_fbase;
+  const char *dli_sname;
+  void *dli_saddr;
+} Dl_info;
+
+
+int __dladdr(void *addr, Dl_info *info);
 
 
 /**
- * Initialize loader dependencies.
+ * Set the root of the DAG.
  **/
-int __rtld_payload_init(void);
+void __rtld_dlfcn_setroot(rtld_lib_t *lib);
+
+
+/**
+ * Initialize the loader.
+ **/
+int __rtld_dlfcn_init(void);

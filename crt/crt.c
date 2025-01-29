@@ -19,6 +19,7 @@ along with this program; see the file COPYING. If not, see
 #include "patch.h"
 #include "payload.h"
 #include "rtld.h"
+#include "rtld_dlfcn.h"
 #include "rtld_payload.h"
 #include "stacktrace.h"
 #include "syscall.h"
@@ -85,6 +86,59 @@ payload_init(payload_args_t *args) {
 }
 
 
+static int
+payload_run(void) {
+  const char* arg0 = "payload.elf";
+  char** (*getargv)(void) = 0;
+  int (*getargc)(void) = 0;
+  rtld_lib_t* lib;
+  char** environ = 0;
+  char** argv = 0;
+  int argc = 0;
+  int err;
+
+  if((KERNEL_DLSYM(0x1, getargc) || KERNEL_DLSYM(0x2001, getargc)) &&
+     (KERNEL_DLSYM(0x1, getargv) || KERNEL_DLSYM(0x2001, getargv)) &&
+     (KERNEL_DLSYM(0x1, environ) || KERNEL_DLSYM(0x2001, environ))) {
+    argc = getargc();
+    argv = getargv();
+  }
+
+  if(argc) {
+    arg0 = argv[0];
+  }
+
+  if(!(lib=__rtld_payload_new(arg0))) {
+    return -1;
+  }
+
+  __rtld_dlfcn_setroot(lib);
+
+  if((err=__rtld_lib_open(lib))) {
+    __rtld_lib_destroy(lib);
+    return err;
+  }
+
+  if((err=__rtld_lib_init(lib, argc, argv, environ, payload_args))) {
+    __rtld_lib_close(lib);
+    __rtld_lib_destroy(lib);
+    return err;
+  }
+
+  *payload_args->payloadout = main(argc, argv, environ);
+
+  if((err=__rtld_lib_fini(lib))) {
+    __rtld_lib_close(lib);
+    __rtld_lib_destroy(lib);
+  }
+
+  err = __rtld_lib_close(lib);
+  __rtld_lib_destroy(lib);
+
+  return err;
+}
+
+
 /**
  * Terminate the payload.
  **/
@@ -133,12 +187,7 @@ payload_get_args(void) {
  **/
 int
 _start(payload_args_t *args) {
-  char** (*getargv)(void) = 0;
-  int (*getargc)(void) = 0;
-  rtld_lib_t* lib;
-  char** environ = 0;
-  char** argv = 0;
-  int argc = 0;
+  int err;
 
   // Clear .bss section.
   for(unsigned char* bss=__bss_start; bss<__bss_end; bss++) {
@@ -152,35 +201,10 @@ _start(payload_args_t *args) {
     return payload_terminate();
   }
 
-  // Obtain argc, argv and envp from libkernel.
-  if((KERNEL_DLSYM(0x1, getargc) || KERNEL_DLSYM(0x2001, getargc)) &&
-     (KERNEL_DLSYM(0x1, getargv) || KERNEL_DLSYM(0x2001, getargv)) &&
-     (KERNEL_DLSYM(0x1, environ) || KERNEL_DLSYM(0x2001, environ))) {
-    argc = getargc();
-    argv = getargv();
-  }
-
   if(!__builtin_setjmp(jmpbuf)) {
-    if(!(lib=__rtld_payload_new())) {
-      payload_exit(-1);
+    if((err=payload_run())) {
+      *payload_args->payloadout = err;
     }
-    if(__rtld_lib_open(lib)) {
-      __rtld_lib_destroy(lib);
-      payload_exit(-1);
-    }
-    if(__rtld_lib_init(lib, argc, argv, environ, args)) {
-      __rtld_lib_destroy(lib);
-      payload_exit(-1);
-    }
-
-    *args->payloadout = main(argc, argv, environ);
-    __rtld_lib_fini(lib);
-
-    if(__rtld_lib_close(lib)) {
-      __rtld_lib_destroy(lib);
-      payload_exit(-1);
-    }
-    __rtld_lib_destroy(lib);
   }
 
   return payload_terminate();
