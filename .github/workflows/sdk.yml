@@ -36,9 +36,10 @@ jobs:
         zip -r $GITHUB_WORKSPACE/ps5-payload-sdk.zip ps5-payload-sdk
 
     - name: Upload
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: SDK
+        include-hidden-files: true
         path: ./ps5-payload-sdk.zip
         if-no-files-found: error
 
