@@ -180,8 +180,14 @@ r_glob_dat(rtld_so_lib_t* lib, Elf64_Rela* rela) {
   void* loc = lib->mapbase + rela->r_offset;
   void* val = 0;
 
+  // check if symbol is provided by lib
+  if((val=__rtld_lib_sym2addr((rtld_lib_t *)lib, name))) {
+    memcpy(loc, &val, sizeof(val));
+    return 0;
+  }
+
   // check if symbol is provided by a parent
-  for(rtld_lib_t *l=(rtld_lib_t *)lib->prev; l!=0; l=l->prev) {
+  for(rtld_lib_t *l=lib->prev; l!=0; l=l->prev) {
     if((val=__rtld_lib_sym2addr(l, name))) {
       memcpy(loc, &val, sizeof(val));
       return 0;
@@ -189,7 +195,7 @@ r_glob_dat(rtld_so_lib_t* lib, Elf64_Rela* rela) {
   }
 
   // check if symbol is provided by a child
-  for(rtld_lib_t *l=(rtld_lib_t *)lib; l!=0; l=l->next) {
+  for(rtld_lib_t *l=lib->next; l!=0; l=l->next) {
     if((val=__rtld_lib_sym2addr(l, name))) {
       memcpy(loc, &val, sizeof(val));
       return 0;
