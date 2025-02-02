@@ -129,7 +129,7 @@ typedef struct dynlib_obj {
 
 
 int kernel_copyout(unsigned long kaddr, void *uaddr, unsigned long len);
-int kernel_copyin(void *uaddr, unsigned long kaddr, unsigned long len);
+int kernel_copyin(const void *uaddr, unsigned long kaddr, unsigned long len);
 
 unsigned long kernel_get_proc(int pid);
 unsigned long kernel_get_ucred_authid(int pid);
