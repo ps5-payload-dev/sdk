@@ -73,6 +73,40 @@ patch_sceKernelSpawn(void) {
 
 
 /**
+ * Patch syscall permissions of the currently running process.
+ **/
+static int
+patch_syscall_permissions(void) {
+  int pid = __syscall(SYS_getpid);
+  unsigned long kproc;
+  unsigned long kaddr;
+  unsigned long uaddr;
+
+  if(!(kproc=kernel_get_proc(pid))) {
+    return -1;
+  }
+
+  if(kernel_copyout(kproc + 0x3e8, &kaddr, sizeof(kaddr)) < 0) {
+    return -1;
+  }
+
+  // set lowest address allowed to make syscalls
+  uaddr = 0;
+  if(kernel_copyin(&uaddr, kaddr + 0xf0, sizeof(uaddr)) < 0) {
+    return -1;
+  }
+
+  // set highest address allowed to make syscalls
+  uaddr = -1;
+  if(kernel_copyin(&uaddr, kaddr + 0xf8, sizeof(uaddr)) < 0) {
+    return -1;
+  }
+
+  return 0;
+}
+
+
+/**
  * Patch the credentials of the currently running process.
  **/
 static int
@@ -117,6 +151,9 @@ __patch_init(void) {
   }
   if((error=patch_kernel_ucred())) {
     return error;
+  }
+  if((error=patch_syscall_permissions())) {
+      return error;
   }
 
   return 0;
