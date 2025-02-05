@@ -81,7 +81,7 @@ typedef struct rtld_so_lib {
   Elf64_Rela* plt;
   unsigned long plt_size;
 
-  void (**init_array)(int, char**, char**, payload_args_t*);
+  void (**init_array)(int, char**, char**);
   unsigned long init_array_size;
 
   void (**fini_array)(void);
@@ -174,29 +174,27 @@ readfile(const char* path) {
  * Process the R_X86_64_GLOB_DAT relocation type.
  **/
 static int
-r_glob_dat(rtld_so_lib_t* lib, Elf64_Rela* rela) {
-  Elf64_Sym* sym = lib->symtab + ELF64_R_SYM(rela->r_info);
-  const char* name = lib->strtab + sym->st_name;
-  void* loc = lib->mapbase + rela->r_offset;
+r_glob_dat(rtld_so_lib_t* ctx, Elf64_Rela* rela) {
+  Elf64_Sym* sym = ctx->symtab + ELF64_R_SYM(rela->r_info);
+  const char* name = ctx->strtab + sym->st_name;
+  void* loc = ctx->mapbase + rela->r_offset;
+  rtld_lib_t* lib = (rtld_lib_t*)ctx;
   void* val = 0;
 
-  // check if symbol is provided by lib
-  if((val=__rtld_lib_sym2addr((rtld_lib_t *)lib, name))) {
-    memcpy(loc, &val, sizeof(val));
-    return 0;
+  while(lib->parent) {
+    lib = lib->parent;
   }
 
-  // check if symbol is provided by a parent
-  for(rtld_lib_t *l=lib->prev; l!=0; l=l->prev) {
-    if((val=__rtld_lib_sym2addr(l, name))) {
+  if((lib=__rtld_lib_sym2lib(lib, name))) {
+    if((val=__rtld_lib_sym2addr(lib, name))) {
       memcpy(loc, &val, sizeof(val));
       return 0;
     }
   }
 
-  // check if symbol is provided by a child
-  for(rtld_lib_t *l=lib->next; l!=0; l=l->next) {
-    if((val=__rtld_lib_sym2addr(l, name))) {
+  lib = (rtld_lib_t*)ctx;
+  if((lib=__rtld_lib_sym2lib(lib, name))) {
+    if((val=__rtld_lib_sym2addr(lib, name))) {
       memcpy(loc, &val, sizeof(val));
       return 0;
     }
@@ -207,7 +205,7 @@ r_glob_dat(rtld_so_lib_t* lib, Elf64_Rela* rela) {
     return 0;
   }
 
-  klog_printf("%s: unable to resolve '%s'\n", lib->soname, name);
+  klog_printf("%s: unable to resolve '%s'\n", ctx->soname, name);
 
   return -1;
 }
@@ -226,24 +224,28 @@ r_jmp_slot(rtld_so_lib_t* lib, Elf64_Rela* rela) {
  * Process the R_X86_64_64 relocation type.
  **/
 static int
-r_direct_64(rtld_so_lib_t* lib, Elf64_Rela* rela) {
-  Elf64_Sym* sym = lib->symtab + ELF64_R_SYM(rela->r_info);
-  const char* name = lib->strtab + sym->st_name;
-  void* loc = lib->mapbase + rela->r_offset;
+r_direct_64(rtld_so_lib_t* ctx, Elf64_Rela* rela) {
+  Elf64_Sym* sym = ctx->symtab + ELF64_R_SYM(rela->r_info);
+  const char* name = ctx->strtab + sym->st_name;
+  void* loc = ctx->mapbase + rela->r_offset;
+  rtld_lib_t* lib = (rtld_lib_t*)ctx;
   void* val = 0;
 
-  // check if symbol is provided by a parent
-  for(rtld_lib_t *l=(rtld_lib_t *)lib->prev; l!=0; l=l->prev) {
-    if((val=__rtld_lib_sym2addr(l, name))) {
+  while(lib->parent) {
+    lib = lib->parent;
+  }
+
+  if((lib=__rtld_lib_sym2lib(lib, name))) {
+    if((val=__rtld_lib_sym2addr(lib, name))) {
       val += rela->r_addend;
       memcpy(loc, &val, sizeof(val));
       return 0;
     }
   }
 
-  // check if symbol is provided by a child
-  for(rtld_lib_t *l=(rtld_lib_t *)lib; l!=0; l=l->next) {
-    if((val=__rtld_lib_sym2addr(l, name))) {
+  lib = (rtld_lib_t*)ctx;
+  if((lib=__rtld_lib_sym2lib(lib, name))) {
+    if((val=__rtld_lib_sym2addr(lib, name))) {
       val += rela->r_addend;
       memcpy(loc, &val, sizeof(val));
       return 0;
@@ -255,7 +257,7 @@ r_direct_64(rtld_so_lib_t* lib, Elf64_Rela* rela) {
     return 0;
   }
 
-  klog_printf("%s: unable to resolve '%s'\n", lib->soname, name);
+  klog_printf("%s: unable to resolve '%s'\n", ctx->soname, name);
 
   return -1;
 }
@@ -279,27 +281,21 @@ r_relative(rtld_so_lib_t *lib, Elf64_Rela* rela) {
  * Process the DT_NEEDED entry in the .dynamic section.
  **/
 static int
-dt_needed(rtld_so_lib_t *lib, const char* soname) {
-  rtld_lib_t* it = (rtld_lib_t*)lib;
-  rtld_lib_t* needed;
+dt_needed(rtld_so_lib_t *ctx, const char* soname) {
+  rtld_lib_t* lib = (rtld_lib_t*)ctx;
+  rtld_lib_t *needed;
 
-  if(!(needed=__rtld_lib_new(it, soname))) {
+  if(!(needed=__rtld_lib_new(lib, soname))) {
     return -1;
   }
 
   if(__rtld_lib_open(needed)) {
-    klog_printf("%s: unable to load '%s'\n", lib->soname, soname);
+    klog_printf("%s: unable to load '%s'\n", ctx->soname, soname);
     __rtld_lib_destroy(needed);
     return -1;
   }
 
-  // append child at the end of our deps
-  while(it->next) {
-    it = it->next;
-  }
-  it->next = needed;
-
-  return 0;
+  return __rtld_lib_append_dep(lib, needed);
 }
 
 
@@ -577,11 +573,11 @@ so_open(rtld_lib_t* ctx) {
 
 
 static int
-so_init(rtld_lib_t* ctx, int argc, char** argv, char** envp, payload_args_t* argp) {
+so_init(rtld_lib_t* ctx, int argc, char** argv, char** envp) {
   rtld_so_lib_t* lib = (rtld_so_lib_t*)ctx;
 
   for(unsigned long i=0; i<lib->init_array_size/sizeof(void*); i++) {
-    lib->init_array[i](argc, argv, envp, argp);
+    lib->init_array[i](argc, argv, envp);
   }
 
   return 0;
@@ -685,10 +681,10 @@ so_destroy(rtld_lib_t* ctx) {
 
 
 rtld_lib_t*
-__rtld_so_new(rtld_lib_t* prev, const char *soname) {
+__rtld_so_new(rtld_lib_t* parent, const char *soname) {
   rtld_so_lib_t* lib = calloc(1, sizeof(rtld_so_lib_t));
 
-  lib->prev     = prev;
+  lib->parent   = parent;
   lib->open     = so_open;
   lib->init     = so_init;
   lib->sym2addr = so_sym2addr;

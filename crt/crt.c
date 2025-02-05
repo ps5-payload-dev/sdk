@@ -119,7 +119,7 @@ payload_run(void) {
     return err;
   }
 
-  if((err=__rtld_lib_init(lib, argc, argv, environ, payload_args))) {
+  if((err=__rtld_lib_init(lib, argc, argv, environ))) {
     __rtld_lib_close(lib);
     __rtld_lib_destroy(lib);
     return err;
@@ -130,6 +130,7 @@ payload_run(void) {
   if((err=__rtld_lib_fini(lib))) {
     __rtld_lib_close(lib);
     __rtld_lib_destroy(lib);
+    return err;
   }
 
   err = __rtld_lib_close(lib);

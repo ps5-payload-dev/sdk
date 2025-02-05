@@ -48,8 +48,8 @@ static void (*free)(void*) = 0;
 /**
  * Dependencies provided by the ELF linker.
  **/
-extern void (*__init_array_start[])(int, char**, char**, payload_args_t*) __attribute__((weak));
-extern void (*__init_array_end[])(int, char**, char**, payload_args_t*) __attribute__((weak));
+extern void (*__init_array_start[])(int, char**, char**) __attribute__((weak));
+extern void (*__init_array_end[])(int, char**, char**) __attribute__((weak));
 
 extern void (*__fini_array_start[])(void) __attribute__((weak));
 extern void (*__fini_array_end[])(void) __attribute__((weak));
@@ -64,27 +64,21 @@ extern Elf64_Dyn _DYNAMIC[];
  * Process the DT_NEEDED entry in the .dynamic section.
  **/
 static int
-dt_needed(rtld_lib_t* ctx, const char* soname) {
-  rtld_lib_t* it = ctx;
-  rtld_lib_t* lib = 0;
+dt_needed(rtld_payload_lib_t* ctx, const char* soname) {
+  rtld_lib_t *lib = (rtld_lib_t*)ctx;
+  rtld_lib_t *needed;
 
-  while(it->next) {
-    it = it->next;
-  }
-
-  if(!(lib=__rtld_lib_new(it, soname))) {
+  if(!(needed=__rtld_lib_new(lib, soname))) {
     klog_printf("Unable to load %s\n", soname);
     return -1;
 
-  } else if(__rtld_lib_open(lib) < 0) {
+  } else if(__rtld_lib_open(needed) < 0) {
     klog_printf("unable to load '%s'\n", soname);
-    __rtld_lib_destroy(lib);
+    __rtld_lib_destroy(needed);
     return -1;
   }
 
-  it->next = lib;
-
-  return 0;
+  return __rtld_lib_append_dep(lib, needed);
 }
 
 
@@ -92,19 +86,20 @@ dt_needed(rtld_lib_t* ctx, const char* soname) {
  * Process the R_X86_64_GLOB_DAT relocation type.
  **/
 static int
-r_glob_dat(rtld_lib_t* ctx, Elf64_Rela* rela) {
-  rtld_payload_lib_t* lib = (rtld_payload_lib_t*)ctx;
-  unsigned long loc = (unsigned long)(lib->mapbase + rela->r_offset);
-  Elf64_Sym* sym = lib->symtab + ELF64_R_SYM(rela->r_info);
-  const char* name = lib->strtab + sym->st_name;
+r_glob_dat(rtld_payload_lib_t* ctx, Elf64_Rela* rela) {
+  unsigned long loc = (unsigned long)(ctx->mapbase + rela->r_offset);
+  Elf64_Sym* sym = ctx->symtab + ELF64_R_SYM(rela->r_info);
+  const char* name = ctx->strtab + sym->st_name;
+  rtld_lib_t* lib = (rtld_lib_t*)ctx;
   void* val = 0;
 
-  for(rtld_lib_t *it=lib->next; it; it=it->next) {
-    if((val=__rtld_lib_sym2addr(it, name))) {
+  if((lib=__rtld_lib_sym2lib(lib, name))) {
+    if((val=__rtld_lib_sym2addr(lib, name))) {
       return mdbg_copyin(-1, &val, loc, sizeof(val));
     }
   }
 
+  // ignore unresolved weak symbols
   if(ELF64_ST_BIND(sym->st_info) == STB_WEAK) {
     return 0;
   }
@@ -119,7 +114,7 @@ r_glob_dat(rtld_lib_t* ctx, Elf64_Rela* rela) {
  * Process the R_X86_64_JMP_SLOT relocation type.
  **/
 static int
-r_jmp_slot(rtld_lib_t* ctx, Elf64_Rela* rela) {
+r_jmp_slot(rtld_payload_lib_t* ctx, Elf64_Rela* rela) {
   return r_glob_dat(ctx, rela);
 }
 
@@ -128,16 +123,15 @@ r_jmp_slot(rtld_lib_t* ctx, Elf64_Rela* rela) {
  * Process the R_X86_64_64 relocation type.
  **/
 static int
-r_direct_64(rtld_lib_t* ctx, Elf64_Rela* rela) {
-  rtld_payload_lib_t* lib = (rtld_payload_lib_t*)ctx;
-  unsigned long loc = (unsigned long)(lib->mapbase + rela->r_offset);
-  Elf64_Sym* sym = lib->symtab + ELF64_R_SYM(rela->r_info);
-  const char* name = lib->strtab + sym->st_name;
+r_direct_64(rtld_payload_lib_t* ctx, Elf64_Rela* rela) {
+  unsigned long loc = (unsigned long)(ctx->mapbase + rela->r_offset);
+  Elf64_Sym* sym = ctx->symtab + ELF64_R_SYM(rela->r_info);
+  const char* name = ctx->strtab + sym->st_name;
+  rtld_lib_t* lib = (rtld_lib_t*)ctx;
   void* val = 0;
 
-  // check if symbol is provided by a child
-  for(rtld_lib_t *it=lib->next; it; it=it->next) {
-    if((val=__rtld_lib_sym2addr(it, name))) {
+  if((lib=__rtld_lib_sym2lib(lib, name))) {
+    if((val=__rtld_lib_sym2addr(lib, name))) {
       val += rela->r_addend;
       return mdbg_copyin(-1, &val, loc, sizeof(val));
     }
@@ -158,10 +152,9 @@ r_direct_64(rtld_lib_t* ctx, Elf64_Rela* rela) {
  * Process the R_X86_64_RELATIVE relocation type.
  **/
 static int
-r_relative(rtld_lib_t* ctx, Elf64_Rela* rela) {
-  rtld_payload_lib_t* lib = (rtld_payload_lib_t*)ctx;
-  unsigned long loc = (unsigned long)(lib->mapbase + rela->r_offset);
-  unsigned long val = (unsigned long)(lib->mapbase + rela->r_addend);
+r_relative(rtld_payload_lib_t* ctx, Elf64_Rela* rela) {
+  unsigned long loc = (unsigned long)(ctx->mapbase + rela->r_offset);
+  unsigned long val = (unsigned long)(ctx->mapbase + rela->r_addend);
 
   // ELF loader allready applied relocation
   if(*((unsigned long*)loc) == val) {
@@ -264,7 +257,7 @@ payload_open(rtld_lib_t* ctx) {
   for(int i=0; _DYNAMIC[i].d_tag!=DT_NULL; i++) {
     switch(_DYNAMIC[i].d_tag) {
     case DT_NEEDED:
-      if(dt_needed(ctx, lib->strtab + _DYNAMIC[i].d_un.d_val)) {
+      if(dt_needed(lib, lib->strtab + _DYNAMIC[i].d_un.d_val)) {
 	return -1;
       }
       break;
@@ -275,25 +268,25 @@ payload_open(rtld_lib_t* ctx) {
   for(int i=0; i<relasz/sizeof(Elf64_Rela); i++) {
     switch(rela[i].r_info & 0xffffffffl) {
     case R_X86_64_JMP_SLOT:
-      if(r_jmp_slot(ctx, &rela[i])) {
+      if(r_jmp_slot(lib, &rela[i])) {
 	return -1;
       }
       break;
 
     case R_X86_64_64:
-      if(r_direct_64(ctx, &rela[i])) {
+      if(r_direct_64(lib, &rela[i])) {
 	return -1;
       }
       break;
 
     case R_X86_64_GLOB_DAT:
-      if(r_glob_dat(ctx, &rela[i])) {
+      if(r_glob_dat(lib, &rela[i])) {
 	return -1;
       }
       break;
 
     case R_X86_64_RELATIVE:
-      if(r_relative(ctx, &rela[i])) {
+      if(r_relative(lib, &rela[i])) {
 	return -1;
       }
       break;
@@ -308,7 +301,7 @@ payload_open(rtld_lib_t* ctx) {
   for(int i=0; i<pltsz/sizeof(Elf64_Rela); i++) {
     switch(plt[i].r_info & 0xffffffffl) {
     case R_X86_64_JMP_SLOT:
-      if(r_jmp_slot(ctx, &plt[i])) {
+      if(r_jmp_slot(lib, &plt[i])) {
 	return -1;
       }
       break;
@@ -325,11 +318,11 @@ payload_open(rtld_lib_t* ctx) {
 
 
 static int
-payload_init(rtld_lib_t* ctx, int argc, char** argv, char** envp, payload_args_t* argp) {
+payload_init(rtld_lib_t* ctx, int argc, char** argv, char** envp) {
   unsigned long count = __init_array_end - __init_array_start;
 
   for(unsigned long i=0; i<count; i++) {
-    __init_array_start[i](argc, argv, envp, argp);
+    __init_array_start[i](argc, argv, envp);
   }
 
   return 0;

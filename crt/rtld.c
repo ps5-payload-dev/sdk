@@ -81,7 +81,7 @@ ref_open(rtld_lib_t* ctx) {
  *
  **/
 static int
-ref_init(rtld_lib_t* ctx, int argc, char** argv, char** envp, payload_args_t* argp) {
+ref_init(rtld_lib_t* ctx, int argc, char** argv, char** envp) {
   return 0;
 }
 
@@ -131,6 +131,28 @@ ref_close(rtld_lib_t* ctx) {
 static void
 ref_destroy(rtld_lib_t* ctx) {
   free(ctx);
+}
+
+
+static rtld_lib_t*
+__rtld_lib_soname2lib(rtld_lib_t* ctx, const char *soname) {
+  rtld_lib_t* lib;
+
+  if(!ctx) {
+    return 0;
+  }
+
+  if(!strcmp(ctx->soname, soname)) {
+    return ctx;
+  }
+
+  for(rtld_lib_seq_t* it=ctx->children.head; it; it=it->next) {
+    if((lib=__rtld_lib_soname2lib(it->lib, soname))) {
+      return lib;
+    }
+  }
+
+  return 0;
 }
 
 
@@ -212,15 +234,15 @@ __rtld_find_file(const char *name, char* path) {
 
 
 rtld_lib_t*
-__rtld_lib_new(rtld_lib_t* prev, const char* soname) {
-  rtld_lib_t* first = prev;
+__rtld_lib_new(rtld_lib_t* parent, const char* soname) {
+  rtld_lib_t* root = parent;
   rtld_ref_lib_t* lib = 0;
   rtld_lib_t* ref = 0;
   char path[1024];
 
-  // find the first lib in the linked list
-  while(first->prev) {
-    first = first->prev;
+  // find the root node
+  while(root && root->parent) {
+    root = root->parent;
   }
 
   if(__rtld_find_file(soname, path)) {
@@ -228,33 +250,31 @@ __rtld_lib_new(rtld_lib_t* prev, const char* soname) {
   }
 
   // check if the lib is already loaded
-  for(ref=first; ref; ref=ref->next) {
-    if(!strcmp(ref->soname, path)) {
-      lib = calloc(1, sizeof(rtld_ref_lib_t));
-      lib->prev     = prev;
-      lib->ref      = ref;
-      lib->open     = ref_open;
-      lib->init     = ref_init;
-      lib->sym2addr = ref_sym2addr;
-      lib->addr2sym = ref_addr2sym;
-      lib->fini     = ref_fini;
-      lib->close    = ref_close;
-      lib->destroy  = ref_destroy;
-      lib->refcnt   = 0;
-      lib->mapbase  = ref->mapbase;
-      lib->mapsize  = ref->mapsize;
+  if((ref=__rtld_lib_soname2lib(root, path))) {
+    lib = calloc(1, sizeof(rtld_ref_lib_t));
+    lib->parent   = parent;
+    lib->ref      = ref;
+    lib->open     = ref_open;
+    lib->init     = ref_init;
+    lib->sym2addr = ref_sym2addr;
+    lib->addr2sym = ref_addr2sym;
+    lib->fini     = ref_fini;
+    lib->close    = ref_close;
+    lib->destroy  = ref_destroy;
+    lib->refcnt   = 0;
+    lib->mapbase  = ref->mapbase;
+    lib->mapsize  = ref->mapsize;
 
-      strcpy(lib->soname, ref->soname);
+    strcpy(lib->soname, ref->soname);
 
-      return (rtld_lib_t*)lib;
-    }
+    return (rtld_lib_t*)lib;
   }
 
   // .sprx and .so files have different loaders
   if(endswith(soname, ".sprx")) {
-    return __rtld_sprx_new(prev, soname);
+    return __rtld_sprx_new(parent, soname);
   } else {
-    return __rtld_so_new(prev, soname);
+    return __rtld_so_new(parent, soname);
   }
 }
 
@@ -270,14 +290,108 @@ __rtld_lib_open(rtld_lib_t* ctx) {
 
 
 int
-__rtld_lib_init(rtld_lib_t* ctx, int argc, char** argv, char** envp, payload_args_t* argp) {
-  int err;
+__rtld_lib_append_dep(rtld_lib_t* ctx, rtld_lib_t* lib) {
+  rtld_lib_seq_t* seq = calloc(1, sizeof(rtld_lib_seq_t));
 
-  if(ctx->next && (err=__rtld_lib_init(ctx->next, argc, argv, envp, argp))) {
-    return err;
+  seq->lib = lib;
+
+  if(!ctx->children.head) {
+    ctx->children.head = seq;
   }
 
-  return ctx->init(ctx, argc, argv, envp, argp);
+  if(!ctx->children.tail) {
+    ctx->children.tail = seq;
+  } else {
+    seq->prev = ctx->children.tail;
+    ctx->children.tail->next = seq;
+    ctx->children.tail = seq;
+  }
+
+  return 0;
+}
+
+
+int
+__rtld_lib_remove_dep(rtld_lib_t* ctx, rtld_lib_t* lib) {
+  for(rtld_lib_seq_t* it=ctx->children.head; it; it=it->next) {
+    if(it->lib != lib) {
+      continue;
+    }
+
+    if(it->prev) {
+      it->prev->next = it->next;
+    }
+    if(it->next) {
+      it->next->prev = it->prev;
+    }
+
+    free(it);
+
+    return 0;
+  }
+
+  return -1;
+}
+
+
+int
+__rtld_lib_init(rtld_lib_t* ctx, int argc, char** argv, char** envp) {
+  int err;
+
+  // init in reverse order
+  for(rtld_lib_seq_t* it=ctx->children.tail; it; it=it->prev) {
+    if((err=__rtld_lib_init(it->lib, argc, argv, envp))) {
+      return err;
+    }
+  }
+
+  return ctx->init(ctx, argc, argv, envp);
+}
+
+
+rtld_lib_t*
+__rtld_lib_sym2lib(rtld_lib_t* ctx, const char* name) {
+  rtld_lib_t* lib;
+
+  if(!name) {
+    return 0;
+  }
+
+  if(ctx->sym2addr(ctx, name)) {
+    return ctx;
+  }
+
+  // TODO: breadth-first search
+  for(rtld_lib_seq_t* it=ctx->children.head; it; it=it->next) {
+      if((lib=__rtld_lib_sym2lib(it->lib, name))) {
+      return lib;
+    }
+  }
+
+  return 0;
+}
+
+
+rtld_lib_t*
+__rtld_lib_addr2lib(rtld_lib_t* ctx, void* addr) {
+  rtld_lib_t* lib;
+
+  if(!addr) {
+    return 0;
+  }
+
+  if(addr >= ctx->mapbase &&
+     addr < ctx->mapbase + ctx->mapsize) {
+      return ctx;
+    }
+
+  for(rtld_lib_seq_t* it=ctx->children.head; it; it=it->next) {
+      if((lib=__rtld_lib_addr2lib(it->lib, addr))) {
+      return lib;
+    }
+  }
+
+  return 0;
 }
 
 
@@ -309,8 +423,10 @@ __rtld_lib_fini(rtld_lib_t* ctx) {
     return err;
   }
 
-  if(ctx->next && (err=__rtld_lib_fini(ctx->next))) {
-    return err;
+  for(rtld_lib_seq_t* it=ctx->children.head; it; it=it->next) {
+    if((err=__rtld_lib_fini(it->lib))) {
+      return err;
+    }
   }
 
   return 0;
@@ -326,14 +442,21 @@ __rtld_lib_close(rtld_lib_t* ctx) {
     return 0;
   }
 
-  if(ctx->next && (err=__rtld_lib_close(ctx->next))) {
-    return err;
-  }
-  if(ctx->prev) {
-    ctx->prev->next = 0;
+  for(rtld_lib_seq_t* it=ctx->children.tail; it; it=it->prev) {
+    if((err=__rtld_lib_close(it->lib))) {
+      return err;
+    }
   }
 
-  return ctx->close(ctx);
+  if((err=ctx->close(ctx))) {
+    return err;
+  }
+
+  if(ctx->parent) {
+    return __rtld_lib_remove_dep(ctx->parent, ctx);
+  } else {
+    return 0;
+  }
 }
 
 

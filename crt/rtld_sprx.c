@@ -291,7 +291,7 @@ sprx_open(rtld_lib_t* ctx) {
  * TODO: sprx_init
  **/
 static int
-sprx_init(rtld_lib_t* ctx, int argc, char** argv, char** envp, payload_args_t* argp) {
+sprx_init(rtld_lib_t* ctx, int argc, char** argv, char** envp) {
   return 0;
 }
 
@@ -415,10 +415,10 @@ sprx_destroy(rtld_lib_t* ctx) {
 
 
 rtld_lib_t*
-__rtld_sprx_new(rtld_lib_t* prev, const char *soname) {
+__rtld_sprx_new(rtld_lib_t* parent, const char *soname) {
   rtld_sprx_lib_t* lib = calloc(1, sizeof(rtld_sprx_lib_t));
 
-  lib->prev     = prev;
+  lib->parent   = parent;
   lib->open     = sprx_open;
   lib->init     = sprx_init;
   lib->sym2addr = sprx_sym2addr;

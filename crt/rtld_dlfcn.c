@@ -14,7 +14,6 @@ You should have received a copy of the GNU General Public License
 along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
-
 #include "kernel.h"
 #include "rtld.h"
 #include "rtld_dlfcn.h"
@@ -42,33 +41,26 @@ along with this program; see the file COPYING. If not, see
 #define RTLD_NOLOAD   0x2000
 
 
-typedef struct rtld_lib_seq {
-  struct rtld_lib *lib;
-  struct rtld_lib_seq *next;
-} rtld_lib_seq_t;
-
-
 /**
  * Dependencies to standard libraries.
  **/
 static char* (*_Strerror)(int, char*) = 0;
 static void* (*calloc)(unsigned long, unsigned long) = 0;
 static void (*free)(void*) = 0;
+static char** (*getargv)(void) = 0;
+static int (*getargc)(void) = 0;
+static char** environ = 0;
 
 
 /**
  * Global variables.
  **/
 static int g_dlerrno = 0;
-static rtld_lib_seq_t* g_libseq = 0;
 static rtld_lib_t* g_root = 0;
 
-#include "klog.h"
 
 void*
 __dlopen(const char *filename, int flags) {
-  rtld_lib_t* last = g_root;
-  rtld_lib_seq_t *seq;
   rtld_lib_t* lib;
 
   if(!(flags & RTLD_MODEMASK)) {
@@ -92,14 +84,10 @@ __dlopen(const char *filename, int flags) {
   */
 
   if(!filename) {
-      return g_root;
+    return g_root;
   }
 
-  while(last && last->next) {
-      last = last->next;
-  }
-
-  if(!(lib=__rtld_lib_new(last, filename))) {
+  if(!(lib=__rtld_lib_new(g_root, filename))) {
     g_dlerrno = ENOMEM;
     return 0;
   }
@@ -109,14 +97,11 @@ __dlopen(const char *filename, int flags) {
     return 0;
   }
 
-  if((flags & RTLD_LOCAL) || !(flags & RTLD_GLOBAL)) {
-    last->next = 0;
+  if(flags & RTLD_GLOBAL) {
+    __rtld_lib_append_dep(g_root, lib);
   }
 
-  seq = calloc(1, sizeof(rtld_lib_seq_t));
-  seq->next = g_libseq;
-  seq->lib  = lib;
-  g_libseq  = seq;
+  __rtld_lib_init(lib, getargc(), getargv(), environ);
 
   g_dlerrno = 0;
 
@@ -126,28 +111,14 @@ __dlopen(const char *filename, int flags) {
 
 int
 __dladdr(void *addr, Dl_info *info) {
-  rtld_lib_t* lib;
+  rtld_lib_t* lib = __rtld_lib_addr2lib(g_root, addr);
 
-  for(lib=g_root; lib; lib=lib->next) {
-    if(addr >= lib->mapbase &&
-       addr < lib->mapbase + lib->mapsize) {
-      info->dli_fname = lib->soname;
-      info->dli_fbase = lib->mapbase;
-      info->dli_sname = __rtld_lib_addr2sym(lib, addr);
-      info->dli_saddr = __rtld_lib_sym2addr(lib, info->dli_sname);
-      return 1;
-    }
-  }
-
-  for(rtld_lib_seq_t* seq=g_libseq; seq; seq=seq->next) {
-    if(addr >= seq->lib->mapbase &&
-       addr < seq->lib->mapbase + seq->lib->mapsize) {
-      info->dli_fname = seq->lib->soname;
-      info->dli_fbase = seq->lib->mapbase;
-      info->dli_sname = __rtld_lib_addr2sym(seq->lib, addr);
-      info->dli_saddr = __rtld_lib_sym2addr(seq->lib, info->dli_sname);
-      return 1;
-    }
+  if(lib) {
+    info->dli_fname = lib->soname;
+    info->dli_fbase = lib->mapbase;
+    info->dli_sname = __rtld_lib_addr2sym(lib, addr);
+    info->dli_saddr = __rtld_lib_sym2addr(lib, info->dli_sname);
+    return 1;
   }
 
   g_dlerrno = EINVAL;
@@ -177,11 +148,10 @@ __dlsym(void *handle, const char *symbol) {
     lib = g_root;
   }
 
-  while(lib) {
+  if((lib=__rtld_lib_sym2lib(lib, symbol))) {
     if((addr=__rtld_lib_sym2addr(lib, symbol))) {
       return addr;
     }
-    lib = lib->next;
   }
 
   g_dlerrno = EINVAL;
@@ -191,33 +161,17 @@ __dlsym(void *handle, const char *symbol) {
 
 int
 __dlclose(void *handle) {
-  rtld_lib_seq_t *prev = 0;
-  rtld_lib_seq_t *seq = 0;
+  rtld_lib_t* lib = handle;
 
-  if(g_root == handle) {
+  if(g_root == lib || !lib) {
     g_dlerrno = -1;
     return g_dlerrno;
   }
 
-  for(seq=g_libseq; seq; prev=seq, seq=seq->next) {
-      if(seq->lib == handle) {
-          break;
-      }
-  }
+  __rtld_lib_fini(lib);
 
-  if(!seq) {
-      g_dlerrno = -1;
-      return g_dlerrno;
-  }
-
-  if(prev) {
-      prev->next = seq->next;
-  } else {
-      g_libseq = seq->next;
-  }
-
-  free(seq);
-  g_dlerrno = __rtld_lib_close(handle);
+  g_dlerrno = __rtld_lib_close(lib);
+  __rtld_lib_destroy(lib);
 
   return g_dlerrno;
 }
@@ -238,7 +192,6 @@ void __rtld_dlfcn_setroot(rtld_lib_t *lib) {
 }
 
 
-
 int
 __rtld_dlfcn_init(void) {
   if(!KERNEL_DLSYM(0x2, calloc)) {
@@ -249,6 +202,22 @@ __rtld_dlfcn_init(void) {
   }
   if(!KERNEL_DLSYM(0x2, _Strerror)) {
     return -1;
+  }
+
+  if(!KERNEL_DLSYM(0x1, getargc)) {
+    if(!KERNEL_DLSYM(0x2001, getargc)) {
+      return -1;
+    }
+  }
+  if(!KERNEL_DLSYM(0x1, getargv)) {
+    if(!KERNEL_DLSYM(0x2001, getargv)) {
+      return -1;
+    }
+  }
+  if(!KERNEL_DLSYM(0x1, environ)) {
+    if(!KERNEL_DLSYM(0x2001, environ)) {
+      return -1;
+    }
   }
 
   return 0;

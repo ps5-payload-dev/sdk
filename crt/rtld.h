@@ -20,11 +20,21 @@ along with this program; see the file COPYING. If not, see
 
 
 /**
+ * Double linked list for keeping track of deps.
+ **/
+typedef struct rtld_lib_seq {
+  struct rtld_lib *lib;
+  struct rtld_lib_seq *next;
+  struct rtld_lib_seq *prev;
+} rtld_lib_seq_t;
+
+
+/**
  * Prototypes for different kinds of libs (.sprx or .so).
  **/
 typedef struct rtld_lib {
   int (*open)(struct rtld_lib* ctx);
-  int (*init)(struct rtld_lib* ctx, int, char**, char**, payload_args_t*);
+  int (*init)(struct rtld_lib* ctx, int, char**, char**);
   void* (*sym2addr)(struct rtld_lib* ctx, const char* name);
   const char* (*addr2sym)(struct rtld_lib* ctx, void* addr);
   int (*fini)(struct rtld_lib* ctx);
@@ -35,8 +45,11 @@ typedef struct rtld_lib {
   void *mapbase;
   unsigned long mapsize;
   int refcnt;
-  struct rtld_lib* next;
-  struct rtld_lib* prev;
+  struct rtld_lib* parent;
+  struct {
+    rtld_lib_seq_t* head;
+    rtld_lib_seq_t* tail;
+  } children;
 } rtld_lib_t;
 
 
@@ -53,13 +66,37 @@ int __rtld_lib_open(rtld_lib_t* ctx);
 
 
 /**
- * Run lib constructors.
+ * Append a dependency.
  **/
-int __rtld_lib_init(rtld_lib_t* ctx, int argc, char** argv, char** envp, payload_args_t* argp);
+int __rtld_lib_append_dep(rtld_lib_t* ctx, rtld_lib_t* lib);
 
 
 /**
- * Resolve the given symbol name to an address.
+ * Remove a dependency.
+ **/
+int __rtld_lib_remove_dep(rtld_lib_t* ctx, rtld_lib_t* lib);
+
+
+/**
+ * Run lib constructors.
+ **/
+int __rtld_lib_init(rtld_lib_t* ctx, int argc, char** argv, char** envp);
+
+
+/**
+ * Recursively search for a lib defining a symbol with the given name.
+ **/
+rtld_lib_t* __rtld_lib_sym2lib(rtld_lib_t* ctx, const char* name);
+
+
+/**
+ * Recursively search for the lib defining the given address.
+ **/
+rtld_lib_t* __rtld_lib_addr2lib(rtld_lib_t* ctx, void* addr);
+
+
+/**
+ * Get the address of a symbol with the given name.
  **/
 void* __rtld_lib_sym2addr(rtld_lib_t* ctx, const char* name);
 
@@ -77,7 +114,7 @@ int __rtld_lib_fini(rtld_lib_t* ctx);
 
 
 /**
- * Close the lib and run its destructor.
+ * Close the lib.
  **/
 int __rtld_lib_close(rtld_lib_t* ctx);
 
