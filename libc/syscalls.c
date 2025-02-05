@@ -14,11 +14,6 @@ You should have received a copy of the GNU General Public License
 along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
-#include "../include/ps5/payload.h"
-
-
-static __attribute__ ((used)) long ptr_syscall = 0;
-
 
 void
 syscall() {
@@ -30,7 +25,7 @@ syscall() {
     "  mov r10, r8\n"
     "  mov r8,  r9\n"
     "  mov r9,  qword ptr [rsp + 8]\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -40,7 +35,7 @@ fork() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 2\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -50,7 +45,7 @@ wait4() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 7\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -60,7 +55,7 @@ link() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 9\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -70,7 +65,7 @@ fchdir() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 13\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -80,7 +75,7 @@ mknod() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 14\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -90,7 +85,7 @@ chown() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 16\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -101,7 +96,7 @@ mount() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 21\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -111,7 +106,7 @@ unmount() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 22\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -121,7 +116,7 @@ ptrace() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 26\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -131,7 +126,7 @@ dup() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 41\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -141,7 +136,7 @@ ktrace() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 45\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -151,7 +146,7 @@ setlogin() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 50\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -161,7 +156,7 @@ acct() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 51\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -171,7 +166,7 @@ reboot() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 55\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -181,7 +176,7 @@ revoke() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 56\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -191,7 +186,7 @@ symlink() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 57\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -201,7 +196,7 @@ readlink() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 58\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -211,7 +206,7 @@ umask() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 60\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -221,7 +216,7 @@ chroot() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 61\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -231,7 +226,7 @@ vfork() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 66\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -241,7 +236,7 @@ sbrk() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 69\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -251,7 +246,7 @@ sstk() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 70\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -261,7 +256,7 @@ vadvise() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 72\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -271,7 +266,7 @@ getpgrp() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 81\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -281,7 +276,7 @@ setpgid() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 82\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -291,7 +286,7 @@ swapon() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 85\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -301,7 +296,7 @@ fchown() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 123\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -311,7 +306,7 @@ mkfifo() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 132\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -321,7 +316,7 @@ adjtime() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 140\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -331,7 +326,7 @@ setsid() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 147\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -341,7 +336,7 @@ quotactl() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 148\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -351,7 +346,7 @@ nlm_syscall() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 154\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -361,7 +356,7 @@ nfssvc() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 155\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -371,7 +366,7 @@ lgetfh() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 160\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -381,7 +376,7 @@ getfh() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 161\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -391,7 +386,7 @@ rtprio() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 166\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -401,7 +396,7 @@ semsys() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 169\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -411,7 +406,7 @@ msgsys() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 170\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -421,7 +416,7 @@ shmsys() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 171\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -431,7 +426,7 @@ setfib() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 175\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -441,7 +436,7 @@ ntp_adjtime() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 176\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -451,7 +446,7 @@ setgid() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 181\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -461,7 +456,7 @@ pathconf() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 191\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -471,7 +466,7 @@ fpathconf() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 192\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -481,7 +476,7 @@ undelete() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 205\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -491,7 +486,7 @@ getpgid() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 207\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -501,7 +496,7 @@ semget() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 221\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -511,7 +506,7 @@ semop() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 222\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -521,7 +516,7 @@ msgget() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 225\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -531,7 +526,7 @@ msgsnd() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 226\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -541,7 +536,7 @@ msgrcv() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 227\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -551,7 +546,7 @@ shmat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 228\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -561,7 +556,7 @@ shmdt() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 230\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -571,7 +566,7 @@ shmget() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 231\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -581,7 +576,7 @@ ffclock_getcounter() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 241\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -591,7 +586,7 @@ ffclock_setestimate() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 242\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -601,7 +596,7 @@ ffclock_getestimate() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 243\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -611,7 +606,7 @@ clock_nanosleep() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 244\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -621,7 +616,7 @@ clock_getcpuclockid2() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 247\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -631,7 +626,7 @@ ntp_gettime() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 248\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -641,7 +636,7 @@ minherit() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 250\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -651,7 +646,7 @@ rfork() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 251\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -661,7 +656,7 @@ lchown() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 254\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -671,7 +666,7 @@ aio_read() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 255\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -681,7 +676,7 @@ aio_write() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 256\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -691,7 +686,7 @@ lio_listio() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 257\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -701,7 +696,7 @@ lchmod() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 274\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -711,7 +706,7 @@ lutimes() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 276\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -721,7 +716,7 @@ nstat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 278\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -731,7 +726,7 @@ nfstat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 279\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -741,7 +736,7 @@ nlstat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 280\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -751,7 +746,7 @@ fhopen() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 298\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -761,7 +756,7 @@ fhstat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 299\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -771,7 +766,7 @@ modnext() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 300\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -781,7 +776,7 @@ modstat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 301\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -791,7 +786,7 @@ modfnext() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 302\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -801,7 +796,7 @@ modfind() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 303\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -811,7 +806,7 @@ kldload() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 304\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -821,7 +816,7 @@ kldunload() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 305\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -831,7 +826,7 @@ kldfind() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 306\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -841,7 +836,7 @@ kldnext() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 307\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -851,7 +846,7 @@ kldstat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 308\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -861,7 +856,7 @@ kldfirstmod() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 309\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -871,7 +866,7 @@ setresuid() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 311\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -881,7 +876,7 @@ setresgid() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 312\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -891,7 +886,7 @@ aio_return() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 314\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -901,7 +896,7 @@ aio_suspend() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 315\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -911,7 +906,7 @@ aio_cancel() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 316\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -921,7 +916,7 @@ aio_error() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 317\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -931,7 +926,7 @@ yield() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 321\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -941,7 +936,7 @@ utrace() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 335\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -951,7 +946,7 @@ kldsym() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 337\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -961,7 +956,7 @@ jail() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 338\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -971,7 +966,7 @@ nnpfs_syscall() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 339\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -981,7 +976,7 @@ __acl_get_file() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 347\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -991,7 +986,7 @@ __acl_set_file() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 348\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1001,7 +996,7 @@ __acl_get_fd() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 349\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1011,7 +1006,7 @@ __acl_set_fd() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 350\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1021,7 +1016,7 @@ __acl_delete_file() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 351\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1031,7 +1026,7 @@ __acl_delete_fd() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 352\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1041,7 +1036,7 @@ __acl_aclcheck_file() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 353\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1051,7 +1046,7 @@ __acl_aclcheck_fd() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 354\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1061,7 +1056,7 @@ extattrctl() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 355\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1071,7 +1066,7 @@ extattr_set_file() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 356\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1081,7 +1076,7 @@ extattr_get_file() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 357\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1091,7 +1086,7 @@ extattr_delete_file() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 358\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1101,7 +1096,7 @@ aio_waitcomplete() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 359\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1111,7 +1106,7 @@ getresuid() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 360\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1121,7 +1116,7 @@ getresgid() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 361\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1131,7 +1126,7 @@ extattr_set_fd() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 371\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1141,7 +1136,7 @@ extattr_get_fd() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 372\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1151,7 +1146,7 @@ extattr_delete_fd() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 373\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1161,7 +1156,7 @@ __setugid() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 374\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1171,7 +1166,7 @@ eaccess() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 376\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1181,7 +1176,7 @@ afs3_syscall() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 377\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1191,7 +1186,7 @@ nmount() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 378\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1201,7 +1196,7 @@ __mac_get_proc() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 384\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1211,7 +1206,7 @@ __mac_set_proc() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 385\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1221,7 +1216,7 @@ __mac_get_fd() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 386\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1231,7 +1226,7 @@ __mac_get_file() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 387\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1241,7 +1236,7 @@ __mac_set_fd() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 388\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1251,7 +1246,7 @@ __mac_set_file() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 389\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1261,7 +1256,7 @@ kenv() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 390\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1271,7 +1266,7 @@ lchflags() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 391\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1281,7 +1276,7 @@ mac_syscall() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 394\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1291,7 +1286,7 @@ getfsstat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 395\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1301,7 +1296,7 @@ statfs() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 396\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1311,7 +1306,7 @@ fstatfs() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 397\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1321,7 +1316,7 @@ fhstatfs() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 398\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1331,7 +1326,7 @@ __mac_get_pid() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 409\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1341,7 +1336,7 @@ __mac_get_link() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 410\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1351,7 +1346,7 @@ __mac_set_link() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 411\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1361,7 +1356,7 @@ extattr_set_link() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 412\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1371,7 +1366,7 @@ extattr_get_link() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 413\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1381,7 +1376,7 @@ extattr_delete_link() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 414\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1391,7 +1386,7 @@ __mac_execve() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 415\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1401,7 +1396,7 @@ swapoff() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 424\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1411,7 +1406,7 @@ __acl_get_link() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 425\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1421,7 +1416,7 @@ __acl_set_link() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 426\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1431,7 +1426,7 @@ __acl_delete_link() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 427\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1441,7 +1436,7 @@ __acl_aclcheck_link() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 428\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1451,7 +1446,7 @@ thr_create() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 430\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1461,7 +1456,7 @@ thr_exit() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 431\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1471,7 +1466,7 @@ thr_self() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 432\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1481,7 +1476,7 @@ thr_kill() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 433\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1491,7 +1486,7 @@ jail_attach() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 436\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1501,7 +1496,7 @@ extattr_list_fd() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 437\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1511,7 +1506,7 @@ extattr_list_file() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 438\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1521,7 +1516,7 @@ extattr_list_link() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 439\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1531,7 +1526,7 @@ thr_suspend() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 442\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1541,7 +1536,7 @@ thr_wake() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 443\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1551,7 +1546,7 @@ kldunloadf() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 444\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1561,7 +1556,7 @@ audit() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 445\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1571,7 +1566,7 @@ auditon() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 446\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1581,7 +1576,7 @@ getauid() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 447\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1591,7 +1586,7 @@ setauid() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 448\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1601,7 +1596,7 @@ getaudit() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 449\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1611,7 +1606,7 @@ setaudit() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 450\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1621,7 +1616,7 @@ getaudit_addr() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 451\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1631,7 +1626,7 @@ setaudit_addr() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 452\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1641,7 +1636,7 @@ auditctl() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 453\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1651,7 +1646,7 @@ thr_new() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 455\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1661,7 +1656,7 @@ kmq_open() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 457\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1671,7 +1666,7 @@ kmq_setattr() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 458\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1681,7 +1676,7 @@ kmq_timedreceive() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 459\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1691,7 +1686,7 @@ kmq_timedsend() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 460\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1701,7 +1696,7 @@ kmq_notify() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 461\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1711,7 +1706,7 @@ kmq_unlink() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 462\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1721,7 +1716,7 @@ abort2() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 463\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1731,7 +1726,7 @@ thr_set_name() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 464\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1741,7 +1736,7 @@ aio_fsync() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 465\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1751,7 +1746,7 @@ sctp_peeloff() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 471\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1761,7 +1756,7 @@ sctp_generic_sendmsg() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 472\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1771,7 +1766,7 @@ sctp_generic_sendmsg_iov() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 473\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1781,7 +1776,7 @@ sctp_generic_recvmsg() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 474\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1791,7 +1786,7 @@ thr_kill2() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 481\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1801,7 +1796,7 @@ cpuset() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 484\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1811,7 +1806,7 @@ cpuset_setid() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 485\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1821,7 +1816,7 @@ faccessat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 489\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1831,7 +1826,7 @@ fchmodat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 490\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1841,7 +1836,7 @@ fchownat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 491\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1851,7 +1846,7 @@ fexecve() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 492\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1861,7 +1856,7 @@ fstatat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 493\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1871,7 +1866,7 @@ futimesat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 494\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1881,7 +1876,7 @@ linkat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 495\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1891,7 +1886,7 @@ mkdirat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 496\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1901,7 +1896,7 @@ mkfifoat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 497\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1911,7 +1906,7 @@ mknodat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 498\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1921,7 +1916,7 @@ openat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 499\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1931,7 +1926,7 @@ readlinkat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 500\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1941,7 +1936,7 @@ renameat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 501\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1951,7 +1946,7 @@ symlinkat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 502\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1961,7 +1956,7 @@ unlinkat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 503\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1971,7 +1966,7 @@ posix_openpt() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 504\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1981,7 +1976,7 @@ gssd_syscall() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 505\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -1991,7 +1986,7 @@ jail_get() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 506\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2001,7 +1996,7 @@ jail_set() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 507\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2011,7 +2006,7 @@ jail_remove() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 508\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2021,7 +2016,7 @@ closefrom() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 509\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2031,7 +2026,7 @@ semctl() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 510\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2041,7 +2036,7 @@ msgctl() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 511\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2051,7 +2046,7 @@ shmctl() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 512\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2061,7 +2056,7 @@ lpathconf() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 513\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2071,7 +2066,7 @@ __cap_rights_get() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 515\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2081,7 +2076,7 @@ cap_enter() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 516\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2091,7 +2086,7 @@ cap_getmode() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 517\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2101,7 +2096,7 @@ pdfork() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 518\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2111,7 +2106,7 @@ pdkill() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 519\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2121,7 +2116,7 @@ pdgetpid() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 520\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2131,7 +2126,7 @@ getloginclass() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 523\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2141,7 +2136,7 @@ setloginclass() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 524\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2151,7 +2146,7 @@ rctl_get_racct() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 525\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2161,7 +2156,7 @@ rctl_get_rules() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 526\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2171,7 +2166,7 @@ rctl_get_limits() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 527\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2181,7 +2176,7 @@ rctl_add_rule() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 528\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2191,7 +2186,7 @@ rctl_remove_rule() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 529\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2201,7 +2196,7 @@ posix_fallocate() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 530\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2211,7 +2206,7 @@ posix_fadvise() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 531\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2221,7 +2216,7 @@ wait6() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 532\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2231,7 +2226,7 @@ cap_rights_limit() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 533\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2241,7 +2236,7 @@ cap_ioctls_limit() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 534\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2251,7 +2246,7 @@ cap_ioctls_get() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 535\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2261,7 +2256,7 @@ cap_fcntls_limit() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 536\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2271,7 +2266,7 @@ cap_fcntls_get() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 537\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2281,7 +2276,7 @@ bindat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 538\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2291,7 +2286,7 @@ connectat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 539\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2301,7 +2296,7 @@ chflagsat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 540\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2311,7 +2306,7 @@ aio_mlock() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 543\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2321,7 +2316,7 @@ procctl() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 544\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2331,7 +2326,7 @@ ppoll() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 545\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2341,7 +2336,7 @@ futimens() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 546\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2351,7 +2346,7 @@ utimensat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 547\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2361,7 +2356,7 @@ numa_getaffinity() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 548\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
@@ -2371,27 +2366,8 @@ numa_setaffinity() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 549\n"
     "  mov r10, rcx\n"
-    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  syscall\n"
     "  ret\n"
     );
 }
 
-
-__attribute__((used))
-__attribute__((constructor(105))) static void
-syscall_constructor(int argc, char** argv, char** envp, payload_args_t *args) {
-  int (*sceKernelDlsym)(int, const char*, void*) = 0;
-
-  if(args->sys_dynlib_dlsym(0x1, "sceKernelDlsym", &sceKernelDlsym)) {
-    args->sys_dynlib_dlsym(0x2001, "sceKernelDlsym", &sceKernelDlsym);
-  }
-  if(sceKernelDlsym == args->sys_dynlib_dlsym) {
-    if(args->sys_dynlib_dlsym(0x1, "getpid", &ptr_syscall)) {
-      args->sys_dynlib_dlsym(0x2001, "getpid", &ptr_syscall);
-    }
-  } else {
-    ptr_syscall = (long)args->sys_dynlib_dlsym;
-  }
-
-  ptr_syscall += 0xa; // jump directly to the syscall instruction
-}
