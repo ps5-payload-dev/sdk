@@ -91,11 +91,11 @@ payload_run(void) {
   const char* arg0 = "payload.elf";
   char** (*getargv)(void) = 0;
   int (*getargc)(void) = 0;
-  rtld_lib_t* lib;
+  rtld_lib_t* lib = 0;
   char** environ = 0;
   char** argv = 0;
   int argc = 0;
-  int err;
+  int err = 0;
 
   if((KERNEL_DLSYM(0x1, getargc) || KERNEL_DLSYM(0x2001, getargc)) &&
      (KERNEL_DLSYM(0x1, getargv) || KERNEL_DLSYM(0x2001, getargv)) &&
