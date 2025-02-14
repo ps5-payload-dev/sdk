@@ -278,7 +278,7 @@ __kernel_init(payload_args_t* args) {
   case 0x7200000:
   case 0x7400000:
   case 0x7600000:
-  case 0x7800000:
+  case 0x7610000:
     KERNEL_ADDRESS_TEXT_BASE      = 0; // currently not known
     KERNEL_ADDRESS_ALLPROC        = KERNEL_ADDRESS_DATA_BASE + 0x02849D50;
     KERNEL_ADDRESS_SECURITY_FLAGS = KERNEL_ADDRESS_DATA_BASE + 0x00AB8064;
