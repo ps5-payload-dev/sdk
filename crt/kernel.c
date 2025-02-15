@@ -456,7 +456,11 @@ kernel_get_qaflags(unsigned char qaflags[16]) {
 
 int
 kernel_set_qaflags(const unsigned char qaflags[16]) {
-  return kernel_copyin(qaflags, KERNEL_ADDRESS_QA_FLAGS, 16);
+  if(kernel_get_fw_version() < 0x7000000) {
+    return kernel_copyin(qaflags, KERNEL_ADDRESS_QA_FLAGS, 16);
+  } else {
+    return -ENOSYS; // currently not supported
+  }
 }
 
 
