@@ -25,6 +25,9 @@ along with this program; see the file COPYING. If not, see
  **/
 #define SA_SIGINFO 0x0040
 
+#define SIG_DFL (void*)0
+#define SIG_IGN (void*)1
+
 
 /**
  *
@@ -300,14 +303,23 @@ __stacktrace_init(void) {
     if(!term_sigmap[signo]) {
       continue;
     }
-    if(sigemptyset(&sa.sa_mask)) {
-      klog_perror("sigemptyset");
-      return -1;
-    }
-    if(sigaction(signo, &sa, &default_sigmap[signo])) {
+
+    if(sigaction(signo, 0, &default_sigmap[signo])) {
       klog_perror("sigaction");
       return -1;
     }
+
+    if(default_sigmap[signo].sa_sigaction == SIG_DFL) {
+      if(sigemptyset(&sa.sa_mask)) {
+        klog_perror("sigemptyset");
+        return -1;
+      }
+      if(sigaction(signo, &sa, 0)) {
+        klog_perror("sigaction");
+        return -1;
+      }
+    }
+
     default_cnt++;
   }
 
@@ -322,10 +334,13 @@ __stacktrace_fini(void) {
       continue;
     }
 
-    if(sigaction(signo, &default_sigmap[signo], 0)) {
-      klog_perror("sigaction");
-      return -1;
+    if(default_sigmap[signo].sa_sigaction == SIG_DFL) {
+      if(sigaction(signo, &default_sigmap[signo], 0)) {
+        klog_perror("sigaction");
+        return -1;
+      }
     }
+
     default_cnt--;
   }
 
