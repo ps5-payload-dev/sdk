@@ -20,17 +20,7 @@ along with this program; see the file COPYING. If not, see
 
 
 int main() {
-  int pid;
-
-  //getpid()
-  asm("movq $20, %%rax \n"
-      "syscall \n"
-      "movl %%eax, %0 \n"
-      : "=r"(pid)
-      :
-      : "rax");
-
-  printf("pid: %d\n", pid);
+  printf("%d\n", (int)syscall(SYS_getuid));
 
   return 0;
 }

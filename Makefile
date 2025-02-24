@@ -24,12 +24,12 @@ ifdef WIN
 	SUBDIRS += host/win
 endif
 
-.PHONY: $(TOPTARGETS) $(SUBDIRS) install
-
 $(TOPTARGETS): $(SUBDIRS)
 
 $(SUBDIRS):
-	$(MAKE) -j1 -C $@ $(MAKECMDGOALS)
+	$(MAKE) -C $@ $(MAKECMDGOALS)
+
+.PHONY: $(TOPTARGETS) $(SUBDIRS)
 
 install:
 	cp -r samples/. $(DESTDIR)/samples

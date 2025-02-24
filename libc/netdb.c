@@ -68,16 +68,6 @@ static const char *g_errlist[] = {
 };
 
 
-static struct protoent g_protent[] = {
-  {"ip", (char*[]){"IP", 0}, IPPROTO_IP},
-  {"icmp", (char*[]){"ICMP", 0}, IPPROTO_ICMP},
-  {"tcp", (char*[]){"TCP", 0}, IPPROTO_TCP},
-  {"udp", (char*[]){"UDP", 0}, IPPROTO_UDP},
-  {"ipv6", (char*[]){"IPV6", 0}, IPPROTO_IPV6},
-  {0, 0, 0}
-};
-
-
 const char*
 gai_strerror(int err) {
   if(0 <= err && err < EAI_MAX) {
@@ -354,7 +344,6 @@ int
 getnameinfo(const struct sockaddr *sa, socklen_t salen, char *hostname,
 	    size_t hostlen, char *servname, size_t servlen, int flags) {
   struct sockaddr_in *addr_in = (struct sockaddr_in *)sa;
-  int port;
 
   if(!hostname && !servname) {
     return EAI_NONAME;
@@ -376,31 +365,7 @@ getnameinfo(const struct sockaddr *sa, socklen_t salen, char *hostname,
   }
 
   if(servname) {
-    switch((port=ntohs(addr_in->sin_port))) {
-    case 21:
-      strncpy(servname, "ftp", servlen);
-      break;
-
-    case 22:
-      strncpy(servname, "ssh", servlen);
-      break;
-
-    case 23:
-      strncpy(servname, "telnet", servlen);
-      break;
-
-    case 80:
-      strncpy(servname, "http", servlen);
-      break;
-
-    case 443:
-      strncpy(servname, "https", servlen);
-      break;
-
-    default:
-      snprintf(servname, servlen, "%d", port);
-      break;
-    }
+    snprintf(servname, servlen, "%d", ntohs(addr_in->sin_port));
   }
 
   return 0;
@@ -565,128 +530,3 @@ freeaddrinfo(struct addrinfo *res) {
   }
 }
 
-
-int
-getservbyname_r(const char *name, const char *prots, struct servent *se,
-                char *buf, size_t buflen, struct servent **res) {
-#warning "getservbyname_r() not implemented"
-  return -1;
-}
-
-
-int
-getservbyport_r(int port, const char *prots, struct servent *se, char *buf,
-                size_t buflen, struct servent **res) {
-  struct sockaddr_in sin = {
-    .sin_family = AF_INET,
-    .sin_port = port,
-  };
-  int i;
-  int r;
-
-  if(!prots) {
-    if((r=getservbyport_r(port, "tcp", se, buf, buflen, res))) {
-      r = getservbyport_r(port, "udp", se, buf, buflen, res);
-    }
-    return r;
-  }
-  *res = 0;
-
-  // Align buffer
-  i = (uintptr_t)buf & sizeof(char *)-1;
-  if(!i) {
-    i = sizeof(char *);
-  }
-  if(buflen <= 3*sizeof(char *)-i) {
-    return ERANGE;
-  }
-  buf += sizeof(char *)-i;
-  buflen -= sizeof(char *)-i;
-
-  if(strcmp(prots, "tcp") && strcmp(prots, "udp")) {
-    return EINVAL;
-  }
-
-  se->s_port = port;
-  se->s_proto = (char *)prots;
-  se->s_aliases = (void *)buf;
-  buf += 2*sizeof(char *);
-  buflen -= 2*sizeof(char *);
-  se->s_aliases[1] = 0;
-  se->s_aliases[0] = se->s_name = buf;
-
-  switch(getnameinfo((void *)&sin, sizeof(sin), 0, 0, buf, buflen,
-                      strcmp(prots, "udp") ? 0 : NI_DGRAM)) {
-  case EAI_MEMORY:
-  case EAI_SYSTEM:
-    return ENOMEM;
-
-  case EAI_OVERFLOW:
-    return ERANGE;
-
-  default:
-    return ENOENT;
-
-  case 0:
-    break;
-  }
-
-  // A numeric port string is not a service record.
-  if(strtol(buf, 0, 10) == ntohs(port)) {
-    return ENOENT;
-  }
-
-  *res = se;
-
-  return 0;
-}
-
-
-struct servent*
-getservbyname(const char *name, const char *prots) {
-  static struct servent se;
-  static char *buf[2];
-  struct servent *res;
-
-  if(getservbyname_r(name, prots, &se, (void *)buf, sizeof buf, &res)) {
-    return 0;
-  }
-
-  return &se;
-}
-
-
-struct servent*
-getservbyport(int port, const char *prots) {
-  static struct servent se;
-  static long buf[32/sizeof(long)];
-  struct servent *res;
-
-  if(getservbyport_r(port, prots, &se, (void *)buf, sizeof buf, &res)) {
-    return 0;
-  }
-
-  return &se;
-}
-
-
-struct protoent*
-getprotobyname(const char *name) {
-  if(!name) {
-    return 0;
-  }
-
-  for(struct protoent *p=g_protent; p->p_name; p++) {
-    if(strcmp(name, p->p_name) == 0) {
-      return p;
-    }
-
-    for(char **alias=p->p_aliases; *alias; alias++) {
-      if(strcmp(name, *alias) == 0) {
-        return p;
-      }
-    }
-  }
-
-  return 0;
-}

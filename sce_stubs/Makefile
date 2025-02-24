@@ -17,14 +17,14 @@
 PYTHON  ?= python3
 DESTDIR ?= /opt/ps5-payload-sdk
 
-CCS := clang-19 clang-18 clang-17 clang-16 clang-15 clang
+CCS := clang-18 clang-17 clang-16 clang-15 clang
 CCS := $(foreach CC,$(CCS),$(if $(shell command -v $(CC) 2> /dev/null),$(CC)))
 CC  := $(firstword $(CCS))
 ifndef CC
     $(error No suitable compiler found)
 endif
 
-LDS := ld.lld-19 ld.lld-18 ld.lld-17 ld.lld-16 ld.lld-15 ld.lld
+LDS := ld.lld-18 ld.lld-17 ld.lld-16 ld.lld-15 ld.lld
 LDS := $(foreach LD,$(LDS),$(if $(shell command -v $(LD) 2> /dev/null),$(LD)))
 LD  := $(firstword $(LDS))
 ifndef LD
@@ -33,7 +33,7 @@ endif
 
 CFLAGS := -ffreestanding -fno-builtin -nostdlib -fPIC
 CFLAGS += -target x86_64-sie-ps5 -fno-plt -fno-stack-protector
-CFLAGS += -Wall -Werror -fvisibility-nodllstorageclass=default
+CFLAGS += -Wall -Werror
 
 SPRXS := $(wildcard *.sprx)
 STUBS := $(SPRXS:.sprx=.c)
@@ -43,8 +43,6 @@ SHARED   := $(SOURCES:.c=.so)
 
 NID_DB     := aerolib.csv
 NID_DB_URL := https://raw.githubusercontent.com/zecoxao/sce_symbols/main/$(NID_DB)
-
-.PHONY: all clean install
 
 all: $(SOURCES) $(SHARED)
 
@@ -59,14 +57,8 @@ $(NID_DB):
 %.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $^
 
-libdl.so: libkernel_web.o
-	$(LD) -m elf_x86_64 -shared -soname libkernel_web.sprx -o $@ $<
-
-libpthread.so: libkernel_web.o
-	$(LD) -m elf_x86_64 -shared -soname libkernel_web.sprx -o $@ $<
-
 %.so: %.o
-	$(LD) -m elf_x86_64 -shared -soname $*.sprx -o $@ $<
+	$(LD) -m elf_x86_64 -shared -o $@ $<
 
 clean:
 	rm -f *.o *.so $(NID_DB)

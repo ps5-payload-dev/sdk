@@ -342,23 +342,6 @@ newlocale(int mask, const char *locale, locale_t base) {
 }
 
 
-locale_t
-duplocale(locale_t loc) {
-    return calloc(sizeof(int), 1);
-}
-
-
-locale_t
-uselocale(locale_t loc) {
-  static locale_t prev = LC_GLOBAL_LOCALE;
-  locale_t ret = prev;
-
-  prev = loc;
-
-  return ret;
-}
-
-
 int
 freelocale(locale_t loc) {
   if(loc) {

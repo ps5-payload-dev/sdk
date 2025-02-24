@@ -62,9 +62,6 @@ typedef struct {
 } SHA1_CTX;
 
 
-/**
- * we need strlen() before we can resolve symbols.
- **/
 static unsigned long
 strlen(const char *str) {
   const char *start = str;
@@ -77,9 +74,6 @@ strlen(const char *str) {
 }
 
 
-/**
- * we need memcpy() before we can resolve symbols.
- **/
 static void*
 memcpy(void *__restrict dst0, const void *__restrict src0,
        unsigned long len0) {
@@ -95,9 +89,6 @@ memcpy(void *__restrict dst0, const void *__restrict src0,
 }
 
 
-/**
- * we need memset() before we can resolve symbols.
- **/
 static void*
 memset(void *m, int c, unsigned long n) {
   char *s = (char*)m;
@@ -110,9 +101,6 @@ memset(void *m, int c, unsigned long n) {
 }
 
 
-/**
- *
- **/
 static void
 SHA1Decode(unsigned int *output, const unsigned char *input, unsigned int len) {
   unsigned int i, j;
@@ -303,6 +291,9 @@ SHA1Final(unsigned char *digest, SHA1_CTX *context) {
 }
 
 
+/**
+ * Encode a symbol into a NID.
+ **/
 char*
 nid_encode(const char *sym, char nid[12]) {
   const unsigned char salt[16] = "\x51\x8d\x64\xa6\x35\xde\xd8\xc1\xe6\xb0\x39\xb1\xc3\xe5\x52\x30";

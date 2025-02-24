@@ -16,12 +16,6 @@ along with this program; see the file COPYING. If not, see
 
 #pragma once
 
-#include "payload.h"
-
-
-#define KERNEL_DLSYM(handle, sym) \
-    (sym=(void*)kernel_dynlib_dlsym(-1, handle, #sym))
-
 
 /**
  * dynamic library loaded in kernel memory.
@@ -129,9 +123,7 @@ typedef struct dynlib_obj {
 
 
 int kernel_copyout(unsigned long kaddr, void *uaddr, unsigned long len);
-int kernel_copyin(const void *uaddr, unsigned long kaddr, unsigned long len);
 
-unsigned long kernel_get_proc(int pid);
 unsigned long kernel_get_ucred_authid(int pid);
 int           kernel_set_ucred_authid(int pid, unsigned long authid);
 
@@ -147,11 +139,5 @@ int           kernel_set_proc_rootdir(int pid, unsigned long vnode);
 
 int kernel_dynlib_obj(int pid, unsigned int handle, dynlib_obj_t* obj);
 int kernel_dynlib_handle(int pid, const char* basename, unsigned int *handle);
-int kernel_dynlib_find_handle(int pid, unsigned long addr, unsigned int* handle);
-unsigned long kernel_dynlib_mapbase_addr(int pid, unsigned int handle);
+
 unsigned long kernel_dynlib_dlsym(int pid, unsigned int handle, const char* sym);
-int kernel_dynlib_path(int pid, unsigned int handle, char* path, unsigned long size);
-
-int kernel_mprotect(int pid, unsigned long addr, unsigned long size, int prot);
-
-int __kernel_init(payload_args_t* args);

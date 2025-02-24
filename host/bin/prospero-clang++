@@ -20,15 +20,12 @@ SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
 SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
 PS5_PAYLOAD_SDK="$(realpath "${SCRIPT_DIR}/..")"
-PS5_PAYLOAD_HBROOT="${PS5_PAYLOAD_SDK}/target/user/homebrew"
 
-LIBS_CRT="${PS5_PAYLOAD_SDK}/target/lib/crt1.o"
 LIBS_C="-lc"
 LIBS_CXX="-lunwind -lc++abi -lc++"
 LIBS_DEPS="-lSceLibcInternal -lSceNet"
 LIBS_KERN="-lkernel_web"
 TU=""
-
 for ARG in "$@"; do
     if [[ "$ARG" == "-nostdlib" ||
           "$ARG" == "-nodefaultlibs" ]]; then
@@ -45,21 +42,16 @@ for ARG in "$@"; do
           "$ARG" == "-lkernel_web" ]]; then
 	LIBS_KERN=""
     fi
-    if [[ "$ARG" == "-nostartfiles" ||
-	  "$ARG" == "-c" ||
-	  "$ARG" == "-shared" ]]; then
-	LIBS_CRT=""
-    fi
     if [[ ! "${ARG:0:1}" == "-" ]]; then
 	TU="${ARG}"
     fi
 done
+
 if [[ "${TU}" == "" ]]; then
-    LIBS_CRT=""
-    LIBS_C=""
-    LIBS_CXX=""
-    LIBS_DEPS=""
-    LIBS_KERN=""
+	LIBS_C=""
+	LIBS_CXX=""
+	LIBS_DEPS=""
+	LIBS_KERN=""
 fi
 
 # ensure clang++ knows where prospero-lld is at
@@ -68,16 +60,13 @@ export PATH="${SCRIPT_DIR}:${PATH}"
 exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang++" \
      --start-no-unused-arguments \
      -target x86_64-sie-ps5 \
-     -fvisibility-nodllstorageclass=default \
      -isysroot "${PS5_PAYLOAD_SDK}" \
      -stdlib++-isystem "${PS5_PAYLOAD_SDK}/target/include/c++/v1" \
-     -L "${PS5_PAYLOAD_SDK}/target/lib" \
-     -L "${PS5_PAYLOAD_HBROOT}/lib" \
      -fno-stack-protector -fno-plt -femulated-tls \
      -frtti -fexceptions \
      $LIBS_CXX $LIBS_C \
      --end-no-unused-arguments \
      "$@" \
      --start-no-unused-arguments \
-     $LIBS_CRT $LIBS_KERN $LIBS_DEPS \
+     $LIBS_DEPS $LIBS_KERN \
      --end-no-unused-arguments

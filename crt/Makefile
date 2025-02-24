@@ -16,41 +16,34 @@
 
 DESTDIR ?= /opt/ps5-payload-sdk
 
-CCS := clang-19 clang-18 clang-17 clang-16 clang-15 clang
+CCS := clang-18 clang-17 clang-16 clang-15 clang
 CCS := $(foreach CC,$(CCS),$(if $(shell command -v $(CC) 2> /dev/null),$(CC)))
 CC  := $(firstword $(CCS))
 ifndef CC
     $(error No suitable compiler found)
 endif
 
-LDS := ld.lld-19 ld.lld-18 ld.lld-17 ld.lld-16 ld.lld-15 ld.lld ld
+LDS := ld.lld-18 ld.lld-17 ld.lld-16 ld.lld-15 ld.lld
 LDS := $(foreach LD,$(LDS),$(if $(shell command -v $(LD) 2> /dev/null),$(LD)))
 LD  := $(firstword $(LDS))
 ifndef LD
     $(error No suitable linker found)
 endif
 
-CFLAGS += -ffreestanding -fno-builtin -nostdlib -fPIC
+CFLAGS := -ffreestanding -fno-builtin -nostdlib -fPIC
 CFLAGS += -target x86_64-sie-ps5 -fno-plt -fno-stack-protector
-CFLAGS += -fvisibility-nodllstorageclass=default -Wall -Werror
-CFLAGS += -fms-extensions -Wno-microsoft-anon-tag
-CFLAGS += -O1
-
-OBJ := crt.o syscall.o klog.o nid.o kernel.o rtld.o rtld_so.o rtld_sprx.o \
-       rtld_payload.o rtld_dlfcn.o patch.o mdbg.o stacktrace.o
-
-.PHONY: all clean install
+CFLAGS += -Wall -Werror
 
 all: crt1.o
 
-crt1.o: $(OBJ)
+crt1.o: crt.o klog.o nid.o kernel.o rtld.o patch.o mdbg.o
 	$(LD) -m elf_x86_64 -r -o $@ $^
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $^
 
 clean:
-	rm -f *.o *.a
+	rm -f *.o
 
 install: crt1.o
 	install -d $(DESTDIR)/target/lib

@@ -41,9 +41,7 @@ patch_sceKernelSpawn(void) {
 
   if(!(loc=kernel_dynlib_dlsym(-1, 0x1, "sceKernelSpawn"))) {
     if(!(loc=kernel_dynlib_dlsym(-1, 0x2001, "sceKernelSpawn"))) {
-      // nothing to patch
-      klog_puts("patch_sceKernelSpawn: unable to resolve sceKernelSpawn");
-      return 0;
+      return -1;
     }
   }
 
@@ -72,46 +70,9 @@ patch_sceKernelSpawn(void) {
 }
 
 
-/**
- * Patch syscall permissions of the currently running process.
- **/
-static int
-patch_syscall_permissions(void) {
-  int pid = __syscall(SYS_getpid);
-  unsigned long kproc;
-  unsigned long kaddr;
-  unsigned long uaddr;
-
-  if(!(kproc=kernel_get_proc(pid))) {
-    return -1;
-  }
-
-  if(kernel_copyout(kproc + 0x3e8, &kaddr, sizeof(kaddr)) < 0) {
-    return -1;
-  }
-
-  // set lowest address allowed to make syscalls
-  uaddr = 0;
-  if(kernel_copyin(&uaddr, kaddr + 0xf0, sizeof(uaddr)) < 0) {
-    return -1;
-  }
-
-  // set highest address allowed to make syscalls
-  uaddr = -1;
-  if(kernel_copyin(&uaddr, kaddr + 0xf8, sizeof(uaddr)) < 0) {
-    return -1;
-  }
-
-  return 0;
-}
-
-
-/**
- * Patch the credentials of the currently running process.
- **/
 static int
 patch_kernel_ucred(void) {
-  int pid = __syscall(SYS_getpid);
+  int pid = syscall(SYS_getpid);
   unsigned char caps[16];
   unsigned long attrs;
 
@@ -142,19 +103,8 @@ patch_kernel_ucred(void) {
 }
 
 
-int
-__patch_init(void) {
-  int error;
-
-  if((error=patch_sceKernelSpawn())) {
-    return error;
-  }
-  if((error=patch_kernel_ucred())) {
-    return error;
-  }
-  if((error=patch_syscall_permissions())) {
-      return error;
-  }
-
-  return 0;
+__attribute__((constructor(105))) static void
+patch_constructor(void) {
+  patch_sceKernelSpawn();
+  patch_kernel_ucred();
 }

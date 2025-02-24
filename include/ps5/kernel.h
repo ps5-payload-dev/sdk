@@ -14,7 +14,8 @@ You should have received a copy of the GNU General Public License
 along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
-#pragma once
+#ifndef PS5SDK_KERNEL_H
+#define PS5SDK_KERNEL_H
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
@@ -36,7 +37,6 @@ extern const intptr_t KERNEL_ADDRESS_TARGETID;
 extern const off_t KERNEL_OFFSET_PROC_P_UCRED;
 extern const off_t KERNEL_OFFSET_PROC_P_FD;
 extern const off_t KERNEL_OFFSET_PROC_P_PID;
-extern const off_t KERNEL_OFFSET_PROC_P_VMSPACE;
 
 // Ucred field offsets
 extern const off_t KERNEL_OFFSET_UCRED_CR_UID;
@@ -72,14 +72,11 @@ intptr_t kernel_get_proc_ucred(pid_t pid);
 intptr_t kernel_get_proc_filedesc(pid_t pid);
 intptr_t kernel_get_proc_file(pid_t pid, int fd);
 
-int kernel_mprotect(pid_t pid, intptr_t addr, size_t size, int prot);
-
 int kernel_overlap_sockets(pid_t pid, int master_sock, int victim_sock);
 
 int kernel_dynlib_handle(pid_t pid, const char* basename, uint32_t *handle);
 intptr_t kernel_dynlib_dlsym(pid_t pid, uint32_t handle, const char *sym);
 intptr_t kernel_dynlib_resolve(pid_t pid, uint32_t handle, const char *nid);
-intptr_t kernel_dynlib_mapbase_addr(pid_t pid, uint32_t handle);
 intptr_t kernel_dynlib_entry_addr(pid_t pid, uint32_t handle);
 intptr_t kernel_dynlib_init_addr(pid_t pid, uint32_t handle);
 intptr_t kernel_dynlib_fini_addr(pid_t pid, uint32_t handle);
@@ -113,3 +110,4 @@ int32_t kernel_set_ucred_svgid(pid_t pid, gid_t svgid);
 
 __END_DECLS
 
+#endif // PS5SDK_KERNEL_H

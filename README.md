@@ -8,21 +8,14 @@ repository originate from the [PS5SDK][PS5SDK] project.
 On Debian-flavored operating systems, you can invoke the following command to
 install dependencies used by the SDK.
 ```console
-john@localhost:ps5-payload-dev/sdk$ sudo apt-get update && sudo apt-get upgrade # optional
 john@localhost:ps5-payload-dev/sdk$ sudo apt-get install bash clang-15 lld-15 # required
 john@localhost:ps5-payload-dev/sdk$ sudo apt-get install socat cmake meson pkg-config # optional
-```
-
-If you are using Fedora, you can install dependencies as follows (tested with version 41):
-```console
-john@localhost:ps5-payload-dev/sdk$ sudo dnf install bash llvm-devel clang lld # required
-john@localhost:ps5-payload-dev/sdk$ sudo dnf install socat cmake meson pkg-config # optional
 ```
 
 ## Quick-start
 To download and install a binary distribution for GNU/Linux:
 ```console
-john@localhost:tmp$ wget https://github.com/ps5-payload-dev/sdk/releases/latest/download/ps5-payload-sdk.zip
+john@localhost:tmp$ wget https://github.com/ps5-payload-dev/sdk/releases/download/v0.21/ps5-payload-sdk.zip
 john@localhost:tmp$ sudo unzip -d /opt ps5-payload-sdk.zip
 ```
 
@@ -67,4 +60,4 @@ the GPLv3+.
 [issues]: https://github.com/ps5-payload-dev/sdk/issues/new
 [elfldr]: https://github.com/ps5-payload-dev/elfldr
 [PS5SDK]: https://github.com/PS5Dev/PS5SDK
-[webkit]: https://github.com/PS5Dev/PS5-UMTX-Jailbreak
+[webkit]: https://github.com/Cryptogenic/PS5-IPV6-Kernel-Exploit

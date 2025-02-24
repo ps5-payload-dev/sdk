@@ -33,13 +33,25 @@ SECTIONS {
 	    PROVIDE_HIDDEN (__text_end = .);
 	} : ph_text
 
-	.plt : { *(.plt) }
+	.rodata : ALIGN(CONSTANT(MAXPAGESIZE)) {
+	    *(.rodata .rodata.*)
 
-	.eh_frame_hdr : ALIGN(CONSTANT(MAXPAGESIZE)) {
+	    PROVIDE_HIDDEN(__init_array_start = .);
+	    KEEP(*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
+	    KEEP(*(.init_array .ctors))
+	    PROVIDE_HIDDEN(__init_array_end = .);
+
+	    PROVIDE_HIDDEN(__fini_array_start = .);
+	    KEEP(*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
+	    KEEP(*(.fini_array .dtors))
+	    PROVIDE_HIDDEN(__fini_array_end = .);
+	} : ph_rodata
+
+	.eh_frame_hdr : {
 	    PROVIDE_HIDDEN(__eh_frame_hdr_start = .);
 	    KEEP(*(.eh_frame_hdr))
 	    PROVIDE_HIDDEN(__eh_frame_hdr_end = .);
-	} : ph_rodata
+	}
 
 	.eh_frame : {
 	    PROVIDE_HIDDEN(__eh_frame_start = .);
@@ -47,43 +59,21 @@ SECTIONS {
 	    PROVIDE_HIDDEN(__eh_frame_end = .);
 	}
 
-	.gcc_except_table : { *(.gcc_except_table*) }
-	.data.rel.ro : { *(.data.rel.ro .data.rel.ro.*); }
-	.got : { *(.got) }
-	.got.plt : { *(.got.plt) }
+	.rela : { *(.rela *.rela.*) }
 
-	.rodata : { *(.rodata .rodata.*) }
-
-	.preinit_array : {
-	    PROVIDE_HIDDEN(__preinit_array_start = .);
-	    KEEP(*(.preinit_array))
-	    PROVIDE_HIDDEN(__preinit_array_start = .);
-	}
-	.init_array : {
-	    PROVIDE_HIDDEN(__init_array_start = .);
-	    KEEP(*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
-	    KEEP(*(.init_array .ctors))
-	    PROVIDE_HIDDEN(__init_array_end = .);
-	}
-	.fini_array : {
-	    PROVIDE_HIDDEN(__fini_array_start = .);
-	    KEEP(*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
-	    KEEP(*(.fini_array .dtors))
-	    PROVIDE_HIDDEN(__fini_array_end = .);
-	}
+	.data : ALIGN(CONSTANT(MAXPAGESIZE)) {
+	    *(.data .data.*)
+	} : ph_data
 
 	.dynamic : ALIGN(CONSTANT(MAXPAGESIZE)) {
 	    PROVIDE_HIDDEN (_DYNAMIC = .);
 	    *(.dynamic)
-	} : ph_rodata : ph_dyn
+	} : ph_data : ph_dyn
 
-	.data : ALIGN(CONSTANT(MAXPAGESIZE)) {
-	    *(.data .data.*)
+	.bss (NOLOAD) : ALIGN(CONSTANT(MAXPAGESIZE)) {
 	    PROVIDE_HIDDEN (__bss_start = .);
 	    *(.bss .bss.*);
 	    *(COMMON)
 	    PROVIDE_HIDDEN (__bss_end = .);
 	} : ph_data
-
-	PROVIDE_HIDDEN (__image_end = .);
 }

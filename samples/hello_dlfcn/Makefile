@@ -25,7 +25,7 @@ endif
 
 ELF := hello_dlfcn.elf
 
-CFLAGS := -Wall -Werror -g -rdynamic
+CFLAGS := -Wall -Werror -g
 
 all: $(ELF)
 

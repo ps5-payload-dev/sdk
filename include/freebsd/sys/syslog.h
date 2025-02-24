@@ -33,15 +33,9 @@
 #ifndef _SYS_SYSLOG_H_
 #define _SYS_SYSLOG_H_
 
-#ifdef __SCE__
-#define	_PATH_LOG	"/user/homebrew/var/run/log"
-#define	_PATH_LOG_PRIV	"/user/homebrew/var/run/logpriv"
-#define	_PATH_OLDLOG	"/dev/log"	/* backward compatibility */
-#else
 #define	_PATH_LOG	"/var/run/log"
 #define	_PATH_LOG_PRIV	"/var/run/logpriv"
 #define	_PATH_OLDLOG	"/dev/log"	/* backward compatibility */
-#endif
 
 /*
  * priorities/facilities are encoded into a single 32-bit quantity, where the

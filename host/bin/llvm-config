@@ -19,8 +19,7 @@ if [ -x "$(command -v "${LLVM_CONFIG}")" ]; then
     exec "${LLVM_CONFIG}"
 fi
 
-CANDIDATES=("llvm-config-19"
-	    "llvm-config-18"
+CANDIDATES=("llvm-config-18"
             "llvm-config-17"
             "llvm-config-16"
             "llvm-config-15")

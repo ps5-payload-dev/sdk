@@ -14,11 +14,10 @@ You should have received a copy of the GNU General Public License
 along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
-#include "elf.h"
 #include "kernel.h"
 #include "nid.h"
+#include "payload.h"
 #include "syscall.h"
-
 
 /**
  * standard macros.
@@ -29,6 +28,19 @@ along with this program; see the file COPYING. If not, see
 #define EBADF  9
 #define EFAULT 14
 #define ENOSYS 78
+
+
+/**
+ * an ELF symbol loaded in kernel memory.
+ **/
+typedef struct {
+  unsigned int st_name;
+  unsigned char st_info;
+  unsigned char st_other;
+  unsigned short st_shndx;
+  unsigned long st_value;
+  unsigned long st_size;
+} Elf64_Sym;
 
 
 /**
@@ -44,12 +56,9 @@ unsigned long KERNEL_ADDRESS_UTOKEN_FLAGS   = 0;
 unsigned long KERNEL_ADDRESS_QA_FLAGS       = 0;
 unsigned long KERNEL_ADDRESS_TARGETID       = 0;
 
-const unsigned long KERNEL_OFFSET_PROC_P_UCRED   = 0x40;
-const unsigned long KERNEL_OFFSET_PROC_P_FD      = 0x48;
-const unsigned long KERNEL_OFFSET_PROC_P_PID     = 0xBC;
-const unsigned long KERNEL_OFFSET_PROC_P_VMSPACE = 0x200;
-
-unsigned long KERNEL_OFFSET_VMSPACE_P_ROOT = 0;
+const unsigned long KERNEL_OFFSET_PROC_P_UCRED = 0x40;
+const unsigned long KERNEL_OFFSET_PROC_P_FD    = 0x48;
+const unsigned long KERNEL_OFFSET_PROC_P_PID   = 0xBC;
 
 const unsigned long KERNEL_OFFSET_UCRED_CR_UID   = 0x04;
 const unsigned long KERNEL_OFFSET_UCRED_CR_RUID  = 0x08;
@@ -76,9 +85,6 @@ static int rw_pair[2] = {-1, -1};
 #define VICTIM_SOCK rw_pair[1]
 
 
-/**
- * we need strcmp() before we can resolve symbols.
- **/
 static int
 strncmp(const char *s1, const char *s2, unsigned long n) {
   if(n == 0) {
@@ -99,9 +105,6 @@ strncmp(const char *s1, const char *s2, unsigned long n) {
 }
 
 
-/**
- * we need strlen() before we can resolve symbols.
- **/
 static unsigned long
 strlen(const char *str) {
   const char *start = str;
@@ -120,7 +123,7 @@ kernel_get_fw_version(void) {
   unsigned long size = sizeof(mib);
   unsigned int version = 0;
 
-  if(__syscall(SYS_sysctl, mib, 2, &version, &size, 0, 0)) {
+  if(syscall(SYS_sysctl, mib, 2, &version, &size, 0, 0)) {
     return 0;
   }
 
@@ -163,7 +166,6 @@ __kernel_init(payload_args_t* args) {
     KERNEL_ADDRESS_UTOKEN_FLAGS   = KERNEL_ADDRESS_DATA_BASE + 0x6241100;
     KERNEL_ADDRESS_PRISON0        = KERNEL_ADDRESS_DATA_BASE + 0x1911E00;
     KERNEL_ADDRESS_ROOTVNODE      = KERNEL_ADDRESS_DATA_BASE + 0x6565540;
-    KERNEL_OFFSET_VMSPACE_P_ROOT  = 0x1c8;
     break;
 
   case 0x1050000:
@@ -180,7 +182,6 @@ __kernel_init(payload_args_t* args) {
     KERNEL_ADDRESS_UTOKEN_FLAGS   = KERNEL_ADDRESS_DATA_BASE + 0x6241100;
     KERNEL_ADDRESS_PRISON0        = KERNEL_ADDRESS_DATA_BASE + 0x1911E00;
     KERNEL_ADDRESS_ROOTVNODE      = KERNEL_ADDRESS_DATA_BASE + 0x6565540;
-    KERNEL_OFFSET_VMSPACE_P_ROOT  = 0x1c8;
     break;
 
   case 0x2000000:
@@ -192,9 +193,7 @@ __kernel_init(payload_args_t* args) {
     KERNEL_ADDRESS_UTOKEN_FLAGS   = KERNEL_ADDRESS_DATA_BASE + 0x63E1300;
     KERNEL_ADDRESS_PRISON0        = KERNEL_ADDRESS_DATA_BASE + 0x194BA60;
     KERNEL_ADDRESS_ROOTVNODE      = KERNEL_ADDRESS_DATA_BASE + 0x67134C0;
-    KERNEL_OFFSET_VMSPACE_P_ROOT  = 0x1c8;
     break;
-
   case 0x2200000:
   case 0x2250000:
   case 0x2260000:
@@ -209,14 +208,13 @@ __kernel_init(payload_args_t* args) {
     KERNEL_ADDRESS_UTOKEN_FLAGS   = KERNEL_ADDRESS_DATA_BASE + 0x63E1300;
     KERNEL_ADDRESS_PRISON0        = KERNEL_ADDRESS_DATA_BASE + 0x194BD20;
     KERNEL_ADDRESS_ROOTVNODE      = KERNEL_ADDRESS_DATA_BASE + 0x67134C0;
-    KERNEL_OFFSET_VMSPACE_P_ROOT  = 0x1c8;
     break;
 
   case 0x3000000:
   case 0x3100000:
   case 0x3200000:
   case 0x3210000:
-    KERNEL_ADDRESS_TEXT_BASE      = KERNEL_ADDRESS_DATA_BASE - 0x0BD0000;
+    KERNEL_ADDRESS_TEXT_BASE      = 0; // currently not known
     KERNEL_ADDRESS_ALLPROC        = KERNEL_ADDRESS_DATA_BASE + 0x276DC58;
     KERNEL_ADDRESS_SECURITY_FLAGS = KERNEL_ADDRESS_DATA_BASE + 0x6466474;
     KERNEL_ADDRESS_TARGETID       = KERNEL_ADDRESS_DATA_BASE + 0x646647D;
@@ -224,11 +222,10 @@ __kernel_init(payload_args_t* args) {
     KERNEL_ADDRESS_UTOKEN_FLAGS   = KERNEL_ADDRESS_DATA_BASE + 0x6466500;
     KERNEL_ADDRESS_PRISON0        = KERNEL_ADDRESS_DATA_BASE + 0x1CC2670;
     KERNEL_ADDRESS_ROOTVNODE      = KERNEL_ADDRESS_DATA_BASE + 0x67AB4C0;
-    KERNEL_OFFSET_VMSPACE_P_ROOT  = 0x1c8;
     break;
 
   case 0x4020000:
-    KERNEL_ADDRESS_TEXT_BASE      = KERNEL_ADDRESS_DATA_BASE - 0x0C00000;
+    KERNEL_ADDRESS_TEXT_BASE      = 0; // currently not known
     KERNEL_ADDRESS_ALLPROC        = KERNEL_ADDRESS_DATA_BASE + 0x27EDCB8;
     KERNEL_ADDRESS_SECURITY_FLAGS = KERNEL_ADDRESS_DATA_BASE + 0x6505474;
     KERNEL_ADDRESS_TARGETID       = KERNEL_ADDRESS_DATA_BASE + 0x650547D;
@@ -236,14 +233,13 @@ __kernel_init(payload_args_t* args) {
     KERNEL_ADDRESS_UTOKEN_FLAGS   = KERNEL_ADDRESS_DATA_BASE + 0x6505500;
     KERNEL_ADDRESS_PRISON0        = KERNEL_ADDRESS_DATA_BASE + 0x1D34D00;
     KERNEL_ADDRESS_ROOTVNODE      = KERNEL_ADDRESS_DATA_BASE + 0x66E64C0;
-    KERNEL_OFFSET_VMSPACE_P_ROOT  = 0x1c8;
     break;
 
   case 0x4000000:
   case 0x4030000:
   case 0x4500000:
   case 0x4510000:
-    KERNEL_ADDRESS_TEXT_BASE      = KERNEL_ADDRESS_DATA_BASE - 0x0C00000;
+    KERNEL_ADDRESS_TEXT_BASE      = 0; // currently not known
     KERNEL_ADDRESS_ALLPROC        = KERNEL_ADDRESS_DATA_BASE + 0x27EDCB8;
     KERNEL_ADDRESS_SECURITY_FLAGS = KERNEL_ADDRESS_DATA_BASE + 0x6506474;
     KERNEL_ADDRESS_TARGETID       = KERNEL_ADDRESS_DATA_BASE + 0x650647D;
@@ -251,53 +247,20 @@ __kernel_init(payload_args_t* args) {
     KERNEL_ADDRESS_UTOKEN_FLAGS   = KERNEL_ADDRESS_DATA_BASE + 0x6506500;
     KERNEL_ADDRESS_PRISON0        = KERNEL_ADDRESS_DATA_BASE + 0x1D34D00;
     KERNEL_ADDRESS_ROOTVNODE      = KERNEL_ADDRESS_DATA_BASE + 0x66E74C0;
-    KERNEL_OFFSET_VMSPACE_P_ROOT  = 0x1c8;
     break;
 
   case 0x5000000:
   case 0x5020000:
   case 0x5100000:
   case 0x5500000:
-    KERNEL_ADDRESS_TEXT_BASE      = KERNEL_ADDRESS_DATA_BASE - 0x0C50000;
+    KERNEL_ADDRESS_TEXT_BASE      = 0; // currently not known
     KERNEL_ADDRESS_ALLPROC        = KERNEL_ADDRESS_DATA_BASE + 0x290DD00;
     KERNEL_ADDRESS_SECURITY_FLAGS = KERNEL_ADDRESS_DATA_BASE + 0x66366EC;
-    KERNEL_ADDRESS_TARGETID       = KERNEL_ADDRESS_DATA_BASE + 0x66366F5;
+    KERNEL_ADDRESS_TARGETID       = KERNEL_ADDRESS_DATA_BASE + 0x650647D;
     KERNEL_ADDRESS_QA_FLAGS       = KERNEL_ADDRESS_DATA_BASE + 0x6636710;
-    KERNEL_ADDRESS_UTOKEN_FLAGS   = KERNEL_ADDRESS_DATA_BASE + 0x6636778;
+    KERNEL_ADDRESS_UTOKEN_FLAGS   = KERNEL_ADDRESS_DATA_BASE + 0x6506500;
     KERNEL_ADDRESS_PRISON0        = KERNEL_ADDRESS_DATA_BASE + 0x1E13470;
     KERNEL_ADDRESS_ROOTVNODE      = KERNEL_ADDRESS_DATA_BASE + 0x6843510;
-    KERNEL_OFFSET_VMSPACE_P_ROOT  = 0x1c8;
-    break;
-
-  case 0x6000000:
-  case 0x6020000:
-  case 0x6500000:
-    KERNEL_ADDRESS_TEXT_BASE      = 0; // currently not known
-    KERNEL_ADDRESS_ALLPROC        = KERNEL_ADDRESS_DATA_BASE + 0x2859D20;
-    KERNEL_ADDRESS_SECURITY_FLAGS = KERNEL_ADDRESS_DATA_BASE + 0x65868EC;
-    KERNEL_ADDRESS_TARGETID       = KERNEL_ADDRESS_DATA_BASE + 0x65868EC + 0x09;
-    KERNEL_ADDRESS_QA_FLAGS       = KERNEL_ADDRESS_DATA_BASE + 0x65868EC + 0x24;
-    KERNEL_ADDRESS_UTOKEN_FLAGS   = KERNEL_ADDRESS_DATA_BASE + 0x65868EC + 0x8C;
-    KERNEL_ADDRESS_PRISON0        = KERNEL_ADDRESS_DATA_BASE + 0x1E35560;
-    KERNEL_ADDRESS_ROOTVNODE      = KERNEL_ADDRESS_DATA_BASE + 0x678F510;
-    KERNEL_OFFSET_VMSPACE_P_ROOT  = 0x1c8; //TODO: confirm offset
-    break;
-
-  case 0x7000000:
-  case 0x7010000:
-  case 0x7200000:
-  case 0x7400000:
-  case 0x7600000:
-  case 0x7610000:
-    KERNEL_ADDRESS_TEXT_BASE      = KERNEL_ADDRESS_DATA_BASE - 0x00C60000;
-    KERNEL_ADDRESS_ALLPROC        = KERNEL_ADDRESS_DATA_BASE + 0x02849D50;
-    KERNEL_ADDRESS_SECURITY_FLAGS = KERNEL_ADDRESS_DATA_BASE + 0x00AB8064;
-    KERNEL_ADDRESS_TARGETID       = KERNEL_ADDRESS_DATA_BASE + 0x00AB8064 + 0x09;
-    KERNEL_ADDRESS_QA_FLAGS       = KERNEL_ADDRESS_DATA_BASE + 0x00AB8064 + 0x24;
-    KERNEL_ADDRESS_UTOKEN_FLAGS   = KERNEL_ADDRESS_DATA_BASE + 0x00AB8064 + 0x8C;
-    KERNEL_ADDRESS_PRISON0        = KERNEL_ADDRESS_DATA_BASE + 0x01E377F0;
-    KERNEL_ADDRESS_ROOTVNODE      = KERNEL_ADDRESS_DATA_BASE + 0x030B7510;
-    KERNEL_OFFSET_VMSPACE_P_ROOT  = 0x1d0;
     break;
 
   default:
@@ -324,13 +287,13 @@ kernel_write(unsigned long addr, unsigned long *data) {
   victim_buf[1] = 0;
   victim_buf[2] = 0;
 
-  if(__syscall(SYS_setsockopt, MASTER_SOCK, IPPROTO_IPV6, IPV6_PKTINFO,
-	       victim_buf, 0x14)) {
+  if(syscall(SYS_setsockopt, MASTER_SOCK, IPPROTO_IPV6, IPV6_PKTINFO,
+	     victim_buf, 0x14)) {
     return -1;
   }
 
-  if(__syscall(SYS_setsockopt, VICTIM_SOCK, IPPROTO_IPV6, IPV6_PKTINFO,
-	       data, 0x14)) {
+  if(syscall(SYS_setsockopt, VICTIM_SOCK, IPPROTO_IPV6, IPV6_PKTINFO,
+	     data, 0x14)) {
     return -1;
   }
 
@@ -363,7 +326,7 @@ kernel_copyin(const void *uaddr, unsigned long kaddr, unsigned long len) {
   }
 
   // Perform write across pipe
-  if(__syscall(SYS_write, rw_pipe[1], uaddr, len) < 0) {
+  if(syscall(SYS_write, rw_pipe[1], uaddr, len) < 0) {
     return -1;
   }
 
@@ -396,7 +359,7 @@ kernel_copyout(unsigned long kaddr, void *uaddr, unsigned long len) {
   }
 
   // Perform read across pipe
-  if(__syscall(SYS_read, rw_pipe[0], uaddr, len) < 0) {
+  if(syscall(SYS_read, rw_pipe[0], uaddr, len) < 0) {
     return -1;
   }
 
@@ -467,11 +430,7 @@ kernel_get_qaflags(unsigned char qaflags[16]) {
 
 int
 kernel_set_qaflags(const unsigned char qaflags[16]) {
-  if(kernel_get_fw_version() < 0x7000000) {
-    return kernel_copyin(qaflags, KERNEL_ADDRESS_QA_FLAGS, 16);
-  } else {
-    return -ENOSYS; // currently not supported
-  }
+  return kernel_copyin(qaflags, KERNEL_ADDRESS_QA_FLAGS, 16);
 }
 
 
@@ -498,7 +457,7 @@ kernel_get_proc(int pid) {
   }
 
   if(pid <= 0) {
-    pid = __syscall(SYS_getpid);
+    pid = syscall(SYS_getpid);
   }
 
   while(addr) {
@@ -554,54 +513,6 @@ kernel_dynlib_obj(int pid, unsigned int handle, dynlib_obj_t* obj) {
   }
 
   return 0;
-}
-
-
-int
-kernel_dynlib_find_handle(int pid, unsigned long addr, unsigned int* handle) {
-  unsigned long mapbase;
-  unsigned long mapsize;
-  unsigned long kproc;
-  unsigned long kaddr;
-  unsigned long h;
-
-  if(!(kproc=kernel_get_proc(pid))) {
-    return -1;
-  }
-
-  if(kernel_copyout(kproc + 0x3e8, &kaddr, sizeof(kaddr)) < 0) {
-    return -1;
-  }
-
-  while(1) {
-    if(kernel_copyout(kaddr, &kaddr, sizeof(kaddr)) < 0) {
-      return -1;
-    }
-    if(!kaddr) {
-      return -1;
-    }
-
-    if(kernel_copyout(kaddr + __builtin_offsetof(dynlib_obj_t, mapbase),
-		      &mapbase, sizeof(mapbase)) < 0) {
-      return -1;
-    }
-
-    if(kernel_copyout(kaddr + __builtin_offsetof(dynlib_obj_t, mapsize),
-		      &mapsize, sizeof(mapsize)) < 0) {
-      return -1;
-    }
-
-    if(mapbase <= addr && addr <= mapbase + mapsize) {
-      if(kernel_copyout(kaddr + __builtin_offsetof(dynlib_obj_t, handle),
-                        &h, sizeof(h)) < 0) {
-        return -1;
-      }
-      *handle = (unsigned int)h;
-      return 0;
-    }
-  }
-
-  return -1;
 }
 
 
@@ -671,26 +582,6 @@ kernel_dynlib_fini_addr(int pid, unsigned int handle) {
   }
 
   return obj.fini;
-}
-
-
-int
-kernel_dynlib_path(int pid, unsigned int handle, char* path, unsigned long size) {
-  dynlib_obj_t obj;
-
-  if(size > 1024) {
-    size = 1024;
-  }
-  if(kernel_dynlib_obj(pid, handle, &obj)) {
-    return -1;
-  }
-  if(kernel_copyout(obj.path, path, size) < 0) {
-    return -1;
-  }
-
-  path[size-1] = 0;
-
-  return 0;
 }
 
 
@@ -996,76 +887,6 @@ kernel_get_proc_filedesc(int pid) {
   }
 
   return filedesc;
-}
-
-
-int
-kernel_mprotect(int pid, unsigned long addr, unsigned long len, int prot) {
-  unsigned long vm_map_entry_addr;
-  unsigned long vmspace_addr;
-  unsigned long proc_addr;
-  unsigned char vm_prot;
-  unsigned long start;
-  unsigned long end;
-
-  if(!(proc_addr=kernel_get_proc(pid))) {
-    return -1;
-  }
-
-  if(kernel_copyout(proc_addr + KERNEL_OFFSET_PROC_P_VMSPACE,
-                    &vmspace_addr, sizeof(vmspace_addr))) {
-    return -1;
-  }
-
-  if(kernel_copyout(vmspace_addr + KERNEL_OFFSET_VMSPACE_P_ROOT,
-		    &vm_map_entry_addr, sizeof(vm_map_entry_addr))) {
-    return -1;
-  }
-
-  while(vm_map_entry_addr) {
-    if(kernel_copyout(vm_map_entry_addr + 0x20, &start, sizeof(start))) {
-      return -1;
-    }
-    if(kernel_copyout(vm_map_entry_addr + 0x28, &end, sizeof(end))) {
-      return -1;
-    } 
-
-    if(addr < start) {
-      // left
-      if(kernel_copyout(vm_map_entry_addr + 0x10, &vm_map_entry_addr,
-                        sizeof(vm_map_entry_addr))) {
-        return -1;
-      }
-    } else if(addr >= end) {
-      // right
-      if(kernel_copyout(vm_map_entry_addr + 0x18, &vm_map_entry_addr,
-                        sizeof(vm_map_entry_addr))) {
-        return -1;
-      }
-    } else {
-      // protection
-      if(kernel_copyout(vm_map_entry_addr + 0x64, &vm_prot, sizeof(vm_prot))) {
-        return -1;
-      }
-      vm_prot |= prot;
-      if(kernel_copyin(&vm_prot, vm_map_entry_addr + 0x64, sizeof(vm_prot))) {
-        return -1;
-      }
-
-      // max_protection
-      if(kernel_copyout(vm_map_entry_addr + 0x65, &vm_prot, sizeof(vm_prot))) {
-        return -1;
-      }
-      vm_prot |= prot;
-      if(kernel_copyin(&vm_prot, vm_map_entry_addr + 0x65, sizeof(vm_prot))) {
-        return -1;
-      }
-
-      return 0;
-    }
-  }
-
-  return -1;
 }
 
 

@@ -16,8 +16,6 @@
 
 DESTDIR ?= /opt/ps5-payload-sdk
 
-.PHONY: all clean install
-
 all:
 
 clean:

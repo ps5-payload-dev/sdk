@@ -16,14 +16,14 @@
 
 DESTDIR ?= /opt/ps5-payload-sdk
 
-CCS := clang-19 clang-18 clang-17 clang-16 clang-15 clang
+CCS := clang-18 clang-17 clang-16 clang-15 clang
 CCS := $(foreach CC,$(CCS),$(if $(shell command -v $(CC) 2> /dev/null),$(CC)))
 CC  := $(firstword $(CCS))
 ifndef CC
     $(error No suitable compiler found)
 endif
 
-ARS := llvm-ar-19 llvm-ar-18 llvm-ar-17 llvm-ar-16 llvm-ar-15 llvm-ar ar
+ARS := llvm-ar-18 llvm-ar-17 llvm-ar-16 llvm-ar-15 llvm-ar
 ARS := $(foreach AR,$(ARS),$(if $(shell command -v $(AR) 2> /dev/null),$(AR)))
 AR  := $(firstword $(ARS))
 ifndef AR
@@ -32,15 +32,11 @@ endif
 
 CFLAGS := -target x86_64-sie-ps5 -fPIC  -fno-plt -fno-stack-protector
 CFLAGS += -nobuiltininc -isystem ../include/freebsd
-CFLAGS += -fvisibility-nodllstorageclass=default
-CFLAGS += -O1
 
 SRCS := $(wildcard *.c)
 OBJS := $(SRCS:.c=.o)
 
 ARCHIVE := libc.a
-
-.PHONY: all clean install
 
 all: $(ARCHIVE)
 

@@ -36,15 +36,13 @@ TOOLS := bin/cmake-bin-wrapper \
 
 LDSCRIPTS := elf_x86_64.x
 
-.PHONY: all clean install
-
 all: bin/prospero-nid
 
 clean:
 	rm -f bin/prospero-nid
 
 bin/prospero-nid: bin/prospero-nid.c
-	$(CC) -o $@ $<
+	$(CC) -static -o $@ $<
 
 install: install-tools install-symlinks install-ldscripts install-toolchains
 

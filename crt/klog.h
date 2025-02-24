@@ -20,4 +20,3 @@ int klog_printf(const char *fmt, ...);
 int klog_puts(const char *s);
 int klog_perror(const char *s);
 
-int __klog_init(void);

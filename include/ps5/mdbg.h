@@ -27,22 +27,18 @@ __BEGIN_DECLS
  **/
 int mdbg_copyout(pid_t pid, intptr_t addr, void *buf, size_t len);
 
+
 /**
  * Copy data into a process with the given pid at the given address.
  **/
 int mdbg_copyin(pid_t pid, const void *buf, intptr_t addr, size_t len);
 
-/**
- * Convenience functions for common uses of mdbg_copyin().
- **/
+
 int mdbg_setchar(pid_t pid, intptr_t addr, char val);
 int mdbg_setshort(pid_t pid, intptr_t addr, short val);
 int mdbg_setint(pid_t pid, intptr_t addr, int val);
 int mdbg_setlong(pid_t pid, intptr_t addr, long val);
 
-/**
- * Convenience functions for common uses of mdbg_copyout().
- **/
 long  mdbg_getlong(pid_t pid, intptr_t addr);
 int   mdbg_getint(pid_t pid, intptr_t addr);
 short mdbg_getshort(pid_t pid, intptr_t addr);

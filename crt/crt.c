@@ -16,18 +16,21 @@ along with this program; see the file COPYING. If not, see
 
 #include "kernel.h"
 #include "klog.h"
-#include "patch.h"
 #include "payload.h"
-#include "rtld.h"
-#include "rtld_dlfcn.h"
-#include "rtld_payload.h"
-#include "stacktrace.h"
-#include "syscall.h"
 
+#define DLSYM(handle, sym) (sym=(void*)kernel_dynlib_dlsym(-1, handle, #sym))
+
+#define EINVAL 22
 
 /**
  * Dependencies provided by the ELF linker.
  **/
+extern void (*__init_array_start[])(int, char**, char**) __attribute__((weak));
+extern void (*__init_array_end[])(int, char**, char**) __attribute__((weak));
+
+extern void (*__fini_array_start[])(void) __attribute__((weak));
+extern void (*__fini_array_end[])(void) __attribute__((weak));
+
 extern unsigned char __bss_start[] __attribute__((weak));
 extern unsigned char __bss_end[] __attribute__((weak));
 
@@ -38,175 +41,149 @@ extern unsigned char __bss_end[] __attribute__((weak));
 extern int main(int argc, char* argv[], char *envp[]);
 
 
-/**
- * Remember the args passed to _start and the cpu state.
- **/
+int __kernel_init(payload_args_t* args);
+int __klog_init(void);
+int __rtld_init(void);
+int __rtld_fini(void);
+
+
 static payload_args_t* payload_args = 0;
-static void* jmpbuf[32];
 
-
-/**
- * Initialize payload runtime.
- **/
-static int
-payload_init(payload_args_t *args) {
-  int *__isthreaded = 0;
-  int error = 0;
-
-  if((error=__syscall_init(args))) {
-    return error;
-  }
-  if((error=__kernel_init(args))) {
-    return error;
-  }
-  if((error=__klog_init())) {
-    return error;
-  }
-
-  if(!KERNEL_DLSYM(0x2, __isthreaded)) {
-    klog_puts("Unable to resolve the symbol '__isthreaded'");
-    return -1;
-  }
-  *__isthreaded = 1;
-
-  if((error=__stacktrace_init())) {
-    klog_puts("Unable to initialize stacktrace");
-    return error;
-  }
-  if((error=__patch_init())) {
-    klog_puts("Unable to initialize patches");
-    return error;
-  }
-  if((error=__rtld_init())) {
-    klog_puts("Unable to initialize rtld");
-    return error;
-  }
-
-  return 0;
-}
-
-
-static int
-payload_run(void) {
-  const char* arg0 = "payload.elf";
-  char** (*getargv)(void) = 0;
-  int (*getargc)(void) = 0;
-  rtld_lib_t* lib = 0;
-  char** environ = 0;
-  char** argv = 0;
-  int argc = 0;
-  int err = 0;
-
-  if((KERNEL_DLSYM(0x1, getargc) || KERNEL_DLSYM(0x2001, getargc)) &&
-     (KERNEL_DLSYM(0x1, getargv) || KERNEL_DLSYM(0x2001, getargv)) &&
-     (KERNEL_DLSYM(0x1, environ) || KERNEL_DLSYM(0x2001, environ))) {
-    argc = getargc();
-    argv = getargv();
-  }
-
-  if(argc) {
-    arg0 = argv[0];
-  }
-
-  if(!(lib=__rtld_payload_new(arg0))) {
-    return -1;
-  }
-
-  __rtld_dlfcn_setroot(lib);
-
-  if((err=__rtld_lib_open(lib))) {
-    __rtld_lib_destroy(lib);
-    return err;
-  }
-
-  if((err=__rtld_lib_init(lib, argc, argv, environ))) {
-    __rtld_lib_close(lib);
-    __rtld_lib_destroy(lib);
-    return err;
-  }
-
-  *payload_args->payloadout = main(argc, argv, environ);
-
-  if((err=__rtld_lib_fini(lib))) {
-    __rtld_lib_close(lib);
-    __rtld_lib_destroy(lib);
-    return err;
-  }
-
-  err = __rtld_lib_close(lib);
-  __rtld_lib_destroy(lib);
-
-  return err;
-}
-
-
-/**
- * Terminate the payload.
- **/
-static int
-payload_terminate(void) {
-  void (*exit)(int) = 0;
-
-  __stacktrace_fini();
-
-  // we are running inside a hijacked process, just return
-  if(kernel_dynlib_dlsym(-1, 0x2001, "sceKernelDlsym")) {
-    return 0;
-  }
-
-  if(KERNEL_DLSYM(0x2, exit)) {
-    exit(*payload_args->payloadout);
-  }
-
-  __builtin_trap();
-
-  return -1;
-}
-
-
-/**
- * Exit the payload by transfering the flow of control back to _start().
- **/
-void
-payload_exit(int exit_code) {
-  *payload_args->payloadout = exit_code;
-  __builtin_longjmp(jmpbuf, 1);
-}
-
-
-/**
- * Provide a convenience function for accessing the payload args.
- **/
 payload_args_t*
 payload_get_args(void) {
   return payload_args;
 }
 
 
+static __attribute__ ((used)) long ptr_syscall = 0;
+
+asm(".intel_syntax noprefix\n"
+    ".global syscall\n"
+    ".type syscall @function\n"
+    "syscall:\n"
+    "  mov rax, rdi\n"
+    "  mov rdi, rsi\n"
+    "  mov rsi, rdx\n"
+    "  mov rdx, rcx\n"
+    "  mov r10, r8\n"
+    "  mov r8,  r9\n"
+    "  mov r9,  qword ptr [rsp + 8]\n"
+    "  jmp qword ptr [rip + ptr_syscall]\n"
+    "  ret\n"
+    );
+
+
+static int
+pre_init(payload_args_t *args) {
+  int *__isthreaded;
+  int error = 0;
+
+  if((error=__kernel_init(args))) {
+    return error;
+  }
+  if((error=__klog_init())) {
+    return error;
+  }
+  if((error=__rtld_init())) {
+    klog_puts("Unable to initialize rtld");
+    return error;
+  }
+  if(!DLSYM(0x2, __isthreaded)) {
+    klog_puts("Unable to resolve the symbol '__isthreaded'");
+    return -1;
+  }
+  *__isthreaded = 1;
+
+  return 0;
+}
+
+
+/**
+ * Terminate the payload.
+ **/
+static void
+terminate(void) {
+  void (*exit)(int) = 0;
+
+  __rtld_fini();
+
+  // we are running inside a hijacked process, just return
+  if(kernel_dynlib_dlsym(-1, 0x2001, "sceKernelDlsym")) {
+    klog_puts("we are running inside a hijacked process, just return");
+    return;
+  }
+
+  if(DLSYM(0x2, exit)) {
+    exit(*payload_args->payloadout);
+  }
+}
+
+
 /**
  * Entry-point invoked by the ELF loader.
  **/
-int
+void
 _start(payload_args_t *args) {
-  int err;
+  int (*sceKernelDlsym)(int, const char*, void*) = 0;
+  char** (*getargv)(void) = 0;
+  int (*getargc)(void) = 0;
+  unsigned long count = 0;
+  char** environ = 0;
+  char** argv = 0;
+  int argc = 0;
 
   // Clear .bss section.
   for(unsigned char* bss=__bss_start; bss<__bss_end; bss++) {
     *bss = 0;
   }
 
+  // Init runtime
   payload_args = args;
-
-  // Init payload runtime.
-  if((*args->payloadout=payload_init(args))) {
-    return payload_terminate();
+  if(args->sys_dynlib_dlsym(0x1, "sceKernelDlsym", &sceKernelDlsym)) {
+    args->sys_dynlib_dlsym(0x2001, "sceKernelDlsym", &sceKernelDlsym);
   }
-
-  if(!__builtin_setjmp(jmpbuf)) {
-    if((err=payload_run())) {
-      *payload_args->payloadout = err;
+  if(sceKernelDlsym == args->sys_dynlib_dlsym) {
+    if(args->sys_dynlib_dlsym(0x1, "getpid", &ptr_syscall)) {
+      args->sys_dynlib_dlsym(0x2001, "getpid", &ptr_syscall);
     }
+  } else {
+    ptr_syscall = (long)args->sys_dynlib_dlsym;
   }
 
-  return payload_terminate();
+  if(!ptr_syscall) {
+    *args->payloadout = -EINVAL;
+    return;
+  }
+
+  ptr_syscall += 0xa; // jump directly to the syscall instruction
+
+  if((*args->payloadout=pre_init(args))) {
+    terminate();
+    return;
+  }
+
+  // Obtain argc, argv and envp from libkernel
+  if((DLSYM(0x1, getargc) || DLSYM(0x2001, getargc)) &&
+     (DLSYM(0x1, getargv) || DLSYM(0x2001, getargv)) &&
+     (DLSYM(0x1, environ) || DLSYM(0x2001, environ))) {
+    argc = getargc();
+    argv = getargv();
+  }
+
+  // Run .init functions.
+  count = __init_array_end - __init_array_start;
+  for(int i=0; i<count; i++) {
+    __init_array_start[i](argc, argv, environ);
+  }
+
+  // Run the actual payload.
+  *args->payloadout = main(argc, argv, environ);
+
+  // Run .fini functions.
+  count = __fini_array_end - __fini_array_start;
+  for(int i=0; i<count; i++) {
+    __fini_array_start[count-i-1]();
+  }
+
+  terminate();
 }

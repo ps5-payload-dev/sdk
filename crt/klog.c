@@ -15,8 +15,9 @@ along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
 #include "kernel.h"
-#include "klog.h"
 #include "syscall.h"
+
+#define DLSYM(handle, sym) (sym=(void*)kernel_dynlib_dlsym(-1, handle, #sym))
 
 
 static int   (*snprintf)(char*, unsigned long, const char*, ...) = 0;
@@ -27,13 +28,13 @@ static int*  (*__error)(void) = 0;
 
 static char*
 klog_label(char *buf, unsigned long size) {
-  int pid = __syscall(SYS_getpid);
+  int pid = syscall(SYS_getpid);
 
   buf[0] = 0;
-  __syscall(0x268, pid, buf, size);
+  syscall(0x268, pid, buf, size);
 
   if(buf[0] == 0) {
-    snprintf(buf, size, "pid:%d", pid);
+    snprintf(buf, size, "pid:%d", syscall(SYS_getpid));
   }
 
   return buf;
@@ -53,7 +54,7 @@ klog_printf(const char *fmt, ...) {
 
   snprintf(buf, sizeof buf, "<118>[%s] %s", klog_label(lbl, sizeof(lbl)), sargs);
 
-  return (int)__syscall(0x259, 7, buf, 0);
+  return (int)syscall(0x259, 7, buf, 0);
 }
 
 
@@ -64,7 +65,7 @@ klog_puts(const char *s) {
 
   snprintf(buf, sizeof buf, "<118>[%s] %s\n", klog_label(lbl, sizeof(lbl)), s);
 
-  return (int)__syscall(0x259, 7, buf, 0);
+  return (int)syscall(0x259, 7, buf, 0);
 }
 
 
@@ -76,23 +77,23 @@ klog_perror(const char *s) {
   snprintf(buf, sizeof buf, "<118>[%s] %s: %s\n",
 	   klog_label(lbl, sizeof(lbl)), s, strerror(*__error()));
 
-  return (int)__syscall(0x259, 7, buf, 0);
+  return (int)syscall(0x259, 7, buf, 0);
 }
 
 
 int
 __klog_init(void) {
-  if(!KERNEL_DLSYM(0x2, snprintf)) {
+  if(!DLSYM(0x2, snprintf)) {
     return -1;
   }
-  if(!KERNEL_DLSYM(0x2, strerror)) {
+  if(!DLSYM(0x2, strerror)) {
     return -1;
   }
-  if(!KERNEL_DLSYM(0x2, vsnprintf)) {
+  if(!DLSYM(0x2, vsnprintf)) {
     return -1;
   }
-  if(!KERNEL_DLSYM(0x1, __error)) {
-    if(!KERNEL_DLSYM(0x2001, __error)) {
+  if(!DLSYM(0x1, __error)) {
+    if(!DLSYM(0x2001, __error)) {
       return -1;
     }
   }

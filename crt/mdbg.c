@@ -69,7 +69,7 @@ static int
 mdbg_memop(int memop, mdbg_memop_args_t *args) {
   static const unsigned char privcaps[16] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
 					     0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
-  int pid = (int)__syscall(SYS_getpid);
+  int pid = (int)syscall(SYS_getpid);
   mdbg_cmd_t cmd = {1, memop};
   unsigned char caps[16];
   unsigned long authid;
@@ -98,7 +98,7 @@ mdbg_memop(int memop, mdbg_memop_args_t *args) {
 
   do {
     res.len = res.status = 0;
-    if((err=__syscall(SYS_mdbg_call, &cmd, args, &res)) == -1) {
+    if((err=syscall(SYS_mdbg_call, &cmd, args, &res)) == -1) {
       break;
     }
     args->src += res.len;
