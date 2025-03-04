@@ -98,10 +98,15 @@ payload_run(void) {
   int err = 0;
 
   if((KERNEL_DLSYM(0x1, getargc) || KERNEL_DLSYM(0x2001, getargc)) &&
-     (KERNEL_DLSYM(0x1, getargv) || KERNEL_DLSYM(0x2001, getargv)) &&
-     (KERNEL_DLSYM(0x1, environ) || KERNEL_DLSYM(0x2001, environ))) {
+     (KERNEL_DLSYM(0x1, getargv) || KERNEL_DLSYM(0x2001, getargv))) {
     argc = getargc();
     argv = getargv();
+  }
+
+  if(!(KERNEL_DLSYM(0x1, environ))) {
+    if(!(KERNEL_DLSYM(0x2001, environ))) {
+      environ = 0;
+    }
   }
 
   if(!(KERNEL_DLSYM(0x1, __progname))) {
