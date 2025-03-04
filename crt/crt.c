@@ -88,7 +88,7 @@ payload_init(payload_args_t *args) {
 
 static int
 payload_run(void) {
-  const char* arg0 = "payload.elf";
+  const char* __progname = 0;
   char** (*getargv)(void) = 0;
   int (*getargc)(void) = 0;
   rtld_lib_t* lib = 0;
@@ -104,11 +104,13 @@ payload_run(void) {
     argv = getargv();
   }
 
-  if(argc) {
-    arg0 = argv[0];
+  if(!(KERNEL_DLSYM(0x1, __progname))) {
+    if(!(KERNEL_DLSYM(0x2001, __progname))) {
+      __progname = "";
+    }
   }
 
-  if(!(lib=__rtld_payload_new(arg0))) {
+  if(!(lib=__rtld_payload_new(__progname))) {
     return -1;
   }
 
