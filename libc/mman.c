@@ -23,8 +23,30 @@ along with this program; see the file COPYING. If not, see
 /**
  * shared objects do not link with crt1.o, declare deps as weak.
  **/
-__attribute__((weak)) long __syscall(long, ...);
 __attribute__((weak)) int kernel_mprotect(pid_t, intptr_t, size_t, int);
+
+
+static void*
+sys_mmap(void* addr, size_t size, int prot, int flags, int fd, off_t offset) {
+  asm(".intel_syntax noprefix\n"
+    "  mov rax, 477\n"
+    "  mov r10, rcx\n"
+    "  syscall\n"
+    "  ret\n"
+    );
+  return (void*)-1;
+}
+
+
+static int
+sys_mprotect(const void* addr, size_t size, int prot) {
+  asm(".intel_syntax noprefix\n"
+    "  mov rax, 74\n"
+    "  syscall\n"
+    "  ret\n"
+    );
+  return -1;
+}
 
 
 int
@@ -32,7 +54,7 @@ mprotect(const void* addr, size_t size, int prot) {
   if((prot & PROT_EXEC)) {
     return kernel_mprotect(-1, (intptr_t)addr, size, prot);
   } else {
-      return (int)__syscall(SYS_mprotect, addr, size, prot);
+      return sys_mprotect(addr, size, prot);
   }
 }
 
@@ -42,11 +64,11 @@ mmap(void* addr, size_t size, int prot, int flags, int fd, off_t offset) {
   void *mapped_addr;
 
   if(!(prot & PROT_EXEC)) {
-    return (void*)__syscall(SYS_mmap, addr, size, prot, flags, fd, offset);
+    return sys_mmap(addr, size, prot, flags, fd, offset);
   }
 
   prot &= ~PROT_EXEC;
-  mapped_addr = (void*)__syscall(SYS_mmap, addr, size, prot, flags, fd, offset);
+  mapped_addr = sys_mmap(addr, size, prot, flags, fd, offset);
   if(mapped_addr == MAP_FAILED) {
     return MAP_FAILED;
   }
