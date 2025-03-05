@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
+#include <errno.h>
 #include <unistd.h>
 
 #include <sys/mman.h>
@@ -26,26 +27,48 @@ along with this program; see the file COPYING. If not, see
 __attribute__((weak)) int kernel_mprotect(pid_t, intptr_t, size_t, int);
 
 
+static long
+__syscall6(long n, long a1, long a2, long a3, long a4, long a5, long a6) {
+  unsigned long ret;
+  char iserror;
+
+  register long r10 __asm__("r10") = a4;
+  register long r8 __asm__("r8") = a5;
+  register long r9 __asm__("r9") = a6;
+
+  __asm__ __volatile__(
+     "syscall" : "=a"(ret), "=@ccc"(iserror), "+r"(r10), "+r"(r8), "+r"(r9) :
+     "a"(n), "D"(a1), "S"(a2), "d"(a3) :
+     "rcx", "r11", "memory"
+     );
+
+  return iserror ? -ret : ret;
+}
+
+
 static void*
 sys_mmap(void* addr, size_t size, int prot, int flags, int fd, off_t offset) {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 477\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-  return (void*)-1;
+  long ret;
+
+  if((ret=__syscall6(SYS_mmap, (long)addr, size, prot, flags, fd, offset)) < 0) {
+    errno = -ret;
+    return (void*)-1;
+  }
+
+  return (void*)ret;
 }
 
 
 static int
 sys_mprotect(const void* addr, size_t size, int prot) {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 74\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-  return -1;
+  long ret;
+
+  if((ret=__syscall6(SYS_mprotect, (long)addr, size, prot, 0, 0, 0)) < 0) {
+    errno = -ret;
+    return -1;
+  }
+
+  return (int)ret;
 }
 
 
