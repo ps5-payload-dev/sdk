@@ -74,32 +74,38 @@ sys_mprotect(const void* addr, size_t size, int prot) {
 
 int
 mprotect(const void* addr, size_t size, int prot) {
-  if((prot & PROT_EXEC)) {
-    return kernel_mprotect(-1, (intptr_t)addr, size, prot);
-  } else {
-      return sys_mprotect(addr, size, prot);
+  if(!(prot & PROT_EXEC)) {
+    return sys_mprotect(addr, size, prot);
   }
+
+  if(!kernel_mprotect(-1, (intptr_t)addr, size, prot)) {
+    return 0;
+  }
+
+  errno = EPERM;
+  return -1;
 }
 
 
 void*
 mmap(void* addr, size_t size, int prot, int flags, int fd, off_t offset) {
-  void *mapped_addr;
+  void *map_addr;
 
   if(!(prot & PROT_EXEC)) {
     return sys_mmap(addr, size, prot, flags, fd, offset);
   }
 
   prot &= ~PROT_EXEC;
-  mapped_addr = sys_mmap(addr, size, prot, flags, fd, offset);
-  if(mapped_addr == MAP_FAILED) {
-    return MAP_FAILED;
+  if((map_addr=sys_mmap(addr, size, prot, flags, fd, offset)) == MAP_FAILED) {
+    return map_addr;
   }
 
   prot |= PROT_EXEC;
-  if(kernel_mprotect(-1, (intptr_t)mapped_addr, size, prot)) {
+  if(kernel_mprotect(-1, (intptr_t)map_addr, size, prot)) {
+    munmap(map_addr, size);
+    errno = EPERM;
     return MAP_FAILED;
   }
 
-  return mapped_addr;
+  return map_addr;
 }
