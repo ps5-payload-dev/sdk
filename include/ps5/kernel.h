@@ -19,37 +19,41 @@ along with this program; see the file COPYING. If not, see
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
+#include <stddef.h>
+#include <stdint.h>
+
+
 __BEGIN_DECLS
 
 // Absolute kernel pointers
-extern const intptr_t KERNEL_ADDRESS_TEXT_BASE;
-extern const intptr_t KERNEL_ADDRESS_DATA_BASE;
-extern const intptr_t KERNEL_ADDRESS_ALLPROC;
-extern const intptr_t KERNEL_ADDRESS_PRISON0;
-extern const intptr_t KERNEL_ADDRESS_ROOTVNODE;
-extern const intptr_t KERNEL_ADDRESS_SECURITY_FLAGS;
-extern const intptr_t KERNEL_ADDRESS_UTOKEN_FLAGS;
-extern const intptr_t KERNEL_ADDRESS_QA_FLAGS;
-extern const intptr_t KERNEL_ADDRESS_TARGETID;
+extern const uintptr_t KERNEL_ADDRESS_TEXT_BASE;
+extern const uintptr_t KERNEL_ADDRESS_DATA_BASE;
+extern const uintptr_t KERNEL_ADDRESS_ALLPROC;
+extern const uintptr_t KERNEL_ADDRESS_PRISON0;
+extern const uintptr_t KERNEL_ADDRESS_ROOTVNODE;
+extern const uintptr_t KERNEL_ADDRESS_SECURITY_FLAGS;
+extern const uintptr_t KERNEL_ADDRESS_UTOKEN_FLAGS;
+extern const uintptr_t KERNEL_ADDRESS_QA_FLAGS;
+extern const uintptr_t KERNEL_ADDRESS_TARGETID;
 
 // Proc field offsets
-extern const off_t KERNEL_OFFSET_PROC_P_UCRED;
-extern const off_t KERNEL_OFFSET_PROC_P_FD;
-extern const off_t KERNEL_OFFSET_PROC_P_PID;
-extern const off_t KERNEL_OFFSET_PROC_P_VMSPACE;
+extern const ptrdiff_t KERNEL_OFFSET_PROC_P_UCRED;
+extern const ptrdiff_t KERNEL_OFFSET_PROC_P_FD;
+extern const ptrdiff_t KERNEL_OFFSET_PROC_P_PID;
+extern const ptrdiff_t KERNEL_OFFSET_PROC_P_VMSPACE;
 
 // Ucred field offsets
-extern const off_t KERNEL_OFFSET_UCRED_CR_UID;
-extern const off_t KERNEL_OFFSET_UCRED_CR_RUID;
-extern const off_t KERNEL_OFFSET_UCRED_CR_SVUID;
-extern const off_t KERNEL_OFFSET_UCRED_CR_RGID;
-extern const off_t KERNEL_OFFSET_UCRED_CR_SCEAUTHID;
-extern const off_t KERNEL_OFFSET_UCRED_CR_SCECAPS;
-extern const off_t KERNEL_OFFSET_UCRED_CR_SCEATTRS;
+extern const ptrdiff_t KERNEL_OFFSET_UCRED_CR_UID;
+extern const ptrdiff_t KERNEL_OFFSET_UCRED_CR_RUID;
+extern const ptrdiff_t KERNEL_OFFSET_UCRED_CR_SVUID;
+extern const ptrdiff_t KERNEL_OFFSET_UCRED_CR_RGID;
+extern const ptrdiff_t KERNEL_OFFSET_UCRED_CR_SCEAUTHID;
+extern const ptrdiff_t KERNEL_OFFSET_UCRED_CR_SCECAPS;
+extern const ptrdiff_t KERNEL_OFFSET_UCRED_CR_SCEATTRS;
 
 //Filedesc field offsets
-extern const off_t KERNEL_OFFSET_FILEDESC_FD_RDIR;
-extern const off_t KERNEL_OFFSET_FILEDESC_FD_JDIR;
+extern const ptrdiff_t KERNEL_OFFSET_FILEDESC_FD_RDIR;
+extern const ptrdiff_t KERNEL_OFFSET_FILEDESC_FD_JDIR;
 
 
 uint32_t kernel_get_fw_version(void);
@@ -67,22 +71,22 @@ uint32_t kernel_getint(intptr_t addr);
 uint16_t kernel_getshort(intptr_t addr);
 uint8_t  kernel_getchar(intptr_t addr);
 
-intptr_t kernel_get_proc(pid_t pid);
-intptr_t kernel_get_proc_ucred(pid_t pid);
-intptr_t kernel_get_proc_filedesc(pid_t pid);
-intptr_t kernel_get_proc_file(pid_t pid, int fd);
+uintptr_t kernel_get_proc(pid_t pid);
+uintptr_t kernel_get_proc_ucred(pid_t pid);
+uintptr_t kernel_get_proc_filedesc(pid_t pid);
+uintptr_t kernel_get_proc_file(pid_t pid, int fd);
 
 int kernel_mprotect(pid_t pid, intptr_t addr, size_t size, int prot);
 
 int kernel_overlap_sockets(pid_t pid, int master_sock, int victim_sock);
 
 int kernel_dynlib_handle(pid_t pid, const char* basename, uint32_t *handle);
-intptr_t kernel_dynlib_dlsym(pid_t pid, uint32_t handle, const char *sym);
-intptr_t kernel_dynlib_resolve(pid_t pid, uint32_t handle, const char *nid);
-intptr_t kernel_dynlib_mapbase_addr(pid_t pid, uint32_t handle);
-intptr_t kernel_dynlib_entry_addr(pid_t pid, uint32_t handle);
-intptr_t kernel_dynlib_init_addr(pid_t pid, uint32_t handle);
-intptr_t kernel_dynlib_fini_addr(pid_t pid, uint32_t handle);
+uintptr_t kernel_dynlib_dlsym(pid_t pid, uint32_t handle, const char *sym);
+uintptr_t kernel_dynlib_resolve(pid_t pid, uint32_t handle, const char *nid);
+uintptr_t kernel_dynlib_mapbase_addr(pid_t pid, uint32_t handle);
+uintptr_t kernel_dynlib_entry_addr(pid_t pid, uint32_t handle);
+uintptr_t kernel_dynlib_init_addr(pid_t pid, uint32_t handle);
+uintptr_t kernel_dynlib_fini_addr(pid_t pid, uint32_t handle);
 
 uint64_t kernel_get_ucred_authid(pid_t pid);
 int32_t  kernel_set_ucred_authid(pid_t pid, uint64_t authid);
@@ -96,12 +100,12 @@ int32_t  kernel_set_ucred_attrs(pid_t pid, uint64_t attr);
 int32_t kernel_get_qaflags(uint8_t qaflags[16]);
 int32_t kernel_set_qaflags(uint8_t const qaflags[16]);
 
-intptr_t kernel_get_root_vnode(void);
+uintptr_t kernel_get_root_vnode(void);
 
-intptr_t kernel_get_proc_rootdir(pid_t pid);
+uintptr_t kernel_get_proc_rootdir(pid_t pid);
 int32_t  kernel_set_proc_rootdir(pid_t pid, intptr_t vnode);
 
-intptr_t kernel_get_proc_jaildir(pid_t pid);
+uintptr_t kernel_get_proc_jaildir(pid_t pid);
 int32_t  kernel_set_proc_jaildir(pid_t pid, intptr_t vnode);
 
 int32_t kernel_set_ucred_uid(pid_t pid, uid_t uid);
@@ -112,4 +116,3 @@ int32_t kernel_set_ucred_rgid(pid_t pid, gid_t rgid);
 int32_t kernel_set_ucred_svgid(pid_t pid, gid_t svgid);
 
 __END_DECLS
-
