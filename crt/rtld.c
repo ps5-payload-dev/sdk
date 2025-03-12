@@ -281,17 +281,30 @@ __rtld_lib_new(rtld_lib_t* parent, const char* soname) {
 
 int
 __rtld_lib_open(rtld_lib_t* ctx) {
+  if(!ctx) {
+    return -1;
+  }
+
   ctx->refcnt++;
   if(ctx->refcnt == 1) {
     return ctx->open(ctx);
   }
+
   return 0;
 }
 
 
 int
 __rtld_lib_append_dep(rtld_lib_t* ctx, rtld_lib_t* lib) {
-  rtld_lib_seq_t* seq = calloc(1, sizeof(rtld_lib_seq_t));
+  rtld_lib_seq_t* seq;
+
+  if(!ctx || !lib) {
+    return -1;
+  }
+
+  if(!(seq=calloc(1, sizeof(rtld_lib_seq_t)))) {
+    return -1;
+  }
 
   seq->lib = lib;
 
@@ -313,6 +326,10 @@ __rtld_lib_append_dep(rtld_lib_t* ctx, rtld_lib_t* lib) {
 
 int
 __rtld_lib_remove_dep(rtld_lib_t* ctx, rtld_lib_t* lib) {
+  if(!ctx || !lib) {
+    return -1;
+  }
+
   for(rtld_lib_seq_t* it=ctx->children.head; it; it=it->next) {
     if(it->lib != lib) {
       continue;
@@ -338,6 +355,10 @@ int
 __rtld_lib_init(rtld_lib_t* ctx, int argc, char** argv, char** envp) {
   int err;
 
+  if(!ctx) {
+    return -1;
+  }
+
   // init in reverse order
   for(rtld_lib_seq_t* it=ctx->children.tail; it; it=it->prev) {
     if((err=__rtld_lib_init(it->lib, argc, argv, envp))) {
@@ -353,7 +374,7 @@ rtld_lib_t*
 __rtld_lib_sym2lib(rtld_lib_t* ctx, const char* name) {
   rtld_lib_t* lib;
 
-  if(!name) {
+  if(!ctx || !name) {
     return 0;
   }
 
@@ -376,7 +397,7 @@ rtld_lib_t*
 __rtld_lib_addr2lib(rtld_lib_t* ctx, void* addr) {
   rtld_lib_t* lib;
 
-  if(!addr) {
+  if(!ctx || !addr) {
     return 0;
   }
 
@@ -397,7 +418,7 @@ __rtld_lib_addr2lib(rtld_lib_t* ctx, void* addr) {
 
 void*
 __rtld_lib_sym2addr(rtld_lib_t* ctx, const char* name) {
-  if(name) {
+  if(ctx && name) {
     return ctx->sym2addr(ctx, name);
   } else {
     return 0;
@@ -407,7 +428,7 @@ __rtld_lib_sym2addr(rtld_lib_t* ctx, const char* name) {
 
 const char*
 __rtld_lib_addr2sym(rtld_lib_t* ctx, void* addr) {
-  if(addr) {
+  if(ctx && addr) {
     return ctx->addr2sym(ctx, addr);
   } else {
     return 0;
@@ -418,6 +439,10 @@ __rtld_lib_addr2sym(rtld_lib_t* ctx, void* addr) {
 int
 __rtld_lib_fini(rtld_lib_t* ctx) {
   int err;
+
+  if(!ctx) {
+    return -1;
+  }
 
   if((err=ctx->fini(ctx))) {
     return err;
@@ -436,6 +461,10 @@ __rtld_lib_fini(rtld_lib_t* ctx) {
 int
 __rtld_lib_close(rtld_lib_t* ctx) {
   int err;
+
+  if(!ctx) {
+    return -1;
+  }
 
   ctx->refcnt--;
   if(ctx->refcnt > 0) {
@@ -462,7 +491,9 @@ __rtld_lib_close(rtld_lib_t* ctx) {
 
 void
 __rtld_lib_destroy(rtld_lib_t* ctx) {
-  ctx->destroy(ctx);
+  if(ctx) {
+    ctx->destroy(ctx);
+  }
 }
 
 
