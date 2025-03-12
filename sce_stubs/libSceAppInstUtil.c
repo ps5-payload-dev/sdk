@@ -1,3 +1,4 @@
+#pragma comment(lib, "libSceIpmi.so")
 
 asm(".global sceAppInstUtilAppAllowDownloadInstall\n"
     ".type sceAppInstUtilAppAllowDownloadInstall @function\n"

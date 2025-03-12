@@ -65,6 +65,9 @@ libdl.so: libkernel_web.o
 libpthread.so: libkernel_web.o
 	$(LD) -m elf_x86_64 -shared -soname libkernel_web.sprx -o $@ $<
 
+# TODO: fix DT_NEEDED deps
+libSceAppInstUtil.so: libSceIpmi.so
+
 %.so: %.o
 	$(LD) -m elf_x86_64 -shared -soname $*.sprx -o $@ $<
 
