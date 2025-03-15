@@ -1,8 +1,13 @@
 # ps5-payload-sdk
-This is an SDK for developing payloads targeted at exploited PS5s running an ELF
-loader, e.g., [ps5-payload-elfldr][elfldr], the [BD-J ps5-payload-loader][bdj],
-or the [webkit approached from Specter][webkit]. Several artifacts in this
-repository originate from the [PS5SDK][PS5SDK] project.
+This is an SDK for developing payloads targeted at exploited PS5s. ELF loaders
+known to work include:
+- [ps5-payload-elfldr][elfldr]
+- [ps5-payload-websrv][websrv]
+- [bdj-ipv6-hen][bdj-ipv6-hen]
+- [elfloader][elfloader] for BD-J [ps5-jar-loader]
+- [remote_lua_loader][remote_lua_loader]
+
+Several artifacts in this repository originate from the [PS5SDK][PS5SDK] project.
 
 ## Prerequisites
 On Debian-flavored operating systems, you can invoke the following command to
@@ -63,8 +68,11 @@ Files in the include_bsd directory are licenced under BSD licences.
 Unless otherwhise explicitly stated inside a file, the rest are licensed under
 the GPLv3+.
 
-[bdj]: https://github.com/john-tornblom/bdj-sdk/tree/master/samples/ps5-payload-loader
 [issues]: https://github.com/ps5-payload-dev/sdk/issues/new
 [elfldr]: https://github.com/ps5-payload-dev/elfldr
+[websrv]: https://github.com/ps5-payload-dev/websrv
+[bdj-ipv6-hen]: https://github.com/ps5-payload-dev/bdj-ipv6-hen
+[remote_lua_loader]: https://github.com/shahrilnet/remote_lua_loader
+[elfloader]: https://github.com/cryonumb/elfloader
+[ps5-jar-loader]: https://github.com/hammer-83/ps5-jar-loader
 [PS5SDK]: https://github.com/PS5Dev/PS5SDK
-[webkit]: https://github.com/PS5Dev/PS5-UMTX-Jailbreak
