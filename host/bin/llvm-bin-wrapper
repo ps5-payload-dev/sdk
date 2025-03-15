@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
+
 SCRIPT_PATH="${BASH_SOURCE[0]}"
 SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
 SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
@@ -32,6 +33,13 @@ SCRIPT_LINK="$(basename "${SCRIPT_LINK}")"
 if [ "$SCRIPT_LINK" = "llvm-bin-wrapper" ]; then
     BIN_NAME=$(echo $SCRIPT_NAME | rev | cut -d'-' -f1 | rev)
     BIN_PATH="${LLVM_BINDIR}/${BIN_NAME}"
+    exec -a "${SCRIPT_NAME}" "${BIN_PATH}" "$@"
+fi
+
+# if the script is not a symlink, its probably a copy of a symlink
+if [ "$SCRIPT_LINK" = "" ]; then
+    BIN_NAME=$(echo $SCRIPT_NAME | rev | cut -d'-' -f1 | rev)
+    BIN_PATH="${LLVM_BINDIR}/llvm-${BIN_NAME}"
     exec -a "${SCRIPT_NAME}" "${BIN_PATH}" "$@"
 fi
 
