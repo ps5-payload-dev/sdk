@@ -86,6 +86,9 @@ payload_init(payload_args_t *args) {
 }
 
 
+/**
+ * Run the payload.
+ **/
 static int
 payload_run(void) {
   const char* __progname = 0;
@@ -120,20 +123,22 @@ payload_run(void) {
   }
 
   __rtld_dlfcn_setroot(lib);
-
   if((err=__rtld_lib_open(lib))) {
     __rtld_lib_destroy(lib);
     return err;
   }
 
+  // run .init constructors
   if((err=__rtld_lib_init(lib, argc, argv, environ))) {
     __rtld_lib_close(lib);
     __rtld_lib_destroy(lib);
     return err;
   }
 
+  // run the actual payload
   *payload_args->payloadout = main(argc, argv, environ);
 
+  // run .fini destructors
   if((err=__rtld_lib_fini(lib))) {
     __rtld_lib_close(lib);
     __rtld_lib_destroy(lib);
@@ -154,6 +159,7 @@ static int
 payload_terminate(void) {
   void (*exit)(int) = 0;
 
+  // resore default signal handlers
   __stacktrace_fini();
 
   // we are running inside a hijacked process, just return
@@ -161,10 +167,12 @@ payload_terminate(void) {
     return 0;
   }
 
+  // resolve and run exit
   if(KERNEL_DLSYM(0x2, exit)) {
     exit(*payload_args->payloadout);
   }
 
+  // should not happend
   __builtin_trap();
 
   return -1;
@@ -197,23 +205,25 @@ int
 _start(payload_args_t *args) {
   int err;
 
-  // Clear .bss section.
+  // clear .bss section
   for(unsigned char* bss=__bss_start; bss<__bss_end; bss++) {
     *bss = 0;
   }
 
   payload_args = args;
 
-  // Init payload runtime.
+  // init payload runtime
   if((*args->payloadout=payload_init(args))) {
     return payload_terminate();
   }
 
+  // run payload
   if(!__builtin_setjmp(jmpbuf)) {
     if((err=payload_run())) {
       *payload_args->payloadout = err;
     }
   }
 
+  // terminate payload
   return payload_terminate();
 }

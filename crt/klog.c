@@ -25,6 +25,9 @@ static int   (*vsnprintf)(char*, unsigned long, const char*, __builtin_va_list) 
 static int*  (*__error)(void) = 0;
 
 
+/**
+ * Get the name of the process we are running in.
+ **/
 static char*
 klog_label(char *buf, unsigned long size) {
   int pid = __syscall(SYS_getpid);
