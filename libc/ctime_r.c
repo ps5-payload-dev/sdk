@@ -16,9 +16,19 @@ along with this program; see the file COPYING. If not, see
 
 #include <time.h>
 
-char* ctime_s(const time_t *restrict timep, char* buf);
+
+int ctime_s(char*, size_t, const time_t*);
+
 
 char*
-ctime_r(const time_t *restrict timep, char* buf) {
-    return ctime_s(timep, buf);
+ctime_r(const time_t* t, char* buf) {
+  if(!t || !buf) {
+    return 0;
+  }
+
+  if(ctime_s(buf, 26, t)) {
+    return 0;
+  }
+
+  return buf;
 }
