@@ -23,7 +23,7 @@ PS5_PAYLOAD_SDK="$(realpath "${SCRIPT_DIR}/..")"
 source "${PS5_PAYLOAD_SDK}/toolchain/prospero.sh"
 
 if [[ -z $1 ]]; then
-    WORKDIR="${PS5_SYSROOT}/${PS5_HBROOT}"
+    WORKDIR="${PS5_PAYLOAD_SDK}/target/${PS5_HBROOT}"
 else
     WORKDIR=$1
 fi
@@ -40,8 +40,8 @@ if [ -d "${WORKDIR}/lib" ]; then
     for FILENAME in $(find . -type f -name "lib*.la"); do
 	echo "cross-fix-root: prepending sysroot to libdir in ${FILENAME}"
 	sed -i \
-	    -e "/^libdir=/s:=.*:='${PS5_SYSROOT}${PS5_HBROOT}/lib':" \
-	    -e "/^dependency_libs=/s: ${PS5_HBROOT}/lib/: ${PS5_SYSROOT}/${PS5_HBROOT}/lib/:g" \
+	    -e "/^libdir=/s:=.*:='${PS5_PAYLOAD_SDK}/target${PS5_HBROOT}/lib':" \
+	    -e "/^dependency_libs=/s: ${PS5_HBROOT}/lib/: ${PS5_PAYLOAD_SDK}/target${PS5_HBROOT}/lib/:g" \
             "${FILENAME}" || exit 1
     done
 fi
@@ -50,7 +50,7 @@ if [ -d "${WORKDIR}/bin" ]; then
     cd "${WORKDIR}/bin" || exit 1
     for FILENAME in $(find . -type f -name "*-config"); do
 	echo "cross-fix-root: prepending sysroot to prefix in ${FILENAME}"
-	sed -i "/^prefix=/s:=.*:='${PS5_SYSROOT}/${PS5_HBROOT}':" "${FILENAME}" || exit 1
+	sed -i "/^prefix=/s:=.*:='${PS5_PAYLOAD_SDK}/target${PS5_HBROOT}':" "${FILENAME}" || exit 1
     done
 fi
 

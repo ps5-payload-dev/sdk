@@ -15,10 +15,9 @@
 # <http://www.gnu.org/licenses/>.
 
 PS5_PAYLOAD_SDK := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))..)
-PS5_SYSROOT     := $(PS5_PAYLOAD_SDK)/target
 PS5_HBROOT      := /user/homebrew
 
-DESTDIR ?= $(PS5_SYSROOT)
+DESTDIR ?= $(PS5_PAYLOAD_SDK)/target
 PREFIX  ?= $(PS5_HBROOT)
 
 PS5_DEPLOY := $(PS5_PAYLOAD_SDK)/bin/prospero-deploy

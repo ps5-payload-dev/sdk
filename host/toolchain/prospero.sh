@@ -21,10 +21,9 @@ PS5_PAYLOAD_SDK="${PS5_PAYLOAD_SDK}/.."
 PS5_PAYLOAD_SDK="$(realpath "${PS5_PAYLOAD_SDK}")"
 
 export PS5_PAYLOAD_SDK=${PS5_PAYLOAD_SDK}
-export PS5_SYSROOT=${PS5_PAYLOAD_SDK}/target
 export PS5_HBROOT=/user/homebrew
 
-export DESTDIR="${PS5_SYSROOT}"
+export DESTDIR="${PS5_PAYLOAD_SDK}/target"
 export PREFIX="${PS5_HBROOT}"
 
 export PS5_DEPLOY=${PS5_PAYLOAD_SDK}/bin/prospero-deploy
