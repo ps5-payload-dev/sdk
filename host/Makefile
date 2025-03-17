@@ -51,6 +51,9 @@ install: install-tools install-symlinks install-ldscripts install-toolchains
 install-ldscripts: $(LDSCRIPTS)
 	install -d $(DESTDIR)/ldscripts
 	install $^ $(DESTDIR)/ldscripts
+	install -d $(DESTDIR)/target/lib
+	ln -sf ../../ldscripts/elf_x86_64.x $(DESTDIR)/target/lib/main.script
+	ln -sf ../../ldscripts/elf_x86_64.x $(DESTDIR)/target/lib/prx.script
 
 install-toolchains: $(TOOLCHAINS)
 	install -d $(DESTDIR)/toolchain

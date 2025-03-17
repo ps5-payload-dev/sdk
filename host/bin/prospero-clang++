@@ -62,6 +62,12 @@ if [[ "${TU}" == "" ]]; then
     LIBS_KERN=""
 fi
 
+# clang++-20 started appending crt objects when linking
+if [[ $($SCRIPT_DIR/llvm-config --version | cut -d. -f1) -ge 20 ]]; then
+    export SCE_PROSPERO_SDK_DIR="${PS5_PAYLOAD_SDK}/"
+    LIBS_CRT=""
+fi
+
 # ensure clang++ knows where prospero-lld is at
 export PATH="${SCRIPT_DIR}:${PATH}"
 

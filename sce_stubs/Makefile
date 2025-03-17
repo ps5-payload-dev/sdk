@@ -17,14 +17,14 @@
 PYTHON  ?= python3
 DESTDIR ?= /opt/ps5-payload-sdk
 
-CCS := clang-19 clang-18 clang-17 clang-16 clang-15 clang
+CCS := clang-20 clang-19 clang-18 clang-17 clang-16 clang-15 clang
 CCS := $(foreach CC,$(CCS),$(if $(shell command -v $(CC) 2> /dev/null),$(CC)))
 CC  := $(firstword $(CCS))
 ifndef CC
     $(error No suitable compiler found)
 endif
 
-LDS := ld.lld-19 ld.lld-18 ld.lld-17 ld.lld-16 ld.lld-15 ld.lld
+LDS := ld.lld-20 ld.lld-19 ld.lld-18 ld.lld-17 ld.lld-16 ld.lld-15 ld.lld ld
 LDS := $(foreach LD,$(LDS),$(if $(shell command -v $(LD) 2> /dev/null),$(LD)))
 LD  := $(firstword $(LDS))
 ifndef LD
@@ -77,3 +77,5 @@ clean:
 install: $(SHARED)
 	install -d $(DESTDIR)/target/lib
 	install $(SHARED) $(DESTDIR)/target/lib
+	ln -sf libkernel_web.so $(DESTDIR)/target/lib/libkernel_stub_weak.so
+	ln -sf libSceLibcInternal.so $(DESTDIR)/target/lib/libc_stub_weak.so
