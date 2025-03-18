@@ -34,7 +34,7 @@ tar xf $TEMPDIR/llvm.tar.xz -C $TEMPDIR || exit 1
 
 ${CMAKE} -S $TEMPDIR/llvm-project-$LLVM_VER.src/runtimes \
 	 -B $TEMPDIR/build \
-	 -DCMAKE_INSTALL_PREFIX="${PS5_PAYLOAD_SDK}/target" \
+	 -DCMAKE_INSTALL_PREFIX="${PS5_SYSROOT}" \
 	 -DCMAKE_BUILD_TYPE=Release \
 	 -DCMAKE_CXX_FLAGS="-nostdlib++" \
 	 -DLLVM_ENABLE_RUNTIMES="libunwind;libcxxabi;libcxx" \
