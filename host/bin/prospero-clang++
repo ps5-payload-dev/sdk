@@ -85,5 +85,6 @@ exec -a "${SCRIPT_NAME}" "${SCRIPT_DIR}/clang++" \
      --end-no-unused-arguments \
      "$@" \
      --start-no-unused-arguments \
+     --sysroot "${PS5_PAYLOAD_SDK}" \
      $LIBS_CRT $LIBS_KERN $LIBS_DEPS \
      --end-no-unused-arguments
