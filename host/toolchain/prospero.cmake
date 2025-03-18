@@ -40,6 +40,8 @@ set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 #
 set(CMAKE_INSTALL_PREFIX "/user/homebrew" CACHE PATH "")
 set(CMAKE_INSTALL_LIBDIR "/user/homebrew/lib" CACHE PATH "")
+set(CMAKE_INSTALL_BINDIR "/user/homebrew/bin" CACHE PATH "")
+set(CMAKE_INSTALL_INCLUDEDIR "/user/homebrew/include" CACHE PATH "")
 
 #
 # Encrease default verbosity in makefiles
