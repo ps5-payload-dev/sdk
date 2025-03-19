@@ -62,9 +62,12 @@ else()
     set(CMAKE_ASM_COMPILER ${PS5_PAYLOAD_SDK}/bin/prospero-as CACHE PATH "")
     set(CMAKE_C_COMPILER ${PS5_PAYLOAD_SDK}/bin/prospero-clang CACHE PATH "")
     set(CMAKE_CXX_COMPILER ${PS5_PAYLOAD_SDK}/bin/prospero-clang++ CACHE PATH "")
+    set(CMAKE_LINKER ${PS5_PAYLOAD_SDK}/bin/prospero-lld CACHE PATH "")
+
+    set(CMAKE_AR ${PS5_PAYLOAD_SDK}/bin/prospero-ar CACHE PATH "")
     set(CMAKE_STRIP ${PS5_PAYLOAD_SDK}/bin/prospero-strip CACHE PATH "")
+    set(CMAKE_RANLIB ${PS5_PAYLOAD_SDK}/bin/prospero-ranlib CACHE PATH "")
 
     set(PKG_CONFIG_EXECUTABLE ${PS5_PAYLOAD_SDK}/bin/prospero-pkg-config CACHE PATH "")
     set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 endif()
-
