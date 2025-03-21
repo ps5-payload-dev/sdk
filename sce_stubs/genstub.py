@@ -52,23 +52,6 @@ with open(NID_DB) as f:
         nid_map[nid] = sym
 
 
-def needed(filename):
-    with open(filename, 'rb') as f:
-        elf = ELFFile(f)
-
-        for segment in elf.iter_segments():
-            if segment.header.p_type != 'PT_DYNAMIC':
-                continue
-
-            for tag in segment.iter_tags():
-                if tag.entry.d_tag == 'DT_NEEDED':
-                    base, ext = tag.needed.rsplit('.', 1)
-                    if base in ['libkernel', 'libkernel_sys', 'libkernel_web',
-                                'libSceLibcInternal']:
-                        continue
-                    yield base + '.so'
-
-
 def symbols(sym_type, filename):
     '''
     yield symbol names in PT_DYNAMIC segments using the NID lookup table
@@ -108,16 +91,6 @@ if __name__ == '__main__':
 
     funcs = sorted(set(symbols('STT_FUNC', cli_args.SPRX_FILE)))
     gvars = sorted(set(symbols('STT_OBJECT', cli_args.SPRX_FILE)))
-
-'''
-    base = cli_args.SPRX_FILE[:-5];
-    libs  = list(needed(cli_args.SPRX_FILE))
-    with open(base + '.d', 'w') as f:
-        f.write(base + '.so: %s' % ' '.join(libs))
-
-    for lib in sorted(libs):
-        print(f'#pragma comment(lib, "{lib}")')
-'''
 
     for name in sorted(funcs):
         print(tmpl_func.substitute(name=name))
