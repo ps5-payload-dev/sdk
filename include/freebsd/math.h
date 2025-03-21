@@ -11,7 +11,7 @@
 
 /*
  * from: @(#)fdlibm.h 5.1 93/09/24
- * $FreeBSD: releng/11.1/lib/msun/src/math.h 301761 2016-06-09 20:49:26Z trasz $
+ * $FreeBSD: releng/11.4/lib/msun/src/math.h 354596 2019-11-10 17:33:10Z dim $
  */
 
 #ifndef _MATH_H_
@@ -213,6 +213,12 @@ __inline_isnanl(__const long double __x)
 
 	return (__x != __x);
 }
+
+/*
+ * Define the following aliases, for compatibility with glibc and CUDA.
+ */
+#define __isnan __inline_isnan
+#define __isnanf __inline_isnanf
 
 /*
  * Version 2 of the Single UNIX Specification (UNIX98) defined isnan() and
@@ -500,6 +506,9 @@ long double	truncl(long double);
 
 #if __BSD_VISIBLE
 long double	lgammal_r(long double, int *);
+void		sincos(double, double *, double *);
+void		sincosf(float, float *, float *);
+void		sincosl(long double, long double *, long double *);
 #endif
 
 __END_DECLS

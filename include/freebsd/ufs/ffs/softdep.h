@@ -36,7 +36,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)softdep.h	9.7 (McKusick) 6/21/00
- * $FreeBSD: releng/11.1/sys/ufs/ffs/softdep.h 320057 2017-06-17 17:10:50Z kib $
+ * $FreeBSD: releng/11.4/sys/ufs/ffs/softdep.h 320057 2017-06-17 17:10:50Z kib $
  */
 
 #include <sys/queue.h>

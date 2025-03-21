@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	from: @(#)tss.h	5.4 (Berkeley) 1/18/91
- * $FreeBSD: releng/11.1/sys/amd64/include/tss.h 145120 2005-04-15 18:39:31Z peter $
+ * $FreeBSD: releng/11.4/sys/amd64/include/tss.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _MACHINE_TSS_H_

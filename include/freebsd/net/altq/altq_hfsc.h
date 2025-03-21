@@ -28,7 +28,7 @@
  * changes without encumbrance.
  *
  * $KAME: altq_hfsc.h,v 1.12 2003/12/05 05:40:46 kjc Exp $
- * $FreeBSD: releng/11.1/sys/net/altq/altq_hfsc.h 287009 2015-08-21 22:02:22Z loos $
+ * $FreeBSD: releng/11.4/sys/net/altq/altq_hfsc.h 330446 2018-03-05 06:59:30Z eadler $
  */
 #ifndef _ALTQ_ALTQ_HFSC_H_
 #define	_ALTQ_ALTQ_HFSC_H_
@@ -192,7 +192,7 @@ struct hfsc_class_stats {
  *	representation.
  *	the slope values are scaled to avoid overflow.
  *	the inverse slope values as well as the y-projection of the 1st
- *	segment are kept in order to to avoid 64-bit divide operations
+ *	segment are kept in order to avoid 64-bit divide operations
  *	that are expensive on 32-bit architectures.
  *
  *  note: Intel Pentium TSC never wraps around in several thousands of years.

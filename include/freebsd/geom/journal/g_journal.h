@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/geom/journal/g_journal.h 298755 2016-04-28 19:26:46Z pfg $
+ * $FreeBSD: releng/11.4/sys/geom/journal/g_journal.h 322792 2017-08-22 15:20:48Z mckusick $
  */
 
 #ifndef	_G_JOURNAL_H_
@@ -181,6 +181,17 @@ struct g_journal_softc {
 		(bp)->bio_next = (pbp)->bio_next;			\
 		(pbp)->bio_next = (bp);					\
 	}								\
+} while (0)
+#define GJQ_LAST(head, bp) do {						\
+	struct bio *_bp;						\
+									\
+	if ((head) == NULL) {						\
+		(bp) = (head);						\
+		break;							\
+	}								\
+	for (_bp = (head); _bp->bio_next != NULL; _bp = _bp->bio_next)	\
+		continue;						\
+	(bp) = (_bp);							\
 } while (0)
 #define	GJQ_FIRST(head)	(head)
 #define	GJQ_REMOVE(head, bp)	do {					\

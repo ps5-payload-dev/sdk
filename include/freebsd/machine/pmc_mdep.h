@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/amd64/include/pmc_mdep.h 285041 2015-07-02 14:37:21Z kib $
+ * $FreeBSD: releng/11.4/sys/amd64/include/pmc_mdep.h 339767 2018-10-26 05:12:56Z mmacy $
  */
 
 /* Machine dependent interfaces */
@@ -52,6 +52,7 @@ struct pmc_mdep;
  */
 #define	PMC_MDEP_CLASS_INDEX_TSC	1
 #define	PMC_MDEP_CLASS_INDEX_K8		2
+#define PMC_MDEP_CLASS_INDEX_F17H	2
 #define	PMC_MDEP_CLASS_INDEX_P4		2
 #define	PMC_MDEP_CLASS_INDEX_IAP	2
 #define	PMC_MDEP_CLASS_INDEX_IAF	3

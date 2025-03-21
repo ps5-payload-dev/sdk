@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/lib/libproc/libproc.h 316713 2017-04-11 17:36:19Z markj $
+ * $FreeBSD: releng/11.4/lib/libproc/libproc.h 316713 2017-04-11 17:36:19Z markj $
  */
 
 #ifndef	_LIBPROC_H_

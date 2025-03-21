@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/dtrace_bsd.h 276142 2014-12-23 15:38:19Z markj $
+ * $FreeBSD: releng/11.4/sys/sys/dtrace_bsd.h 331722 2018-03-29 02:50:57Z eadler $
  *
  * This file contains BSD shims for Sun's DTrace code.
  */
@@ -37,7 +37,6 @@ struct trapframe;
 struct thread;
 struct vattr;
 struct vnode;
-struct reg;
 
 int dtrace_trap(struct trapframe *, u_int);
 
@@ -58,9 +57,9 @@ typedef void (*dtrace_doubletrap_func_t)(void);
 extern	dtrace_doubletrap_func_t	dtrace_doubletrap_func;
 
 /* Pid provider hooks */
-typedef int (*dtrace_pid_probe_ptr_t)(struct reg *);
+typedef int (*dtrace_pid_probe_ptr_t)(struct trapframe *);
 extern	dtrace_pid_probe_ptr_t	dtrace_pid_probe_ptr;
-typedef int (*dtrace_return_probe_ptr_t)(struct reg *);
+typedef int (*dtrace_return_probe_ptr_t)(struct trapframe *);
 extern	dtrace_return_probe_ptr_t	dtrace_return_probe_ptr;
 
 /* Virtual time hook function type. */

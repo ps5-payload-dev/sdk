@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/intr.h 308333 2016-11-05 10:23:02Z mmel $
+ * $FreeBSD: releng/11.4/sys/sys/intr.h 308333 2016-11-05 10:23:02Z mmel $
  */
 
 #ifndef _SYS_INTR_H_

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/iicbus/iiconf.h 298955 2016-05-03 03:41:25Z pfg $
+ * $FreeBSD: releng/11.4/sys/dev/iicbus/iiconf.h 331722 2018-03-29 02:50:57Z eadler $
  */
 #ifndef __IICONF_H
 #define __IICONF_H
@@ -37,13 +37,14 @@
 #define LSB 0x1
 
 /*
- * How tsleep() is called in iic_request_bus().
+ * Options affecting iicbus_request_bus()
  */
 #define IIC_DONTWAIT	0
 #define IIC_NOINTR	0
 #define IIC_WAIT	0x1
 #define IIC_INTR	0x2
 #define IIC_INTRWAIT	(IIC_INTR | IIC_WAIT)
+#define IIC_RECURSIVE	0x4
 
 /*
  * i2c modes
@@ -132,6 +133,16 @@ int iicbus_transfer(device_t bus, struct iic_msg *msgs, uint32_t nmsgs);
 int iicbus_transfer_excl(device_t bus, struct iic_msg *msgs, uint32_t nmsgs,
     int how);
 int iicbus_transfer_gen(device_t bus, struct iic_msg *msgs, uint32_t nmsgs);
+
+/*
+ * Simple register read/write routines, but the "register" can be any size.
+ * The transfers are done with iicbus_transfer_excl().  Reads use a repeat-start
+ * between sending the address and reading; writes use a single start/stop.
+ */
+int iicdev_readfrom(device_t _slavedev, uint8_t _regaddr, void *_buffer,
+    uint16_t _buflen, int _waithow);
+int iicdev_writeto(device_t _slavedev, uint8_t _regaddr, void *_buffer,
+    uint16_t _buflen, int _waithow);
 
 #define IICBUS_MODVER	1
 #define IICBUS_MINVER	1

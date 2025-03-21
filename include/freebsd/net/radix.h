@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)radix.h	8.2 (Berkeley) 10/31/94
- * $FreeBSD: releng/11.1/sys/net/radix.h 294706 2016-01-25 06:33:15Z melifaro $
+ * $FreeBSD: releng/11.4/sys/net/radix.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _RADIX_H_

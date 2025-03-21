@@ -23,13 +23,14 @@
  * any improvements or extensions that they make and grant Carnegie Mellon
  * the rights to redistribute these changes.
  *
- * $FreeBSD: releng/11.1/sys/amd64/include/db_machdep.h 308418 2016-11-07 12:10:17Z kib $
+ * $FreeBSD: releng/11.4/sys/amd64/include/db_machdep.h 338691 2018-09-14 23:21:52Z jhb $
  */
 
 #ifndef _MACHINE_DB_MACHDEP_H_
 #define	_MACHINE_DB_MACHDEP_H_
 
 #include <machine/frame.h>
+#include <machine/reg.h>
 #include <machine/trap.h>
 
 typedef	vm_offset_t	db_addr_t;	/* address - unsigned */
@@ -64,7 +65,8 @@ do {						\
  * unknown addresses and doesn't turn them off while it is running.
  */
 #define	IS_BREAKPOINT_TRAP(type, code)	((type) == T_BPTFLT)
-#define	IS_SSTEP_TRAP(type, code)	((type) == T_TRCTRAP && (code) & 0x4000)
+#define	IS_SSTEP_TRAP(type, code)					\
+	((type) == T_TRCTRAP && (code) & DBREG_DR6_BS)
 #define	IS_WATCHPOINT_TRAP(type, code)	0
 
 #define	I_CALL		0xe8

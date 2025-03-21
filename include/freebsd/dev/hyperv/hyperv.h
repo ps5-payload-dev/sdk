@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2009-2012,2016 Microsoft Corp.
+ * Copyright (c) 2009-2012,2016-2017 Microsoft Corp.
  * Copyright (c) 2012 NetApp Inc.
  * Copyright (c) 2012 Citrix Inc.
  * All rights reserved.
@@ -25,7 +25,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/hyperv/include/hyperv.h 314003 2017-02-21 02:15:58Z sephe $
+ * $FreeBSD: releng/11.4/sys/dev/hyperv/include/hyperv.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _HYPERV_H_
@@ -90,6 +90,7 @@ int			hyperv_guid2str(const struct hyperv_guid *, char *,
  */
 extern hyperv_tc64_t	hyperv_tc64;
 extern u_int		hyperv_features;	/* CPUID_HV_MSR_ */
+extern u_int		hyperv_ver_major;
 
 #endif	/* _KERNEL */
 

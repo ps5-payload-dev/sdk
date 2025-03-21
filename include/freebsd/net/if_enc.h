@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/net/if_enc.h 291292 2015-11-25 07:31:59Z ae $
+ * $FreeBSD: releng/11.4/sys/net/if_enc.h 322741 2017-08-21 09:03:20Z ae $
  */
 
 #ifndef _NET_IF_ENC_H
@@ -33,6 +33,7 @@
 struct ipsec_ctx_data {
 	struct mbuf	**mp;
 	struct secasvar	*sav;
+	struct inpcb	*inp;
 	uint8_t		af;
 #define	IPSEC_ENC_BEFORE	0x01
 #define	IPSEC_ENC_AFTER		0x02

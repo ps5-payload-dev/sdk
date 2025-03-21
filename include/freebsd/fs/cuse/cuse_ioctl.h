@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.1/sys/fs/cuse/cuse_ioctl.h 292594 2015-12-22 09:55:44Z hselasky $ */
+/* $FreeBSD: releng/11.4/sys/fs/cuse/cuse_ioctl.h 325636 2017-11-10 08:42:37Z hselasky $ */
 /*-
  * Copyright (c) 2014 Hans Petter Selasky. All rights reserved.
  *
@@ -35,6 +35,7 @@
 #define	CUSE_BUF_MIN_PTR	0x10000UL
 #define	CUSE_BUF_MAX_PTR	0x20000UL
 #define	CUSE_ALLOC_UNIT_MAX	128	/* units */
+/* All memory allocations must be less than the following limit */
 #define	CUSE_ALLOC_PAGES_MAX	(((16UL * 1024UL * 1024UL) + PAGE_SIZE - 1) / PAGE_SIZE)
 
 struct cuse_dev;

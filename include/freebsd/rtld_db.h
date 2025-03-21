@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/lib/librtld_db/rtld_db.h 316713 2017-04-11 17:36:19Z markj $
+ * $FreeBSD: releng/11.4/lib/librtld_db/rtld_db.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _RTLD_DB_H_

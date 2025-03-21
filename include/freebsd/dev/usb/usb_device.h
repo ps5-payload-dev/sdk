@@ -1,6 +1,6 @@
-/* $FreeBSD: releng/11.1/sys/dev/usb/usb_device.h 305733 2016-09-12 10:14:30Z hselasky $ */
+/* $FreeBSD: releng/11.4/sys/dev/usb/usb_device.h 356680 2020-01-13 11:30:07Z hselasky $ */
 /*-
- * Copyright (c) 2008 Hans Petter Selasky. All rights reserved.
+ * Copyright (c) 2008-2019 Hans Petter Selasky. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -175,10 +175,22 @@ union usb_device_scratch {
 };
 
 /*
+ * Helper structure to keep track of USB device statistics.
+ */
+struct usb_device_statistics {
+	uint32_t uds_requests[4];
+};
+
+/*
  * The following structure defines an USB device. There exists one of
  * these structures for every USB device.
  */
 struct usb_device {
+	/* statistics */
+	struct usb_device_statistics stats_err;
+	struct usb_device_statistics stats_ok;
+  	struct usb_device_statistics stats_cancelled;
+
 	/* generic clear stall message */
 	struct usb_udev_msg cs_msg[2];
 	struct sx enum_sx;

@@ -35,7 +35,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/mac.h 166537 2007-02-06 16:24:57Z rwatson $
+ * $FreeBSD: releng/11.4/sys/sys/mac.h 331722 2018-03-29 02:50:57Z eadler $
  */
 /*
  * Userland interface for Mandatory Access Control.  Loosely based on the

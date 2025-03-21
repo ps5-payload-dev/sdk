@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)signal.h	8.3 (Berkeley) 3/30/94
- * $FreeBSD: releng/11.1/include/signal.h 315282 2017-03-14 20:14:57Z pfg $
+ * $FreeBSD: releng/11.4/include/signal.h 355898 2019-12-19 02:09:16Z kevans $
  */
 
 #ifndef _SIGNAL_H_
@@ -120,7 +120,10 @@ void	psignal(int, const char *);
 #endif
 
 #if __BSD_VISIBLE
+int	sigandset(sigset_t *dest, const sigset_t *left, const sigset_t *right);
 int	sigblock(int);
+int	sigisemptyset(const sigset_t *set);
+int	sigorset(sigset_t *dest, const sigset_t *left, const sigset_t *right);
 int	sigreturn(const struct __ucontext *);
 int	sigsetmask(int);
 int	sigstack(const struct sigstack *, struct sigstack *);

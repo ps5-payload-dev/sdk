@@ -25,7 +25,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/imgact_elf.h 316576 2017-04-06 15:19:18Z kib $
+ * $FreeBSD: releng/11.4/sys/sys/imgact_elf.h 346821 2019-04-28 13:28:05Z dchagin $
  */
 
 #ifndef _SYS_IMGACT_ELF_H_
@@ -61,7 +61,7 @@ typedef struct {
 	Elf_Note	hdr;
 	const char *	vendor;
 	int		flags;
-	boolean_t	(*trans_osrel)(const Elf_Note *, int32_t *);
+	bool		(*trans_osrel)(const Elf_Note *, int32_t *);
 #define	BN_CAN_FETCH_OSREL	0x0001	/* Deprecated. */
 #define	BN_TRANSLATE_OSREL	0x0002	/* Use trans_osrel to fetch osrel */
 		/* after checking the image ABI specification, if needed. */

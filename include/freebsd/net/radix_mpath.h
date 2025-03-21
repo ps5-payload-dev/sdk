@@ -32,7 +32,7 @@
  * BE LIABLE FOR ANY INFRINGEMENT OF ANY OTHERS' INTELLECTUAL
  * PROPERTIES.
  */
-/* $FreeBSD: releng/11.1/sys/net/radix_mpath.h 294706 2016-01-25 06:33:15Z melifaro $ */
+/* $FreeBSD: releng/11.4/sys/net/radix_mpath.h 331722 2018-03-29 02:50:57Z eadler $ */
 
 #ifndef _NET_RADIX_MPATH_H_
 #define	_NET_RADIX_MPATH_H_

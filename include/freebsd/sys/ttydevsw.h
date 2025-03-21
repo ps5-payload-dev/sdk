@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/ttydevsw.h 294753 2016-01-25 22:58:06Z marius $
+ * $FreeBSD: releng/11.4/sys/sys/ttydevsw.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_TTYDEVSW_H_

@@ -29,7 +29,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/fs/nfs/nfsrvcache.h 269347 2014-07-31 19:24:44Z kib $
+ * $FreeBSD: releng/11.4/sys/fs/nfs/nfsrvcache.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _NFS_NFSRVCACHE_H_

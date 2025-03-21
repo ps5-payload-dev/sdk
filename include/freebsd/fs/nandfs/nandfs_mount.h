@@ -31,7 +31,7 @@
  *
  * From: NetBSD: nilfs_mount.h,v 1.1 2009/07/18 16:31:42 reinoud
  *
- * $FreeBSD: releng/11.1/sys/fs/nandfs/nandfs_mount.h 235537 2012-05-17 10:11:18Z gber $
+ * $FreeBSD: releng/11.4/sys/fs/nandfs/nandfs_mount.h 235537 2012-05-17 10:11:18Z gber $
  */
 
 #ifndef _FS_NANDFS_NANDFS_MOUNT_H_

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/netsmb/netbios.h 263140 2014-03-14 02:58:48Z glebius $
+ * $FreeBSD: releng/11.4/sys/netsmb/netbios.h 263140 2014-03-14 02:58:48Z glebius $
  */
 #ifndef _NETSMB_NETBIOS_H_
 #define	_NETSMB_NETBIOS_H_

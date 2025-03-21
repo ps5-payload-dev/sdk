@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/vm/_vm_radix.h 318716 2017-05-23 07:27:30Z markj $
+ * $FreeBSD: releng/11.4/sys/vm/_vm_radix.h 321513 2017-07-26 06:52:45Z kib $
  */
 
 #ifndef __VM_RADIX_H_
@@ -38,14 +38,4 @@ struct vm_radix {
 	uintptr_t	rt_root;
 };
 
-#ifdef _KERNEL
-
-static __inline boolean_t
-vm_radix_is_empty(struct vm_radix *rtree)
-{
-
-	return (rtree->rt_root == 0);
-}
-
-#endif /* _KERNEL */
 #endif /* !__VM_RADIX_H_ */

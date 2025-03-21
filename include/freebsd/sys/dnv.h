@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/dnv.h 285130 2015-07-04 10:33:33Z oshogbo $
+ * $FreeBSD: releng/11.4/sys/sys/dnv.h 285130 2015-07-04 10:33:33Z oshogbo $
  */
 
 #ifndef	_DNV_H_

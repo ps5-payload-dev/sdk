@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/stack.h 287645 2015-09-11 03:54:37Z markj $
+ * $FreeBSD: releng/11.4/sys/sys/stack.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_STACK_H_

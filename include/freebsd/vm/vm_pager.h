@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)vm_pager.h	8.4 (Berkeley) 1/12/94
- * $FreeBSD: releng/11.1/sys/vm/vm_pager.h 312073 2017-01-13 13:45:34Z kib $
+ * $FreeBSD: releng/11.4/sys/vm/vm_pager.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 /*
@@ -98,6 +98,7 @@ extern struct pagerops mgtdevicepagerops;
 
 #define	VM_PAGER_PUT_SYNC		0x0001
 #define	VM_PAGER_PUT_INVAL		0x0002
+#define	VM_PAGER_PUT_NOREUSE		0x0004
 #define VM_PAGER_CLUSTER_OK		0x0008
 
 #ifdef _KERNEL

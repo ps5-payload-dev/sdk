@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.1/include/gssapi.h 153838 2005-12-29 14:40:22Z dfr $ */
+/* $FreeBSD: releng/11.4/include/gssapi.h 153838 2005-12-29 14:40:22Z dfr $ */
 #ifdef __GNUC__
 #warning "this file includes <gssapi.h> which is deprecated, use <gssapi/gssapi.h> instead"
 #endif

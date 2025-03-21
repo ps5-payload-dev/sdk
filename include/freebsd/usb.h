@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.1/lib/libusb/usb.h 248236 2013-03-13 12:23:14Z hselasky $ */
+/* $FreeBSD: releng/11.4/lib/libusb/usb.h 331722 2018-03-29 02:50:57Z eadler $ */
 /*-
  * Copyright (c) 2008 Hans Petter Selasky. All rights reserved.
  *

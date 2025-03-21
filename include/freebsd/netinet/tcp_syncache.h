@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)tcp_var.h	8.4 (Berkeley) 5/24/95
- * $FreeBSD: releng/11.1/sys/netinet/tcp_syncache.h 319654 2017-06-07 12:50:54Z tuexen $
+ * $FreeBSD: releng/11.4/sys/netinet/tcp_syncache.h 347153 2019-05-05 12:11:58Z tuexen $
  */
 
 #ifndef _NETINET_TCP_SYNCACHE_H_
@@ -54,7 +54,6 @@ struct syncache {
 	int		sc_rxttime;		/* retransmit time */
 	u_int16_t	sc_rxmits;		/* retransmit counter */
 	u_int32_t	sc_tsreflect;		/* timestamp to reflect */
-	u_int32_t	sc_ts;			/* our timestamp to send */
 	u_int32_t	sc_tsoff;		/* ts offset w/ syncookies */
 	u_int32_t	sc_flowlabel;		/* IPv6 flowlabel */
 	tcp_seq		sc_irs;			/* seq from peer */

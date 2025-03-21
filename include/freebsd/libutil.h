@@ -33,7 +33,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/lib/libutil/libutil.h 283984 2015-06-04 08:00:11Z bapt $
+ * $FreeBSD: releng/11.4/lib/libutil/libutil.h 356461 2020-01-07 18:42:53Z ian $
  */
 
 #ifndef _LIBUTIL_H_
@@ -152,6 +152,7 @@ int	pw_edit(int _notsetuid);
 int	pw_equal(const struct passwd *_pw1, const struct passwd *_pw2);
 void	pw_fini(void);
 int	pw_init(const char *_dir, const char *_master);
+void	pw_initpwd(struct passwd *_pw);
 char	*pw_make(const struct passwd *_pw);
 char	*pw_make_v7(const struct passwd *_pw);
 int	pw_mkdb(const char *_user);

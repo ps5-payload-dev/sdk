@@ -26,7 +26,7 @@
  * SUCH DAMAGE.
  *
  *	from BSDI $Id: ktr.h,v 1.10.2.7 2000/03/16 21:44:42 cp Exp $
- * $FreeBSD: releng/11.1/sys/sys/ktr_class.h 289979 2015-10-26 02:21:19Z cem $
+ * $FreeBSD: releng/11.4/sys/sys/ktr_class.h 332078 2018-04-05 15:52:20Z markj $
  */
 
 #ifndef _SYS_KTR_CLASS_H_
@@ -63,7 +63,7 @@
 #define	KTR_VM		0x00100000		/* The virtual memory system */
 #define	KTR_INET	0x00200000		/* IPv4 stack */
 #define	KTR_RUNQ	0x00400000		/* Run queue */
-#define	KTR_CONTENTION	0x00800000		/* Lock contention */
+#define	KTR_SPARE5	0x00800000
 #define	KTR_UMA		0x01000000		/* UMA slab allocator */
 #define	KTR_CALLOUT	0x02000000		/* Callouts and timeouts */
 #define	KTR_GEOM	0x04000000		/* GEOM I/O events */

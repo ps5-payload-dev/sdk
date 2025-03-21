@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/cam/cam_periph.h 316139 2017-03-29 15:25:34Z mav $
+ * $FreeBSD: releng/11.4/sys/cam/cam_periph.h 355341 2019-12-03 16:52:39Z mav $
  */
 
 #ifndef _CAM_CAM_PERIPH_H
@@ -129,6 +129,8 @@ struct cam_periph {
 #define CAM_PERIPH_RUN_TASK		0x40
 #define CAM_PERIPH_FREE			0x80
 #define CAM_PERIPH_ANNOUNCED		0x100
+#define CAM_PERIPH_RECOVERY_WAIT	0x200
+#define CAM_PERIPH_RECOVERY_WAIT_FAILED	0x400
 	uint32_t		 scheduled_priority;
 	uint32_t		 immediate_priority;
 	int			 periph_allocating;
@@ -146,6 +148,7 @@ struct cam_periph {
 
 struct cam_periph_map_info {
 	int		num_bufs_used;
+	void		*orig[CAM_PERIPH_MAXMAPS];
 	struct buf	*bp[CAM_PERIPH_MAXMAPS];
 };
 

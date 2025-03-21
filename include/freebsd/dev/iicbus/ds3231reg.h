@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/iicbus/ds3231reg.h 300421 2016-05-22 13:58:32Z loos $
+ * $FreeBSD: releng/11.4/sys/dev/iicbus/ds3231reg.h 323467 2017-09-11 22:21:15Z ian $
  */
 
 /*
@@ -38,7 +38,10 @@
 #define	DS3231_MINS		0x01
 #define	DS3231_MINS_MASK		0x7f
 #define	DS3231_HOUR		0x02
-#define	DS3231_HOUR_MASK		0x3f
+#define	DS3231_HOUR_MASK_12HR		0x3f
+#define	DS3231_HOUR_MASK_24HR		0x1f
+#define	DS3231_HOUR_IS_PM		0x20
+#define	DS3231_HOUR_USE_AMPM		0x40
 #define	DS3231_WEEKDAY		0x03
 #define	DS3231_WEEKDAY_MASK		0x07
 #define	DS3231_DATE		0x04

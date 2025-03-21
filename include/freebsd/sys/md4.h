@@ -1,5 +1,5 @@
 /* MD4.H - header file for MD4C.C
- * $FreeBSD: releng/11.1/sys/sys/md4.h 309023 2016-11-22 20:28:17Z asomers $
+ * $FreeBSD: releng/11.4/sys/sys/md4.h 309023 2016-11-22 20:28:17Z asomers $
  */
 
 /*-

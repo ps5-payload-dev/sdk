@@ -54,7 +54,7 @@
 #define _MFIVAR_H
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: releng/11.1/sys/dev/mfi/mfivar.h 266848 2014-05-29 16:20:34Z kib $");
+__FBSDID("$FreeBSD: releng/11.4/sys/dev/mfi/mfivar.h 331722 2018-03-29 02:50:57Z eadler $");
 
 #include <sys/lock.h>
 #include <sys/sx.h>

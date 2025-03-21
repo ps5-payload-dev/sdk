@@ -24,7 +24,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/lib/libthread_db/thread_db.h 209689 2010-07-04 12:08:04Z kib $
+ * $FreeBSD: releng/11.4/lib/libthread_db/thread_db.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _THREAD_DB_H_

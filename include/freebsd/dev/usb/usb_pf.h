@@ -31,7 +31,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/usb/usb_pf.h 220301 2011-04-03 20:03:45Z hselasky $
+ * $FreeBSD: releng/11.4/sys/dev/usb/usb_pf.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _DEV_USB_PF_H

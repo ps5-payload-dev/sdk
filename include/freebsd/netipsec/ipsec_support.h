@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/netipsec/ipsec_support.h 315514 2017-03-18 22:04:20Z ae $
+ * $FreeBSD: releng/11.4/sys/netipsec/ipsec_support.h 315514 2017-03-18 22:04:20Z ae $
  */
 
 #ifndef _NETIPSEC_IPSEC_SUPPORT_H_

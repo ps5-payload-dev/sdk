@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.1/sys/netipsec/ipsec6.h 315514 2017-03-18 22:04:20Z ae $	*/
+/*	$FreeBSD: releng/11.4/sys/netipsec/ipsec6.h 331722 2018-03-29 02:50:57Z eadler $	*/
 /*	$KAME: ipsec.h,v 1.44 2001/03/23 08:08:47 itojun Exp $	*/
 
 /*-
@@ -60,7 +60,7 @@ VNET_DECLARE(int, ip6_ipsec_ecn);
 
 struct inpcb;
 struct secpolicy *ipsec6_checkpolicy(const struct mbuf *,
-    struct inpcb *, int *);
+    struct inpcb *, int *, int);
 
 void ipsec6_setsockaddrs(const struct mbuf *, union sockaddr_union *,
     union sockaddr_union *);

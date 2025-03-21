@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)msgbuf.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: releng/11.1/sys/sys/msgbuf.h 233135 2012-03-19 00:36:32Z eadler $
+ * $FreeBSD: releng/11.4/sys/sys/msgbuf.h 338109 2018-08-20 17:27:30Z kevans $
  */
 
 #ifndef _SYS_MSGBUF_H_
@@ -66,7 +66,7 @@ extern struct	mtx msgbuf_lock;
 
 void	msgbufinit(void *ptr, int size);
 void	msgbuf_addchar(struct msgbuf *mbp, int c);
-void	msgbuf_addstr(struct msgbuf *mbp, int pri, char *str, int filter_cr);
+void	msgbuf_addstr(struct msgbuf *mbp, int pri, const char *str, int filter_cr);
 void	msgbuf_clear(struct msgbuf *mbp);
 void	msgbuf_copy(struct msgbuf *src, struct msgbuf *dst);
 int	msgbuf_getbytes(struct msgbuf *mbp, char *buf, int buflen);

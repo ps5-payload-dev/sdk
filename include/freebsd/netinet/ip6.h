@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.1/sys/netinet/ip6.h 272559 2014-10-05 06:28:53Z rwatson $	*/
+/*	$FreeBSD: releng/11.4/sys/netinet/ip6.h 346755 2019-04-26 17:01:56Z mav $	*/
 /*	$KAME: ip6.h,v 1.18 2001/03/29 05:34:30 itojun Exp $	*/
 
 /*-
@@ -102,6 +102,7 @@ struct ip6_hdr {
 #define IPV6_FLOWLABEL_MASK	0xffff0f00	/* flow label (20 bits) */
 #endif /* LITTLE_ENDIAN */
 #endif
+#define IPV6_FLOWLABEL_LEN	20
 #if 1
 /* ECN bits proposed by Sally Floyd */
 #define IP6TOS_CE		0x01	/* congestion experienced */

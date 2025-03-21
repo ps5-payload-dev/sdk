@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.1/sys/opencrypto/xform_auth.h 292963 2015-12-30 22:43:07Z allanjude $	*/
+/*	$FreeBSD: releng/11.4/sys/opencrypto/xform_auth.h 292963 2015-12-30 22:43:07Z allanjude $	*/
 /*	$OpenBSD: xform.h,v 1.8 2001/08/28 12:20:43 ben Exp $	*/
 
 /*-

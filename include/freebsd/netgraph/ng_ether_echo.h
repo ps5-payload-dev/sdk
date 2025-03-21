@@ -37,7 +37,7 @@
  *
  * Author: Archie Cobbs <archie@freebsd.org>
  *
- * $FreeBSD: releng/11.1/sys/netgraph/ng_ether_echo.h 186481 2008-12-25 00:01:29Z julian $
+ * $FreeBSD: releng/11.4/sys/netgraph/ng_ether_echo.h 186481 2008-12-25 00:01:29Z julian $
  * $Whistle: ng_echo.h,v 1.3 1999/01/20 00:22:12 archie Exp $
  */
 

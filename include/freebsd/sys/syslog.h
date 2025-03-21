@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)syslog.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: releng/11.1/sys/sys/syslog.h 249311 2013-04-09 16:16:34Z ed $
+ * $FreeBSD: releng/11.4/sys/sys/syslog.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_SYSLOG_H_

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/lib/libmemstat/memstat.h 261726 2014-02-10 20:09:10Z glebius $
+ * $FreeBSD: releng/11.4/lib/libmemstat/memstat.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _MEMSTAT_H_

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/fs/nfs/nfsclstate.h 317393 2017-04-24 23:47:12Z rmacklem $
+ * $FreeBSD: releng/11.4/sys/fs/nfs/nfsclstate.h 324997 2017-10-25 19:27:12Z rmacklem $
  */
 
 #ifndef _NFS_NFSCLSTATE_H_
@@ -91,6 +91,7 @@ struct nfsclds {
 #define	NFSCLDS_HASWRITEVERF	0x0001
 #define	NFSCLDS_MDS		0x0002
 #define	NFSCLDS_DS		0x0004
+#define	NFSCLDS_CLOSED		0x0008
 
 struct nfsclclient {
 	LIST_ENTRY(nfsclclient) nfsc_list;

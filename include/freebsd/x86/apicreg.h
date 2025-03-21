@@ -22,7 +22,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/x86/include/apicreg.h 316831 2017-04-14 14:01:35Z avg $
+ * $FreeBSD: releng/11.4/sys/x86/include/apicreg.h 323608 2017-09-15 09:00:45Z kib $
  */
 
 #ifndef _X86_APICREG_H_
@@ -468,6 +468,8 @@ typedef struct IOAPIC ioapic_t;
 /* window register offset */
 #define IOAPIC_WINDOW		0x10
 #define IOAPIC_EOIR		0x40
+
+#define	IOAPIC_WND_SIZE		0x50
 
 /* indexes into IO APIC */
 #define IOAPIC_ID		0x00

@@ -28,7 +28,7 @@
  *
  *	@(#)socketvar.h	8.3 (Berkeley) 2/19/95
  *
- * $FreeBSD: releng/11.1/sys/sys/socketvar.h 315312 2017-03-15 16:38:39Z dchagin $
+ * $FreeBSD: releng/11.4/sys/sys/socketvar.h 338617 2018-09-12 18:52:18Z sobomax $
  */
 
 #ifndef _SYS_SOCKETVAR_H_
@@ -126,6 +126,8 @@ struct socket {
 	 */
 	int so_fibnum;		/* routing domain for this socket */
 	uint32_t so_user_cookie;
+
+	int so_ts_clock;	/* type of the clock used for timestamps */
 
 	void *so_pspare[2];	/* packet pacing / general use */
 	int so_ispare[2];	/* packet pacing / general use */

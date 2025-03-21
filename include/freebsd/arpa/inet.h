@@ -52,7 +52,7 @@
 /*%
  *	@(#)inet.h	8.1 (Berkeley) 6/2/93
  *	$Id: inet.h,v 1.3 2005/04/27 04:56:16 sra Exp $
- * $FreeBSD: releng/11.1/include/arpa/inet.h 269867 2014-08-12 12:36:06Z ume $
+ * $FreeBSD: releng/11.4/include/arpa/inet.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _ARPA_INET_H_

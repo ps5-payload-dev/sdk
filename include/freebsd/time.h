@@ -35,7 +35,7 @@
  */
 
 /*
- * $FreeBSD: releng/11.1/include/time.h 317618 2017-05-01 01:36:54Z vangyzen $
+ * $FreeBSD: releng/11.4/include/time.h 332135 2018-04-06 19:17:59Z kevans $
  */
 
 #ifndef _TIME_H_
@@ -144,7 +144,9 @@ __BEGIN_DECLS
 char *asctime(const struct tm *);
 clock_t clock(void);
 char *ctime(const time_t *);
+#ifndef _STANDALONE
 double difftime(time_t, time_t);
+#endif
 /* XXX missing: getdate() */
 struct tm *gmtime(const time_t *);
 struct tm *localtime(const time_t *);

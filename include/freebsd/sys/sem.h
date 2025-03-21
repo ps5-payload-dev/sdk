@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.1/sys/sys/sem.h 286088 2015-07-30 18:59:01Z rodrigc $ */
+/* $FreeBSD: releng/11.4/sys/sys/sem.h 347995 2019-05-20 16:31:45Z kib $ */
 /*	$NetBSD: sem.h,v 1.5 1994/06/29 06:45:15 cgd Exp $	*/
 
 /*
@@ -10,6 +10,9 @@
 #ifndef _SYS_SEM_H_
 #define _SYS_SEM_H_
 
+#ifdef _WANT_SYSVSEM_INTERNALS
+#define	_WANT_SYSVIPC_INTERNALS
+#endif
 #include <sys/ipc.h>
 
 #ifndef _PID_T_DECLARED
@@ -101,8 +104,7 @@ union semun {
 #define SEM_A		IPC_W	/* alter permission */
 #define SEM_R		IPC_R	/* read permission */
 
-#ifdef _KERNEL
-
+#if defined(_KERNEL) || defined(_WANT_SYSVSEM_INTERNALS)
 /*
  * semaphore info struct
  */
@@ -117,7 +119,6 @@ struct seminfo {
 		semvmx,		/* semaphore maximum value */
 		semaem;		/* adjust on exit max value */
 };
-extern struct seminfo	seminfo;
 
 /*
  * Kernel wrapper for the user-level structure
@@ -131,15 +132,17 @@ struct semid_kernel {
 /* internal "mode" bits */
 #define	SEM_ALLOC	01000	/* semaphore is allocated */
 #define	SEM_DEST	02000	/* semaphore will be destroyed on last detach */
+#endif
 
+#ifdef _KERNEL
+extern struct seminfo	seminfo;
 /*
  * Process sem_undo vectors at proc exit.
  */
 void	semexit(struct proc *p);
 
-#endif /* _KERNEL */
+#else /* !_KERNEL */
 
-#if !defined(_KERNEL) || defined(_WANT_SEM_PROTOTYPES)
 __BEGIN_DECLS
 #if __BSD_VISIBLE
 int semsys(int, ...);
@@ -149,6 +152,6 @@ int semget(key_t, int, int);
 int semop(int, struct sembuf *, size_t);
 __END_DECLS
 
-#endif /* !_KERNEL || _WANT_SEM_PROTOTYPES */
+#endif /* !_KERNEL */
 
 #endif /* !_SYS_SEM_H_ */

@@ -33,7 +33,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  * 
- * $FreeBSD: releng/11.1/sys/dev/firewire/if_fwipvar.h 170374 2007-06-06 14:31:36Z simokawa $
+ * $FreeBSD: releng/11.4/sys/dev/firewire/if_fwipvar.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _NET_IF_FWIPVAR_H_

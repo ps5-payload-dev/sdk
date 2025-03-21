@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/net/toeplitz.h 277331 2015-01-18 18:06:40Z adrian $
+ * $FreeBSD: releng/11.4/sys/net/toeplitz.h 277331 2015-01-18 18:06:40Z adrian $
  */
 
 #ifndef _NETINET_TOEPLITZ_H_

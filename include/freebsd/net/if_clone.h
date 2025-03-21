@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	From: @(#)if.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: releng/11.1/sys/net/if_clone.h 279538 2015-03-02 20:00:03Z hrs $
+ * $FreeBSD: releng/11.4/sys/net/if_clone.h 357326 2020-01-31 10:34:38Z kp $
  */
 
 #ifndef	_NET_IF_CLONE_H_
@@ -72,7 +72,8 @@ int	if_clone_list(struct if_clonereq *);
 struct if_clone *if_clone_findifc(struct ifnet *);
 void	if_clone_addgroup(struct ifnet *, struct if_clone *);
 
-/* The below interface used only by epair(4). */
+/* The below interfaces are used only by epair(4). */
+void	if_clone_addif(struct if_clone *, struct ifnet *);
 int	if_clone_destroyif(struct if_clone *, struct ifnet *);
 
 #endif /* _KERNEL */

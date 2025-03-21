@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/net/sff8436.h 292831 2015-12-28 09:26:07Z melifaro $
+ * $FreeBSD: releng/11.4/sys/net/sff8436.h 292831 2015-12-28 09:26:07Z melifaro $
  */
 
 /*

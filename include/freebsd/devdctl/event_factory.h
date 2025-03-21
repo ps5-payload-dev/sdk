@@ -29,7 +29,7 @@
  *
  * Authors: Justin T. Gibbs     (Spectra Logic Corporation)
  *
- * $FreeBSD: releng/11.1/lib/libdevdctl/event_factory.h 300906 2016-05-28 17:43:40Z asomers $
+ * $FreeBSD: releng/11.4/lib/libdevdctl/event_factory.h 300906 2016-05-28 17:43:40Z asomers $
  */
 
 /**

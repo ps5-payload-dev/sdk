@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/geom/raid/g_raid.h 267992 2014-06-28 03:56:17Z hselasky $
+ * $FreeBSD: releng/11.4/sys/geom/raid/g_raid.h 267992 2014-06-28 03:56:17Z hselasky $
  */
 
 #ifndef	_G_RAID_H_

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/netinet/tcp_pcap.h 302374 2016-07-06 16:17:13Z jtl $
+ * $FreeBSD: releng/11.4/sys/netinet/tcp_pcap.h 302374 2016-07-06 16:17:13Z jtl $
  */
 
 #ifndef _NETINET_TCP_PCAP_H_

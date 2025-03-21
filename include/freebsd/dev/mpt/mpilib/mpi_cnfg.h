@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.1/sys/dev/mpt/mpilib/mpi_cnfg.h 298955 2016-05-03 03:41:25Z pfg $ */
+/* $FreeBSD: releng/11.4/sys/dev/mpt/mpilib/mpi_cnfg.h 331722 2018-03-29 02:50:57Z eadler $ */
 /*-
  * Copyright (c) 2000-2010, LSI Logic Corporation and its contributors.
  * All rights reserved.

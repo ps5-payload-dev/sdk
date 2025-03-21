@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/include/cpio.h 101138 2002-08-01 07:18:38Z mike $
+ * $FreeBSD: releng/11.4/include/cpio.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _CPIO_H_

@@ -26,7 +26,7 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/include/malloc_np.h 296221 2016-02-29 19:10:32Z jasone $
+ * $FreeBSD: releng/11.4/include/malloc_np.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _MALLOC_NP_H_

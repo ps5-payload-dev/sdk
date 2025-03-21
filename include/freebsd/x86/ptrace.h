@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ptrace.h	8.1 (Berkeley) 6/11/93
- * $FreeBSD: releng/11.1/sys/x86/include/ptrace.h 284919 2015-06-29 07:07:24Z kib $
+ * $FreeBSD: releng/11.4/sys/x86/include/ptrace.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _MACHINE_PTRACE_H_

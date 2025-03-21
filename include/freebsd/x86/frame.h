@@ -31,7 +31,7 @@
  * SUCH DAMAGE.
  *
  *	from: @(#)frame.h	5.2 (Berkeley) 1/18/91
- * $FreeBSD: releng/11.1/sys/x86/include/frame.h 308418 2016-11-07 12:10:17Z kib $
+ * $FreeBSD: releng/11.4/sys/x86/include/frame.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _MACHINE_FRAME_H_

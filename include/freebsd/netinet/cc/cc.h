@@ -35,7 +35,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/netinet/cc/cc.h 294931 2016-01-27 17:59:39Z glebius $
+ * $FreeBSD: releng/11.4/sys/netinet/cc/cc.h 341503 2018-12-04 22:25:24Z tuexen $
  */
 
 /*
@@ -174,5 +174,7 @@ extern struct rwlock cc_list_lock;
 #define	CC_LIST_WLOCK()		rw_wlock(&cc_list_lock)
 #define	CC_LIST_WUNLOCK()	rw_wunlock(&cc_list_lock)
 #define	CC_LIST_LOCK_ASSERT()	rw_assert(&cc_list_lock, RA_LOCKED)
+
+#define CC_ALGOOPT_LIMIT	2048
 
 #endif /* _NETINET_CC_CC_H_ */

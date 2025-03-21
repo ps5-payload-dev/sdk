@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/netgraph/ng_tcpmss.h 147231 2005-06-10 08:02:34Z glebius $
+ * $FreeBSD: releng/11.4/sys/netgraph/ng_tcpmss.h 147231 2005-06-10 08:02:34Z glebius $
  */
 
 #ifndef _NETGRAPH_TCPMSS_H_

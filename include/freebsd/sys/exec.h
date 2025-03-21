@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)exec.h	8.3 (Berkeley) 1/21/94
- * $FreeBSD: releng/11.1/sys/sys/exec.h 299482 2016-05-11 21:14:36Z emaste $
+ * $FreeBSD: releng/11.4/sys/sys/exec.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_EXEC_H_

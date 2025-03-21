@@ -26,7 +26,7 @@
  *
  * Author: Ruslan Ermilov <ru@FreeBSD.org>
  *
- * $FreeBSD: releng/11.1/sys/netgraph/ng_vlan.h 232825 2012-03-11 19:08:56Z adrian $
+ * $FreeBSD: releng/11.4/sys/netgraph/ng_vlan.h 232825 2012-03-11 19:08:56Z adrian $
  */
 
 #ifndef _NETGRAPH_NG_VLAN_H_

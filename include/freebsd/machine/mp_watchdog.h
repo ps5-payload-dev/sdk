@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/amd64/include/mp_watchdog.h 133759 2004-08-15 18:02:09Z rwatson $
+ * $FreeBSD: releng/11.4/sys/amd64/include/mp_watchdog.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef	_MACHINE_MP_WATCHDOG_H_

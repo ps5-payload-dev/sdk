@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)in_pcb.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: releng/11.1/sys/netinet/in_pcb.h 302153 2016-06-23 21:07:15Z np $
+ * $FreeBSD: releng/11.4/sys/netinet/in_pcb.h 343432 2019-01-25 15:25:53Z tuexen $
  */
 
 #ifndef _NETINET_IN_PCB_H_
@@ -120,6 +120,7 @@ struct in_conninfo {
  * Flags for inc_flags.
  */
 #define	INC_ISIPV6	0x01
+#define	INC_IPV6MINMTU	0x02
 
 #define	inc_isipv6	inc_flags	/* temp compatibility */
 #define	inc_fport	inc_ie.ie_fport

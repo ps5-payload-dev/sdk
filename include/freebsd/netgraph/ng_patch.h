@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/netgraph/ng_patch.h 310625 2016-12-27 08:31:40Z julian $
+ * $FreeBSD: releng/11.4/sys/netgraph/ng_patch.h 310625 2016-12-27 08:31:40Z julian $
  */
 
 #ifndef _NETGRAPH_NG_PATCH_H_

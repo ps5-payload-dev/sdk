@@ -1,5 +1,5 @@
 /*	$NetBSD: execinfo.h,v 1.2 2012/06/09 21:22:17 christos Exp $	*/
-/*	$FreeBSD: releng/11.1/contrib/libexecinfo/execinfo.h 255177 2013-09-03 13:38:41Z emaste $ */
+/*	$FreeBSD: releng/11.4/contrib/libexecinfo/execinfo.h 255177 2013-09-03 13:38:41Z emaste $ */
 
 /*-
  * Copyright (c) 2012 The NetBSD Foundation, Inc.

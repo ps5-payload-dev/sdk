@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/devicestat.h 256603 2013-10-16 09:12:40Z mav $
+ * $FreeBSD: releng/11.4/sys/sys/devicestat.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _DEVICESTAT_H

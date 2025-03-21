@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  *	$OpenBSD: pfvar.h,v 1.282 2009/01/29 15:12:28 pyr Exp $
- *	$FreeBSD: releng/11.1/sys/net/pfvar.h 302156 2016-06-23 21:34:38Z bz $
+ *	$FreeBSD: releng/11.4/sys/net/pfvar.h 345691 2019-03-29 14:34:50Z kp $
  */
 
 #ifndef _NET_PFVAR_H_
@@ -36,8 +36,11 @@
 #include <sys/param.h>
 #include <sys/queue.h>
 #include <sys/counter.h>
+#include <sys/cpuset.h>
 #include <sys/malloc.h>
 #include <sys/refcount.h>
+#include <sys/lock.h>
+#include <sys/rmlock.h>
 #include <sys/tree.h>
 #include <vm/uma.h>
 
@@ -145,14 +148,15 @@ extern struct mtx pf_unlnkdrules_mtx;
 #define	PF_UNLNKDRULES_LOCK()	mtx_lock(&pf_unlnkdrules_mtx)
 #define	PF_UNLNKDRULES_UNLOCK()	mtx_unlock(&pf_unlnkdrules_mtx)
 
-extern struct rwlock pf_rules_lock;
-#define	PF_RULES_RLOCK()	rw_rlock(&pf_rules_lock)
-#define	PF_RULES_RUNLOCK()	rw_runlock(&pf_rules_lock)
-#define	PF_RULES_WLOCK()	rw_wlock(&pf_rules_lock)
-#define	PF_RULES_WUNLOCK()	rw_wunlock(&pf_rules_lock)
-#define	PF_RULES_ASSERT()	rw_assert(&pf_rules_lock, RA_LOCKED)
-#define	PF_RULES_RASSERT()	rw_assert(&pf_rules_lock, RA_RLOCKED)
-#define	PF_RULES_WASSERT()	rw_assert(&pf_rules_lock, RA_WLOCKED)
+extern struct rmlock pf_rules_lock;
+#define	PF_RULES_RLOCK_TRACKER	struct rm_priotracker _pf_rules_tracker
+#define	PF_RULES_RLOCK()	rm_rlock(&pf_rules_lock, &_pf_rules_tracker)
+#define	PF_RULES_RUNLOCK()	rm_runlock(&pf_rules_lock, &_pf_rules_tracker)
+#define	PF_RULES_WLOCK()	rm_wlock(&pf_rules_lock)
+#define	PF_RULES_WUNLOCK()	rm_wunlock(&pf_rules_lock)
+#define	PF_RULES_ASSERT()	rm_assert(&pf_rules_lock, RA_LOCKED)
+#define	PF_RULES_RASSERT()	rm_assert(&pf_rules_lock, RA_RLOCKED)
+#define	PF_RULES_WASSERT()	rm_assert(&pf_rules_lock, RA_WLOCKED)
 
 #define	PF_MODVER	1
 #define	PFLOG_MODVER	1
@@ -816,13 +820,21 @@ typedef	void		pfsync_update_state_t(struct pf_state *);
 typedef	void		pfsync_delete_state_t(struct pf_state *);
 typedef void		pfsync_clear_states_t(u_int32_t, const char *);
 typedef int		pfsync_defer_t(struct pf_state *, struct mbuf *);
+typedef void		pfsync_detach_ifnet_t(struct ifnet *);
 
-extern pfsync_state_import_t	*pfsync_state_import_ptr;
-extern pfsync_insert_state_t	*pfsync_insert_state_ptr;
-extern pfsync_update_state_t	*pfsync_update_state_ptr;
-extern pfsync_delete_state_t	*pfsync_delete_state_ptr;
-extern pfsync_clear_states_t	*pfsync_clear_states_ptr;
-extern pfsync_defer_t		*pfsync_defer_ptr;
+VNET_DECLARE(pfsync_state_import_t *, pfsync_state_import_ptr);
+#define V_pfsync_state_import_ptr	VNET(pfsync_state_import_ptr)
+VNET_DECLARE(pfsync_insert_state_t *, pfsync_insert_state_ptr);
+#define V_pfsync_insert_state_ptr	VNET(pfsync_insert_state_ptr)
+VNET_DECLARE(pfsync_update_state_t *, pfsync_update_state_ptr);
+#define V_pfsync_update_state_ptr	VNET(pfsync_update_state_ptr)
+VNET_DECLARE(pfsync_delete_state_t *, pfsync_delete_state_ptr);
+#define V_pfsync_delete_state_ptr	VNET(pfsync_delete_state_ptr)
+VNET_DECLARE(pfsync_clear_states_t *, pfsync_clear_states_ptr);
+#define V_pfsync_clear_states_ptr	VNET(pfsync_clear_states_ptr)
+VNET_DECLARE(pfsync_defer_t *, pfsync_defer_ptr);
+#define V_pfsync_defer_ptr		VNET(pfsync_defer_ptr)
+extern pfsync_detach_ifnet_t	*pfsync_detach_ifnet_ptr;
 
 void			pfsync_state_export(struct pfsync_state *,
 			    struct pf_state *);
@@ -1001,6 +1013,17 @@ struct pfr_tstats {
 	int		 pfrts_cnt;
 	int		 pfrts_refcnt[PFR_REFCNT_MAX];
 };
+
+struct pfr_ktstats {
+	struct pfr_table pfrts_t;
+	counter_u64_t	 pfrkts_packets[PFR_DIR_MAX][PFR_OP_TABLE_MAX];
+	counter_u64_t	 pfrkts_bytes[PFR_DIR_MAX][PFR_OP_TABLE_MAX];
+	counter_u64_t	 pfrkts_match;
+	counter_u64_t	 pfrkts_nomatch;
+	long		 pfrkts_tzero;
+	int		 pfrkts_cnt;
+	int		 pfrkts_refcnt[PFR_REFCNT_MAX];
+};
 #define	pfrts_name	pfrts_t.pfrt_name
 #define pfrts_flags	pfrts_t.pfrt_flags
 
@@ -1014,8 +1037,9 @@ union sockaddr_union {
 #endif /* _SOCKADDR_UNION_DEFINED */
 
 struct pfr_kcounters {
-	u_int64_t		 pfrkc_packets[PFR_DIR_MAX][PFR_OP_ADDR_MAX];
-	u_int64_t		 pfrkc_bytes[PFR_DIR_MAX][PFR_OP_ADDR_MAX];
+	counter_u64_t		 pfrkc_packets[PFR_DIR_MAX][PFR_OP_ADDR_MAX];
+	counter_u64_t		 pfrkc_bytes[PFR_DIR_MAX][PFR_OP_ADDR_MAX];
+	long			 pfrkc_tzero;
 };
 
 SLIST_HEAD(pfr_kentryworkq, pfr_kentry);
@@ -1023,8 +1047,7 @@ struct pfr_kentry {
 	struct radix_node	 pfrke_node[2];
 	union sockaddr_union	 pfrke_sa;
 	SLIST_ENTRY(pfr_kentry)	 pfrke_workq;
-	struct pfr_kcounters	*pfrke_counters;
-	long			 pfrke_tzero;
+	struct pfr_kcounters	 pfrke_counters;
 	u_int8_t		 pfrke_af;
 	u_int8_t		 pfrke_net;
 	u_int8_t		 pfrke_not;
@@ -1034,7 +1057,7 @@ struct pfr_kentry {
 SLIST_HEAD(pfr_ktableworkq, pfr_ktable);
 RB_HEAD(pfr_ktablehead, pfr_ktable);
 struct pfr_ktable {
-	struct pfr_tstats	 pfrkt_ts;
+	struct pfr_ktstats	 pfrkt_kts;
 	RB_ENTRY(pfr_ktable)	 pfrkt_tree;
 	SLIST_ENTRY(pfr_ktable)	 pfrkt_workq;
 	struct radix_node_head	*pfrkt_ip4;
@@ -1045,18 +1068,18 @@ struct pfr_ktable {
 	long			 pfrkt_larg;
 	int			 pfrkt_nflags;
 };
-#define pfrkt_t		pfrkt_ts.pfrts_t
+#define pfrkt_t		pfrkt_kts.pfrts_t
 #define pfrkt_name	pfrkt_t.pfrt_name
 #define pfrkt_anchor	pfrkt_t.pfrt_anchor
 #define pfrkt_ruleset	pfrkt_t.pfrt_ruleset
 #define pfrkt_flags	pfrkt_t.pfrt_flags
-#define pfrkt_cnt	pfrkt_ts.pfrts_cnt
-#define pfrkt_refcnt	pfrkt_ts.pfrts_refcnt
-#define pfrkt_packets	pfrkt_ts.pfrts_packets
-#define pfrkt_bytes	pfrkt_ts.pfrts_bytes
-#define pfrkt_match	pfrkt_ts.pfrts_match
-#define pfrkt_nomatch	pfrkt_ts.pfrts_nomatch
-#define pfrkt_tzero	pfrkt_ts.pfrts_tzero
+#define pfrkt_cnt	pfrkt_kts.pfrkts_cnt
+#define pfrkt_refcnt	pfrkt_kts.pfrkts_refcnt
+#define pfrkt_packets	pfrkt_kts.pfrkts_packets
+#define pfrkt_bytes	pfrkt_kts.pfrkts_bytes
+#define pfrkt_match	pfrkt_kts.pfrkts_match
+#define pfrkt_nomatch	pfrkt_kts.pfrkts_nomatch
+#define pfrkt_tzero	pfrkt_kts.pfrkts_tzero
 
 /* keep synced with pfi_kif, used in RB_FIND */
 struct pfi_kif_cmp {
@@ -1463,6 +1486,7 @@ struct pf_idhash {
 extern u_long		pf_hashmask;
 extern u_long		pf_srchashmask;
 #define	PF_HASHSIZ	(32768)
+#define	PF_SRCHASHSIZ	(PF_HASHSIZ/4)
 VNET_DECLARE(struct pf_keyhash *, pf_keyhash);
 VNET_DECLARE(struct pf_idhash *, pf_idhash);
 #define V_pf_keyhash	VNET(pf_keyhash)
@@ -1573,13 +1597,13 @@ extern void			 pf_addrcpy(struct pf_addr *, struct pf_addr *,
 void				pf_free_rule(struct pf_rule *);
 
 #ifdef INET
-int	pf_test(int, struct ifnet *, struct mbuf **, struct inpcb *);
+int	pf_test(int, int, struct ifnet *, struct mbuf **, struct inpcb *);
 int	pf_normalize_ip(struct mbuf **, int, struct pfi_kif *, u_short *,
 	    struct pf_pdesc *);
 #endif /* INET */
 
 #ifdef INET6
-int	pf_test6(int, struct ifnet *, struct mbuf **, struct inpcb *);
+int	pf_test6(int, int, struct ifnet *, struct mbuf **, struct inpcb *);
 int	pf_normalize_ip6(struct mbuf **, int, struct pfi_kif *, u_short *,
 	    struct pf_pdesc *);
 void	pf_poolmask(struct pf_addr *, struct pf_addr*,
@@ -1632,6 +1656,7 @@ void	pfr_detach_table(struct pfr_ktable *);
 int	pfr_clr_tables(struct pfr_table *, int *, int);
 int	pfr_add_tables(struct pfr_table *, int, int *, int);
 int	pfr_del_tables(struct pfr_table *, int, int *, int);
+int	pfr_table_count(struct pfr_table *, int);
 int	pfr_get_tables(struct pfr_table *, struct pfr_table *, int *, int);
 int	pfr_get_tstats(struct pfr_table *, struct pfr_tstats *, int *, int);
 int	pfr_clr_tstats(struct pfr_table *, int, int *, int);

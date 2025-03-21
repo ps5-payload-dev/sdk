@@ -33,7 +33,7 @@
  *
  *	@(#)nlist.h	8.2 (Berkeley) 1/21/94
  *
- * $FreeBSD: releng/11.1/sys/sys/nlist_aout.h 283671 2015-05-28 22:06:05Z brooks $
+ * $FreeBSD: releng/11.4/sys/sys/nlist_aout.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_NLIST_AOUT_H_

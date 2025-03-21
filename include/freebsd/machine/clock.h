@@ -3,7 +3,7 @@
  * Garrett Wollman, September 1994.
  * This file is in the public domain.
  *
- * $FreeBSD: releng/11.1/sys/amd64/include/clock.h 263008 2014-03-11 10:20:42Z royger $
+ * $FreeBSD: releng/11.4/sys/amd64/include/clock.h 335657 2018-06-26 08:35:58Z avg $
  */
 
 #ifndef _MACHINE_CLOCK_H_
@@ -34,6 +34,7 @@ void	clock_init(void);
 
 void	startrtclock(void);
 void	init_TSC(void);
+void	resume_TSC(void);
 
 #define	HAS_TIMER_SPKR 1
 int	timer_spkr_acquire(void);

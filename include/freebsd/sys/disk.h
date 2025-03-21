@@ -6,7 +6,7 @@
  * this stuff is worth it, you can buy me a beer in return.   Poul-Henning Kamp
  * ----------------------------------------------------------------------------
  *
- * $FreeBSD: releng/11.1/sys/sys/disk.h 300207 2016-05-19 14:08:36Z ken $
+ * $FreeBSD: releng/11.4/sys/sys/disk.h 325003 2017-10-25 22:25:32Z asomers $
  *
  */
 
@@ -133,6 +133,7 @@ struct diocgattr_arg {
 		char str[DISK_IDENT_SIZE];
 		off_t off;
 		int i;
+		uint16_t u16;
 	} value;
 };
 #define	DIOCGATTR _IOWR('d', 142, struct diocgattr_arg)

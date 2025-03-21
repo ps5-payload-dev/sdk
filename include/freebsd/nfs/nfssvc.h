@@ -29,7 +29,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/nfs/nfssvc.h 291527 2015-11-30 21:54:27Z rmacklem $
+ * $FreeBSD: releng/11.4/sys/nfs/nfssvc.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _NFS_NFSSVC_H_
@@ -70,6 +70,7 @@
 #define	NFSSVC_RESUMENFSD	0x08000000
 #define	NFSSVC_DUMPMNTOPTS	0x10000000
 #define	NFSSVC_NEWSTRUCT	0x20000000
+#define	NFSSVC_FORCEDISM	0x40000000
 
 /* Argument structure for NFSSVC_DUMPMNTOPTS. */
 struct nfscl_dumpmntopts {

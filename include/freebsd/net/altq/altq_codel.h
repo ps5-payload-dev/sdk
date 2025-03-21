@@ -37,7 +37,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/net/altq/altq_codel.h 287120 2015-08-24 23:40:36Z loos $
+ * $FreeBSD: releng/11.4/sys/net/altq/altq_codel.h 287120 2015-08-24 23:40:36Z loos $
  */
 
 #ifndef _ALTQ_ALTQ_CODEL_H_

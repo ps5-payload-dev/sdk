@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/amd64/include/counter.h 302372 2016-07-06 14:09:49Z nwhitehorn $
+ * $FreeBSD: releng/11.4/sys/amd64/include/counter.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef __MACHINE_COUNTER_H__
@@ -69,8 +69,8 @@ static inline void
 counter_u64_zero_inline(counter_u64_t c)
 {
 
-	smp_rendezvous(smp_no_rendevous_barrier, counter_u64_zero_one_cpu,
-	    smp_no_rendevous_barrier, c);
+	smp_rendezvous(smp_no_rendezvous_barrier, counter_u64_zero_one_cpu,
+	    smp_no_rendezvous_barrier, c);
 }
 #endif
 

@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)stat.h	8.12 (Berkeley) 6/16/95
- * $FreeBSD: releng/11.1/sys/sys/stat.h 277610 2015-01-23 21:07:08Z jilles $
+ * $FreeBSD: releng/11.4/sys/sys/stat.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_STAT_H_

@@ -28,7 +28,7 @@
  *
  *	@(#)socketvar.h	8.3 (Berkeley) 2/19/95
  *
- * $FreeBSD: releng/11.1/sys/sys/sockopt.h 180948 2008-07-29 07:45:05Z kmacy $
+ * $FreeBSD: releng/11.4/sys/sys/sockopt.h 331722 2018-03-29 02:50:57Z eadler $
  */
 #ifndef _SYS_SOCKOPT_H_
 #define _SYS_SOCKOPT_H_

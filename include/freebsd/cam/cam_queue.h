@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/cam/cam_queue.h 308352 2016-11-05 20:23:18Z markj $
+ * $FreeBSD: releng/11.4/sys/cam/cam_queue.h 308352 2016-11-05 20:23:18Z markj $
  */
 
 #ifndef _CAM_CAM_QUEUE_H

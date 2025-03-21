@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/cam/cam_sim.h 256843 2013-10-21 12:00:26Z mav $
+ * $FreeBSD: releng/11.4/sys/cam/cam_sim.h 256843 2013-10-21 12:00:26Z mav $
  */
 
 #ifndef _CAM_CAM_SIM_H

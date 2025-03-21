@@ -22,7 +22,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/fs/devfs/devfs_int.h 277391 2015-01-19 17:36:52Z kib $
+ * $FreeBSD: releng/11.4/sys/fs/devfs/devfs_int.h 277391 2015-01-19 17:36:52Z kib $
  */
 
 /*

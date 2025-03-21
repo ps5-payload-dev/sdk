@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/include/stringlist.h 283201 2015-05-21 08:38:25Z bapt $
+ * $FreeBSD: releng/11.4/include/stringlist.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _STRINGLIST_H

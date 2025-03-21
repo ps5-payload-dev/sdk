@@ -26,7 +26,7 @@
  * SUCH DAMAGE.
  *
  *	from BSDI Id: mutex.h,v 2.7.2.35 2000/04/27 03:10:26 cp
- * $FreeBSD: releng/11.1/sys/sys/lock.h 315394 2017-03-16 08:29:09Z mjg $
+ * $FreeBSD: releng/11.4/sys/sys/lock.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_LOCK_H_
@@ -137,9 +137,13 @@ struct lock_class {
  * operations.  Otherwise, use default values to avoid the unneeded bloat.
  */
 #if LOCK_DEBUG > 0
+#define LOCK_FILE_LINE_ARG_DEF	, const char *file, int line
+#define LOCK_FILE_LINE_ARG	, file, line
 #define	LOCK_FILE	__FILE__
 #define	LOCK_LINE	__LINE__
 #else
+#define LOCK_FILE_LINE_ARG_DEF
+#define LOCK_FILE_LINE_ARG
 #define	LOCK_FILE	NULL
 #define	LOCK_LINE	0
 #endif
@@ -225,6 +229,13 @@ lock_delay_arg_init(struct lock_delay_arg *la, struct lock_delay_config *lc)
 	la->delay = lc->base;
 	la->spin_cnt = 0;
 }
+
+#define lock_delay_spin(n)	do {	\
+	u_int _i;			\
+					\
+	for (_i = (n); _i > 0; _i--)	\
+		cpu_spinwait();		\
+} while (0)
 
 #define	LOCK_DELAY_SYSINIT(func) \
 	SYSINIT(func##_ld, SI_SUB_LOCK, SI_ORDER_ANY, func, NULL)

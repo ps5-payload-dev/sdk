@@ -58,7 +58,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)in.h	8.3 (Berkeley) 1/3/94
- * $FreeBSD: releng/11.1/sys/netinet6/in6.h 315514 2017-03-18 22:04:20Z ae $
+ * $FreeBSD: releng/11.4/sys/netinet6/in6.h 337799 2018-08-14 18:10:25Z jtl $
  */
 
 #ifndef __KAME_NETINET_IN_H_INCLUDED_
@@ -637,7 +637,9 @@ struct ip6_mtuinfo {
 #define	IPV6CTL_INTRQMAXLEN	51	/* max length of IPv6 netisr queue */
 #define	IPV6CTL_INTRDQMAXLEN	52	/* max length of direct IPv6 netisr
 					 * queue */
-#define	IPV6CTL_MAXID		53
+#define	IPV6CTL_MAXFRAGSPERPACKET	53 /* Max fragments per packet */
+#define	IPV6CTL_MAXFRAGBUCKETSIZE	54 /* Max reassembly queues per bucket */
+#define	IPV6CTL_MAXID		55
 #endif /* __BSD_VISIBLE */
 
 /*
@@ -653,6 +655,7 @@ struct ip6_mtuinfo {
 #define	M_LOOP			M_PROTO6
 #define	M_AUTHIPDGM		M_PROTO7
 #define	M_RTALERT_MLD		M_PROTO8
+#define	M_FRAGMENTED		M_PROTO9	/* contained fragment header */
 
 #ifdef _KERNEL
 struct cmsghdr;

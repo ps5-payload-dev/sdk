@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)un.h	8.3 (Berkeley) 2/19/95
- * $FreeBSD: releng/11.1/sys/sys/un.h 246210 2013-02-01 15:32:20Z jhb $
+ * $FreeBSD: releng/11.4/sys/sys/un.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_UN_H_

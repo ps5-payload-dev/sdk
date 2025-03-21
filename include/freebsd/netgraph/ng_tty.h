@@ -38,7 +38,7 @@
  *
  * Author: Archie Cobbs <archie@freebsd.org>
  *
- * $FreeBSD: releng/11.1/sys/netgraph/ng_tty.h 184760 2008-11-08 02:05:41Z mav $
+ * $FreeBSD: releng/11.4/sys/netgraph/ng_tty.h 184760 2008-11-08 02:05:41Z mav $
  * $Whistle: ng_tty.h,v 1.7 1999/01/20 00:22:15 archie Exp $
  */
 

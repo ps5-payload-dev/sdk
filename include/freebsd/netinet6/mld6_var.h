@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/netinet6/mld6_var.h 279027 2015-02-19 22:37:01Z glebius $
+ * $FreeBSD: releng/11.4/sys/netinet6/mld6_var.h 279027 2015-02-19 22:37:01Z glebius $
  */
 #ifndef _NETINET6_MLD6_VAR_H_
 #define _NETINET6_MLD6_VAR_H_

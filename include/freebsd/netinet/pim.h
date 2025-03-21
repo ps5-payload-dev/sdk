@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/netinet/pim.h 139823 2005-01-07 01:45:51Z imp $
+ * $FreeBSD: releng/11.4/sys/netinet/pim.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _NETINET_PIM_H_

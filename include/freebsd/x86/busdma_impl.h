@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/x86/include/busdma_impl.h 257308 2013-10-29 07:25:54Z kib $
+ * $FreeBSD: releng/11.4/sys/x86/include/busdma_impl.h 257308 2013-10-29 07:25:54Z kib $
  */
 
 #ifndef	__X86_BUSDMA_IMPL_H

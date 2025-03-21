@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)tcp_timer.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: releng/11.1/sys/netinet/tcp_timer.h 298743 2016-04-28 13:27:12Z rrs $
+ * $FreeBSD: releng/11.4/sys/netinet/tcp_timer.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _NETINET_TCP_TIMER_H_
@@ -188,6 +188,7 @@ extern int tcp_ttl;			/* time to live for TCP segs */
 extern int tcp_backoff[];
 extern int tcp_syn_backoff[];
 
+extern int tcp_always_keepalive;
 extern int tcp_finwait2_timeout;
 extern int tcp_fast_finwait2_recycle;
 

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/geom/stripe/g_stripe.h 256880 2013-10-22 08:22:19Z mav $
+ * $FreeBSD: releng/11.4/sys/geom/stripe/g_stripe.h 256880 2013-10-22 08:22:19Z mav $
  */
 
 #ifndef	_G_STRIPE_H_

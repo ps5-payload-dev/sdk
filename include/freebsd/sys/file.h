@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)file.h	8.3 (Berkeley) 1/9/95
- * $FreeBSD: releng/11.1/sys/sys/file.h 316294 2017-03-30 20:03:20Z dchagin $
+ * $FreeBSD: releng/11.4/sys/sys/file.h 358202 2020-02-21 04:30:21Z kevans $
  */
 
 #ifndef _SYS_FILE_H_
@@ -232,7 +232,7 @@ extern volatile int openfiles;	/* actual number of open files */
 
 int fget(struct thread *td, int fd, cap_rights_t *rightsp, struct file **fpp);
 int fget_mmap(struct thread *td, int fd, cap_rights_t *rightsp,
-    u_char *maxprotp, struct file **fpp);
+    vm_prot_t *maxprotp, struct file **fpp);
 int fget_read(struct thread *td, int fd, cap_rights_t *rightsp,
     struct file **fpp);
 int fget_write(struct thread *td, int fd, cap_rights_t *rightsp,

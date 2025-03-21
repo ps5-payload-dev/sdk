@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)vm_extern.h	8.2 (Berkeley) 1/12/94
- * $FreeBSD: releng/11.1/sys/vm/vm_extern.h 314334 2017-02-27 11:27:46Z kib $
+ * $FreeBSD: releng/11.4/sys/vm/vm_extern.h 337262 2018-08-03 15:42:39Z markj $
  */
 
 #ifndef _VM_EXTERN_H_
@@ -65,13 +65,13 @@ int kmem_back(vm_object_t, vm_offset_t, vm_size_t, int);
 void kmem_unback(vm_object_t, vm_offset_t, vm_size_t);
 
 /* Bootstrapping. */
+void kmem_bootstrap_free(vm_offset_t, vm_size_t);
 vm_map_t kmem_suballoc(vm_map_t, vm_offset_t *, vm_offset_t *, vm_size_t,
     boolean_t);
 void kmem_init(vm_offset_t, vm_offset_t);
 void kmem_init_zero_region(void);
 void kmeminit(void);
 
-void swapout_procs(int);
 int kernacc(void *, int, int);
 int useracc(void *, int, int);
 int vm_fault(vm_map_t, vm_offset_t, vm_prot_t, int);

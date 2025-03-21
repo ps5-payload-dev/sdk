@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-#define	YPMAXRECORD 1024
+#define	YPMAXRECORD 16777216
 #define	YPMAXDOMAIN 64
 #define	YPMAXMAP 64
 #define	YPMAXPEER 64

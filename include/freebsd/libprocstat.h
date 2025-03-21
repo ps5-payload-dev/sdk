@@ -1,5 +1,6 @@
 /*-
  * Copyright (c) 2009 Stanislav Sedov <stas@FreeBSD.org>
+ * Copyright (c) 2017 Dell EMC
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/lib/libprocstat/libprocstat.h 255219 2013-09-05 00:09:56Z pjd $
+ * $FreeBSD: releng/11.4/lib/libprocstat/libprocstat.h 341779 2018-12-10 01:39:40Z kib $
  */
 
 #ifndef _LIBPROCSTAT_H_
@@ -67,6 +68,8 @@
 #define	PS_FST_TYPE_SEM		10
 #define	PS_FST_TYPE_UNKNOWN	11
 #define	PS_FST_TYPE_NONE	12
+#define	PS_FST_TYPE_PROCDESC	13
+#define	PS_FST_TYPE_DEV		14
 
 /*
  * Special descriptor numbers.
@@ -101,6 +104,7 @@
 struct kinfo_kstack;
 struct kinfo_vmentry;
 struct procstat;
+struct ptrace_lwpinfo;
 struct rlimit;
 struct filestat {
 	int	fs_type;	/* Descriptor type. */
@@ -172,6 +176,8 @@ void	procstat_freekstack(struct procstat *procstat,
 void	procstat_freeprocs(struct procstat *procstat, struct kinfo_proc *p);
 void	procstat_freefiles(struct procstat *procstat,
     struct filestat_list *head);
+void	procstat_freeptlwpinfo(struct procstat *procstat,
+    struct ptrace_lwpinfo *pl);
 void	procstat_freevmmap(struct procstat *procstat,
     struct kinfo_vmentry *vmmap);
 struct filestat_list	*procstat_getfiles(struct procstat *procstat,
@@ -196,6 +202,8 @@ char	**procstat_getargv(struct procstat *procstat, struct kinfo_proc *p,
 Elf_Auxinfo	*procstat_getauxv(struct procstat *procstat,
     struct kinfo_proc *kp, unsigned int *cntp);
 #endif
+struct ptrace_lwpinfo	*procstat_getptlwpinfo(struct procstat *procstat,
+    unsigned int *cntp);
 char	**procstat_getenvv(struct procstat *procstat, struct kinfo_proc *p,
     size_t nchr);
 gid_t	*procstat_getgroups(struct procstat *procstat, struct kinfo_proc *kp,

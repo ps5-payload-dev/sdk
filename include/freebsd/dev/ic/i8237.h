@@ -1,7 +1,7 @@
 /*
  * Intel 8237 DMA Controller
  *
- * $FreeBSD: releng/11.1/sys/dev/ic/i8237.h 146214 2005-05-14 10:14:56Z nyan $
+ * $FreeBSD: releng/11.4/sys/dev/ic/i8237.h 146214 2005-05-14 10:14:56Z nyan $
  */
 
 #define	DMA37MD_SINGLE	0x40	/* single pass mode */

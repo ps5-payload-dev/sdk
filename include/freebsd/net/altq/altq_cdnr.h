@@ -24,7 +24,7 @@
  * SUCH DAMAGE.
  *
  * $KAME: altq_cdnr.h,v 1.9 2003/07/10 12:07:48 kjc Exp $
- * $FreeBSD: releng/11.1/sys/net/altq/altq_cdnr.h 281613 2015-04-16 20:22:40Z glebius $
+ * $FreeBSD: releng/11.4/sys/net/altq/altq_cdnr.h 281613 2015-04-16 20:22:40Z glebius $
  */
 
 #ifndef _ALTQ_ALTQ_CDNR_H_

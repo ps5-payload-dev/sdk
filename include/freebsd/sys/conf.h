@@ -34,7 +34,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)conf.h	8.5 (Berkeley) 1/9/95
- * $FreeBSD: releng/11.1/sys/sys/conf.h 317916 2017-05-07 20:11:58Z rmacklem $
+ * $FreeBSD: releng/11.4/sys/sys/conf.h 353783 2019-10-20 22:01:35Z kevans $
  */
 
 #ifndef _SYS_CONF_H_
@@ -57,7 +57,7 @@ struct cdev {
 #define	SI_ETERNAL	0x0001	/* never destroyed */
 #define	SI_ALIAS	0x0002	/* carrier of alias name */
 #define	SI_NAMED	0x0004	/* make_dev{_alias} has been called */
-#define	SI_CHEAPCLONE	0x0008	/* can be removed_dev'ed when vnode reclaims */
+#define	SI_UNUSED1	0x0008	/* unused */
 #define	SI_CHILD	0x0010	/* child of another struct cdev **/
 #define	SI_DUMPDEV	0x0080	/* is kernel dumpdev */
 #define	SI_CLONELIST	0x0200	/* on a clone list */

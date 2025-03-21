@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)times.h	8.4 (Berkeley) 1/21/94
- * $FreeBSD: releng/11.1/sys/sys/times.h 127976 2004-04-07 04:19:52Z imp $
+ * $FreeBSD: releng/11.4/sys/sys/times.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef	_SYS_TIMES_H_

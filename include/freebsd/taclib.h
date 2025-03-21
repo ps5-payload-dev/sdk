@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.1/lib/libtacplus/taclib.h 200399 2009-12-11 07:53:44Z syrinx $
+ *	$FreeBSD: releng/11.4/lib/libtacplus/taclib.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _TACLIB_H_

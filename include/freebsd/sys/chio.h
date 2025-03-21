@@ -29,7 +29,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/chio.h 249658 2013-04-19 20:03:51Z ken $
+ * $FreeBSD: releng/11.4/sys/sys/chio.h 343226 2019-01-20 21:38:24Z joerg $
  */
 
 #ifndef	_SYS_CHIO_H_
@@ -262,7 +262,7 @@ struct changer_set_voltag_request {
 
 
 #define	CESTATUS_BITS	\
-	"\20\6INEAB\5EXENAB\4ACCESS\3EXCEPT\2IMPEXP\1FULL"
+	"\20\6INENAB\5EXENAB\4ACCESS\3EXCEPT\2IMPEXP\1FULL"
 
 #define	CHIOMOVE	_IOW('c', 0x01, struct changer_move)
 #define	CHIOEXCHANGE	_IOW('c', 0x02, struct changer_exchange)

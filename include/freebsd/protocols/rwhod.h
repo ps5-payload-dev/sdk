@@ -28,7 +28,7 @@
  *
  *	@(#)rwhod.h	8.1 (Berkeley) 6/2/93
  *
- * $FreeBSD: releng/11.1/include/protocols/rwhod.h 250889 2013-05-21 21:50:11Z ed $
+ * $FreeBSD: releng/11.4/include/protocols/rwhod.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _PROTOCOLS_RWHOD_H_

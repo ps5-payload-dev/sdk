@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/bus.h 316369 2017-04-01 19:27:06Z jhibbits $
+ * $FreeBSD: releng/11.4/sys/sys/bus.h 350034 2019-07-16 15:28:41Z avg $
  */
 
 #ifndef _SYS_BUS_H_
@@ -120,6 +120,7 @@ struct devreq {
 #define	DEV_CLEAR_DRIVER _IOW('D', 8, struct devreq)
 #define	DEV_RESCAN	_IOW('D', 9, struct devreq)
 #define	DEV_DELETE	_IOW('D', 10, struct devreq)
+#define	DEV_RESET	_IOW('D', 13, struct devreq)
 
 /* Flags for DEV_DETACH and DEV_DISABLE. */
 #define	DEVF_FORCE_DETACH	0x0000001
@@ -132,6 +133,10 @@ struct devreq {
 
 /* Flags for DEV_DELETE. */
 #define	DEVF_FORCE_DELETE	0x0000001
+
+/* Flags for DEV_RESET */
+#define	DEVF_RESET_DETACH	0x0000001	/* Detach drivers vs suspend
+						   device */
 
 #ifdef _KERNEL
 
@@ -479,6 +484,8 @@ int	bus_generic_unmap_resource(device_t dev, device_t child, int type,
 				   struct resource_map *map);
 int	bus_generic_write_ivar(device_t dev, device_t child, int which,
 			       uintptr_t value);
+int	bus_helper_reset_post(device_t dev, int flags);
+int	bus_helper_reset_prepare(device_t dev, int flags);
 int	bus_null_rescan(device_t dev);
 
 /*
@@ -491,6 +498,7 @@ struct resource_spec {
 	int	rid;
 	int	flags;
 };
+#define	RESOURCE_SPEC_END	{-1, 0, 0}
 
 int	bus_alloc_resources(device_t dev, struct resource_spec *rs,
 			    struct resource **res);
@@ -632,7 +640,6 @@ struct sysctl_oid *devclass_get_sysctl_tree(devclass_t dc);
 /*
  * Access functions for device resources.
  */
-
 int	resource_int_value(const char *name, int unit, const char *resname,
 			   int *result);
 int	resource_long_value(const char *name, int unit, const char *resname,
@@ -644,12 +651,6 @@ int	resource_find_match(int *anchor, const char **name, int *unit,
 			    const char *resname, const char *value);
 int	resource_find_dev(int *anchor, const char *name, int *unit,
 			  const char *resname, const char *value);
-int	resource_set_int(const char *name, int unit, const char *resname,
-			 int value);
-int	resource_set_long(const char *name, int unit, const char *resname,
-			  long value);
-int	resource_set_string(const char *name, int unit, const char *resname,
-			    const char *value);
 int	resource_unset_value(const char *name, int unit, const char *resname);
 
 /*
@@ -786,16 +787,30 @@ DECLARE_MODULE(name##_##busname, name##_##busname##_mod,		\
 static __inline type varp ## _get_ ## var(device_t dev)			\
 {									\
 	uintptr_t v;							\
-	BUS_READ_IVAR(device_get_parent(dev), dev,			\
+	int e;								\
+	e = BUS_READ_IVAR(device_get_parent(dev), dev,			\
 	    ivarp ## _IVAR_ ## ivar, &v);				\
+	if (e != 0) {							\
+		device_printf(dev, "failed to read ivar "		\
+		    __XSTRING(ivarp ## _IVAR_ ## ivar) " on bus %s, "	\
+		    "error = %d\n",					\
+		    device_get_nameunit(device_get_parent(dev)), e);	\
+	}								\
 	return ((type) v);						\
 }									\
 									\
 static __inline void varp ## _set_ ## var(device_t dev, type t)		\
 {									\
 	uintptr_t v = (uintptr_t) t;					\
-	BUS_WRITE_IVAR(device_get_parent(dev), dev,			\
+	int e;								\
+	e = BUS_WRITE_IVAR(device_get_parent(dev), dev,			\
 	    ivarp ## _IVAR_ ## ivar, v);				\
+	if (e != 0) {							\
+		device_printf(dev, "failed to write ivar "		\
+		    __XSTRING(ivarp ## _IVAR_ ## ivar) " on bus %s, "	\
+		    "error = %d\n",					\
+		    device_get_nameunit(device_get_parent(dev)), e);	\
+	}								\
 }
 
 /**

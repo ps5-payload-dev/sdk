@@ -31,7 +31,7 @@
  */
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: releng/11.1/sys/netinet/sctp_timer.h 295709 2016-02-17 18:04:22Z tuexen $");
+__FBSDID("$FreeBSD: releng/11.4/sys/netinet/sctp_timer.h 331722 2018-03-29 02:50:57Z eadler $");
 
 #ifndef _NETINET_SCTP_TIMER_H_
 #define _NETINET_SCTP_TIMER_H_

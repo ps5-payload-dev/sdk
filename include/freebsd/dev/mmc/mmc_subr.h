@@ -49,7 +49,7 @@
  * or the SD Card Association to disclose or distribute any technical
  * information, know-how or other confidential information to any third party.
  *
- * $FreeBSD: releng/11.1/sys/dev/mmc/mmc_subr.h 318197 2017-05-11 20:55:11Z marius $
+ * $FreeBSD: releng/11.4/sys/dev/mmc/mmc_subr.h 322119 2017-08-06 16:07:25Z marius $
  */
 
 #ifndef DEV_MMC_SUBR_H
@@ -57,16 +57,16 @@
 
 struct mmc_command;
 
-int mmc_send_ext_csd(device_t brdev, device_t reqdev, uint8_t *rawextcsd);
-int mmc_send_status(device_t brdev, device_t reqdev, uint16_t rca,
+int mmc_send_ext_csd(device_t busdev, device_t dev, uint8_t *rawextcsd);
+int mmc_send_status(device_t busdev, device_t dev, uint16_t rca,
     uint32_t *status);
-int mmc_switch(device_t brdev, device_t reqdev, uint16_t rca, uint8_t set,
+int mmc_switch(device_t busdev, device_t dev, uint16_t rca, uint8_t set,
     uint8_t index, uint8_t value, u_int timeout, bool send_status);
-int mmc_switch_status(device_t brdev, device_t reqdev, uint16_t rca,
+int mmc_switch_status(device_t busdev, device_t dev, uint16_t rca,
     u_int timeout);
-int mmc_wait_for_app_cmd(device_t brdev, device_t reqdev, uint16_t rca,
+int mmc_wait_for_app_cmd(device_t busdev, device_t dev, uint16_t rca,
     struct mmc_command *cmd, int retries);
-int mmc_wait_for_cmd(device_t brdev, device_t reqdev, struct mmc_command *cmd,
+int mmc_wait_for_cmd(device_t busdev, device_t dev, struct mmc_command *cmd,
     int retries);
 
 #endif /* DEV_MMC_SUBR_H */

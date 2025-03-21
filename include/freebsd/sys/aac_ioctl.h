@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.1/sys/sys/aac_ioctl.h 218909 2011-02-21 09:01:34Z brucec $
+ *	$FreeBSD: releng/11.4/sys/sys/aac_ioctl.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 /*
@@ -172,6 +172,14 @@ struct get_adapter_fib_ioctl {
 	int	  	Wait;
 	caddr_t		AifFib;
 };
+
+#ifdef _KERNEL
+struct get_adapter_fib_ioctl32 {
+	u_int32_t	AdapterFibContext;
+	int	  	Wait;
+	u_int32_t	AifFib;
+};
+#endif
 
 struct aac_query_disk {
 	int32_t		ContainerNumber;

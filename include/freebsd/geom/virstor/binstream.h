@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/geom/virstor/binstream.h 172302 2007-09-23 07:34:23Z pjd $
+ * $FreeBSD: releng/11.4/sys/geom/virstor/binstream.h 172302 2007-09-23 07:34:23Z pjd $
  */
 
 // $Id: binstream.h,v 1.1 2006/07/05 10:47:54 ivoras Exp $

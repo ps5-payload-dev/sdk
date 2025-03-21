@@ -13,7 +13,7 @@
  * bad that happens because of using this software isn't the responsibility
  * of the author.  This software is distributed AS-IS.
  *
- * $FreeBSD: releng/11.1/sys/sys/aio.h 302074 2016-06-21 22:19:06Z jhb $
+ * $FreeBSD: releng/11.4/sys/sys/aio.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_AIO_H_
@@ -52,7 +52,7 @@
 #define	LIO_WAIT		0x1
 
 /*
- * Maximum number of allowed LIO operations
+ * Maximum number of operations in a single lio_listio call
  */
 #define	AIO_LISTIO_MAX		16
 
@@ -252,7 +252,7 @@ int	aio_suspend(const struct aiocb * const[], int, const struct timespec *);
  */
 int	aio_mlock(struct aiocb *);
 
-#ifdef __BSD_VISIBLE
+#if __BSD_VISIBLE
 ssize_t	aio_waitcomplete(struct aiocb **, struct timespec *);
 #endif
 

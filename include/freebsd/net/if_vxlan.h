@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/net/if_vxlan.h 273331 2014-10-20 14:42:42Z bryanv $
+ * $FreeBSD: releng/11.4/sys/net/if_vxlan.h 327927 2018-01-13 17:21:45Z bryanv $
  */
 
 #ifndef _NET_IF_VXLAN_H_
@@ -54,6 +54,12 @@ struct vxlan_header {
 #define VXLAN_PORT		4789
 #define VXLAN_LEGACY_PORT	8472
 
+union vxlan_sockaddr {
+	struct sockaddr		sa;
+	struct sockaddr_in	in4;
+	struct sockaddr_in6	in6;
+};
+
 struct ifvxlanparam {
 	uint64_t		vxlp_with;
 
@@ -72,10 +78,8 @@ struct ifvxlanparam {
 #define VXLAN_PARAM_WITH_LEARN		0x1000
 
 	uint32_t		vxlp_vni;
-	struct in_addr		vxlp_local_in4;
-	struct in6_addr		vxlp_local_in6;
-	struct in_addr		vxlp_remote_in4;
-	struct in6_addr		vxlp_remote_in6;
+	union vxlan_sockaddr 	vxlp_local_sa;
+	union vxlan_sockaddr 	vxlp_remote_sa;
 	uint16_t		vxlp_local_port;
 	uint16_t		vxlp_remote_port;
 	uint16_t		vxlp_min_port;
@@ -85,12 +89,6 @@ struct ifvxlanparam {
 	uint32_t		vxlp_ftable_max;
 	uint8_t			vxlp_ttl;
 	uint8_t			vxlp_learn;
-};
-
-union vxlan_sockaddr {
-	struct sockaddr		sa;
-	struct sockaddr_in	in4;
-	struct sockaddr_in6	in6;
 };
 
 #define VXLAN_SOCKADDR_IS_IPV4(_vxsin)	((_vxsin)->sa.sa_family == AF_INET)

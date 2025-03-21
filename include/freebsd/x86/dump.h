@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/x86/include/dump.h 276772 2015-01-07 01:01:39Z markj $
+ * $FreeBSD: releng/11.4/sys/x86/include/dump.h 276772 2015-01-07 01:01:39Z markj $
  */
 
 #ifndef _MACHINE_DUMP_H_

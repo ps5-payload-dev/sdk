@@ -25,7 +25,7 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/net/ieee_oui.h 266462 2014-05-20 02:59:13Z grehan $
+ * $FreeBSD: releng/11.4/sys/net/ieee_oui.h 346783 2019-04-27 04:39:41Z kevans $
  *
  * Author: George V. Neville-Neil
  *
@@ -65,3 +65,14 @@
 /* Allocate 20 bits to bhyve */
 #define OUI_FREEBSD_BHYVE_LOW	OUI_FREEBSD(0x000001)
 #define OUI_FREEBSD_BHYVE_HIGH	OUI_FREEBSD(0x0fffff)
+
+/*
+ * Allocate 16 bits for a pool to give to various interfaces that need a
+ * generated address, but don't quite need to slice off a whole section of
+ * the OUI (e.g. cloned interfaces, one-off NICs of various vendors).
+ *
+ * ether_gen_addr should be used to generate an address from this pool.
+ */
+#define	OUI_FREEBSD_GENERATED_MASK	0x10ffff
+#define	OUI_FREEBSD_GENERATED_LOW	OUI_FREEBSD(0x100000)
+#define	OUI_FREEBSD_GENERATED_HIGH	OUI_FREEBSD(OU_FREEBSD_GENERATED_MASK)

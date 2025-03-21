@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/procfs.h 308009 2016-10-28 03:54:19Z jhb $
+ * $FreeBSD: releng/11.4/sys/sys/procfs.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_PROCFS_H_

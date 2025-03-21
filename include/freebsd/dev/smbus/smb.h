@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/smbus/smb.h 310520 2016-12-24 14:44:25Z avg $
+ * $FreeBSD: releng/11.4/sys/dev/smbus/smb.h 331722 2018-03-29 02:50:57Z eadler $
  *
  */
 #ifndef __SMB_H

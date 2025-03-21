@@ -28,7 +28,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)mbuf.h	8.5 (Berkeley) 2/19/95
- * $FreeBSD: releng/11.1/sys/sys/mbuf.h 318815 2017-05-24 20:54:14Z np $
+ * $FreeBSD: releng/11.4/sys/sys/mbuf.h 338618 2018-09-12 19:13:32Z markj $
  */
 
 #ifndef _SYS_MBUF_H_
@@ -472,7 +472,7 @@ void sf_ext_free_nocache(void *, void *);
 #define	CSUM_L4_VALID		0x08000000	/* checksum is correct */
 #define	CSUM_L5_CALC		0x10000000	/* calculated layer 5 csum */
 #define	CSUM_L5_VALID		0x20000000	/* checksum is correct */
-#define	CSUM_COALESED		0x40000000	/* contains merged segments */
+#define	CSUM_COALESCED		0x40000000	/* contains merged segments */
 
 /*
  * CSUM flag description for use with printf(9) %b identifier.
@@ -483,7 +483,7 @@ void sf_ext_free_nocache(void *, void *);
     "\12CSUM_IP6_UDP\13CSUM_IP6_TCP\14CSUM_IP6_SCTP\15CSUM_IP6_TSO" \
     "\16CSUM_IP6_ISCSI" \
     "\31CSUM_L3_CALC\32CSUM_L3_VALID\33CSUM_L4_CALC\34CSUM_L4_VALID" \
-    "\35CSUM_L5_CALC\36CSUM_L5_VALID\37CSUM_COALESED"
+    "\35CSUM_L5_CALC\36CSUM_L5_VALID\37CSUM_COALESCED"
 
 /* CSUM flags compatibility mappings. */
 #define	CSUM_IP_CHECKED		CSUM_L3_CALC
@@ -523,7 +523,8 @@ void sf_ext_free_nocache(void *, void *);
 #define	MT_EXP4		12	/* for experimental use */
 
 #define	MT_CONTROL	14	/* extra-data protocol message */
-#define	MT_OOBDATA	15	/* expedited data  */
+#define	MT_EXTCONTROL	15	/* control message with externalized contents */
+#define	MT_OOBDATA	16	/* expedited data  */
 #define	MT_NTYPES	16	/* number of mbuf types for mbtypes[] */
 
 #define	MT_NOINIT	255	/* Not a type but a flag to allocate
@@ -589,6 +590,7 @@ void		 m_demote_pkthdr(struct mbuf *);
 void		 m_demote(struct mbuf *, int, int);
 struct mbuf	*m_devget(char *, int, int, struct ifnet *,
 		    void (*)(char *, caddr_t, u_int));
+void		 m_dispose_extcontrolm(struct mbuf *m);
 struct mbuf	*m_dup(const struct mbuf *, int);
 int		 m_dup_pkthdr(struct mbuf *, const struct mbuf *, int);
 void		 m_extadd(struct mbuf *, caddr_t, u_int,

@@ -31,7 +31,7 @@
  *
  *	@(#)tar.h	8.2 (Berkeley) 1/4/94
  *
- * $FreeBSD: releng/11.1/include/tar.h 203964 2010-02-16 19:39:50Z imp $
+ * $FreeBSD: releng/11.4/include/tar.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _TAR_H

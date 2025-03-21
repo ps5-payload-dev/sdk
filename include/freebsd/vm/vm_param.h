@@ -57,7 +57,7 @@
  * any improvements or extensions that they make and grant Carnegie the
  * rights to redistribute these changes.
  *
- * $FreeBSD: releng/11.1/sys/vm/vm_param.h 287640 2015-09-11 03:00:20Z markj $
+ * $FreeBSD: releng/11.4/sys/vm/vm_param.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 /*
@@ -84,7 +84,8 @@
 #define VM_V_PAGEOUT_FREE_MIN	9	/* vm_cnt.v_pageout_free_min */
 #define	VM_OBSOLETE_10		10	/* pageout algorithm */
 #define VM_SWAPPING_ENABLED	11	/* swapping enabled */
-#define	VM_MAXID		12	/* number of valid vm ids */
+#define VM_OVERCOMMIT		12	/* vm.overcommit */
+#define	VM_MAXID		13	/* number of valid vm ids */
 
 /*
  * Structure for swap device statistics

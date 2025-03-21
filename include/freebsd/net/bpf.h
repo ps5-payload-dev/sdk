@@ -34,7 +34,7 @@
  *      @(#)bpf.h	8.1 (Berkeley) 6/10/93
  *	@(#)bpf.h	1.34 (LBL)     6/16/96
  *
- * $FreeBSD: releng/11.1/sys/net/bpf.h 319279 2017-05-31 05:20:59Z delphij $
+ * $FreeBSD: releng/11.4/sys/net/bpf.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _NET_BPF_H_

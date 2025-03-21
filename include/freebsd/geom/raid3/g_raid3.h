@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/geom/raid3/g_raid3.h 200821 2009-12-21 23:31:03Z mav $
+ * $FreeBSD: releng/11.4/sys/geom/raid3/g_raid3.h 200821 2009-12-21 23:31:03Z mav $
  */
 
 #ifndef	_G_RAID3_H_

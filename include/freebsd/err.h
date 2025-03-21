@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)err.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: releng/11.1/include/err.h 315282 2017-03-14 20:14:57Z pfg $
+ * $FreeBSD: releng/11.4/include/err.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _ERR_H_

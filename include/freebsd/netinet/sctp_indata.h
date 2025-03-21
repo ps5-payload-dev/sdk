@@ -31,7 +31,7 @@
  */
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: releng/11.1/sys/netinet/sctp_indata.h 310773 2016-12-29 11:32:42Z tuexen $");
+__FBSDID("$FreeBSD: releng/11.4/sys/netinet/sctp_indata.h 361522 2020-05-26 15:48:27Z tuexen $");
 
 #ifndef _NETINET_SCTP_INDATA_H_
 #define _NETINET_SCTP_INDATA_H_
@@ -59,7 +59,6 @@ sctp_build_readq_entry(struct sctp_tcb *stcb,
 		(_ctl)->sinfo_ppid = ppid; \
 		(_ctl)->sinfo_context = context; \
 		(_ctl)->fsn_included = 0xffffffff; \
-		(_ctl)->top_fsn = 0xffffffff; \
 		(_ctl)->sinfo_tsn = tsn; \
 		(_ctl)->sinfo_cumtsn = tsn; \
 		(_ctl)->sinfo_assoc_id = sctp_get_associd((in_it)); \
@@ -67,6 +66,9 @@ sctp_build_readq_entry(struct sctp_tcb *stcb,
 		(_ctl)->data = dm; \
 		(_ctl)->stcb = (in_it); \
 		(_ctl)->port_from = (in_it)->rport; \
+		if ((in_it)->asoc.state & SCTP_STATE_ABOUT_TO_BE_FREED) { \
+			(_ctl)->do_not_ref_stcb = 1; \
+		}\
 	} \
 } while (0)
 
@@ -97,8 +99,7 @@ void
 sctp_handle_forward_tsn(struct sctp_tcb *,
     struct sctp_forward_tsn_chunk *, int *, struct mbuf *, int);
 
-struct sctp_tmit_chunk *
-                sctp_try_advance_peer_ack_point(struct sctp_tcb *, struct sctp_association *);
+struct sctp_tmit_chunk *sctp_try_advance_peer_ack_point(struct sctp_tcb *, struct sctp_association *);
 
 void sctp_service_queues(struct sctp_tcb *, struct sctp_association *);
 

@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)socket.h	8.4 (Berkeley) 2/21/94
- * $FreeBSD: releng/11.1/sys/sys/socket.h 313567 2017-02-10 19:49:42Z jhb $
+ * $FreeBSD: releng/11.4/sys/sys/socket.h 338617 2018-09-12 18:52:18Z sobomax $
  */
 
 #ifndef _SYS_SOCKET_H_
@@ -158,6 +158,16 @@ typedef	__uintptr_t	uintptr_t;
 #define	SO_USER_COOKIE	0x1015		/* user cookie (dummynet etc.) */
 #define	SO_PROTOCOL	0x1016		/* get socket protocol (Linux name) */
 #define	SO_PROTOTYPE	SO_PROTOCOL	/* alias for SO_PROTOCOL (SunOS name) */
+#define	SO_TS_CLOCK	0x1017		/* clock type used for SO_TIMESTAMP */
+#endif
+
+#if __BSD_VISIBLE
+#define	SO_TS_REALTIME_MICRO	0	/* microsecond resolution, realtime */
+#define	SO_TS_BINTIME		1	/* sub-nanosecond resolution, realtime */
+#define	SO_TS_REALTIME		2	/* nanosecond resolution, realtime */
+#define	SO_TS_MONOTONIC		3	/* nanosecond resolution, monotonic */
+#define	SO_TS_DEFAULT		SO_TS_REALTIME_MICRO
+#define	SO_TS_CLOCK_MAX		SO_TS_MONOTONIC
 #endif
 
 /*
@@ -534,6 +544,8 @@ struct sockcred {
 #define	SCM_TIMESTAMP	0x02		/* timestamp (struct timeval) */
 #define	SCM_CREDS	0x03		/* process creds (struct cmsgcred) */
 #define	SCM_BINTIME	0x04		/* timestamp (struct bintime) */
+#define	SCM_REALTIME	0x05		/* timestamp (struct timespec) */
+#define	SCM_MONOTONIC	0x06		/* timestamp (struct timespec) */
 #endif
 
 #if __BSD_VISIBLE

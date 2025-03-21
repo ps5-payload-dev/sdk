@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ttycom.h	8.1 (Berkeley) 3/28/94
- * $FreeBSD: releng/11.1/sys/sys/ttycom.h 231095 2012-02-06 18:15:46Z ed $
+ * $FreeBSD: releng/11.4/sys/sys/ttycom.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef	_SYS_TTYCOM_H_

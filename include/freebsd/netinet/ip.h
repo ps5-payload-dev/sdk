@@ -28,7 +28,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ip.h	8.2 (Berkeley) 6/1/94
- * $FreeBSD: releng/11.1/sys/netinet/ip.h 298995 2016-05-03 18:05:43Z pfg $
+ * $FreeBSD: releng/11.4/sys/netinet/ip.h 346755 2019-04-26 17:01:56Z mav $
  */
 
 #ifndef _NETINET_IP_H_
@@ -90,6 +90,11 @@ struct ip {
 #define	IPTOS_PREC_IMMEDIATE		IPTOS_DSCP_CS2
 #define	IPTOS_PREC_PRIORITY		IPTOS_DSCP_CS1
 #define	IPTOS_PREC_ROUTINE		IPTOS_DSCP_CS0
+
+/*
+ * Offset of Diffserv decimal value to convert it to tos value .
+ */
+#define	IPTOS_DSCP_OFFSET		2
 
 /*
  * Definitions for DiffServ Codepoints as per RFC2474 and RFC5865.

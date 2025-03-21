@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.1/sys/fs/cuse/cuse_defs.h 266581 2014-05-23 08:46:28Z hselasky $ */
+/* $FreeBSD: releng/11.4/sys/fs/cuse/cuse_defs.h 346666 2019-04-25 11:57:34Z hselasky $ */
 /*-
  * Copyright (c) 2010-2012 Hans Petter Selasky. All rights reserved.
  *
@@ -27,7 +27,7 @@
 #ifndef _CUSE_DEFS_H_
 #define	_CUSE_DEFS_H_
 
-#define	CUSE_VERSION		0x000122
+#define	CUSE_VERSION		0x000124
 
 #define	CUSE_ERR_NONE		0
 #define	CUSE_ERR_BUSY		-1
@@ -38,6 +38,7 @@
 #define	CUSE_ERR_SIGNAL		-6
 #define	CUSE_ERR_OTHER		-7
 #define	CUSE_ERR_NOT_LOADED	-8
+#define	CUSE_ERR_NO_DEVICE	-9
 
 #define	CUSE_POLL_NONE		0
 #define	CUSE_POLL_READ		1
@@ -48,6 +49,7 @@
 #define	CUSE_FFLAG_READ		1
 #define	CUSE_FFLAG_WRITE	2
 #define	CUSE_FFLAG_NONBLOCK	4
+#define	CUSE_FFLAG_COMPAT32	8 /* peer is running in 32-bit compat mode */
 
 #define	CUSE_DBG_NONE		0
 #define	CUSE_DBG_FULL		1

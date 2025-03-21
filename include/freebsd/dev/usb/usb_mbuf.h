@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.1/sys/dev/usb/usb_mbuf.h 196219 2009-08-14 20:03:53Z jhb $ */
+/* $FreeBSD: releng/11.4/sys/dev/usb/usb_mbuf.h 331722 2018-03-29 02:50:57Z eadler $ */
 /*-
  * Copyright (c) 2008 Hans Petter Selasky. All rights reserved.
  *

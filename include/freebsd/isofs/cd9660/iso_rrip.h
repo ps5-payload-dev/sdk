@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)iso_rrip.h	8.2 (Berkeley) 1/23/94
- * $FreeBSD: releng/11.1/sys/fs/cd9660/iso_rrip.h 166639 2007-02-11 13:54:25Z rodrigc $
+ * $FreeBSD: releng/11.4/sys/fs/cd9660/iso_rrip.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 

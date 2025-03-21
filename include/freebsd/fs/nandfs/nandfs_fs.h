@@ -27,7 +27,7 @@
  *                    and Ryusuke Konishi <ryusuke@osrg.net>
  * From: NetBSD: nandfs_fs.h,v 1.1 2009/07/18 16:31:42 reinoud
  *
- * $FreeBSD: releng/11.1/sys/fs/nandfs/nandfs_fs.h 298806 2016-04-29 20:51:24Z pfg $
+ * $FreeBSD: releng/11.4/sys/fs/nandfs/nandfs_fs.h 298806 2016-04-29 20:51:24Z pfg $
  */
 
 #ifndef _NANDFS_FS_H

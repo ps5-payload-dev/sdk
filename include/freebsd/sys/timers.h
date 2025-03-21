@@ -30,7 +30,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/timers.h 156137 2006-03-01 06:48:31Z davidxu $
+ * $FreeBSD: releng/11.4/sys/sys/timers.h 331722 2018-03-29 02:50:57Z eadler $
  *
  * Description : Basic timers header.
  */

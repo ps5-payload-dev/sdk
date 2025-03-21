@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/geom/geom_ctl.h 115624 2003-06-01 13:47:51Z phk $
+ * $FreeBSD: releng/11.4/sys/geom/geom_ctl.h 344584 2019-02-26 15:06:44Z markj $
  */
 
 #ifndef _GEOM_GEOM_CTL_H_
@@ -76,7 +76,8 @@ struct gctl_req {
 
 #define GEOM_CTL	_IOW('G', GCTL_VERSION, struct gctl_req)
 
-#define PATH_GEOM_CTL	"geom.ctl"
+#define GEOM_CTL_ARG_MAX 2048	/* maximum number of parameters */
 
+#define PATH_GEOM_CTL	"geom.ctl"
 
 #endif /* _GEOM_GEOM_CTL_H_ */

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/_task.h 304704 2016-08-23 21:21:56Z shurd $
+ * $FreeBSD: releng/11.4/sys/sys/_task.h 333338 2018-05-07 21:42:22Z shurd $
  */
 
 #ifndef _SYS__TASK_H_
@@ -65,7 +65,8 @@ struct grouptask {
 	void			*gt_taskqueue;
 	LIST_ENTRY(grouptask)	gt_list;
 	void			*gt_uniq;
-	char			*gt_name;
+#define GROUPTASK_NAMELEN	32
+	char			gt_name[GROUPTASK_NAMELEN];
 	int16_t			gt_irq;
 	int16_t			gt_cpu;
 };

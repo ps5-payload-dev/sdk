@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/cam/cam_ccb.h 312844 2017-01-26 21:06:59Z mav $
+ * $FreeBSD: releng/11.4/sys/cam/cam_ccb.h 335166 2018-06-14 18:18:55Z mav $
  */
 
 #ifndef _CAM_CAM_CCB_H
@@ -206,7 +206,7 @@ typedef enum {
 				/* Serial Management Protocol */
 
 	XPT_NVME_IO		= 0x1c | XPT_FC_DEV_QUEUED,
-				/* Execiute the requestred NVMe I/O operation */
+				/* Execute the requested NVMe I/O operation */
 
 	XPT_MMCSD_IO		= 0x1d | XPT_FC_DEV_QUEUED,
 				/* Placeholder for MMC / SD / SDIO I/O stuff */
@@ -214,6 +214,9 @@ typedef enum {
 	XPT_SCAN_TGT		= 0x1E | XPT_FC_QUEUED | XPT_FC_USER_CCB
 				       | XPT_FC_XPT_ONLY,
 				/* Scan Target */
+
+	XPT_NVME_ADMIN		= 0x1f | XPT_FC_DEV_QUEUED,
+				/* Execute the requested NVMe Admin operation */
 
 /* HBA engine commands 0x20->0x2F */
 	XPT_ENG_INQ		= 0x20 | XPT_FC_XPT_ONLY,
@@ -359,8 +362,7 @@ struct ccb_getdev {
 	u_int8_t  serial_num[252];
 	u_int8_t  inq_flags;
 	u_int8_t  serial_num_len;
-	const struct nvme_controller_data	*nvme_cdata;
-	const struct nvme_namespace_data	*nvme_data;
+	void *padding[2];
 };
 
 /* Device Statistics CCB */
@@ -623,7 +625,12 @@ struct ccb_pathinq_settings_sas {
 };
 
 struct ccb_pathinq_settings_nvme {
-	uint16_t nsid;		/* Namespace ID for this path */
+	uint32_t nsid;		/* Namespace ID for this path */
+	uint32_t domain;
+	uint8_t  bus;
+	uint8_t  slot;
+	uint8_t  function;
+	uint8_t  extra;
 };
 
 #define	PATHINQ_SETTINGS_SIZE	128
@@ -801,7 +808,7 @@ struct ccb_relsim {
 };
 
 /*
- * NVMe I/O Request CCB used for the XPT_NVME_IO function code.
+ * NVMe I/O Request CCB used for the XPT_NVME_IO and XPT_NVME_ADMIN function codes.
  */
 struct ccb_nvmeio {
 	struct	   ccb_hdr ccb_h;
@@ -810,7 +817,8 @@ struct ccb_nvmeio {
 	struct nvme_completion cpl;	/* NVME completion, per NVME standard */
 	uint8_t   *data_ptr;		/* Ptr to the data buf/SG list */
 	uint32_t  dxfer_len;		/* Data transfer length */
-	uint32_t  resid;		/* Transfer residual length: 2's comp unused ?*/
+	uint16_t  sglist_cnt;		/* Number of SG list entries */
+	uint16_t  unused;		/* padding for removed uint32_t */
 };
 
 /*
@@ -995,11 +1003,15 @@ struct ccb_trans_settings_nvme
 	u_int     	valid;		/* Which fields to honor */
 #define CTS_NVME_VALID_SPEC	0x01
 #define CTS_NVME_VALID_CAPS	0x02
-	u_int		spec_major;	/* Major version of spec supported */
-	u_int		spec_minor;	/* Minor verison of spec supported */
-	u_int		spec_tiny;	/* Tiny version of spec supported */
-	u_int		max_xfer;	/* Max transfer size (0 -> unlimited */
-	u_int		caps;
+#define CTS_NVME_VALID_LINK	0x04
+	uint32_t	spec;		/* NVMe spec implemented -- same as vs register */
+	uint32_t	max_xfer;	/* Max transfer size (0 -> unlimited */
+	uint32_t	caps;
+	uint8_t		lanes;		/* Number of PCIe lanes */
+	uint8_t		speed;		/* PCIe generation for each lane */
+	uint8_t		max_lanes;	/* Number of PCIe lanes */
+	uint8_t		max_speed;	/* PCIe generation for each lane */
+	u_int		pad;		/* Padding to keep ABI */
 };
 	
 /* Get/Set transfer rate/width/disconnection/tag queueing settings */
@@ -1223,6 +1235,8 @@ struct ccb_dev_advinfo {
 #define	CDAI_TYPE_PHYS_PATH	3
 #define	CDAI_TYPE_RCAPLONG	4
 #define	CDAI_TYPE_EXT_INQ	5
+#define	CDAI_TYPE_NVME_CNTRL	6	/* NVMe Identify Controller data */
+#define	CDAI_TYPE_NVME_NS	7	/* NVMe Identify Namespace data */
 	off_t bufsiz;			/* IN: Size of external buffer */
 #define	CAM_SCSI_DEVID_MAXLEN	65536	/* length in buffer is an uint16_t */
 	off_t provsiz;			/* OUT: Size required/used */
@@ -1429,6 +1443,21 @@ cam_fill_nvmeio(struct ccb_nvmeio *nvmeio, u_int32_t retries,
 	      u_int32_t timeout)
 {
 	nvmeio->ccb_h.func_code = XPT_NVME_IO;
+	nvmeio->ccb_h.flags = flags;
+	nvmeio->ccb_h.retry_count = retries;
+	nvmeio->ccb_h.cbfcnp = cbfcnp;
+	nvmeio->ccb_h.timeout = timeout;
+	nvmeio->data_ptr = data_ptr;
+	nvmeio->dxfer_len = dxfer_len;
+}
+
+static __inline void
+cam_fill_nvmeadmin(struct ccb_nvmeio *nvmeio, u_int32_t retries,
+	      void (*cbfcnp)(struct cam_periph *, union ccb *),
+	      u_int32_t flags, u_int8_t *data_ptr, u_int32_t dxfer_len,
+	      u_int32_t timeout)
+{
+	nvmeio->ccb_h.func_code = XPT_NVME_ADMIN;
 	nvmeio->ccb_h.flags = flags;
 	nvmeio->ccb_h.retry_count = retries;
 	nvmeio->ccb_h.cbfcnp = cbfcnp;

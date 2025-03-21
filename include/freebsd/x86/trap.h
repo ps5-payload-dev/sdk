@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	from: @(#)trap.h	5.4 (Berkeley) 5/9/91
- * $FreeBSD: releng/11.1/sys/x86/include/trap.h 257417 2013-10-31 02:35:00Z markj $
+ * $FreeBSD: releng/11.4/sys/x86/include/trap.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _MACHINE_TRAP_H_

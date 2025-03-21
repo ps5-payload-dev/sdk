@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)route.h	8.4 (Berkeley) 1/9/95
- * $FreeBSD: releng/11.1/sys/net/route.h 320134 2017-06-20 05:57:28Z ae $
+ * $FreeBSD: releng/11.4/sys/net/route.h 341241 2018-11-29 15:56:46Z markj $
  */
 
 #ifndef _NET_ROUTE_H_
@@ -251,6 +251,7 @@ struct rt_msghdr {
 	u_char	rtm_version;	/* future binary compatibility */
 	u_char	rtm_type;	/* message type */
 	u_short	rtm_index;	/* index for associated ifp */
+	u_short _rtm_spare1;
 	int	rtm_flags;	/* flags, incl. kern & message, e.g. DONE */
 	int	rtm_addrs;	/* bitmask identifying sockaddrs in msg */
 	pid_t	rtm_pid;	/* identify sender */

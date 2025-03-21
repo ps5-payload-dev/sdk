@@ -31,7 +31,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/wi/if_wivar.h 300238 2016-05-19 22:14:35Z avos $
+ * $FreeBSD: releng/11.4/sys/dev/wi/if_wivar.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 /*

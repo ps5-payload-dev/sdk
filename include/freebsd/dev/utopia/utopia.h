@@ -26,7 +26,7 @@
  *
  * Author: Hartmut Brandt <harti@freebsd.org>
  *
- * $FreeBSD: releng/11.1/sys/dev/utopia/utopia.h 142384 2005-02-24 16:56:36Z harti $
+ * $FreeBSD: releng/11.4/sys/dev/utopia/utopia.h 142384 2005-02-24 16:56:36Z harti $
  */
 #ifndef _DEV_UTOPIA_UTOPIA_H
 #define	_DEV_UTOPIA_UTOPIA_H

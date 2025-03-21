@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.1/include/ifaddrs.h 250887 2013-05-21 21:20:10Z ed $	*/
+/*	$FreeBSD: releng/11.4/include/ifaddrs.h 250887 2013-05-21 21:20:10Z ed $	*/
 
 /*
  * Copyright (c) 1995, 1999

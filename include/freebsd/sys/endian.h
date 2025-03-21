@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/endian.h 208331 2010-05-20 06:16:13Z phk $
+ * $FreeBSD: releng/11.4/sys/sys/endian.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_ENDIAN_H_

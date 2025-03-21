@@ -14,7 +14,7 @@
  *
  * Ported to run under 386BSD by Julian Elischer (julian@tfs.com) Sept 1992
  *
- * $FreeBSD: releng/11.1/sys/cam/scsi/scsi_all.h 317961 2017-05-08 17:21:55Z ken $
+ * $FreeBSD: releng/11.4/sys/cam/scsi/scsi_all.h 351582 2019-08-28 20:23:08Z mav $
  */
 
 /*
@@ -3574,7 +3574,9 @@ struct scsi_mode_header_10
 	u_int8_t data_length[2];/* Sense data length */
 	u_int8_t medium_type;
 	u_int8_t dev_spec;
-	u_int8_t unused[2];
+	u_int8_t flags;
+#define	SMH_LONGLBA	0x01
+	u_int8_t unused;
 	u_int8_t blk_desc_len[2];
 };
 
@@ -3745,8 +3747,8 @@ void scsi_command_sbuf(struct sbuf *sb, uint8_t *cdb, int cdb_len,
 void scsi_progress_sbuf(struct sbuf *sb, uint16_t progress);
 int scsi_sks_sbuf(struct sbuf *sb, int sense_key, uint8_t *sks);
 void scsi_fru_sbuf(struct sbuf *sb, uint64_t fru);
-void scsi_stream_sbuf(struct sbuf *sb, uint8_t stream_bits, uint64_t info);
-void scsi_block_sbuf(struct sbuf *sb, uint8_t block_bits, uint64_t info);
+void scsi_stream_sbuf(struct sbuf *sb, uint8_t stream_bits);
+void scsi_block_sbuf(struct sbuf *sb, uint8_t block_bits);
 void scsi_sense_info_sbuf(struct sbuf *sb, struct scsi_sense_data *sense,
 			  u_int sense_len, uint8_t *cdb, int cdb_len,
 			  struct scsi_inquiry_data *inq_data,

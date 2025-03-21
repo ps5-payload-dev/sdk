@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)signalvar.h	8.6 (Berkeley) 2/19/95
- * $FreeBSD: releng/11.1/sys/sys/signalvar.h 315949 2017-03-25 13:33:23Z badger $
+ * $FreeBSD: releng/11.4/sys/sys/signalvar.h 353789 2019-10-21 01:24:21Z kevans $
  */
 
 #ifndef _SYS_SIGNALVAR_H_
@@ -379,6 +379,7 @@ void	sigacts_copy(struct sigacts *dest, struct sigacts *src);
 void	sigacts_free(struct sigacts *ps);
 struct sigacts *sigacts_hold(struct sigacts *ps);
 int	sigacts_shared(struct sigacts *ps);
+void	sig_drop_caught(struct proc *p);
 void	sigexit(struct thread *td, int sig) __dead2;
 int	sigev_findtd(struct proc *p, struct sigevent *sigev, struct thread **);
 int	sig_ffs(sigset_t *set);

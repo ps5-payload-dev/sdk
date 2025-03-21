@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  * 	from: @(#) ieeefp.h 	1.0 (Berkeley) 9/23/93
- * $FreeBSD: releng/11.1/sys/amd64/include/ieeefp.h 226607 2011-10-21 06:41:46Z das $
+ * $FreeBSD: releng/11.4/sys/amd64/include/ieeefp.h 334771 2018-06-07 09:03:42Z dim $
  */
 
 #ifndef _MACHINE_IEEEFP_H_
@@ -128,6 +128,7 @@ typedef enum {
 
 #define	__fldcw(addr)	__asm __volatile("fldcw %0" : : "m" (*(addr)))
 #define	__fldenv(addr)	__asm __volatile("fldenv %0" : : "m" (*(addr)))
+#define	__fnclex()	__asm __volatile("fnclex")
 #define	__fnstcw(addr)	__asm __volatile("fnstcw %0" : "=m" (*(addr)))
 #define	__fnstenv(addr)	__asm __volatile("fnstenv %0" : "=m" (*(addr)))
 #define	__fnstsw(addr)	__asm __volatile("fnstsw %0" : "=m" (*(addr)))

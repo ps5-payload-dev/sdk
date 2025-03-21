@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ioccom.h	8.2 (Berkeley) 3/28/94
- * $FreeBSD: releng/11.1/sys/sys/ioccom.h 206051 2010-04-01 16:21:35Z pjd $
+ * $FreeBSD: releng/11.4/sys/sys/ioccom.h 332502 2018-04-14 12:52:34Z emaste $
  */
 
 #ifndef	_SYS_IOCCOM_H_
@@ -59,6 +59,10 @@
 #define	_IOW(g,n,t)	_IOC(IOC_IN,	(g), (n), sizeof(t))
 /* this should be _IORW, but stdio got there first */
 #define	_IOWR(g,n,t)	_IOC(IOC_INOUT,	(g), (n), sizeof(t))
+/* Replace length/type in an ioctl command. */
+#define	_IOC_NEWLEN(ioc, len) \
+    (((~(IOCPARM_MASK << 16)) & (ioc)) | (((len) & IOCPARM_MASK) << 16))
+#define	_IOC_NEWTYPE(ioc, type)	_IOC_NEWLEN((ioc), sizeof(type))
 
 #ifdef _KERNEL
 

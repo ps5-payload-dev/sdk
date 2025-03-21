@@ -15,7 +15,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 4. Neither the name of the University nor the names of its contributors
+ * 3. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
  *
@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)dir.h	8.2 (Berkeley) 1/21/94
- * $FreeBSD: releng/11.1/sys/ufs/ufs/dir.h 272880 2014-10-10 00:35:08Z imp $
+ * $FreeBSD: releng/11.4/sys/ufs/ufs/dir.h 347475 2019-05-10 23:46:42Z mckusick $
  */
 
 #ifndef _UFS_UFS_DIR_H_
@@ -105,13 +105,11 @@ struct	direct {
  * The DIRSIZ macro gives the minimum record length which will hold
  * the directory entry.  This requires the amount of space in struct direct
  * without the d_name field, plus enough space for the name with a terminating
- * null byte (dp->d_namlen+1), rounded up to a 4 byte boundary.
- *
- * 
+ * null byte (dp->d_namlen + 1), rounded up to a 4 byte boundary.
  */
-#define	DIRECTSIZ(namlen)						\
-	((__offsetof(struct direct, d_name) +				\
-	  ((namlen)+1)*sizeof(((struct direct *)0)->d_name[0]) + 3) & ~3)
+#define	DIR_ROUNDUP	4	/* Directory name roundup size */
+#define	DIRECTSIZ(namlen) \
+    (roundup2(__offsetof(struct direct, d_name) + (namlen) + 1, DIR_ROUNDUP))
 #if (BYTE_ORDER == LITTLE_ENDIAN)
 #define	DIRSIZ(oldfmt, dp) \
     ((oldfmt) ? DIRECTSIZ((dp)->d_type) : DIRECTSIZ((dp)->d_namlen))

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/fs/smbfs/smbfs_node.h 243396 2012-11-22 08:58:29Z davide $
+ * $FreeBSD: releng/11.4/sys/fs/smbfs/smbfs_node.h 243396 2012-11-22 08:58:29Z davide $
  */
 #ifndef _FS_SMBFS_NODE_H_
 #define _FS_SMBFS_NODE_H_

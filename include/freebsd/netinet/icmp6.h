@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.1/sys/netinet/icmp6.h 301478 2016-06-06 00:35:45Z gnn $	*/
+/*	$FreeBSD: releng/11.4/sys/netinet/icmp6.h 331722 2018-03-29 02:50:57Z eadler $	*/
 /*	$KAME: icmp6.h,v 1.46 2001/04/27 15:09:48 itojun Exp $	*/
 
 /*-
@@ -626,7 +626,7 @@ struct icmp6stat {
 	uint64_t icp6s_nd_badopt;	/* bad ND options */
 	uint64_t icp6s_badns;		/* bad neighbor solicitation */
 	uint64_t icp6s_badna;		/* bad neighbor advertisement */
-	uint64_t icp6s_badrs;		/* bad router advertisement */
+	uint64_t icp6s_badrs;		/* bad router solicitation */
 	uint64_t icp6s_badra;		/* bad router advertisement */
 	uint64_t icp6s_badredirect;	/* bad redirect message */
 };

@@ -1,6 +1,6 @@
 /* This file was created automatically
  * Source file: $Begemot: libunimsg/atm/msg/msg.def,v 1.3 2003/09/19 11:58:15 hbb Exp $
- * $FreeBSD: releng/11.1/sys/contrib/ngatm/netnatm/msg/uni_msg.h 121936 2003-11-03 09:11:53Z harti $
+ * $FreeBSD: releng/11.4/sys/contrib/ngatm/netnatm/msg/uni_msg.h 121936 2003-11-03 09:11:53Z harti $
  */
 
 #ifndef _NETNATM_MSG_UNI_MSG_H_

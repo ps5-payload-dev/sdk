@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/_bus_dma.h 161927 2006-09-03 00:26:17Z jmg $
+ * $FreeBSD: releng/11.4/sys/sys/_bus_dma.h 331722 2018-03-29 02:50:57Z eadler $
  *
  */
 

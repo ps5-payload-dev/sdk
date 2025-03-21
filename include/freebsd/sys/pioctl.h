@@ -33,11 +33,15 @@
 /*
  * procfs ioctl definitions.
  *
- * $FreeBSD: releng/11.1/sys/sys/pioctl.h 217747 2011-01-23 12:44:17Z kib $
+ * $FreeBSD: releng/11.4/sys/sys/pioctl.h 361035 2020-05-14 17:47:55Z jhb $
  */
 
 #ifndef _SYS_PIOCTL_H
 # define _SYS_PIOCTL_H
+
+#ifndef _KERNEL
+#warning "<sys/pioctl.h> is deprecated, ptrace() should be used instead"
+#endif
 
 # include <sys/ioccom.h>
 

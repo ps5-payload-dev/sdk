@@ -28,7 +28,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/vm/vm_reserv.h 318716 2017-05-23 07:27:30Z markj $
+ * $FreeBSD: releng/11.4/sys/vm/vm_reserv.h 324399 2017-10-07 20:22:04Z alc $
  */
 
 /*
@@ -64,6 +64,7 @@ void		vm_reserv_rename(vm_page_t m, vm_object_t new_object,
 int		vm_reserv_size(int level);
 vm_paddr_t	vm_reserv_startup(vm_offset_t *vaddr, vm_paddr_t end,
 		    vm_paddr_t high_water);
+vm_page_t	vm_reserv_to_superpage(vm_page_t m);
 
 #endif	/* VM_NRESERVLEVEL > 0 */
 #endif	/* _KERNEL */

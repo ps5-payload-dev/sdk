@@ -1,6 +1,6 @@
 /*-
  * Copyright (c) 2016 Oleksandr Tymoshenko <gonzo@FreeBSD.org>
- * Copyright (c) 2015-2016 Vladimir Kondratyev <wulf@cicgroup.ru>
+ * Copyright (c) 2015-2016 Vladimir Kondratyev <wulf@FreeBSD.org>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,19 +24,22 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/evdev/input.h 305706 2016-09-11 18:56:38Z gonzo $
+ * $FreeBSD: releng/11.4/sys/dev/evdev/input.h 337290 2018-08-04 12:40:59Z wulf $
  */
 
 #ifndef	_EVDEV_INPUT_H
 #define	_EVDEV_INPUT_H
 
 #ifndef __KERNEL__
-#include <sys/time.h>
 #include <sys/ioccom.h>
+#include <sys/time.h>
 #include <sys/types.h>
 #endif
 
 #include "input-event-codes.h"
+
+#define	input_event_sec		time.tv_sec
+#define	input_event_usec	time.tv_usec
 
 struct input_event {
 	struct timeval	time;
@@ -138,6 +141,9 @@ struct input_keymap_entry {
 #define	BUS_GSC			0x1A
 #define	BUS_ATARI		0x1B
 #define	BUS_SPI			0x1C
+#define	BUS_RMI			0x1D
+#define	BUS_CEC			0x1E
+#define	BUS_INTEL_ISHTP		0x1F
 
 /*
  * MT_TOOL types

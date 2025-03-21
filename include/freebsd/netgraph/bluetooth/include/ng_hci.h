@@ -28,7 +28,7 @@
  * SUCH DAMAGE.
  *
  * $Id: ng_hci.h,v 1.2 2003/03/18 00:09:37 max Exp $
- * $FreeBSD: releng/11.1/sys/netgraph/bluetooth/include/ng_hci.h 298813 2016-04-29 21:25:05Z pfg $
+ * $FreeBSD: releng/11.4/sys/netgraph/bluetooth/include/ng_hci.h 298813 2016-04-29 21:25:05Z pfg $
  */
 
 /*

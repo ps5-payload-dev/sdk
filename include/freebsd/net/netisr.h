@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/net/netisr.h 301270 2016-06-03 13:57:10Z bz $
+ * $FreeBSD: releng/11.4/sys/net/netisr.h 301270 2016-06-03 13:57:10Z bz $
  */
 
 #ifndef _NET_NETISR_H_

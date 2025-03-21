@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/pmckern.h 315285 2017-03-14 20:43:04Z mjg $
+ * $FreeBSD: releng/11.4/sys/sys/pmckern.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 /*

@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)stdlib.h	8.5 (Berkeley) 5/19/95
- * $FreeBSD: releng/11.1/include/stdlib.h 317342 2017-04-23 20:32:46Z kib $
+ * $FreeBSD: releng/11.4/include/stdlib.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _STDLIB_H_
@@ -90,7 +90,7 @@ long	 atol(const char *);
 void	*bsearch(const void *, const void *, size_t,
 	    size_t, int (*)(const void * _Nonnull, const void *));
 void	*calloc(size_t, size_t) __malloc_like __result_use_check
-	     __alloc_size(1) __alloc_size(2);
+	     __alloc_size2(1, 2);
 div_t	 div(int, int) __pure2;
 _Noreturn void	 exit(int);
 void	 free(void *);
@@ -307,9 +307,9 @@ void	 qsort_r(void *, size_t, size_t, void *,
 	    int (*)(void *, const void *, const void *));
 int	 radixsort(const unsigned char **, int, const unsigned char *,
 	    unsigned);
-void	*reallocarray(void *, size_t, size_t) __result_use_check __alloc_size(2)
-	    __alloc_size(3);
-void	*reallocf(void *, size_t) __alloc_size(2);
+void	*reallocarray(void *, size_t, size_t) __result_use_check
+	    __alloc_size2(2, 3);
+void	*reallocf(void *, size_t) __result_use_check __alloc_size(2);
 int	 rpmatch(const char *);
 void	 setprogname(const char *);
 int	 sradixsort(const unsigned char **, int, const unsigned char *,

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/mmc/mmc_ioctl.h 318197 2017-05-11 20:55:11Z marius $
+ * $FreeBSD: releng/11.4/sys/dev/mmc/mmc_ioctl.h 322119 2017-08-06 16:07:25Z marius $
  */
 
 #ifndef _DEV_MMC_MMC_IOCTL_H_
@@ -54,7 +54,7 @@ struct mmc_ioc_multi_cmd {
 #define	MMC_IOC_BASE		'M'
 
 #define	MMC_IOC_CMD		_IOWR(MMC_IOC_BASE, 0, struct mmc_ioc_cmd)
-#define	MMC_IOC_CMD_MULTI	_IOWR(MMC_IOC_BASE, 1, struct mmc_ioc_multi_cmd)
+#define	MMC_IOC_MULTI_CMD	_IOWR(MMC_IOC_BASE, 1, struct mmc_ioc_multi_cmd)
 
 /* Maximum accepted data transfer size */
 #define	MMC_IOC_MAX_BYTES	(512  * 256)

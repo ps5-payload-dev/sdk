@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.1/sys/netipsec/ipcomp.h 139823 2005-01-07 01:45:51Z imp $	*/
+/*	$FreeBSD: releng/11.4/sys/netipsec/ipcomp.h 331722 2018-03-29 02:50:57Z eadler $	*/
 /*	$KAME: ipcomp.h,v 1.8 2000/09/26 07:55:14 itojun Exp $	*/
 
 /*-

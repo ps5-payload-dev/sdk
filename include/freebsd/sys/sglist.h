@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/sglist.h 300337 2016-05-20 23:28:43Z jhb $
+ * $FreeBSD: releng/11.4/sys/sys/sglist.h 345039 2019-03-11 22:48:51Z jhb $
  */
 
 /*
@@ -88,6 +88,8 @@ int	sglist_append_bio(struct sglist *sg, struct bio *bp);
 int	sglist_append_mbuf(struct sglist *sg, struct mbuf *m0);
 int	sglist_append_phys(struct sglist *sg, vm_paddr_t paddr,
 	    size_t len);
+int	sglist_append_sglist(struct sglist *sg, struct sglist *source,
+	    size_t offset, size_t length);
 int	sglist_append_uio(struct sglist *sg, struct uio *uio);
 int	sglist_append_user(struct sglist *sg, void *buf, size_t len,
 	    struct thread *td);

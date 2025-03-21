@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *      $FreeBSD: releng/11.1/sys/sys/sbuf.h 284192 2015-06-09 21:39:38Z ken $
+ *      $FreeBSD: releng/11.4/sys/sys/sbuf.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_SBUF_H_
@@ -99,6 +99,7 @@ void		 sbuf_start_section(struct sbuf *, ssize_t *);
 ssize_t		 sbuf_end_section(struct sbuf *, ssize_t, size_t, int);
 void		 sbuf_hexdump(struct sbuf *, const void *, int, const char *,
 		     int);
+void		 sbuf_putbuf(struct sbuf *);
 
 #ifdef _KERNEL
 struct uio;

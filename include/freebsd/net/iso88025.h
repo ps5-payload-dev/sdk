@@ -30,7 +30,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/net/iso88025.h 263203 2014-03-15 06:49:32Z glebius $
+ * $FreeBSD: releng/11.4/sys/net/iso88025.h 263203 2014-03-15 06:49:32Z glebius $
  *
  * Information gathered from tokenring@freebsd, /sys/net/ethernet.h and
  * the Mach token ring driver.

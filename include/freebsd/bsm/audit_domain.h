@@ -26,7 +26,7 @@
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE. 
  *
- * $FreeBSD: releng/11.1/sys/bsm/audit_domain.h 292522 2015-12-20 23:22:04Z brueffer $
+ * $FreeBSD: releng/11.4/sys/bsm/audit_domain.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _BSM_AUDIT_DOMAIN_H_

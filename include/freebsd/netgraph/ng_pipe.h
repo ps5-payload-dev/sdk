@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/netgraph/ng_pipe.h 206360 2010-04-07 16:29:10Z joel $
+ * $FreeBSD: releng/11.4/sys/netgraph/ng_pipe.h 206360 2010-04-07 16:29:10Z joel $
  */
 
 #ifndef _NETGRAPH_PIPE_H_

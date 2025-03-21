@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	from: @(#)nec765.h	7.1 (Berkeley) 5/9/91
- * $FreeBSD: releng/11.1/sys/dev/ic/nec765.h 162165 2006-09-08 21:46:01Z jkim $
+ * $FreeBSD: releng/11.4/sys/dev/ic/nec765.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 /*

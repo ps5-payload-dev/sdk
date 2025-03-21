@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.1/sys/dev/usb/usb_ioctl.h 283879 2015-06-01 11:24:34Z hselasky $ */
+/* $FreeBSD: releng/11.4/sys/dev/usb/usb_ioctl.h 353174 2019-10-07 08:13:10Z hselasky $ */
 /*-
  * Copyright (c) 2008 Hans Petter Selasky. All rights reserved.
  * Copyright (c) 1998 The NetBSD Foundation, Inc. All rights reserved.
@@ -220,7 +220,7 @@ struct usb_fs_uninit {
 } USB_IOCTL_STRUCT_ALIGN(1);
 
 struct usb_fs_open {
-#define	USB_FS_MAX_BUFSIZE (1 << 18)
+#define	USB_FS_MAX_BUFSIZE (1 << 25)	/* 32 MBytes */
 	uint32_t max_bufsize;
 #define	USB_FS_MAX_FRAMES		(1U << 12)
 #define	USB_FS_MAX_FRAMES_PRE_SCALE	(1U << 31)	/* for ISOCHRONOUS transfers */

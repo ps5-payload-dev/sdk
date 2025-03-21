@@ -1,6 +1,5 @@
 /*-
- * Copyright (c) 1992-2017 The FreeBSD Project.
- * All rights reserved.
+ * Copyright (c) 1992-2020 The FreeBSD Project.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,5 +28,5 @@
 #error "<osreldate.h> cannot be used in the kernel, use <sys/param.h>"
 #else
 #undef __FreeBSD_version
-#define __FreeBSD_version 1101001
+#define __FreeBSD_version 1104001
 #endif

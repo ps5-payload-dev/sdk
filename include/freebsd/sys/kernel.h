@@ -39,7 +39,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)kernel.h	8.3 (Berkeley) 1/21/94
- * $FreeBSD: releng/11.1/sys/sys/kernel.h 316448 2017-04-03 09:36:44Z kib $
+ * $FreeBSD: releng/11.4/sys/sys/kernel.h 358936 2020-03-13 08:53:26Z hselasky $
  */
 
 #ifndef _SYS_KERNEL_H_
@@ -118,6 +118,7 @@ enum sysinit_sub_id {
 	SI_SUB_SCHED_IDLE	= 0x2600000,	/* required idle procs */
 	SI_SUB_MBUF		= 0x2700000,	/* mbuf subsystem */
 	SI_SUB_INTR		= 0x2800000,	/* interrupt threads */
+	SI_SUB_TASKQ		= 0x2880000,	/* task queues */
 #ifdef EARLY_AP_STARTUP
 	SI_SUB_SMP		= 0x2900000,	/* start the APs*/
 #endif
@@ -176,6 +177,10 @@ enum sysinit_elem_order {
 	SI_ORDER_SECOND		= 0x0000001,	/* second*/
 	SI_ORDER_THIRD		= 0x0000002,	/* third*/
 	SI_ORDER_FOURTH		= 0x0000003,	/* fourth*/
+	SI_ORDER_FIFTH		= 0x0000004,	/* fifth*/
+	SI_ORDER_SIXTH		= 0x0000005,	/* sixth*/
+	SI_ORDER_SEVENTH	= 0x0000006,	/* seventh*/
+	SI_ORDER_EIGHTH		= 0x0000007,	/* eighth*/
 	SI_ORDER_MIDDLE		= 0x1000000,	/* somewhere in the middle */
 	SI_ORDER_ANY		= 0xfffffff	/* last*/
 };
@@ -400,13 +405,16 @@ struct tunable_str {
 #define	TUNABLE_STR_FETCH(path, var, size)			\
 	getenv_string((path), (var), (size))
 
+typedef void (*ich_func_t)(void *_arg);
+
 struct intr_config_hook {
 	TAILQ_ENTRY(intr_config_hook) ich_links;
-	void	(*ich_func)(void *arg);
-	void	*ich_arg;
+	ich_func_t	ich_func;
+	void		*ich_arg;
 };
 
 int	config_intrhook_establish(struct intr_config_hook *hook);
 void	config_intrhook_disestablish(struct intr_config_hook *hook);
+void	config_intrhook_oneshot(ich_func_t _func, void *_arg);
 
 #endif /* !_SYS_KERNEL_H_*/

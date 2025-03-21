@@ -1,6 +1,6 @@
-/* $FreeBSD: releng/11.1/sys/dev/usb/usb_bus.h 286773 2015-08-14 12:57:53Z hselasky $ */
+/* $FreeBSD: releng/11.4/sys/dev/usb/usb_bus.h 356395 2020-01-06 09:10:13Z hselasky $ */
 /*-
- * Copyright (c) 2008 Hans Petter Selasky. All rights reserved.
+ * Copyright (c) 2008-2019 Hans Petter Selasky. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -40,19 +40,10 @@ struct usb_bus_msg {
 };
 
 /*
- * The following structure defines the USB statistics structure.
- */
-struct usb_bus_stat {
-	uint32_t uds_requests[4];
-};
-
-/*
  * The following structure defines an USB BUS. There is one USB BUS
  * for every Host or Device controller.
  */
 struct usb_bus {
-	struct usb_bus_stat stats_err;
-	struct usb_bus_stat stats_ok;
 #if USB_HAVE_ROOT_MOUNT_HOLD
 	struct root_hold_token *bus_roothold;
 #endif
@@ -129,6 +120,7 @@ struct usb_bus {
 	uint8_t	do_probe;		/* set if USB should be re-probed */
 	uint8_t no_explore;		/* don't explore USB ports */
 	uint8_t dma_bits;		/* number of DMA address lines */
+	uint8_t control_ep_quirk;	/* need 64kByte buffer for data stage */
 };
 
 #endif					/* _USB_BUS_H_ */

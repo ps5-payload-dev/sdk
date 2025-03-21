@@ -48,7 +48,7 @@
  * or the SD Card Association to disclose or distribute any technical
  * information, know-how or other confidential information to any third party.
  *
- * $FreeBSD: releng/11.1/sys/dev/mmc/bridge.h 318494 2017-05-18 20:46:20Z marius $
+ * $FreeBSD: releng/11.4/sys/dev/mmc/bridge.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef DEV_MMC_BRIDGE_H
@@ -65,12 +65,10 @@
  * linux/mmc/host.h file.
  *
  * A mmc bridge is a chipset that can have one or more mmc and/or sd
- * cards attached to it.  mmc cards are attached on a bus topology,
- * while sd and sdio cards are attached using a star topology (meaning
- * in practice each sd card has its own, independent slot).  Each
- * mmcbr is assumed to be derived from the mmcbr.  This is done to
- * allow for easier addition of bridges (as each bridge does not need
- * to be added to the mmcbus file).
+ * cards attached to it.  mmc devices are attached on a bus topology,
+ * while sd and sdio cards usually are attached using a star topology
+ * (meaning in practice each sd card has its own, independent slot).
+ * Since SDHCI v3.00, buses for esd and esdio are possible, though.
  *
  * Attached to the mmc bridge is an mmcbus.  The mmcbus is described
  * in dev/mmc/mmcbus_if.m.
@@ -137,6 +135,10 @@ enum mmc_card_mode {
 	mode_mmc, mode_sd
 };
 
+enum mmc_retune_req {
+	retune_req_none = 0, retune_req_normal, retune_req_reset
+};
+
 struct mmc_host {
 	int f_min;
 	int f_max;
@@ -177,7 +179,7 @@ struct mmc_host {
 extern driver_t   mmc_driver;
 extern devclass_t mmc_devclass;
 
-#define	MMC_VERSION	3
+#define	MMC_VERSION	5
 
 #define	MMC_DECLARE_BRIDGE(name)					\
     DRIVER_MODULE(mmc, name, mmc_driver, mmc_devclass, NULL, NULL);	\

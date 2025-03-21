@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	from: @(#)npx.h	5.3 (Berkeley) 1/18/91
- * $FreeBSD: releng/11.1/sys/amd64/include/fpu.h 306314 2016-09-25 17:24:10Z kib $
+ * $FreeBSD: releng/11.4/sys/amd64/include/fpu.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 /*

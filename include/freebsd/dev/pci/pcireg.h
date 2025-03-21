@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/pci/pcireg.h 306520 2016-09-30 18:47:34Z jhb $
+ * $FreeBSD: releng/11.4/sys/dev/pci/pcireg.h 358361 2020-02-27 00:57:02Z kib $
  *
  */
 
@@ -120,6 +120,9 @@
 #define	PCIM_MFDEV		0x80
 #define	PCIR_BIST	0x0f
 
+/* PCI Spec rev 2.2: 0FFFFh is an invalid value for Vendor ID. */
+#define	PCIV_INVALID	0xffff 
+
 /* Capability Register Offsets */
 
 #define	PCICAP_ID	0x0
@@ -147,6 +150,7 @@
 #define	PCIY_SATA	0x12	/* SATA */
 #define	PCIY_PCIAF	0x13	/* PCI Advanced Features */
 #define	PCIY_EA		0x14	/* PCI Extended Allocation */
+#define	PCIY_FPB	0x15	/* Flattening Portal Bridge */
 
 /* Extended Capability Register Fields */
 
@@ -188,8 +192,22 @@
 #define	PCIZ_PMUX	0x001a	/* Protocol Multiplexing */
 #define	PCIZ_PASID	0x001b	/* Process Address Space ID */
 #define	PCIZ_LN_REQ	0x001c	/* LN Requester */
-#define	PCIZ_DPC	0x001d	/* Downstream Porto Containment */
+#define	PCIZ_DPC	0x001d	/* Downstream Port Containment */
 #define	PCIZ_L1PM	0x001e	/* L1 PM Substates */
+#define	PCIZ_PTM	0x001f	/* Precision Time Measurement */
+#define	PCIZ_M_PCIE	0x0020	/* PCIe over M-PHY */
+#define	PCIZ_FRS	0x0021	/* FRS Queuing */
+#define	PCIZ_RTR	0x0022	/* Readiness Time Reporting */
+#define	PCIZ_DVSEC	0x0023	/* Designated Vendor-Specific */
+#define	PCIZ_VF_REBAR	0x0024	/* VF Resizable BAR */
+#define	PCIZ_DLNK	0x0025	/* Data Link Feature */
+#define	PCIZ_16GT	0x0026	/* Physical Layer 16.0 GT/s */
+#define	PCIZ_LMR	0x0027	/* Lane Margining at Receiver */
+#define	PCIZ_HIER_ID	0x0028	/* Hierarchy ID */
+#define	PCIZ_NPEM	0x0029	/* Native PCIe Enclosure Management */
+#define	PCIZ_PL32	0x002a	/* Physical Layer 32.0 GT/s */
+#define	PCIZ_AP		0x002b	/* Alternate Protocol */
+#define	PCIZ_SFI	0x002c	/* System Firmware Intermediary */
 
 /* config registers for header type 0 devices */
 
@@ -330,6 +348,8 @@
 #define	PCIS_STORAGE_NVM	0x08
 #define	PCIP_STORAGE_NVM_NVMHCI_1_0	0x01
 #define	PCIP_STORAGE_NVM_ENTERPRISE_NVMHCI_1_0	0x02
+#define	PCIS_STORAGE_UFS	0x09
+#define	PCIP_STORAGE_UFS_UFSHCI_1_0	0x01
 #define	PCIS_STORAGE_OTHER	0x80
 
 #define	PCIC_NETWORK	0x02
@@ -340,6 +360,8 @@
 #define	PCIS_NETWORK_ISDN	0x04
 #define	PCIS_NETWORK_WORLDFIP	0x05
 #define	PCIS_NETWORK_PICMG	0x06
+#define	PCIS_NETWORK_INFINIBAND	0x07
+#define	PCIS_NETWORK_HFC	0x08
 #define	PCIS_NETWORK_OTHER	0x80
 
 #define	PCIC_DISPLAY	0x03
@@ -353,6 +375,7 @@
 #define	PCIS_MULTIMEDIA_AUDIO	0x01
 #define	PCIS_MULTIMEDIA_TELE	0x02
 #define	PCIS_MULTIMEDIA_HDA	0x03
+#define	PCIP_MULTIMEDIA_HDA_VENDOR	0x01
 #define	PCIS_MULTIMEDIA_OTHER	0x80
 
 #define	PCIC_MEMORY	0x05
@@ -373,6 +396,8 @@
 #define	PCIS_BRIDGE_RACEWAY	0x08
 #define	PCIS_BRIDGE_PCI_TRANSPARENT 0x09
 #define	PCIS_BRIDGE_INFINIBAND	0x0a
+#define	PCIS_BRIDGE_AS_PCI	0x0b
+#define	PCIS_BRIDGE_AS_PCI_ASI_SIG	0x01
 #define	PCIS_BRIDGE_OTHER	0x80
 
 #define	PCIC_SIMPLECOMM	0x07
@@ -404,6 +429,7 @@
 #define	PCIS_BASEPERIPH_PCIHOT	0x04
 #define	PCIS_BASEPERIPH_SDHC	0x05
 #define	PCIS_BASEPERIPH_IOMMU	0x06
+#define	PCIS_BASEPERIPH_RCEC	0x07
 #define	PCIS_BASEPERIPH_OTHER	0x80
 
 #define	PCIC_INPUTDEV	0x09
@@ -446,6 +472,7 @@
 #define	PCIP_SERIALBUS_IPMI_BT		0x02
 #define	PCIS_SERIALBUS_SERCOS	0x08
 #define	PCIS_SERIALBUS_CANBUS	0x09
+#define	PCIS_SERIALBUS_MIPI_I3C	0x0a
 
 #define	PCIC_WIRELESS	0x0d
 #define	PCIS_WIRELESS_IRDA	0x00
@@ -455,6 +482,8 @@
 #define	PCIS_WIRELESS_BROADBAND	0x12
 #define	PCIS_WIRELESS_80211A	0x20
 #define	PCIS_WIRELESS_80211B	0x21
+#define	PCIS_WIRELESS_CELL	0x40
+#define	PCIS_WIRELESS_CELL_E	0x41
 #define	PCIS_WIRELESS_OTHER	0x80
 
 #define	PCIC_INTELLIIO	0x0e
@@ -477,6 +506,11 @@
 #define	PCIS_DASP_COMM_SYNC	0x10
 #define	PCIS_DASP_MGMT_CARD	0x20
 #define	PCIS_DASP_OTHER		0x80
+
+#define	PCIC_ACCEL	0x12
+#define	PCIS_ACCEL_PROCESSING	0x00
+
+#define	PCIC_INSTRUMENT	0x13
 
 #define	PCIC_OTHER	0xff
 

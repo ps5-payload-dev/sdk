@@ -24,7 +24,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/vm/uma.h 302372 2016-07-06 14:09:49Z nwhitehorn $
+ * $FreeBSD: releng/11.4/sys/vm/uma.h 338389 2018-08-29 17:58:01Z markj $
  *
  */
 
@@ -262,8 +262,8 @@ uma_zone_t uma_zcache_create(char *name, int size, uma_ctor ctor, uma_dtor dtor,
 					 * information in the vm_page.
 					 */
 #define	UMA_ZONE_SECONDARY	0x0200	/* Zone is a Secondary Zone */
-/*				0x0400	   Unused */
-#define	UMA_ZONE_MAXBUCKET	0x0800	/* Use largest buckets */
+#define	UMA_ZONE_NOBUCKET	0x0400	/* Do not use buckets. */
+#define	UMA_ZONE_MAXBUCKET	0x0800	/* Use largest buckets. */
 #define	UMA_ZONE_CACHESPREAD	0x1000	/*
 					 * Spread memory start locations across
 					 * all possible cache lines.  May
@@ -296,6 +296,7 @@ uma_zone_t uma_zcache_create(char *name, int size, uma_ctor ctor, uma_dtor dtor,
 #define UMA_ALIGN_SHORT	(sizeof(short) - 1)	/* "" short */
 #define UMA_ALIGN_CHAR	(sizeof(char) - 1)	/* "" char */
 #define UMA_ALIGN_CACHE	(0 - 1)			/* Cache line size align */
+#define	UMA_ALIGNOF(type) (_Alignof(type) - 1)	/* Alignment fit for 'type' */
 
 /*
  * Destroys an empty uma zone.  If the zone is not empty uma complains loudly.
@@ -363,6 +364,11 @@ uma_zfree(uma_zone_t zone, void *item)
 {
 	uma_zfree_arg(zone, item, NULL);
 }
+
+/*
+ * Wait until the specified zone can allocate an item.
+ */
+void uma_zwait(uma_zone_t zone);
 
 /*
  * XXX The rest of the prototypes in this header are h0h0 magic for the VM.

@@ -29,7 +29,7 @@
  *
  * Authors: Ken Merry           (Spectra Logic Corporation)
  *
- * $FreeBSD: releng/11.1/sys/sys/disk_zone.h 300207 2016-05-19 14:08:36Z ken $
+ * $FreeBSD: releng/11.4/sys/sys/disk_zone.h 300207 2016-05-19 14:08:36Z ken $
  */
 
 #ifndef _SYS_DISK_ZONE_H_

@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/acpica/acpi_hpet.h 305866 2016-09-16 10:04:28Z kib $
+ * $FreeBSD: releng/11.4/sys/dev/acpica/acpi_hpet.h 305866 2016-09-16 10:04:28Z kib $
  */
 
 #ifndef __ACPI_HPET_H__

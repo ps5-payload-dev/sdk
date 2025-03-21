@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/include/proc_service.h 155412 2006-02-07 02:29:55Z davidxu $
+ * $FreeBSD: releng/11.4/include/proc_service.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _PROC_SERVICE_H_

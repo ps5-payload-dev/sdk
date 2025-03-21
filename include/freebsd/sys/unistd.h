@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)unistd.h	8.2 (Berkeley) 1/7/94
- * $FreeBSD: releng/11.1/sys/sys/unistd.h 312170 2017-01-14 11:16:10Z kib $
+ * $FreeBSD: releng/11.4/sys/sys/unistd.h 353789 2019-10-21 01:24:21Z kevans $
  */
 
 #ifndef _SYS_UNISTD_H_
@@ -186,11 +186,14 @@
 #define	RFTSIGNUM(flags)	(((flags) >> RFTSIGSHIFT) & RFTSIGMASK)
 #define	RFTSIGFLAGS(signum)	((signum) << RFTSIGSHIFT)
 #define	RFPROCDESC	(1<<28)	/* return a process descriptor */
-#define	RFPPWAIT	(1<<31)	/* parent sleeps until child exits (vfork) */
+/* kernel: parent sleeps until child exits (vfork) */
+#define	RFPPWAIT	(1<<31)
+/* user: vfork(2) semantics, clear signals */
+#define	RFSPAWN		(1U<<31)
 #define	RFFLAGS		(RFFDG | RFPROC | RFMEM | RFNOWAIT | RFCFDG | \
     RFTHREAD | RFSIGSHARE | RFLINUXTHPN | RFSTOPPED | RFHIGHPID | RFTSIGZMB | \
-    RFPROCDESC | RFPPWAIT)
-#define	RFKERNELONLY	(RFSTOPPED | RFHIGHPID | RFPPWAIT | RFPROCDESC)
+    RFPROCDESC | RFSPAWN | RFPPWAIT)
+#define	RFKERNELONLY	(RFSTOPPED | RFHIGHPID | RFPROCDESC)
 
 #endif /* __BSD_VISIBLE */
 

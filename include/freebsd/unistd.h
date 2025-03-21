@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)unistd.h	8.12 (Berkeley) 4/27/95
- * $FreeBSD: releng/11.1/include/unistd.h 304977 2016-08-29 05:15:43Z kib $
+ * $FreeBSD: releng/11.4/include/unistd.h 357180 2020-01-27 22:13:42Z kevans $
  */
 
 #ifndef _UNISTD_H_
@@ -545,16 +545,14 @@ char	*re_comp(const char *);
 int	 re_exec(const char *);
 int	 reboot(int);
 int	 revoke(const char *);
-pid_t	 rfork(int);
+pid_t	 rfork(int) __returns_twice;
 pid_t	 rfork_thread(int, void *, int (*)(void *), void *);
 int	 rresvport(int *);
 int	 rresvport_af(int *, int);
 int	 ruserok(const char *, int, const char *, const char *);
-#if __BSD_VISIBLE
 #ifndef _SELECT_DECLARED
 #define	_SELECT_DECLARED
 int	 select(int, fd_set *, fd_set *, fd_set *, struct timeval *);
-#endif
 #endif
 int	 setdomainname(const char *, int);
 int	 setgroups(int, const gid_t *);
@@ -569,6 +567,7 @@ int	 setloginclass(const char *);
 void	*setmode(const char *);
 int	 setpgrp(pid_t, pid_t);			/* obsoleted by setpgid() */
 void	 setproctitle(const char *_fmt, ...) __printf0like(1, 2);
+void	 setproctitle_fast(const char *_fmt, ...) __printf0like(1, 2);
 int	 setresgid(gid_t, gid_t, gid_t);
 int	 setresuid(uid_t, uid_t, uid_t);
 int	 setrgid(gid_t);

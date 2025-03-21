@@ -1,6 +1,6 @@
 /*-
  * This file is in the public domain.
- * $FreeBSD: releng/11.1/sys/cam/scsi/scsi_message.h 289843 2015-10-23 18:34:18Z mav $
+ * $FreeBSD: releng/11.4/sys/cam/scsi/scsi_message.h 289843 2015-10-23 18:34:18Z mav $
  */
 
 /* Messages (1 byte) */		     /* I/T (M)andatory or (O)ptional */

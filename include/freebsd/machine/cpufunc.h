@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/amd64/include/cpufunc.h 313148 2017-02-03 12:03:10Z kib $
+ * $FreeBSD: releng/11.4/sys/amd64/include/cpufunc.h 340545 2018-11-18 01:07:36Z jhb $
  */
 
 /*
@@ -111,6 +111,13 @@ clflushopt(u_long addr)
 {
 
 	__asm __volatile(".byte 0x66;clflush %0" : : "m" (*(char *)addr));
+}
+
+static __inline void
+clwb(u_long addr)
+{
+
+	__asm __volatile("clwb %0" : : "m" (*(char *)addr));
 }
 
 static __inline void
@@ -651,6 +658,38 @@ load_gs(u_short sel)
 }
 #endif
 
+static __inline uint64_t
+rdfsbase(void)
+{
+	uint64_t x;
+
+	__asm __volatile("rdfsbase %0" : "=r" (x));
+	return (x);
+}
+
+static __inline void
+wrfsbase(uint64_t x)
+{
+
+	__asm __volatile("wrfsbase %0" : : "r" (x));
+}
+
+static __inline uint64_t
+rdgsbase(void)
+{
+	uint64_t x;
+
+	__asm __volatile("rdgsbase %0" : "=r" (x));
+	return (x);
+}
+
+static __inline void
+wrgsbase(uint64_t x)
+{
+
+	__asm __volatile("wrgsbase %0" : : "r" (x));
+}
+
 static __inline void
 bare_lgdt(struct region_descriptor *addr)
 {
@@ -685,6 +724,15 @@ static __inline void
 lldt(u_short sel)
 {
 	__asm __volatile("lldt %0" : : "r" (sel));
+}
+
+static __inline u_short
+sldt(void)
+{
+	u_short sel;
+
+	__asm __volatile("sldt %0" : "=r" (sel));
+	return (sel);
 }
 
 static __inline void
@@ -828,6 +876,20 @@ static __inline void
 intr_restore(register_t rflags)
 {
 	write_rflags(rflags);
+}
+
+static __inline void
+stac(void)
+{
+
+	__asm __volatile("stac" : : : "cc");
+}
+
+static __inline void
+clac(void)
+{
+
+	__asm __volatile("clac" : : : "cc");
 }
 
 #else /* !(__GNUCLIKE_ASM && __CC_SUPPORTS___INLINE) */

@@ -20,7 +20,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/mouse.h 307576 2016-10-18 20:17:57Z gonzo $
+ * $FreeBSD: releng/11.4/sys/sys/mouse.h 344165 2019-02-15 20:46:03Z wulf $
  */
 
 #ifndef _SYS_MOUSE_H_
@@ -135,6 +135,8 @@ typedef struct synapticshw {
 	int maximumYCoord;
 	int infoXupmm;
 	int infoYupmm;
+	int forcePad;
+	int topButtonPad;
 } synapticshw_t;
 
 /* iftype */

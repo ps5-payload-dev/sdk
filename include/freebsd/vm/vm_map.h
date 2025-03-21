@@ -57,7 +57,7 @@
  * any improvements or extensions that they make and grant Carnegie the
  * rights to redistribute these changes.
  *
- * $FreeBSD: releng/11.1/sys/vm/vm_map.h 320909 2017-07-12 07:31:28Z kib $
+ * $FreeBSD: releng/11.4/sys/vm/vm_map.h 343426 2019-01-25 11:46:07Z kib $
  */
 
 /*
@@ -172,15 +172,26 @@ vm_map_entry_system_wired_count(vm_map_entry_t entry)
  *	A map is a set of map entries.  These map entries are
  *	organized both as a binary search tree and as a doubly-linked
  *	list.  Both structures are ordered based upon the start and
- *	end addresses contained within each map entry.  Sleator and
- *	Tarjan's top-down splay algorithm is employed to control
- *	height imbalance in the binary search tree.
+ *	end addresses contained within each map entry.
  *
- * List of locks
+ *	Counterintuitively, the map's min offset value is stored in
+ *	map->header.end, and its max offset value is stored in
+ *	map->header.start.
+ *
+ *	The list header has max start value and min end value to act
+ *	as sentinels for sequential search of the doubly-linked list.
+ *	Sleator and Tarjan's top-down splay algorithm is employed to
+ *	control height imbalance in the binary search tree.
+ *
+ *	List of locks
  *	(c)	const until freed
  */
 struct vm_map {
 	struct vm_map_entry header;	/* List of entries */
+/*
+	map min_offset	header.end	(c)
+	map max_offset	header.start	(c)
+*/
 	struct sx lock;			/* Lock for map data */
 	struct mtx system_mtx;
 	int nentries;			/* Number of entries */
@@ -191,8 +202,6 @@ struct vm_map {
 	vm_flags_t flags;		/* flags for this vm_map */
 	vm_map_entry_t root;		/* Root of a binary search tree */
 	pmap_t pmap;			/* (c) Physical map */
-#define	min_offset	header.start	/* (c) */
-#define	max_offset	header.end	/* (c) */
 	int busy;
 };
 
@@ -203,16 +212,23 @@ struct vm_map {
 #define	MAP_BUSY_WAKEUP		0x02
 
 #ifdef	_KERNEL
+#ifdef KLD_MODULE
+#define	vm_map_max(map)		vm_map_max_KBI((map))
+#define	vm_map_min(map)		vm_map_min_KBI((map))
+#define	vm_map_pmap(map)	vm_map_pmap_KBI((map))
+#else
 static __inline vm_offset_t
 vm_map_max(const struct vm_map *map)
 {
-	return (map->max_offset);
+
+	return (map->header.start);
 }
 
 static __inline vm_offset_t
 vm_map_min(const struct vm_map *map)
 {
-	return (map->min_offset);
+
+	return (map->header.end);
 }
 
 static __inline pmap_t
@@ -226,6 +242,7 @@ vm_map_modflags(vm_map_t map, vm_flags_t set, vm_flags_t clear)
 {
 	map->flags = (map->flags | set) & ~clear;
 }
+#endif	/* KLD_MODULE */
 #endif	/* _KERNEL */
 
 /*
@@ -286,6 +303,9 @@ void vm_map_wakeup(vm_map_t map);
 void vm_map_busy(vm_map_t map);
 void vm_map_unbusy(vm_map_t map);
 void vm_map_wait_busy(vm_map_t map);
+vm_offset_t vm_map_max_KBI(const struct vm_map *map);
+vm_offset_t vm_map_min_KBI(const struct vm_map *map);
+pmap_t vm_map_pmap_KBI(vm_map_t map);
 
 #define	vm_map_lock(map)	_vm_map_lock(map, LOCK_FILE, LOCK_LINE)
 #define	vm_map_unlock(map)	_vm_map_unlock(map, LOCK_FILE, LOCK_LINE)
@@ -322,6 +342,7 @@ long vmspace_resident_count(struct vmspace *vmspace);
 #define MAP_DISABLE_COREDUMP	0x0100
 #define MAP_PREFAULT_MADVISE	0x0200	/* from (user) madvise request */
 #define	MAP_VN_WRITECOUNT	0x0400
+#define	MAP_REMAP		0x0800
 #define	MAP_STACK_GROWS_DOWN	0x1000
 #define	MAP_STACK_GROWS_UP	0x2000
 #define	MAP_ACC_CHARGED		0x4000

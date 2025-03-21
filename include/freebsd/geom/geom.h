@@ -32,7 +32,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/geom/geom.h 300287 2016-05-20 08:22:20Z kib $
+ * $FreeBSD: releng/11.4/sys/geom/geom.h 347378 2019-05-09 03:51:34Z kevans $
  */
 
 #ifndef _GEOM_GEOM_H_
@@ -148,8 +148,10 @@ struct g_geom {
 	void			*spare1;
 	void			*softc;
 	unsigned		flags;
-#define	G_GEOM_WITHER		1
-#define	G_GEOM_VOLATILE_BIO	2
+#define	G_GEOM_WITHER		0x01
+#define	G_GEOM_VOLATILE_BIO	0x02
+#define	G_GEOM_IN_ACCESS	0x04
+#define	G_GEOM_ACCESS_WAIT	0x08
 };
 
 /*
@@ -398,7 +400,7 @@ g_free(void *ptr)
 	static moduledata_t name##_mod = {			\
 		#name, g_modevent, &class			\
 	};							\
-	DECLARE_MODULE(name, name##_mod, SI_SUB_DRIVERS, SI_ORDER_FIRST);
+	DECLARE_MODULE(name, name##_mod, SI_SUB_DRIVERS, SI_ORDER_SECOND);
 
 int g_is_geom_thread(struct thread *td);
 

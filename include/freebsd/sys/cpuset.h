@@ -26,7 +26,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/cpuset.h 303228 2016-07-23 17:37:59Z jhb $
+ * $FreeBSD: releng/11.4/sys/sys/cpuset.h 333338 2018-05-07 21:42:22Z shurd $
  */
 
 #ifndef _SYS_CPUSET_H_
@@ -83,6 +83,8 @@
 #define	CPU_WHICH_IRQ		4	/* Specifies an irq #. */
 #define	CPU_WHICH_JAIL		5	/* Specifies a jail id. */
 #define	CPU_WHICH_DOMAIN	6	/* Specifies a NUMA domain id. */
+#define	CPU_WHICH_INTRHANDLER	7	/* Specifies an irq # (not ithread). */
+#define	CPU_WHICH_ITHREAD	8	/* Specifies an irq's ithread. */
 
 /*
  * Reserved cpuset identifiers.

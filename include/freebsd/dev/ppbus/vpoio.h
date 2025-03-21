@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/ppbus/vpoio.h 185003 2008-11-16 17:42:02Z jhb $
+ * $FreeBSD: releng/11.4/sys/dev/ppbus/vpoio.h 331722 2018-03-29 02:50:57Z eadler $
  *
  */
 #ifndef __VP0IO_H

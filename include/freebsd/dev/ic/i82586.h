@@ -31,7 +31,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/ic/i82586.h 112734 2003-03-28 06:27:08Z mdodd $
+ * $FreeBSD: releng/11.4/sys/dev/ic/i82586.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 /*

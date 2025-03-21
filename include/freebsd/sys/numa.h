@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/numa.h 285387 2015-07-11 15:21:37Z adrian $
+ * $FreeBSD: releng/11.4/sys/sys/numa.h 285387 2015-07-11 15:21:37Z adrian $
  */
 #ifndef	__SYS_NUMA_H__
 #define	__SYS_NUMA_H__

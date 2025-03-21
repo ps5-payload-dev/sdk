@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/include/stdbool.h 228878 2011-12-25 20:15:41Z ed $
+ * $FreeBSD: releng/11.4/include/stdbool.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef __bool_true_false_are_defined

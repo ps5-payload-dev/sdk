@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/vm/vm_radix.h 318716 2017-05-23 07:27:30Z markj $
+ * $FreeBSD: releng/11.4/sys/vm/vm_radix.h 327785 2018-01-10 20:39:26Z markj $
  */
 
 #ifndef _VM_RADIX_H_
@@ -35,8 +35,8 @@
 
 #ifdef _KERNEL
 
-void		vm_radix_init(void);
 int		vm_radix_insert(struct vm_radix *rtree, vm_page_t page);
+void		vm_radix_wait(void);
 boolean_t	vm_radix_is_singleton(struct vm_radix *rtree);
 vm_page_t	vm_radix_lookup(struct vm_radix *rtree, vm_pindex_t index);
 vm_page_t	vm_radix_lookup_ge(struct vm_radix *rtree, vm_pindex_t index);
@@ -44,6 +44,21 @@ vm_page_t	vm_radix_lookup_le(struct vm_radix *rtree, vm_pindex_t index);
 void		vm_radix_reclaim_allnodes(struct vm_radix *rtree);
 vm_page_t	vm_radix_remove(struct vm_radix *rtree, vm_pindex_t index);
 vm_page_t	vm_radix_replace(struct vm_radix *rtree, vm_page_t newpage);
+void		vm_radix_zinit(void);
+
+static __inline void
+vm_radix_init(struct vm_radix *rtree)
+{
+
+	rtree->rt_root = 0;
+}
+
+static __inline boolean_t
+vm_radix_is_empty(struct vm_radix *rtree)
+{
+
+	return (rtree->rt_root == 0);
+}
 
 #endif /* _KERNEL */
 #endif /* !_VM_RADIX_H_ */

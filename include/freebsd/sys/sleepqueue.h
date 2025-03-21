@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/sleepqueue.h 316120 2017-03-29 01:21:48Z vangyzen $
+ * $FreeBSD: releng/11.4/sys/sys/sleepqueue.h 354405 2019-11-06 18:02:18Z mav $
  */
 
 #ifndef _SYS_SLEEPQUEUE_H_
@@ -83,6 +83,7 @@ struct thread;
 #define	SLEEPQ_SX		0x03		/* Used by an sx lock. */
 #define	SLEEPQ_LK		0x04		/* Used by a lockmgr. */
 #define	SLEEPQ_INTERRUPTIBLE	0x100		/* Sleep is interruptible. */
+#define	SLEEPQ_UNFAIR		0x200		/* Unfair wakeup order. */
 
 void	init_sleepqueues(void);
 int	sleepq_abort(struct thread *td, int intrval);

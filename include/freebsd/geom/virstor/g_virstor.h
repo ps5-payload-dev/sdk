@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/geom/virstor/g_virstor.h 172302 2007-09-23 07:34:23Z pjd $
+ * $FreeBSD: releng/11.4/sys/geom/virstor/g_virstor.h 172302 2007-09-23 07:34:23Z pjd $
  */
 
 #ifndef _G_VIRSTOR_H_

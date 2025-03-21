@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/hwpmc/hwpmc_core.h 298955 2016-05-03 03:41:25Z pfg $
+ * $FreeBSD: releng/11.4/sys/dev/hwpmc/hwpmc_core.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _DEV_HWPMC_CORE_H_

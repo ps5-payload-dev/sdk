@@ -29,7 +29,7 @@
  *
  *	from: @(#)types.h 1.18 87/07/24 SMI
  *	from: @(#)types.h	2.3 88/08/15 4.0 RPCSRC
- * $FreeBSD: releng/11.1/sys/rpc/types.h 299150 2016-05-06 01:49:46Z pfg $
+ * $FreeBSD: releng/11.4/sys/rpc/types.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 /*

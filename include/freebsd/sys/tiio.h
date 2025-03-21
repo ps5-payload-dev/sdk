@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.1/sys/sys/tiio.h 98849 2002-06-26 03:37:47Z ken $
+ *	$FreeBSD: releng/11.4/sys/sys/tiio.h 331722 2018-03-29 02:50:57Z eadler $
  */
 /*
  * The ti_stats structure below is from code with the following copyright, 

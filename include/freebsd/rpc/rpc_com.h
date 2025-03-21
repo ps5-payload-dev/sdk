@@ -1,5 +1,5 @@
 /*	$NetBSD: rpc_com.h,v 1.3 2000/12/10 04:10:08 christos Exp $	*/
-/*	$FreeBSD: releng/11.1/include/rpc/rpc_com.h 258578 2013-11-25 19:04:36Z hrs $ */
+/*	$FreeBSD: releng/11.4/include/rpc/rpc_com.h 331722 2018-03-29 02:50:57Z eadler $ */
 
 /*-
  * Copyright (c) 2009, Sun Microsystems, Inc.

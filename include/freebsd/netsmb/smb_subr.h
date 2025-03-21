@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/netsmb/smb_subr.h 217174 2011-01-08 23:06:54Z csjp $
+ * $FreeBSD: releng/11.4/sys/netsmb/smb_subr.h 217174 2011-01-08 23:06:54Z csjp $
  */
 #ifndef _NETSMB_SMB_SUBR_H_
 #define _NETSMB_SMB_SUBR_H_

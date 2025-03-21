@@ -24,7 +24,7 @@
  * SUCH DAMAGE.
  *
  * $KAME: altq.h,v 1.10 2003/07/10 12:07:47 kjc Exp $
- * $FreeBSD: releng/11.1/sys/net/altq/altq.h 287009 2015-08-21 22:02:22Z loos $
+ * $FreeBSD: releng/11.4/sys/net/altq/altq.h 287009 2015-08-21 22:02:22Z loos $
  */
 #ifndef _ALTQ_ALTQ_H_
 #define	_ALTQ_ALTQ_H_

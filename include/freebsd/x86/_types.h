@@ -33,7 +33,7 @@
  *
  *	From: @(#)ansi.h	8.2 (Berkeley) 1/4/94
  *	From: @(#)types.h	8.3 (Berkeley) 1/5/94
- * $FreeBSD: releng/11.1/sys/x86/include/_types.h 313574 2017-02-11 02:00:56Z kib $
+ * $FreeBSD: releng/11.4/sys/x86/include/_types.h 332135 2018-04-06 19:17:59Z kevans $
  */
 
 #ifndef _MACHINE__TYPES_H_
@@ -78,15 +78,19 @@ typedef	unsigned long long	__uint64_t;
 #ifdef	__LP64__
 typedef	__int32_t	__clock_t;		/* clock()... */
 typedef	__int64_t	__critical_t;
+#ifndef _STANDALONE
 typedef	double		__double_t;
 typedef	float		__float_t;
+#endif
 typedef	__int64_t	__intfptr_t;
 typedef	__int64_t	__intptr_t;
 #else
 typedef	unsigned long	__clock_t;
 typedef	__int32_t	__critical_t;
+#ifndef _STANDALONE
 typedef	long double	__double_t;
 typedef	long double	__float_t;
+#endif
 typedef	__int32_t	__intfptr_t;
 typedef	__int32_t	__intptr_t;
 #endif

@@ -67,7 +67,7 @@
  *
  * OpenBSD: if_bridge.h,v 1.14 2001/03/22 03:48:29 jason Exp
  *
- * $FreeBSD: releng/11.1/sys/net/if_bridgevar.h 313050 2017-02-01 20:27:38Z kp $
+ * $FreeBSD: releng/11.4/sys/net/if_bridgevar.h 313050 2017-02-01 20:27:38Z kp $
  */
 
 /*

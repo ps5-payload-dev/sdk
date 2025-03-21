@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.1/sys/dev/usb/usb_process.h 286773 2015-08-14 12:57:53Z hselasky $ */
+/* $FreeBSD: releng/11.4/sys/dev/usb/usb_process.h 331722 2018-03-29 02:50:57Z eadler $ */
 /*-
  * Copyright (c) 2008 Hans Petter Selasky. All rights reserved.
  *

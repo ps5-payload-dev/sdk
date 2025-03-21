@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/geom/gate/g_gate.h 238119 2012-07-04 20:16:28Z pjd $
+ * $FreeBSD: releng/11.4/sys/geom/gate/g_gate.h 356581 2020-01-10 00:44:07Z mav $
  */
 
 #ifndef _G_GATE_H_
@@ -89,16 +89,15 @@ struct g_gate_softc {
 	uint32_t		 sc_queue_count;	/* P: sc_queue_mtx */
 	uint32_t		 sc_queue_size;		/* P: (read-only) */
 	u_int			 sc_timeout;		/* P: (read-only) */
-	struct g_consumer	*sc_readcons;		/* P: XXX */
-	off_t			 sc_readoffset;		/* P: XXX */
+	struct g_consumer	*sc_readcons;		/* P: sc_read_mtx */
+	off_t			 sc_readoffset;		/* P: sc_read_mtx */
 	struct callout		 sc_callout;		/* P: (modified only
 							       from callout
 							       thread) */
-	uintptr_t		 sc_seq;		/* P: (modified only
-							       from g_down
-							       thread) */
+	uintptr_t		 sc_seq;		/* P: sc_queue_mtx */
 	LIST_ENTRY(g_gate_softc) sc_next;		/* P: g_gate_list_mtx */
 	char			 sc_info[G_GATE_INFOSIZE]; /* P: (read-only) */
+	struct mtx		 sc_read_mtx;
 };
 
 #define	G_GATE_DEBUG(lvl, ...)	do {					\

@@ -33,7 +33,7 @@
  *	@(#)procfs.h	8.9 (Berkeley) 5/14/95
  *
  * From:
- * $FreeBSD: releng/11.1/sys/fs/procfs/procfs.h 197428 2009-09-23 12:08:08Z kib $
+ * $FreeBSD: releng/11.4/sys/fs/procfs/procfs.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifdef _KERNEL

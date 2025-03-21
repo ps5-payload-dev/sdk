@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/geom/shsec/g_shsec.h 155174 2006-02-01 12:06:01Z pjd $
+ * $FreeBSD: releng/11.4/sys/geom/shsec/g_shsec.h 155174 2006-02-01 12:06:01Z pjd $
  */
 
 #ifndef	_G_SHSEC_H_

@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.1/sys/dev/usb/usb.h 280598 2015-03-25 13:32:27Z hselasky $ */
+/* $FreeBSD: releng/11.4/sys/dev/usb/usb.h 359317 2020-03-26 05:37:50Z hselasky $ */
 /*-
  * Copyright (c) 2008 Hans Petter Selasky. All rights reserved.
  * Copyright (c) 1998 The NetBSD Foundation, Inc. All rights reserved.
@@ -271,6 +271,11 @@ typedef struct usb_device_request usb_device_request_t;
 #define	UHF_BH_PORT_RESET	28
 #define	UHF_C_BH_PORT_RESET	29
 #define	UHF_FORCE_LINKPM_ACCEPT	30
+
+/* SuperSpeed suspend support */
+#define	USB_INTERFACE_FUNC_SUSPEND 0
+#define	USB_INTERFACE_FUNC_SUSPEND_LP	(1 << 8)
+#define	USB_INTERFACE_FUNC_SUSPEND_RW	(1 << 9)
 
 struct usb_descriptor {
 	uByte	bLength;

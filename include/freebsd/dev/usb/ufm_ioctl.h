@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.1/sys/dev/usb/ufm_ioctl.h 246115 2013-01-30 10:59:42Z hselasky $ */
+/* $FreeBSD: releng/11.4/sys/dev/usb/ufm_ioctl.h 331722 2018-03-29 02:50:57Z eadler $ */
 /*-
  * Copyright (c) 2001 M. Warner Losh
  * All rights reserved.

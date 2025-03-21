@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/x86/include/pci_cfgreg.h 294883 2016-01-27 02:23:54Z jhibbits $
+ * $FreeBSD: releng/11.4/sys/x86/include/pci_cfgreg.h 294883 2016-01-27 02:23:54Z jhibbits $
  *
  */
 

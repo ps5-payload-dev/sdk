@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)assert.h	8.2 (Berkeley) 1/21/94
- * $FreeBSD: releng/11.1/include/assert.h 228955 2011-12-29 14:41:17Z ed $
+ * $FreeBSD: releng/11.4/include/assert.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #include <sys/cdefs.h>

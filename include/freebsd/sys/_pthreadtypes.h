@@ -30,7 +30,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/_pthreadtypes.h 189828 2009-03-14 20:10:14Z das $
+ * $FreeBSD: releng/11.4/sys/sys/_pthreadtypes.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS__PTHREADTYPES_H_

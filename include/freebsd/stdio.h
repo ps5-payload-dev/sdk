@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)stdio.h	8.5 (Berkeley) 4/29/95
- * $FreeBSD: releng/11.1/include/stdio.h 319430 2017-06-01 14:49:53Z vangyzen $
+ * $FreeBSD: releng/11.4/include/stdio.h 357852 2020-02-13 03:13:29Z kevans $
  */
 
 #ifndef	_STDIO_H_
@@ -47,6 +47,11 @@ typedef	__off_t		fpos_t;
 #ifndef _SIZE_T_DECLARED
 typedef	__size_t	size_t;
 #define	_SIZE_T_DECLARED
+#endif
+
+#ifndef _RSIZE_T_DEFINED
+#define _RSIZE_T_DEFINED
+typedef size_t rsize_t;
 #endif
 
 #if __POSIX_VISIBLE >= 200809
@@ -263,6 +268,9 @@ size_t	 fwrite(const void * __restrict, size_t, size_t, FILE * __restrict);
 int	 getc(FILE *);
 int	 getchar(void);
 char	*gets(char *);
+#if __EXT1_VISIBLE
+char	*gets_s(char *, rsize_t);
+#endif
 void	 perror(const char *);
 int	 printf(const char * __restrict, ...);
 int	 putc(int, FILE *);
@@ -285,14 +293,16 @@ int	 vprintf(const char * __restrict, __va_list);
 int	 vsprintf(char * __restrict, const char * __restrict,
 	    __va_list);
 
-#if __ISO_C_VISIBLE >= 1999
+#if __ISO_C_VISIBLE >= 1999 || __POSIX_VISIBLE >= 199506
 int	 snprintf(char * __restrict, size_t, const char * __restrict,
 	    ...) __printflike(3, 4);
+int	 vsnprintf(char * __restrict, size_t, const char * __restrict,
+	    __va_list) __printflike(3, 0);
+#endif
+#if __ISO_C_VISIBLE >= 1999
 int	 vfscanf(FILE * __restrict, const char * __restrict, __va_list)
 	    __scanflike(2, 0);
 int	 vscanf(const char * __restrict, __va_list) __scanflike(1, 0);
-int	 vsnprintf(char * __restrict, size_t, const char * __restrict,
-	    __va_list) __printflike(3, 0);
 int	 vsscanf(const char * __restrict, const char * __restrict, __va_list)
 	    __scanflike(2, 0);
 #endif
@@ -335,7 +345,13 @@ int	 putchar_unlocked(int);
 void	 clearerr_unlocked(FILE *);
 int	 feof_unlocked(FILE *);
 int	 ferror_unlocked(FILE *);
+int	 fflush_unlocked(FILE *);
 int	 fileno_unlocked(FILE *);
+int	 fputc_unlocked(int, FILE *);
+int	 fputs_unlocked(const char * __restrict, FILE * __restrict);
+size_t	 fread_unlocked(void * __restrict, size_t, size_t, FILE * __restrict);
+size_t	 fwrite_unlocked(const void * __restrict, size_t, size_t,
+    FILE * __restrict);
 #endif
 
 #if __POSIX_VISIBLE >= 200112
@@ -531,10 +547,11 @@ extern int __isthreaded;
  * See ISO/IEC 9945-1 ANSI/IEEE Std 1003.1 Second Edition 1996-07-12
  * B.8.2.7 for the rationale behind the *_unlocked() macros.
  */
+#define	clearerr_unlocked(p)	__sclearerr(p)
 #define	feof_unlocked(p)	__sfeof(p)
 #define	ferror_unlocked(p)	__sferror(p)
-#define	clearerr_unlocked(p)	__sclearerr(p)
 #define	fileno_unlocked(p)	__sfileno(p)
+#define	fputc_unlocked(s, p)	__sputc(s, p)
 #endif
 #if __POSIX_VISIBLE >= 199506
 #define	getc_unlocked(fp)	__sgetc(fp)

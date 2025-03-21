@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/ofw/ofw_cpu.h 279012 2015-02-19 16:34:48Z andrew $
+ * $FreeBSD: releng/11.4/sys/dev/ofw/ofw_cpu.h 279012 2015-02-19 16:34:48Z andrew $
  */
 
 #ifndef _DEV_OFW_OFW_CPU_H_

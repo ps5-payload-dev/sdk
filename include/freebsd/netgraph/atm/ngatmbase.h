@@ -27,7 +27,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/netgraph/atm/ngatmbase.h 139823 2005-01-07 01:45:51Z imp $
+ * $FreeBSD: releng/11.4/sys/netgraph/atm/ngatmbase.h 139823 2005-01-07 01:45:51Z imp $
  *
  * In-kernel UNI stack message functions.
  */

@@ -33,7 +33,7 @@
  *
  *      @(#)bpf.h       7.1 (Berkeley) 5/7/91
  *
- * $FreeBSD: releng/11.1/sys/net/dlt.h 319279 2017-05-31 05:20:59Z delphij $
+ * $FreeBSD: releng/11.4/sys/net/dlt.h 356341 2020-01-04 00:44:49Z cy $
  */
 
 #ifndef _NET_DLT_H_
@@ -122,9 +122,9 @@
 
 /*
  * 18 is used for DLT_PFSYNC in OpenBSD, NetBSD, DragonFly BSD and
- * Mac OS X; don't use it for anything else.  (FreeBSD uses 121,
- * which collides with DLT_HHDLC, even though it doesn't use 18
- * for anything and doesn't appear to have ever used it for anything.)
+ * macOS; don't use it for anything else.  (FreeBSD uses 121, which
+ * collides with DLT_HHDLC, even though it doesn't use 18 for
+ * anything and doesn't appear to have ever used it for anything.)
  *
  * We define it as 18 on those platforms; it is, unfortunately, used
  * for DLT_CIP in Suse 6.3, so we don't define it as DLT_PFSYNC
@@ -342,7 +342,7 @@
  *
  * FreeBSD's libpcap won't map a link-layer header type of 18 - i.e.,
  * DLT_PFSYNC files from OpenBSD and possibly older versions of NetBSD,
- * DragonFly BSD, and OS X - to DLT_PFSYNC, so code built with FreeBSD's
+ * DragonFly BSD, and macOS - to DLT_PFSYNC, so code built with FreeBSD's
  * libpcap won't treat those files as DLT_PFSYNC files.
  *
  * Other libpcaps won't map a link-layer header type of 121 to DLT_PFSYNC;
@@ -769,8 +769,17 @@
  * IPMB packet for IPMI, beginning with the I2C slave address, followed
  * by the netFn and LUN, etc..  Requested by Chanthy Toeung
  * <chanthy.toeung@ca.kontron.com>.
+ * 
+ * XXX - this used to be called DLT_IPMB, back when we got the
+ * impression from the email thread requesting it that the packet
+ * had no extra 2-byte header.  We've renamed it; if anybody used
+ * DLT_IPMB and assumed no 2-byte header, this will cause the compile
+ * to fail, at which point we'll have to figure out what to do about
+ * the two header types using the same DLT_/LINKTYPE_ value.  If that
+ * doesn't happen, we'll assume nobody used it and that the redefinition
+ * is safe.
  */
-#define DLT_IPMB		199
+#define DLT_IPMB_KONTRON	199
 
 /*
  * Juniper-private data link type, as per request from
@@ -948,14 +957,14 @@
  * the pseudo-header is:
  *
  * struct dl_ipnetinfo {
- *     u_int8_t   dli_version;
- *     u_int8_t   dli_family;
- *     u_int16_t  dli_htype;
- *     u_int32_t  dli_pktlen;
- *     u_int32_t  dli_ifindex;
- *     u_int32_t  dli_grifindex;
- *     u_int32_t  dli_zsrc;
- *     u_int32_t  dli_zdst;
+ *     uint8_t   dli_version;
+ *     uint8_t   dli_family;
+ *     uint16_t  dli_htype;
+ *     uint32_t  dli_pktlen;
+ *     uint32_t  dli_ifindex;
+ *     uint32_t  dli_grifindex;
+ *     uint32_t  dli_zsrc;
+ *     uint32_t  dli_zdst;
  * };
  *
  * dli_version is 2 for the current version of the pseudo-header.
@@ -1231,7 +1240,7 @@
  * So I'll just give them one; hopefully this will show up in a
  * libpcap release in time for them to get this into 10.10 Big Sur
  * or whatever Mavericks' successor is called.  LINKTYPE_PKTAP
- * will be 258 *even on OS X*; that is *intentional*, so that
+ * will be 258 *even on macOS*; that is *intentional*, so that
  * PKTAP files look the same on *all* OSes (different OSes can have
  * different numerical values for a given DLT_, but *MUST NOT* have
  * different values for what goes in a file, as files can be moved
@@ -1243,9 +1252,9 @@
  * and that will continue to be DLT_USER2 on Darwin-based OSes. That way,
  * binary compatibility with Mavericks is preserved for programs using
  * this version of libpcap.  This does mean that if you were using
- * DLT_USER2 for some capture device on OS X, you can't do so with
+ * DLT_USER2 for some capture device on macOS, you can't do so with
  * this version of libpcap, just as you can't with Apple's libpcap -
- * on OS X, they define DLT_PKTAP to be DLT_USER2, so programs won't
+ * on macOS, they define DLT_PKTAP to be DLT_USER2, so programs won't
  * be able to distinguish between PKTAP and whatever you were using
  * DLT_USER2 for.
  *
@@ -1305,6 +1314,71 @@
 #define DLT_RDS		265
 
 /*
+ * USB packets, beginning with a Darwin (macOS, etc.) header.
+ */
+#define DLT_USB_DARWIN	266
+
+/*
+ * OpenBSD DLT_OPENFLOW.
+ */
+#define DLT_OPENFLOW	267
+
+/*
+ * SDLC frames containing SNA PDUs.
+ */
+#define DLT_SDLC	268
+
+/*
+ * per "Selvig, Bjorn" <b.selvig@ti.com> used for
+ * TI protocol sniffer.
+ */
+#define DLT_TI_LLN_SNIFFER	269
+
+/*
+ * per: Erik de Jong <erikdejong at gmail.com> for
+ *   https://github.com/eriknl/LoRaTap/releases/tag/v0.1
+ */
+#define DLT_LORATAP             270
+
+/*
+ * per: Stefanha at gmail.com for
+ *   http://lists.sandelman.ca/pipermail/tcpdump-workers/2017-May/000772.html
+ * and: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/linux/vsockmon.h
+ * for: http://qemu-project.org/Features/VirtioVsock
+ */
+#define DLT_VSOCK               271
+
+/*
+ * Nordic Semiconductor Bluetooth LE sniffer.
+ */
+#define DLT_NORDIC_BLE		272
+
+/*
+ * Excentis DOCSIS 3.1 RF sniffer (XRA-31)
+ *   per: bruno.verstuyft at excentis.com
+ *        http://www.xra31.com/xra-header
+ */
+#define DLT_DOCSIS31_XRA31	273
+
+/*
+ * mPackets, as specified by IEEE 802.3br Figure 99-4, starting
+ * with the preamble and always ending with a CRC field.
+ */
+#define DLT_ETHERNET_MPACKET	274
+
+/*
+ * DisplayPort AUX channel monitoring data as specified by VESA
+ * DisplayPort(DP) Standard preceeded by a pseudo-header.
+ *    per dirk.eibach at gdsys.cc
+ */
+#define DLT_DISPLAYPORT_AUX	275
+
+/*
+ * Linux cooked sockets v2.
+ */
+#define DLT_LINUX_SLL2	276
+
+/*
  * In case the code that includes this file (directly or indirectly)
  * has also included OS files that happen to define DLT_MATCHING_MAX,
  * with a different value (perhaps because that OS hasn't picked up
@@ -1314,7 +1388,7 @@
 #ifdef DLT_MATCHING_MAX
 #undef DLT_MATCHING_MAX
 #endif
-#define DLT_MATCHING_MAX	265	/* highest value in the "matching" range */
+#define DLT_MATCHING_MAX	276	/* highest value in the "matching" range */
 
 /*
  * DLT and savefile link type values are split into a class and

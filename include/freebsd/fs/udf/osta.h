@@ -1,7 +1,7 @@
 /*
  * Prototypes for the OSTA functions
  *
- * $FreeBSD: releng/11.1/sys/fs/udf/osta.h 298806 2016-04-29 20:51:24Z pfg $
+ * $FreeBSD: releng/11.4/sys/fs/udf/osta.h 298806 2016-04-29 20:51:24Z pfg $
  */
 
 /*-

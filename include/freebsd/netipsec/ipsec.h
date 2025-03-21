@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.1/sys/netipsec/ipsec.h 319599 2017-06-05 11:11:07Z ae $	*/
+/*	$FreeBSD: releng/11.4/sys/netipsec/ipsec.h 351358 2019-08-21 22:42:08Z jhb $	*/
 /*	$KAME: ipsec.h,v 1.53 2001/11/20 08:32:38 itojun Exp $	*/
 
 /*-
@@ -253,8 +253,9 @@ struct ipsecstat {
 #include <sys/counter.h>
 
 struct ipsec_ctx_data;
-#define	IPSEC_INIT_CTX(_ctx, _mp, _sav, _af, _enc) do {	\
+#define	IPSEC_INIT_CTX(_ctx, _mp, _inp, _sav, _af, _enc) do {	\
 	(_ctx)->mp = (_mp);				\
+	(_ctx)->inp = (_inp);				\
 	(_ctx)->sav = (_sav);				\
 	(_ctx)->af = (_af);				\
 	(_ctx)->enc = (_enc);				\
@@ -277,12 +278,12 @@ VNET_DECLARE(int, ip4_esp_trans_deflev);
 VNET_DECLARE(int, ip4_esp_net_deflev);
 VNET_DECLARE(int, ip4_ah_trans_deflev);
 VNET_DECLARE(int, ip4_ah_net_deflev);
-VNET_DECLARE(int, ip4_ah_offsetmask);
 VNET_DECLARE(int, ip4_ipsec_dfbit);
 VNET_DECLARE(int, ip4_ipsec_ecn);
-VNET_DECLARE(int, ip4_esp_randpad);
 VNET_DECLARE(int, crypto_support);
 VNET_DECLARE(int, natt_cksum_policy);
+
+extern struct timeval ipsec_warn_interval;
 
 #define	IPSECSTAT_INC(name)	\
     VNET_PCPUSTAT_ADD(struct ipsecstat, ipsec4stat, name, 1)
@@ -290,10 +291,8 @@ VNET_DECLARE(int, natt_cksum_policy);
 #define	V_ip4_esp_net_deflev	VNET(ip4_esp_net_deflev)
 #define	V_ip4_ah_trans_deflev	VNET(ip4_ah_trans_deflev)
 #define	V_ip4_ah_net_deflev	VNET(ip4_ah_net_deflev)
-#define	V_ip4_ah_offsetmask	VNET(ip4_ah_offsetmask)
 #define	V_ip4_ipsec_dfbit	VNET(ip4_ipsec_dfbit)
 #define	V_ip4_ipsec_ecn		VNET(ip4_ipsec_ecn)
-#define	V_ip4_esp_randpad	VNET(ip4_esp_randpad)
 #define	V_crypto_support	VNET(crypto_support)
 #define	V_natt_cksum_policy	VNET(natt_cksum_policy)
 
@@ -319,7 +318,7 @@ int ipsec_if_input(struct mbuf *, struct secasvar *, uint32_t);
 struct ipsecrequest *ipsec_newisr(void);
 void ipsec_delisr(struct ipsecrequest *);
 struct secpolicy *ipsec4_checkpolicy(const struct mbuf *, struct inpcb *,
-    int *);
+    int *, int);
 
 u_int ipsec_get_reqlevel(struct secpolicy *, u_int);
 

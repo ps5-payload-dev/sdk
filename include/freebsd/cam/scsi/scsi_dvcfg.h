@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.1/sys/cam/scsi/scsi_dvcfg.h 139743 2005-01-05 22:34:37Z imp $	*/
+/*	$FreeBSD: releng/11.4/sys/cam/scsi/scsi_dvcfg.h 139743 2005-01-05 22:34:37Z imp $	*/
 /*	$NecBSD: scsi_dvcfg.h,v 1.4 1998/03/14 07:05:06 kmatsuda Exp $	*/
 /*	$NetBSD$	*/
 

@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/gtaskqueue.h 304704 2016-08-23 21:21:56Z shurd $
+ * $FreeBSD: releng/11.4/sys/sys/gtaskqueue.h 328805 2018-02-02 18:38:29Z mav $
  */
 
 #ifndef _SYS_GTASKQUEUE_H_
@@ -80,22 +80,6 @@ int	taskqgroup_adjust(struct taskqgroup *qgroup, int cnt, int stride);
 #define TASKQGROUP_DECLARE(name)			\
 extern struct taskqgroup *qgroup_##name
 
-
-#ifdef EARLY_AP_STARTUP
-#define TASKQGROUP_DEFINE(name, cnt, stride)				\
-									\
-struct taskqgroup *qgroup_##name;					\
-									\
-static void								\
-taskqgroup_define_##name(void *arg)					\
-{									\
-	qgroup_##name = taskqgroup_create(#name);			\
-	taskqgroup_adjust(qgroup_##name, (cnt), (stride));		\
-}									\
-									\
-SYSINIT(taskqgroup_##name, SI_SUB_INIT_IF, SI_ORDER_FIRST,		\
-	taskqgroup_define_##name, NULL)
-#else
 #define TASKQGROUP_DEFINE(name, cnt, stride)				\
 									\
 struct taskqgroup *qgroup_##name;					\
@@ -106,7 +90,7 @@ taskqgroup_define_##name(void *arg)					\
 	qgroup_##name = taskqgroup_create(#name);			\
 }									\
 									\
-SYSINIT(taskqgroup_##name, SI_SUB_INIT_IF, SI_ORDER_FIRST,		\
+SYSINIT(taskqgroup_##name, SI_SUB_TASKQ, SI_ORDER_FIRST,		\
 	taskqgroup_define_##name, NULL);				\
 									\
 static void								\
@@ -116,10 +100,9 @@ taskqgroup_adjust_##name(void *arg)					\
 }									\
 									\
 SYSINIT(taskqgroup_adj_##name, SI_SUB_SMP, SI_ORDER_ANY,		\
-	taskqgroup_adjust_##name, NULL);				\
-									\
-struct __hack
-#endif
+	taskqgroup_adjust_##name, NULL)
+
 TASKQGROUP_DECLARE(net);
+TASKQGROUP_DECLARE(softirq);
 
 #endif /* !_SYS_GTASKQUEUE_H_ */

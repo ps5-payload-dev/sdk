@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.1/sys/opencrypto/gfmult.h 275732 2014-12-12 19:56:36Z jmg $
+ *	$FreeBSD: releng/11.4/sys/opencrypto/gfmult.h 275732 2014-12-12 19:56:36Z jmg $
  *
  */
 

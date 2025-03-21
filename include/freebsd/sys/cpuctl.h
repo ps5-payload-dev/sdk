@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/cpuctl.h 267673 2014-06-20 13:13:38Z kib $
+ * $FreeBSD: releng/11.4/sys/sys/cpuctl.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _CPUCTL_H_
@@ -57,5 +57,6 @@ typedef struct {
 #define	CPUCTL_MSRSBIT	_IOWR('c', 5, cpuctl_msr_args_t)
 #define	CPUCTL_MSRCBIT	_IOWR('c', 6, cpuctl_msr_args_t)
 #define	CPUCTL_CPUID_COUNT _IOWR('c', 7, cpuctl_cpuid_count_args_t)
+#define	CPUCTL_EVAL_CPU_FEATURES	_IO('c', 8)
 
 #endif /* _CPUCTL_H_ */

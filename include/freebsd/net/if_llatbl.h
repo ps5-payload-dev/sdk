@@ -25,7 +25,7 @@
  * SUCH DAMAGE.
  */
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: releng/11.1/sys/net/if_llatbl.h 301217 2016-06-02 17:51:29Z gnn $");
+__FBSDID("$FreeBSD: releng/11.4/sys/net/if_llatbl.h 337462 2018-08-08 16:17:50Z ae $");
 
 #ifndef	_NET_IF_LLATBL_H_
 #define	_NET_IF_LLATBL_H_
@@ -155,6 +155,7 @@ typedef void (llt_fill_sa_entry_t)(const struct llentry *, struct sockaddr *);
 typedef void (llt_free_tbl_t)(struct lltable *);
 typedef void (llt_link_entry_t)(struct lltable *, struct llentry *);
 typedef void (llt_unlink_entry_t)(struct llentry *);
+typedef void (llt_mark_used_t)(struct llentry *);
 
 typedef int (llt_foreach_cb_t)(struct lltable *, struct llentry *, void *);
 typedef int (llt_foreach_entry_t)(struct lltable *, llt_foreach_cb_t *, void *);
@@ -179,6 +180,7 @@ struct lltable {
 	llt_unlink_entry_t	*llt_unlink_entry;
 	llt_fill_sa_entry_t	*llt_fill_sa_entry;
 	llt_free_tbl_t		*llt_free_tbl;
+	llt_mark_used_t		*llt_mark_used;
 };
 
 MALLOC_DECLARE(M_LLTABLE);
@@ -251,6 +253,19 @@ lla_lookup(struct lltable *llt, u_int flags, const struct sockaddr *l3addr)
 {
 
 	return (llt->llt_lookup(llt, flags, l3addr));
+}
+
+/*
+ * Notify the LLE code that the entry was used by datapath.
+ */
+static __inline void
+llentry_mark_used(struct llentry *lle)
+{
+
+	if (lle->r_skip_req == 0)
+		return;
+	if ((lle->r_flags & RLLE_VALID) != 0)
+		lle->lle_tbl->llt_mark_used(lle);
 }
 
 int		lla_rt_output(struct rt_msghdr *, struct rt_addrinfo *);

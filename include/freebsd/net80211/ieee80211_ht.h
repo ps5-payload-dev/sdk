@@ -22,7 +22,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/net80211/ieee80211_ht.h 297603 2016-04-06 01:21:51Z adrian $
+ * $FreeBSD: releng/11.4/sys/net80211/ieee80211_ht.h 330457 2018-03-05 08:17:02Z eadler $
  */
 #ifndef _NET80211_IEEE80211_HT_H_
 #define _NET80211_IEEE80211_HT_H_
@@ -210,6 +210,8 @@ void	ieee80211_ampdu_stop(struct ieee80211_node *,
 int	ieee80211_send_bar(struct ieee80211_node *, struct ieee80211_tx_ampdu *,
 		ieee80211_seq);
 uint8_t	*ieee80211_add_htcap(uint8_t *, struct ieee80211_node *);
+uint8_t	*ieee80211_add_htcap_ch(uint8_t *, struct ieee80211vap *,
+	    struct ieee80211_channel *);
 uint8_t	*ieee80211_add_htcap_vendor(uint8_t *, struct ieee80211_node *);
 uint8_t	*ieee80211_add_htinfo(uint8_t *, struct ieee80211_node *);
 uint8_t	*ieee80211_add_htinfo_vendor(uint8_t *, struct ieee80211_node *);

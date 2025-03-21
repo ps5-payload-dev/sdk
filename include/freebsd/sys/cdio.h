@@ -1,7 +1,7 @@
 /*
  * 16 Feb 93	Julian Elischer	(julian@dialix.oz.au)
  *
- * $FreeBSD: releng/11.1/sys/sys/cdio.h 141031 2005-01-30 08:12:37Z sobomax $
+ * $FreeBSD: releng/11.4/sys/sys/cdio.h 349629 2019-07-03 00:12:50Z markj $
  */
 
 /*
@@ -273,12 +273,5 @@ struct ioc_capability {			/*<2>*/
 };					/*<2>*/
 
 #define	CDIOCCAPABILITY	_IOR('c',30,struct ioc_capability)	/*<2>*/
-
-/*
- * Special version of CDIOCREADSUBCHANNEL which assumes that
- * ioc_read_subchannel->data points to the kernel memory. For
- * use in compatibility layers.
- */
-#define CDIOCREADSUBCHANNEL_SYSSPACE _IOWR('c', 31, struct ioc_read_subchannel)
 
 #endif /* !_SYS_CDIO_H_ */

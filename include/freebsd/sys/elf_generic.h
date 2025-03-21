@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/elf_generic.h 314127 2017-02-23 07:28:29Z kib $
+ * $FreeBSD: releng/11.4/sys/sys/elf_generic.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_ELF_GENERIC_H_

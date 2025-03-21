@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)sockio.h	8.1 (Berkeley) 3/28/94
- * $FreeBSD: releng/11.1/sys/sys/sockio.h 318397 2017-05-17 05:53:25Z rpokala $
+ * $FreeBSD: releng/11.4/sys/sys/sockio.h 352649 2019-09-24 06:36:25Z kib $
  */
 
 #ifndef _SYS_SOCKIO_H_
@@ -133,5 +133,14 @@
 #define	SIOCDIFGROUP	 _IOW('i', 137, struct ifgroupreq) /* delete ifgroup */
 #define	SIOCGIFGMEMB	_IOWR('i', 138, struct ifgroupreq) /* get members */
 #define	SIOCGIFXMEDIA	_IOWR('i', 139, struct ifmediareq) /* get net xmedia */
+
+#define	SIOCGIFRSSKEY	_IOWR('i', 150, struct ifrsskey)/* get RSS key */
+#define	SIOCGIFRSSHASH	_IOWR('i', 151, struct ifrsshash)/* get the current RSS
+							type/func settings */
+
+#define	SIOCGLANPCP	_IOWR('i', 152, struct ifreq)	/* Get (V)LAN PCP */
+#define	SIOCSLANPCP	 _IOW('i', 153, struct ifreq)	/* Set (V)LAN PCP */
+
+#define	SIOCGIFDOWNREASON	_IOWR('i', 154, struct ifdownreason)
 
 #endif /* !_SYS_SOCKIO_H_ */

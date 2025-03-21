@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/x86/include/apicvar.h 316831 2017-04-14 14:01:35Z avg $
+ * $FreeBSD: releng/11.4/sys/x86/include/apicvar.h 346817 2019-04-28 13:21:01Z dchagin $
  */
 
 #ifndef _X86_APICVAR_H_
@@ -123,12 +123,7 @@
 
 #define	IPI_STOP	(APIC_IPI_INTS + 6)	/* Stop CPU until restarted. */
 #define	IPI_SUSPEND	(APIC_IPI_INTS + 7)	/* Suspend CPU until restarted. */
-#ifdef __i386__
-#define	IPI_LAZYPMAP	(APIC_IPI_INTS + 8)	/* Lazy pmap release. */
-#define	IPI_DYN_FIRST	(APIC_IPI_INTS + 9)
-#else
 #define	IPI_DYN_FIRST	(APIC_IPI_INTS + 8)
-#endif
 #define	IPI_DYN_LAST	(253)			/* IPIs allocated at runtime */
 
 /*
@@ -157,13 +152,13 @@
 #define	APIC_BUS_PCI		2
 #define	APIC_BUS_MAX		APIC_BUS_PCI
 
-#define	IRQ_EXTINT		(NUM_IO_INTS + 1)
-#define	IRQ_NMI			(NUM_IO_INTS + 2)
-#define	IRQ_SMI			(NUM_IO_INTS + 3)
-#define	IRQ_DISABLED		(NUM_IO_INTS + 4)
+#define	IRQ_EXTINT		-1
+#define	IRQ_NMI			-2
+#define	IRQ_SMI			-3
+#define	IRQ_DISABLED		-4
 
 /*
- * An APIC enumerator is a psuedo bus driver that enumerates APIC's including
+ * An APIC enumerator is a pseudo bus driver that enumerates APIC's including
  * CPU's and I/O APIC's.
  */
 struct apic_enumerator {
@@ -179,7 +174,11 @@ inthand_t
 	IDTVEC(apic_isr1), IDTVEC(apic_isr2), IDTVEC(apic_isr3),
 	IDTVEC(apic_isr4), IDTVEC(apic_isr5), IDTVEC(apic_isr6),
 	IDTVEC(apic_isr7), IDTVEC(cmcint), IDTVEC(errorint),
-	IDTVEC(spuriousint), IDTVEC(timerint);
+	IDTVEC(spuriousint), IDTVEC(timerint),
+	IDTVEC(apic_isr1_pti), IDTVEC(apic_isr2_pti), IDTVEC(apic_isr3_pti),
+	IDTVEC(apic_isr4_pti), IDTVEC(apic_isr5_pti), IDTVEC(apic_isr6_pti),
+	IDTVEC(apic_isr7_pti), IDTVEC(cmcint_pti), IDTVEC(errorint_pti),
+	IDTVEC(spuriousint_pti), IDTVEC(timerint_pti);
 
 extern vm_paddr_t lapic_paddr;
 extern int apic_cpuids[];
@@ -473,6 +472,8 @@ void	lapic_handle_cmc(void);
 void	lapic_handle_error(void);
 void	lapic_handle_intr(int vector, struct trapframe *frame);
 void	lapic_handle_timer(struct trapframe *frame);
+
+int	ioapic_get_rid(u_int apic_id, uint16_t *ridp);
 
 extern int x2apic_mode;
 extern int lapic_eoi_suppression;

@@ -10,7 +10,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 4. Neither the name of the University nor the names of its contributors
+ * 3. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
  *
@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)fs.h	8.13 (Berkeley) 3/21/95
- * $FreeBSD: releng/11.1/sys/ufs/ffs/fs.h 298804 2016-04-29 20:43:51Z pfg $
+ * $FreeBSD: releng/11.4/sys/ufs/ffs/fs.h 356905 2020-01-20 08:28:54Z eugen $
  */
 
 #ifndef _UFS_FFS_FS_H_
@@ -219,7 +219,8 @@
 #define	FFS_UNLINK		14	/* remove a name in the filesystem */
 #define	FFS_SET_INODE		15	/* update an on-disk inode */
 #define	FFS_SET_BUFOUTPUT	16	/* set buffered writing on descriptor */
-#define	FFS_MAXID		16	/* number of valid ffs ids */
+#define	FFS_SET_SIZE		17	/* set inode size */
+#define	FFS_MAXID		17	/* number of valid ffs ids */
 
 /*
  * Command structure passed in to the filesystem to adjust filesystem values.
@@ -231,6 +232,18 @@ struct fsck_cmd {
 	int64_t	value;		/* inode or block number to be affected */
 	int64_t	size;		/* amount or range to be adjusted */
 	int64_t	spare;		/* reserved for future use */
+};
+
+/*
+ * A recovery structure placed at the end of the boot block area by newfs
+ * that can be used by fsck to search for alternate superblocks.
+ */
+struct fsrecovery {
+	int32_t	fsr_magic;	/* magic number */
+	int32_t	fsr_fsbtodb;	/* fsbtodb and dbtofsb shift constant */
+	int32_t	fsr_sblkno;	/* offset of super-block in filesys */
+	int32_t	fsr_fpg;	/* blocks per group * fs_frag */
+	u_int32_t fsr_ncg;	/* number of cylinder groups */
 };
 
 /*

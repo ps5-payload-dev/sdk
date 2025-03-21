@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/lib/libcasper/services/cap_pwd/cap_pwd.h 296047 2016-02-25 18:23:40Z oshogbo $
+ * $FreeBSD: releng/11.4/lib/libcasper/services/cap_pwd/cap_pwd.h 296047 2016-02-25 18:23:40Z oshogbo $
  */
 
 #ifndef	_CAP_PWD_H_

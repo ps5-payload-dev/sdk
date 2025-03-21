@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)acct.h	8.4 (Berkeley) 1/9/95
- * $FreeBSD: releng/11.1/sys/sys/acct.h 169857 2007-05-22 06:51:38Z dds $
+ * $FreeBSD: releng/11.4/sys/sys/acct.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_ACCT_H_

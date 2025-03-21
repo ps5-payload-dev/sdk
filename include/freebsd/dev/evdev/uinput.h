@@ -1,6 +1,6 @@
 /*-
  * Copyright (c) 2016 Oleksandr Tymoshenko <gonzo@FreeBSD.org>
- * Copyright (c) 2015-2016 Vladimir Kondratyev <wulf@cicgroup.ru>
+ * Copyright (c) 2015-2016 Vladimir Kondratyev <wulf@FreeBSD.org>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/evdev/uinput.h 305706 2016-09-11 18:56:38Z gonzo $
+ * $FreeBSD: releng/11.4/sys/dev/evdev/uinput.h 324768 2017-10-19 20:16:40Z wulf $
  */
 
 #ifndef _EVDEV_UINPUT_H_

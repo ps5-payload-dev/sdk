@@ -34,7 +34,7 @@
  * interfaces on 64bit machines). This assists network interfaces that may need
  * huge numbers of mbufs.
  *
- * $FreeBSD: releng/11.1/sys/sys/mbpool.h 268529 2014-07-11 13:58:48Z glebius $
+ * $FreeBSD: releng/11.4/sys/sys/mbpool.h 268529 2014-07-11 13:58:48Z glebius $
  */
 #ifndef _SYS_MBPOOL_H_
 #define	_SYS_MBPOOL_H_

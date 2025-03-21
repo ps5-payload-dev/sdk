@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)queue.h	8.5 (Berkeley) 8/20/94
- * $FreeBSD: releng/11.1/sys/sys/queue.h 307533 2016-10-17 21:44:41Z mckusick $
+ * $FreeBSD: releng/11.4/sys/sys/queue.h 354405 2019-11-06 18:02:18Z mav $
  */
 
 #ifndef _SYS_QUEUE_H_
@@ -93,6 +93,7 @@
  * _NEXT			+	+	+	+
  * _PREV			-	+	-	+
  * _LAST			-	-	+	+
+ * _LAST_FAST			-	-	-	+
  * _FOREACH			+	+	+	+
  * _FOREACH_FROM		+	+	+	+
  * _FOREACH_SAFE		+	+	+	+
@@ -744,10 +745,24 @@ struct {								\
 #define	TAILQ_LAST(head, headname)					\
 	(*(((struct headname *)((head)->tqh_last))->tqh_last))
 
+/*
+ * The FAST function is fast in that it causes no data access other
+ * then the access to the head. The standard LAST function above
+ * will cause a data access of both the element you want and 
+ * the previous element. FAST is very useful for instances when
+ * you may want to prefetch the last data element.
+ */
+#define	TAILQ_LAST_FAST(head, type, field)			\
+    (TAILQ_EMPTY(head) ? NULL : __containerof((head)->tqh_last, QUEUE_TYPEOF(type), field.tqe_next))
+
 #define	TAILQ_NEXT(elm, field) ((elm)->field.tqe_next)
 
 #define	TAILQ_PREV(elm, headname, field)				\
 	(*(((struct headname *)((elm)->field.tqe_prev))->tqh_last))
+
+#define	TAILQ_PREV_FAST(elm, head, type, field)				\
+    ((elm)->field.tqe_prev == &(head)->tqh_first ? NULL :		\
+     __containerof((elm)->field.tqe_prev, QUEUE_TYPEOF(type), field.tqe_next))
 
 #define	TAILQ_REMOVE(head, elm, field) do {				\
 	QMD_SAVELINK(oldnext, (elm)->field.tqe_next);			\

@@ -49,7 +49,7 @@
  * or the SD Card Association to disclose or distribute any technical
  * information, know-how or other confidential information to any third party.
  *
- * $FreeBSD: releng/11.1/sys/dev/mmc/mmcvar.h 318197 2017-05-11 20:55:11Z marius $
+ * $FreeBSD: releng/11.4/sys/dev/mmc/mmcvar.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef DEV_MMC_MMCVAR_H
@@ -68,6 +68,8 @@ enum mmc_device_ivars {
     MMC_IVAR_BUS_WIDTH,
     MMC_IVAR_ERASE_SECTOR,
     MMC_IVAR_MAX_DATA,
+    MMC_IVAR_CMD6_TIMEOUT,
+    MMC_IVAR_QUIRKS,
     MMC_IVAR_CARD_ID_STRING,
     MMC_IVAR_CARD_SN_STRING,
 };
@@ -90,6 +92,8 @@ MMC_ACCESSOR(card_type, CARD_TYPE, int)
 MMC_ACCESSOR(bus_width, BUS_WIDTH, int)
 MMC_ACCESSOR(erase_sector, ERASE_SECTOR, int)
 MMC_ACCESSOR(max_data, MAX_DATA, int)
+MMC_ACCESSOR(cmd6_timeout, CMD6_TIMEOUT, u_int)
+MMC_ACCESSOR(quirks, QUIRKS, u_int)
 MMC_ACCESSOR(card_id_string, CARD_ID_STRING, const char *)
 MMC_ACCESSOR(card_sn_string, CARD_SN_STRING, const char *)
 

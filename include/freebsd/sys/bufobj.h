@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/bufobj.h 275743 2014-12-13 16:02:37Z kib $
+ * $FreeBSD: releng/11.4/sys/sys/bufobj.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 /*
@@ -88,6 +88,12 @@ struct buf_ops {
 #define BO_WRITE(bo, bp)	((bo)->bo_ops->bop_write((bp)))
 #define BO_BDFLUSH(bo, bp)	((bo)->bo_ops->bop_bdflush((bo), (bp)))
 
+/*
+ * Locking notes:
+ * 'S' is sync_mtx
+ * 'v' is the vnode lock which embeds the bufobj.
+ * '-' Constant and unchanging after initialization.
+ */
 struct bufobj {
 	struct rwlock	bo_lock;	/* Lock which protects "i" things */
 	struct buf_ops	*bo_ops;	/* - Buffer operations */

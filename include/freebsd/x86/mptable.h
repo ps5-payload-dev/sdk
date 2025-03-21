@@ -22,7 +22,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/x86/include/mptable.h 259228 2013-12-11 21:19:04Z jhb $
+ * $FreeBSD: releng/11.4/sys/x86/include/mptable.h 259228 2013-12-11 21:19:04Z jhb $
  */
 
 #ifndef __MACHINE_MPTABLE_H__

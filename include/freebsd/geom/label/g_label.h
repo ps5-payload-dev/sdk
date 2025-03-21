@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/geom/label/g_label.h 284582 2015-06-18 21:55:55Z trasz $
+ * $FreeBSD: releng/11.4/sys/geom/label/g_label.h 346559 2019-04-22 15:09:47Z ian $
  */
 
 #ifndef	_G_LABEL_H_
@@ -86,6 +86,7 @@ extern struct g_label_desc g_label_ntfs;
 extern struct g_label_desc g_label_gpt;
 extern struct g_label_desc g_label_gpt_uuid;
 extern struct g_label_desc g_label_disk_ident;
+extern struct g_label_desc g_label_flashmap;
 
 extern void g_label_rtrim(char *label, size_t size);
 #endif	/* _KERNEL */

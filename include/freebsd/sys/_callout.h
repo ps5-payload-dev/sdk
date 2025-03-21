@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)callout.h	8.2 (Berkeley) 1/21/94
- * $FreeBSD: releng/11.1/sys/sys/_callout.h 288096 2015-09-22 06:51:55Z hselasky $
+ * $FreeBSD: releng/11.4/sys/sys/_callout.h 360633 2020-05-04 16:30:36Z jhb $
  */
 
 #ifndef _SYS__CALLOUT_H
@@ -46,6 +46,8 @@ LIST_HEAD(callout_list, callout);
 SLIST_HEAD(callout_slist, callout);
 TAILQ_HEAD(callout_tailq, callout);
 
+typedef void callout_func_t(void *);
+
 struct callout {
 	union {
 		LIST_ENTRY(callout) le;
@@ -55,7 +57,7 @@ struct callout {
 	sbintime_t c_time;			/* ticks to the event */
 	sbintime_t c_precision;			/* delta allowed wrt opt */
 	void	*c_arg;				/* function argument */
-	void	(*c_func)(void *);		/* function to call */
+	callout_func_t *c_func;			/* function to call */
 	struct lock_object *c_lock;		/* lock to handle */
 	short	c_flags;			/* User State */
 	short	c_iflags;			/* Internal State */

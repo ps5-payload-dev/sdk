@@ -29,7 +29,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/fs/nfs/nfs.h 317393 2017-04-24 23:47:12Z rmacklem $
+ * $FreeBSD: releng/11.4/sys/fs/nfs/nfs.h 356161 2019-12-28 22:32:14Z rmacklem $
  */
 
 #ifndef _NFS_NFS_H_
@@ -212,6 +212,11 @@ struct nfsd_oidargs {
 	int		nid_namelen;	/* and its length */
 };
 
+struct nfsuserd_args {
+	sa_family_t	nuserd_family;	/* Address family to use */
+	u_short		nuserd_port;	/* Port# */
+};
+
 struct nfsd_clid {
 	int		nclid_idlen;	/* Length of client id */
 	u_char		nclid_id[NFSV4_OPAQUELIMIT]; /* and name */
@@ -288,6 +293,8 @@ struct nfsreferral {
 #define	LCL_ADMINREVOKED	0x00008000
 #define	LCL_RECLAIMCOMPLETE	0x00010000
 #define	LCL_NFSV41		0x00020000
+#define	LCL_DONEBINDCONN	0x00040000
+#define	LCL_RECLAIMONEFS	0x00080000
 
 #define	LCL_GSS		LCL_KERBV	/* Or of all mechs */
 
@@ -376,10 +383,14 @@ typedef struct {
 	(t)->bits[2] = (f)->bits[2];					\
 } while (0)
 
-#define	NFSSETSUPP_ATTRBIT(b) do { 					\
+#define	NFSSETSUPP_ATTRBIT(b, n) do { 					\
 	(b)->bits[0] = NFSATTRBIT_SUPP0; 				\
-	(b)->bits[1] = (NFSATTRBIT_SUPP1 | NFSATTRBIT_SUPPSETONLY);	\
-	(b)->bits[2] = NFSATTRBIT_SUPP2;				\
+	(b)->bits[1] = (NFSATTRBIT_SUPP1 | NFSATTRBIT_SUPPSETONLY1);	\
+	(b)->bits[2] = (NFSATTRBIT_SUPP2 | NFSATTRBIT_SUPPSETONLY2);	\
+	if (((n)->nd_flag & ND_NFSV41) == 0) {				\
+		(b)->bits[1] &= ~NFSATTRBIT_NFSV41_1;			\
+		(b)->bits[2] &= ~NFSATTRBIT_NFSV41_2;			\
+	}								\
 } while (0)
 
 #define	NFSISSET_ATTRBIT(b, p)	((b)->bits[(p) / 32] & (1 << ((p) % 32)))
@@ -398,16 +409,22 @@ typedef struct {
 	(b)->bits[2] &= ((a)->bits[2]);		 			\
 } while (0)
 
-#define	NFSCLRNOTFILLABLE_ATTRBIT(b) do { 				\
+#define	NFSCLRNOTFILLABLE_ATTRBIT(b, n) do { 				\
 	(b)->bits[0] &= NFSATTRBIT_SUPP0;	 			\
 	(b)->bits[1] &= NFSATTRBIT_SUPP1;				\
 	(b)->bits[2] &= NFSATTRBIT_SUPP2;				\
+	if (((n)->nd_flag & ND_NFSV41) == 0) {				\
+		(b)->bits[1] &= ~NFSATTRBIT_NFSV41_1;			\
+		(b)->bits[2] &= ~NFSATTRBIT_NFSV41_2;			\
+	}								\
 } while (0)
 
-#define	NFSCLRNOTSETABLE_ATTRBIT(b) do { 				\
+#define	NFSCLRNOTSETABLE_ATTRBIT(b, n) do { 				\
 	(b)->bits[0] &= NFSATTRBIT_SETABLE0;	 			\
 	(b)->bits[1] &= NFSATTRBIT_SETABLE1;				\
 	(b)->bits[2] &= NFSATTRBIT_SETABLE2;				\
+	if (((n)->nd_flag & ND_NFSV41) == 0)				\
+		(b)->bits[2] &= ~NFSATTRBIT_NFSV41_2;			\
 } while (0)
 
 #define	NFSNONZERO_ATTRBIT(b)	((b)->bits[0] || (b)->bits[1] || (b)->bits[2])
@@ -733,6 +750,9 @@ struct nfsslot {
 	uint32_t	nfssl_seq;
 	struct mbuf	*nfssl_reply;
 };
+
+/* Enumerated type for nfsuserd state. */
+typedef enum { NOTRUNNING=0, STARTSTOP=1, RUNNING=2 } nfsuserd_state;
 
 #endif	/* _KERNEL */
 

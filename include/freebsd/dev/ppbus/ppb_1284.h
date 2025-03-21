@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/ppbus/ppb_1284.h 55957 2000-01-14 08:03:15Z nsouch $
+ * $FreeBSD: releng/11.4/sys/dev/ppbus/ppb_1284.h 331722 2018-03-29 02:50:57Z eadler $
  *
  */
 #ifndef __1284_H

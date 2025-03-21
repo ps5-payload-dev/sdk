@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/net80211/ieee80211_node.h 302018 2016-06-19 07:31:02Z adrian $
+ * $FreeBSD: releng/11.4/sys/net80211/ieee80211_node.h 330458 2018-03-05 08:18:13Z eadler $
  */
 #ifndef _NET80211_IEEE80211_NODE_H_
 #define _NET80211_IEEE80211_NODE_H_
@@ -65,6 +65,7 @@
 struct ieee80211_node_table;
 struct ieee80211com;
 struct ieee80211vap;
+struct ieee80211_scanparams;
 
 /*
  * Information element ``blob''.  We use this structure
@@ -330,6 +331,8 @@ void	ieee80211_setupcurchan(struct ieee80211com *,
 void	ieee80211_setcurchan(struct ieee80211com *, struct ieee80211_channel *);
 void	ieee80211_update_chw(struct ieee80211com *);
 int	ieee80211_ibss_merge_check(struct ieee80211_node *);
+int	ieee80211_ibss_node_check_new(struct ieee80211_node *ni,
+	    const struct ieee80211_scanparams *);
 int	ieee80211_ibss_merge(struct ieee80211_node *);
 struct ieee80211_scan_entry;
 int	ieee80211_sta_join(struct ieee80211vap *, struct ieee80211_channel *,

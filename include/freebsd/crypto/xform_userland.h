@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/opencrypto/xform_userland.h 292963 2015-12-30 22:43:07Z allanjude $
+ * $FreeBSD: releng/11.4/sys/opencrypto/xform_userland.h 329175 2018-02-12 17:44:35Z kevans $
  */
 
 #ifndef _CRYPTO_XFORM_USERLAND_H_
@@ -34,7 +34,7 @@
 #define KMALLOC(size, type, flags)	malloc(size, type, flags)
 #define KFREE(ptr, type)		free(ptr, type)
 #else /* not _KERNEL */
-#ifdef _STAND
+#ifdef _STANDALONE
 #include <stand.h>
 #else /* !_STAND */
 #include <stdlib.h>

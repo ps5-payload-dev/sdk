@@ -22,7 +22,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/lockstat.h 315394 2017-03-16 08:29:09Z mjg $
+ * $FreeBSD: releng/11.4/sys/sys/lockstat.h 334437 2018-05-31 15:58:28Z mjg $
  */
  
 /*
@@ -107,12 +107,7 @@ extern volatile int lockstat_enabled;
 	LOCKSTAT_RECORD1(probe, lp, a);					\
 } while (0)
 
-#ifndef LOCK_PROFILING
 #define	LOCKSTAT_PROFILE_ENABLED(probe)		__predict_false(lockstat_enabled)
-#define	LOCKSTAT_OOL_PROFILE_ENABLED(probe)	LOCKSTAT_PROFILE_ENABLED(probe)
-#else
-#define	LOCKSTAT_OOL_PROFILE_ENABLED(probe)	1
-#endif
 
 struct lock_object;
 uint64_t lockstat_nsecs(struct lock_object *);
@@ -137,10 +132,7 @@ uint64_t lockstat_nsecs(struct lock_object *);
 #define	LOCKSTAT_PROFILE_RELEASE_RWLOCK(probe, lp, a)  			\
 	LOCKSTAT_PROFILE_RELEASE_LOCK(probe, lp)
 
-#ifndef LOCK_PROFILING
 #define	LOCKSTAT_PROFILE_ENABLED(probe)		0
-#endif
-#define	LOCKSTAT_OOL_PROFILE_ENABLED(probe)	1
 
 #endif /* !KDTRACE_HOOKS */
 

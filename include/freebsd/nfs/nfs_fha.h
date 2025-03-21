@@ -22,7 +22,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  */
-/* $FreeBSD: releng/11.1/sys/nfs/nfs_fha.h 260097 2013-12-30 20:23:15Z mav $ */
+/* $FreeBSD: releng/11.4/sys/nfs/nfs_fha.h 322137 2017-08-07 07:02:51Z mav $ */
 
 #ifndef	_NFS_FHA_H
 #define	_NFS_FHA_H 1
@@ -31,6 +31,8 @@
 
 /* Sysctl defaults. */
 #define FHA_DEF_ENABLE			1
+#define FHA_DEF_READ			1
+#define FHA_DEF_WRITE			1
 #define FHA_DEF_BIN_SHIFT		22 /* 4MB */
 #define FHA_DEF_MAX_NFSDS_PER_FH	8
 #define FHA_DEF_MAX_REQS_PER_NFSD	0  /* Unlimited */
@@ -39,6 +41,8 @@
 
 struct fha_ctls {
 	int	 enable;
+	int	 read;
+	int	 write;
 	uint32_t bin_shift;
 	uint32_t max_nfsds_per_fh;
 	uint32_t max_reqs_per_nfsd;
@@ -79,6 +83,8 @@ struct fha_info {
 	u_int64_t fh;
 	off_t offset;
 	int locktype;
+	int read;
+	int write;
 };
 
 struct fha_callbacks {

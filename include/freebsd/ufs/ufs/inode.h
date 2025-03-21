@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)inode.h	8.9 (Berkeley) 5/14/95
- * $FreeBSD: releng/11.1/sys/ufs/ufs/inode.h 306553 2016-10-01 09:19:43Z kib $
+ * $FreeBSD: releng/11.4/sys/ufs/ufs/inode.h 359738 2020-04-09 06:35:50Z mckusick $
  */
 
 #ifndef _UFS_UFS_INODE_H_

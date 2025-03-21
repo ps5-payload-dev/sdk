@@ -29,7 +29,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/fs/nfs/nfsproto.h 306609 2016-10-03 00:10:14Z rmacklem $
+ * $FreeBSD: releng/11.4/sys/fs/nfs/nfsproto.h 347045 2019-05-03 03:05:22Z rmacklem $
  */
 
 #ifndef _NFS_NFSPROTO_H_
@@ -56,8 +56,22 @@
 #define	NFS_MAXDGRAMDATA 16384
 #define	NFS_MAXPATHLEN	1024
 #define	NFS_MAXNAMLEN	255
+/*
+ * Calculating the maximum XDR overhead for an NFS RPC isn't easy.
+ * NFS_MAXPKTHDR is antiquated and assumes AUTH_SYS over UDP.
+ * NFS_MAXXDR should be sufficient for all NFS versions over TCP.
+ * It includes:
+ * - Maximum RPC message header. It can include 2 400byte authenticators plus
+ *   a machine name of unlimited length, although it is usually relatively
+ *   small.
+ * - XDR overheads for the NFSv4 compound. This can include Owner and
+ *   Owner_group strings, which are usually fairly small, but are allowed
+ *   to be up to 1024 bytes each.
+ * 4096 is overkill, but should always be sufficient.
+ */
 #define	NFS_MAXPKTHDR	404
-#define	NFS_MAXPACKET	(NFS_SRVMAXIO + 2048)
+#define	NFS_MAXXDR	4096
+#define	NFS_MAXPACKET	(NFS_SRVMAXIO + NFS_MAXXDR)
 #define	NFS_MINPACKET	20
 #define	NFS_FABLKSIZE	512	/* Size in bytes of a block wrt fa_blocks */
 #define	NFSV4_MINORVERSION	0	/* V4 Minor version */
@@ -328,11 +342,13 @@
 #define	NFSPROC_WRITEDS		51
 #define	NFSPROC_READDS		52
 #define	NFSPROC_COMMITDS	53
+#define	NFSPROC_OPENLAYGET	54
+#define	NFSPROC_CREATELAYGET	55
 
 /*
  * Must be defined as one higher than the last NFSv4.1 Proc# above.
  */
-#define	NFSV41_NPROCS		54
+#define	NFSV41_NPROCS		56
 
 #endif	/* NFS_V3NPROCS */
 
@@ -538,6 +554,7 @@
 #define	NFSV4OPEN_WDRESOURCE		0x00080000
 #define	NFSV4OPEN_WDCONTENTION		0x00100000
 #define	NFSV4OPEN_WDNOTWANTED		0x00200000
+#define	NFSV4OPEN_WDSUPPFTYPE		0x00400000
 
 /*
  * NFS V4 File Handle types
@@ -633,6 +650,15 @@
 /* Flags for File Layout. */
 #define	NFSFLAYUTIL_DENSE		0x1
 #define	NFSFLAYUTIL_COMMIT_THRU_MDS	0x2
+
+/* Enum values for Bind Connection to Session. */
+#define	NFSCDFC4_FORE		0x1
+#define	NFSCDFC4_BACK		0x2
+#define	NFSCDFC4_FORE_OR_BOTH	0x3
+#define	NFSCDFC4_BACK_OR_BOTH	0x7
+#define	NFSCDFS4_FORE		0x1
+#define	NFSCDFS4_BACK		0x2
+#define	NFSCDFS4_BOTH		0x3
 
 /* Conversion macros */
 #define	vtonfsv2_mode(t,m) 						\
@@ -1029,11 +1055,11 @@ struct nfsv3_sattr {
 #define	NFSATTRBIT_SUPP2	NFSATTRBM_SUPPATTREXCLCREAT
 
 /*
- * NFSATTRBIT_SUPPSETONLY is the OR of NFSATTRBIT_TIMEACCESSSET and
- * NFSATTRBIT_TIMEMODIFYSET.
+ * These are the set only attributes.
  */
-#define	NFSATTRBIT_SUPPSETONLY	 (NFSATTRBM_TIMEACCESSSET |		\
+#define	NFSATTRBIT_SUPPSETONLY1	 (NFSATTRBM_TIMEACCESSSET |		\
 				 NFSATTRBM_TIMEMODIFYSET)
+#define	NFSATTRBIT_SUPPSETONLY2	(NFSATTRBM_MODESETMASKED)
 
 /*
  * NFSATTRBIT_SETABLE - SETABLE0 - bits 0<->31
@@ -1049,7 +1075,20 @@ struct nfsv3_sattr {
  	NFSATTRBM_OWNERGROUP |						\
  	NFSATTRBM_TIMEACCESSSET |					\
  	NFSATTRBM_TIMEMODIFYSET)
-#define	NFSATTRBIT_SETABLE2		0
+#define	NFSATTRBIT_SETABLE2						\
+	(NFSATTRBM_MODESETMASKED)
+
+/*
+ * NFSATTRBIT_NFSV41 - Attributes only supported by NFSv4.1.
+ */
+#define	NFSATTRBIT_NFSV41_1						\
+	(NFSATTRBM_FSLAYOUTTYPE)
+#define	NFSATTRBIT_NFSV41_2						\
+	(NFSATTRBM_LAYOUTTYPE |						\
+	NFSATTRBM_LAYOUTBLKSIZE |					\
+	NFSATTRBM_LAYOUTALIGNMENT |					\
+	NFSATTRBM_MODESETMASKED |					\
+	NFSATTRBM_SUPPATTREXCLCREAT)
 
 /*
  * Set of attributes that the getattr vnode op needs.

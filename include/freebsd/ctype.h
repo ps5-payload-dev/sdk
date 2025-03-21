@@ -35,7 +35,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ctype.h	8.4 (Berkeley) 1/21/94
- *      $FreeBSD: releng/11.1/include/ctype.h 290494 2015-11-07 12:43:35Z bapt $
+ *      $FreeBSD: releng/11.4/include/ctype.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _CTYPE_H_
@@ -85,7 +85,6 @@ int	isspecial(int);
 __END_DECLS
 
 #ifndef __cplusplus
-#ifndef __SCE__
 #define	isalnum(c)	__sbistype((c), _CTYPE_A|_CTYPE_D|_CTYPE_N)
 #define	isalpha(c)	__sbistype((c), _CTYPE_A)
 #define	iscntrl(c)	__sbistype((c), _CTYPE_C)
@@ -99,7 +98,6 @@ __END_DECLS
 #define	isxdigit(c)	__sbistype((c), _CTYPE_X)
 #define	tolower(c)	__sbtolower(c)
 #define	toupper(c)	__sbtoupper(c)
-#endif /* !__SCE__ */
 #endif /* !__cplusplus */
 
 #if __XSI_VISIBLE
@@ -120,7 +118,7 @@ __END_DECLS
 #define	toascii(c)	((c) & 0x7F)
 #endif
 
-#if __ISO_C_VISIBLE >= 1999 && !defined(__cplusplus) && !defined(__SCE__)
+#if __ISO_C_VISIBLE >= 1999 && !defined(__cplusplus)
 #define	isblank(c)	__sbistype((c), _CTYPE_B)
 #endif
 

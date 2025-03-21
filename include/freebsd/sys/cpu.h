@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/cpu.h 278998 2015-02-19 12:47:48Z andrew $
+ * $FreeBSD: releng/11.4/sys/sys/cpu.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_CPU_H_

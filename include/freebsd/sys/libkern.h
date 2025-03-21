@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)libkern.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: releng/11.1/sys/sys/libkern.h 319404 2017-06-01 09:00:38Z tuexen $
+ * $FreeBSD: releng/11.4/sys/sys/libkern.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_LIBKERN_H_
@@ -52,6 +52,13 @@ extern char const	hex2ascii_data[];
 #define	bcd2bin(bcd)	(bcd2bin_data[bcd])
 #define	bin2bcd(bin)	(bin2bcd_data[bin])
 #define	hex2ascii(hex)	(hex2ascii_data[hex])
+
+static inline bool
+validbcd(int bcd)
+{
+
+	return (bcd == 0 || (bcd > 0 && bcd <= 0x99 && bcd2bin_data[bcd] != 0));
+}
 
 static __inline int imax(int a, int b) { return (a > b ? a : b); }
 static __inline int imin(int a, int b) { return (a < b ? a : b); }

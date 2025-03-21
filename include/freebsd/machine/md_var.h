@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/amd64/include/md_var.h 297399 2016-03-29 19:56:48Z kib $
+ * $FreeBSD: releng/11.4/sys/amd64/include/md_var.h 338427 2018-09-02 10:51:31Z kib $
  */
 
 #ifndef _MACHINE_MD_VAR_H_
@@ -34,11 +34,24 @@
 
 #include <x86/x86_var.h>
 
-extern  uint64_t *vm_page_dump;
+extern uint64_t	*vm_page_dump;
+extern int	hw_lower_amd64_sharedpage;
+extern int	hw_ibrs_disable;
+extern int	hw_ssb_disable;
+extern int	nmi_flush_l1d_sw;
+
+/*
+ * The file "conf/ldscript.amd64" defines the symbol "kernphys".  Its
+ * value is the physical address at which the kernel is loaded.
+ */
+extern char kernphys[];
 
 struct	savefpu;
+struct	sysentvec;
 
+void	amd64_conf_fast_syscall(void);
 void	amd64_db_resume_dbreg(void);
+void	amd64_lower_shared_page(struct sysentvec *);
 void	amd64_syscall(struct thread *td, int traced);
 void	doreti_iret(void) __asm(__STRING(doreti_iret));
 void	doreti_iret_fault(void) __asm(__STRING(doreti_iret_fault));

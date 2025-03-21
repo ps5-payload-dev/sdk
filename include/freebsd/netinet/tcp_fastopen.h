@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/netinet/tcp_fastopen.h 292706 2015-12-24 19:09:48Z pkelsey $
+ * $FreeBSD: releng/11.4/sys/netinet/tcp_fastopen.h 292706 2015-12-24 19:09:48Z pkelsey $
  */
 
 #ifndef _TCP_FASTOPEN_H_

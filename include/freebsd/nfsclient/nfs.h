@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)nfs.h	8.4 (Berkeley) 5/1/95
- * $FreeBSD: releng/11.1/sys/nfsclient/nfs.h 281691 2015-04-18 16:08:06Z trasz $
+ * $FreeBSD: releng/11.4/sys/nfsclient/nfs.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _NFSCLIENT_NFS_H_

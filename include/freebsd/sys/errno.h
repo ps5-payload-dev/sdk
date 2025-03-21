@@ -32,13 +32,13 @@
  * SUCH DAMAGE.
  *
  *	@(#)errno.h	8.5 (Berkeley) 1/21/94
- * $FreeBSD: releng/11.1/sys/sys/errno.h 317342 2017-04-23 20:32:46Z kib $
+ * $FreeBSD: releng/11.4/sys/sys/errno.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_ERRNO_H_
 #define _SYS_ERRNO_H_
 
-#ifndef _KERNEL
+#if !defined(_KERNEL) && !defined(_STANDALONE)
 #include <sys/cdefs.h>
 __BEGIN_DECLS
 int *	__error(void);

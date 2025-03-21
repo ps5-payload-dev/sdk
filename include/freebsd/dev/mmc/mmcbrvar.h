@@ -49,7 +49,7 @@
  * or the SD Card Association to disclose or distribute any technical
  * information, know-how or other confidential information to any third party.
  *
- * $FreeBSD: releng/11.1/sys/dev/mmc/mmcbrvar.h 318494 2017-05-18 20:46:20Z marius $
+ * $FreeBSD: releng/11.4/sys/dev/mmc/mmcbrvar.h 338476 2018-09-05 20:43:46Z marius $
  */
 
 #ifndef DEV_MMC_MMCBRVAR_H
@@ -70,6 +70,7 @@ enum mmcbr_device_ivars {
     MMCBR_IVAR_MODE,
     MMCBR_IVAR_OCR,
     MMCBR_IVAR_POWER_MODE,
+    MMCBR_IVAR_RETUNE_REQ,
     MMCBR_IVAR_VDD,
     MMCBR_IVAR_VCCQ,
     MMCBR_IVAR_CAPS,
@@ -102,10 +103,38 @@ MMCBR_ACCESSOR(max_data, MAX_DATA, int)
 MMCBR_ACCESSOR(max_busy_timeout, MAX_BUSY_TIMEOUT, u_int)
 
 static int __inline
+mmcbr_get_retune_req(device_t dev)
+{
+	uintptr_t v;
+
+	if (__predict_false(BUS_READ_IVAR(device_get_parent(dev), dev,
+	    MMCBR_IVAR_RETUNE_REQ, &v) != 0))
+		return (retune_req_none);
+	return ((int)v);
+}
+
+/*
+ * Convenience wrappers for the mmcbr interface
+ */
+static int __inline
 mmcbr_update_ios(device_t dev)
 {
 
 	return (MMCBR_UPDATE_IOS(device_get_parent(dev), dev));
+}
+
+static int __inline
+mmcbr_tune(device_t dev, bool hs400)
+{
+
+	return (MMCBR_TUNE(device_get_parent(dev), dev, hs400));
+}
+
+static int __inline
+mmcbr_retune(device_t dev, bool reset)
+{
+
+	return (MMCBR_RETUNE(device_get_parent(dev), dev, reset));
 }
 
 static int __inline

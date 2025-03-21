@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.1/sys/opencrypto/deflate.h 281855 2015-04-22 14:38:58Z rodrigc $	*/
+/*	$FreeBSD: releng/11.4/sys/opencrypto/deflate.h 281855 2015-04-22 14:38:58Z rodrigc $	*/
 /* $OpenBSD: deflate.h,v 1.3 2002/03/14 01:26:51 millert Exp $ */
 
 /*-

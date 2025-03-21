@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)limits.h	8.3 (Berkeley) 1/4/94
- * $FreeBSD: releng/11.1/sys/amd64/include/limits.h 143063 2005-03-02 21:33:29Z joerg $
+ * $FreeBSD: releng/11.4/sys/amd64/include/limits.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _MACHINE_LIMITS_H_

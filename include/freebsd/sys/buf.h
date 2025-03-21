@@ -32,7 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)buf.h	8.9 (Berkeley) 3/30/95
- * $FreeBSD: releng/11.1/sys/sys/buf.h 308554 2016-11-11 20:18:08Z kib $
+ * $FreeBSD: releng/11.4/sys/sys/buf.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_BUF_H_
@@ -459,6 +459,7 @@ buf_countdeps(struct buf *bp, int i)
 extern int	nbuf;			/* The number of buffer headers */
 extern long	maxswzone;		/* Max KVA for swap structures */
 extern long	maxbcache;		/* Max KVA for buffer cache */
+extern int	maxbcachebuf;		/* Max buffer cache block size */
 extern long	runningbufspace;
 extern long	hibufspace;
 extern int	dirtybufthresh;
@@ -525,9 +526,11 @@ int	cluster_read(struct vnode *, u_quad_t, daddr_t, long,
 	    struct ucred *, long, int, int, struct buf **);
 int	cluster_wbuild(struct vnode *, long, daddr_t, int, int);
 void	cluster_write(struct vnode *, struct buf *, u_quad_t, int, int);
+void	vfs_bio_brelse(struct buf *bp, int ioflags);
 void	vfs_bio_bzero_buf(struct buf *bp, int base, int size);
-void	vfs_bio_set_valid(struct buf *, int base, int size);
 void	vfs_bio_clrbuf(struct buf *);
+void	vfs_bio_set_flags(struct buf *bp, int ioflags);
+void	vfs_bio_set_valid(struct buf *, int base, int size);
 void	vfs_busy_pages(struct buf *, int clear_modify);
 void	vfs_unbusy_pages(struct buf *);
 int	vmapbuf(struct buf *, int);

@@ -39,7 +39,7 @@
 
 #ifndef RPC_HDR
 %#include <sys/cdefs.h>
-%__FBSDID("$FreeBSD: releng/11.1/include/rpcsvc/nis_cache.x 114629 2003-05-04 02:51:42Z obrien $");
+%__FBSDID("$FreeBSD: releng/11.4/include/rpcsvc/nis_cache.x 114629 2003-05-04 02:51:42Z obrien $");
 #endif
 
 #ifdef RPC_HDR

@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)unpcb.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: releng/11.1/sys/sys/unpcb.h 305159 2016-08-31 21:35:12Z markj $
+ * $FreeBSD: releng/11.4/sys/sys/unpcb.h 339067 2018-10-01 17:36:58Z asomers $
  */
 
 #ifndef _SYS_UNPCB_H_
@@ -149,5 +149,14 @@ struct xunpgen {
 	so_gen_t xug_sogen;
 };
 #endif /* _SYS_SOCKETVAR_H_ */
+
+#if defined(_KERNEL)
+struct thread;
+
+/* In uipc_userreq.c */
+void
+unp_copy_peercred(struct thread *td, struct unpcb *client_unp,
+    struct unpcb *server_unp, struct unpcb *listen_unp);
+#endif
 
 #endif /* _SYS_UNPCB_H_ */

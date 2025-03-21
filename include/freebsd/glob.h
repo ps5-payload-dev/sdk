@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)glob.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: releng/11.1/include/glob.h 228754 2011-12-20 22:56:13Z eadler $
+ * $FreeBSD: releng/11.4/include/glob.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _GLOB_H_

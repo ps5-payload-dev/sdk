@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/jail.h 316943 2017-04-14 21:49:20Z smh $
+ * $FreeBSD: releng/11.4/sys/sys/jail.h 360299 2020-04-25 12:49:48Z kp $
  */
 
 #ifndef _SYS_JAIL_H_
@@ -230,7 +230,8 @@ struct prison_racct {
 #define	PR_ALLOW_MOUNT_FDESCFS		0x1000
 #define	PR_ALLOW_MOUNT_LINPROCFS	0x2000
 #define	PR_ALLOW_MOUNT_LINSYSFS		0x4000
-#define	PR_ALLOW_ALL			0x7fff
+#define	PR_ALLOW_READ_MSGBUF		0x8000
+#define	PR_ALLOW_ALL			0xffff
 
 /*
  * OSD methods
@@ -366,6 +367,7 @@ void getcredhostname(struct ucred *, char *, size_t);
 void getcreddomainname(struct ucred *, char *, size_t);
 void getcredhostuuid(struct ucred *, char *, size_t);
 void getcredhostid(struct ucred *, unsigned long *);
+void getjailname(struct ucred *cred, char *name, size_t len);
 void prison0_init(void);
 int prison_allow(struct ucred *, unsigned);
 int prison_check(struct ucred *cred1, struct ucred *cred2);

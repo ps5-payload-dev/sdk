@@ -43,7 +43,7 @@
 #ifndef	_RPCSVC_NIS_TAGS_H
 #define	_RPCSVC_NIS_TAGS_H
 
-/* $FreeBSD: releng/11.1/include/rpcsvc/nis_tags.h 259117 2013-12-09 04:26:50Z hrs $ */
+/* $FreeBSD: releng/11.4/include/rpcsvc/nis_tags.h 331722 2018-03-29 02:50:57Z eadler $ */
 /* From: #pragma ident	"@(#)nis_tags.h	1.10	94/05/03 SMI" */
 /* from file: zns_tags.h	1.7 Copyright (c) 1990 Sun Microsystems */
 

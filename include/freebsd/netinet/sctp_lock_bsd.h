@@ -31,7 +31,7 @@
  */
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: releng/11.1/sys/netinet/sctp_lock_bsd.h 298942 2016-05-02 20:56:11Z pfg $");
+__FBSDID("$FreeBSD: releng/11.4/sys/netinet/sctp_lock_bsd.h 331722 2018-03-29 02:50:57Z eadler $");
 
 #ifndef _NETINET_SCTP_LOCK_BSD_H_
 #define _NETINET_SCTP_LOCK_BSD_H_

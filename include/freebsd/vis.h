@@ -1,5 +1,5 @@
-/*	$NetBSD: vis.h,v 1.24 2016/01/14 20:42:14 christos Exp $	*/
-/*	$FreeBSD: releng/11.1/contrib/libc-vis/vis.h 301679 2016-06-08 18:21:27Z brooks $	*/
+/*	$NetBSD: vis.h,v 1.25 2017/04/23 01:57:36 christos Exp $	*/
+/*	$FreeBSD: releng/11.4/contrib/libc-vis/vis.h 326320 2017-11-28 16:49:16Z brooks $	*/
 
 /*-
  * Copyright (c) 1990, 1993
@@ -52,6 +52,7 @@
 #define	VIS_NL		0x0010	/* also encode newline */
 #define	VIS_WHITE	(VIS_SP | VIS_TAB | VIS_NL)
 #define	VIS_SAFE	0x0020	/* only encode "unsafe" characters */
+#define	VIS_DQ		0x8000	/* also encode double quotes */
 
 /*
  * other

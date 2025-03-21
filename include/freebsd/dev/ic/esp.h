@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/ic/esp.h 77961 2001-06-10 04:20:37Z nyan $
+ * $FreeBSD: releng/11.4/sys/dev/ic/esp.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _IC_ESP_H_

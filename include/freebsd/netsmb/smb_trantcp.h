@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/netsmb/smb_trantcp.h 206361 2010-04-07 16:50:38Z joel $
+ * $FreeBSD: releng/11.4/sys/netsmb/smb_trantcp.h 206361 2010-04-07 16:50:38Z joel $
  */
 #ifndef _NETSMB_SMB_TRANTCP_H_
 #define	_NETSMB_SMB_TRANTCP_H_

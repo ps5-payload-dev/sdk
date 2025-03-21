@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/netinet/libalias/alias.h 223080 2011-06-14 13:35:24Z ae $
+ * $FreeBSD: releng/11.4/sys/netinet/libalias/alias.h 359695 2020-04-07 16:29:11Z eugen $
  */
 
 /*
@@ -225,6 +225,14 @@ struct mbuf    *m_megapullup(struct mbuf *, int);
  * states in 'ipfw nat global' rule.
  */
 #define	PKT_ALIAS_SKIP_GLOBAL		0x200
+
+/*
+ * Like PKT_ALIAS_UNREGISTERED_ONLY, but includes the RFC 6598
+ * (Carrier Grade NAT) address range as follows:
+ *
+ *		100.64.0.0   ->   100.127.255.255
+ */
+#define	PKT_ALIAS_UNREGISTERED_CGN	0x400
 
 /* Function return codes. */
 #define	PKT_ALIAS_ERROR			-1

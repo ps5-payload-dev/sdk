@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/fs/udf/udf.h 189082 2009-02-26 18:58:41Z avg $
+ * $FreeBSD: releng/11.4/sys/fs/udf/udf.h 189082 2009-02-26 18:58:41Z avg $
  */
 
 #define UDF_HASHTBLSIZE 100

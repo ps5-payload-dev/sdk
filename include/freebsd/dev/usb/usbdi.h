@@ -21,7 +21,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/usb/usbdi.h 298932 2016-05-02 17:44:03Z pfg $
+ * $FreeBSD: releng/11.4/sys/dev/usb/usbdi.h 331722 2018-03-29 02:50:57Z eadler $
  */
 #ifndef _USB_USBDI_H_
 #define _USB_USBDI_H_
@@ -334,7 +334,7 @@ struct usb_device_id {
 	unsigned long driver_info;
 } __aligned(32);
 
-#define USB_STD_PNP_INFO "M16:mask;U16:vendor;U16:product;L16:product;G16:product;" \
+#define USB_STD_PNP_INFO "M16:mask;U16:vendor;U16:product;L16:release;G16:release;" \
 	"U8:devclass;U8:devsubclass;U8:devprotocol;" \
 	"U8:intclass;U8:intsubclass;U8:intprotocol;"
 #define USB_STD_PNP_HOST_INFO USB_STD_PNP_INFO "T:mode=host;"

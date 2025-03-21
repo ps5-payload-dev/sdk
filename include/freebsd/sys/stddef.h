@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/stddef.h 221476 2011-05-05 02:35:25Z obrien $
+ * $FreeBSD: releng/11.4/sys/sys/stddef.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_STDDEF_H_

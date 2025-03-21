@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ttyent.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: releng/11.1/include/ttyent.h 260913 2014-01-20 18:15:06Z nwhitehorn $
+ * $FreeBSD: releng/11.4/include/ttyent.h 333796 2018-05-18 14:57:58Z gjb $
  */
 
 #ifndef	_TTYENT_H_
@@ -38,6 +38,7 @@
 #define	_TTYS_OFF	"off"
 #define	_TTYS_ON	"on"
 #define	_TTYS_ONIFCONSOLE "onifconsole"
+#define	_TTYS_ONIFEXISTS "onifexists"
 #define	_TTYS_SECURE	"secure"
 #define	_TTYS_INSECURE	"insecure"
 #define	_TTYS_WINDOW	"window"
@@ -54,6 +55,8 @@ struct ttyent {
 #define	TTY_SECURE	0x02	/* allow uid of 0 to login */
 #define	TTY_DIALUP	0x04	/* is a dialup tty */
 #define	TTY_NETWORK	0x08	/* is a network tty */
+#define	TTY_IFEXISTS	0x10	/* configured as "onifexists" */
+#define	TTY_IFCONSOLE	0x20	/* configured as "onifconsole" */
 	int	ty_status;	/* status flags */
 	char 	*ty_window;	/* command to start up window manager */
 	char	*ty_comment;	/* comment field */

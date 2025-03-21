@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/nfs/nfs_kdtrace.h 222813 2011-06-07 08:46:13Z attilio $
+ * $FreeBSD: releng/11.4/sys/nfs/nfs_kdtrace.h 222813 2011-06-07 08:46:13Z attilio $
  */
 
 #ifndef _NFSCLIENT_NFS_KDTRACE_H_

@@ -57,7 +57,7 @@
  */
 
 /*
- * $FreeBSD: releng/11.1/lib/libmd/ripemd.h 310372 2016-12-21 18:42:04Z emaste $
+ * $FreeBSD: releng/11.4/lib/libmd/ripemd.h 310372 2016-12-21 18:42:04Z emaste $
  */
 
 #ifndef HEADER_RIPEMD_H

@@ -6,7 +6,7 @@
  * this stuff is worth it, you can buy me a beer in return.   Poul-Henning Kamp
  * ----------------------------------------------------------------------------
  *
- * $FreeBSD: releng/11.1/sys/x86/include/x86_smp.h 308438 2016-11-08 09:51:55Z kib $
+ * $FreeBSD: releng/11.4/sys/x86/include/x86_smp.h 329462 2018-02-17 18:00:01Z kib $
  *
  */
 
@@ -37,6 +37,7 @@ extern int cpu_logical;
 extern int cpu_cores;
 extern volatile uint32_t smp_tlb_generation;
 extern struct pmap *smp_tlb_pmap;
+extern vm_offset_t smp_tlb_addr1, smp_tlb_addr2;
 extern u_int xhits_gbl[];
 extern u_int xhits_pg[];
 extern u_int xhits_rng[];
@@ -95,9 +96,9 @@ void	ipi_selected(cpuset_t cpus, u_int ipi);
 u_int	mp_bootaddress(u_int);
 void	set_interrupt_apic_ids(void);
 void	smp_cache_flush(void);
-void	smp_masked_invlpg(cpuset_t mask, vm_offset_t addr);
+void	smp_masked_invlpg(cpuset_t mask, vm_offset_t addr, struct pmap *pmap);
 void	smp_masked_invlpg_range(cpuset_t mask, vm_offset_t startva,
-	    vm_offset_t endva);
+	    vm_offset_t endva, struct pmap *pmap);
 void	smp_masked_invltlb(cpuset_t mask, struct pmap *pmap);
 void	mem_range_AP_init(void);
 void	topo_probe(void);

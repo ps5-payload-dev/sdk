@@ -29,7 +29,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/fs/nfs/nfsport.h 317983 2017-05-08 21:29:29Z rmacklem $
+ * $FreeBSD: releng/11.4/sys/fs/nfs/nfsport.h 356161 2019-12-28 22:32:14Z rmacklem $
  */
 
 #ifndef _NFS_NFSPORT_H_
@@ -357,11 +357,13 @@
 #define	NFSPROC_WRITEDS		51
 #define	NFSPROC_READDS		52
 #define	NFSPROC_COMMITDS	53
+#define	NFSPROC_OPENLAYGET	54
+#define	NFSPROC_CREATELAYGET	55
 
 /*
  * Must be defined as one higher than the last NFSv4.1 Proc# above.
  */
-#define	NFSV41_NPROCS		54
+#define	NFSV41_NPROCS		56
 
 #endif	/* NFS_V3NPROCS */
 
@@ -390,7 +392,7 @@ struct nfsstatsv1 {
 	uint64_t	readlink_bios;
 	uint64_t	biocache_readdirs;
 	uint64_t	readdir_bios;
-	uint64_t	rpccnt[NFSV41_NPROCS + 15];
+	uint64_t	rpccnt[NFSV41_NPROCS + 13];
 	uint64_t	rpcretries;
 	uint64_t	srvrpccnt[NFSV42_NOPS + NFSV4OP_FAKENOPS];
 	uint64_t	srvrpc_errs;
@@ -586,6 +588,7 @@ struct nfst_rec {
 #define	NFSNST_NEWSTATE	0x1
 #define	NFSNST_REVOKE		0x2
 #define	NFSNST_GOTSTATE		0x4
+#define	NFSNST_RECLAIMED	0x8
 
 /*
  * This structure is linked onto nfsrv_stablefirst for the duration of
@@ -675,6 +678,7 @@ void nfsrvd_rcv(struct socket *, void *, int);
 #define	NFSLOCKSOCK()		mtx_lock(&nfs_slock_mutex)
 #define	NFSUNLOCKSOCK()		mtx_unlock(&nfs_slock_mutex)
 #define	NFSNAMEIDMUTEX		extern struct mtx nfs_nameid_mutex
+#define	NFSNAMEIDMUTEXPTR	(&nfs_nameid_mutex)
 #define	NFSLOCKNAMEID()		mtx_lock(&nfs_nameid_mutex)
 #define	NFSUNLOCKNAMEID()	mtx_unlock(&nfs_nameid_mutex)
 #define	NFSNAMEIDREQUIRED()	mtx_assert(&nfs_nameid_mutex, MA_OWNED)
@@ -1022,7 +1026,7 @@ struct nfsreq {
 };
 
 #ifndef NFS_MAXBSIZE
-#define	NFS_MAXBSIZE	MAXBCACHEBUF
+#define	NFS_MAXBSIZE	(maxbcachebuf)
 #endif
 
 /*

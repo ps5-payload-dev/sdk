@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.1/sys/sys/shm.h 301074 2016-05-31 19:24:32Z ed $ */
+/* $FreeBSD: releng/11.4/sys/sys/shm.h 347995 2019-05-20 16:31:45Z kib $ */
 /*	$NetBSD: shm.h,v 1.15 1994/06/29 06:45:17 cgd Exp $	*/
 
 /*-
@@ -40,6 +40,9 @@
 #define _SYS_SHM_H_
 
 #include <sys/cdefs.h>
+#ifdef _WANT_SYSVSHM_INTERNALS
+#define	_WANT_SYSVIPC_INTERNALS
+#endif
 #include <sys/ipc.h>
 #include <sys/_types.h>
 
@@ -47,6 +50,7 @@
 
 #define SHM_RDONLY  010000  /* Attach read-only (else read-write) */
 #define SHM_RND     020000  /* Round attach address to SHMLBA */
+#define	SHM_REMAP   030000  /* Unmap before mapping */
 #define SHMLBA      PAGE_SIZE /* Segment low boundary address multiple */
 
 /* "official" access mode definitions; somewhat braindead since you have
@@ -103,9 +107,7 @@ struct shmid_ds {
 	time_t          shm_ctime;	/* time of last change by shmctl() */
 };
 
-#ifdef _KERNEL
-#include <vm/vm.h>
-
+#if defined(_KERNEL) || defined(_WANT_SYSVSHM_INTERNALS)
 /*
  * System 5 style catch-all structure for shared memory constants that
  * might be of interest to user programs.  Do we really want/need this?
@@ -118,18 +120,19 @@ struct shminfo {
 	u_long	shmall;		/* max amount of shared memory (pages) */
 };
 
+struct vm_object;
+
 /* 
  * Add a kernel wrapper to the shmid_ds struct so that private info (like the
  * MAC label) can be added to it, without changing the user interface.
  */
 struct shmid_kernel {
 	struct shmid_ds u;
-	vm_object_t object;
+	struct vm_object *object;
 	struct label *label;	/* MAC label */
 	struct ucred *cred;	/* creator's credendials */
 };
-
-extern struct shminfo	shminfo;
+#endif
 
 struct shm_info {
 	int used_ids;
@@ -140,15 +143,17 @@ struct shm_info {
 	unsigned long swap_successes;
 };
 
-struct thread;
+#ifdef _KERNEL
 struct proc;
 struct vmspace;
 
+extern struct shminfo	shminfo;
+
 void	shmexit(struct vmspace *);
 void	shmfork(struct proc *, struct proc *);
-#endif /* _KERNEL */
 
-#if !defined(_KERNEL) || defined(_WANT_SHM_PROTOTYPES)
+#else /* !_KERNEL */
+
 #include <sys/cdefs.h>
 
 #ifndef _SIZE_T_DECLARED
@@ -157,7 +162,7 @@ typedef __size_t        size_t;
 #endif
 
 __BEGIN_DECLS
-#ifdef __BSD_VISIBLE
+#if __BSD_VISIBLE
 int shmsys(int, ...);
 #endif
 void *shmat(int, const void *, int);
@@ -166,6 +171,6 @@ int shmctl(int, int, struct shmid_ds *);
 int shmdt(const void *);
 __END_DECLS
 
-#endif /* _KERNEL || _WANT_SHM_PROTOTYPES */
+#endif /* _KERNEL */
 
 #endif /* !_SYS_SHM_H_ */

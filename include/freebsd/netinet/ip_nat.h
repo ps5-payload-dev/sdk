@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.1/sys/contrib/ipfilter/netinet/ip_nat.h 305138 2016-08-31 18:00:41Z dim $	*/
+/*	$FreeBSD: releng/11.4/sys/contrib/ipfilter/netinet/ip_nat.h 344833 2019-03-06 02:37:25Z cy $	*/
 
 /*
  * Copyright (C) 2012 by Darren Reed.
@@ -6,7 +6,7 @@
  * See the IPFILTER.LICENCE file for details on licencing.
  *
  * @(#)ip_nat.h	1.5 2/4/96
- * $FreeBSD: releng/11.1/sys/contrib/ipfilter/netinet/ip_nat.h 305138 2016-08-31 18:00:41Z dim $
+ * $FreeBSD: releng/11.4/sys/contrib/ipfilter/netinet/ip_nat.h 344833 2019-03-06 02:37:25Z cy $
  * Id: ip_nat.h,v 2.90.2.20 2007/09/25 08:27:32 darrenr Exp $
  */
 
@@ -14,7 +14,7 @@
 #define	__IP_NAT_H__
 
 #ifndef	SOLARIS
-# if defined(sun) && (defined(__svr4__) || defined(__SVR4))
+# if defined(sun) && defined(__SVR4)
 #  define	SOLARIS		1
 # else
 #  define	SOLARIS		0
@@ -694,9 +694,6 @@ extern	int	ipf_nat_hostmap_rehash __P((ipf_main_softc_t *,
 					    ipftuneable_t *, ipftuneval_t *));
 extern	nat_t	*ipf_nat_icmperrorlookup __P((fr_info_t *, int));
 extern	nat_t	*ipf_nat_icmperror __P((fr_info_t *, u_int *, int));
-#if defined(__OpenBSD__)
-extern	void	ipf_nat_ifdetach __P((void *));
-#endif
 extern	int	ipf_nat_init __P((void));
 extern	nat_t	*ipf_nat_inlookup __P((fr_info_t *, u_int, u_int,
 				      struct in_addr, struct in_addr));

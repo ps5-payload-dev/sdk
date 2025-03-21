@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	from: @(#)cpu.h	5.4 (Berkeley) 5/9/91
- * $FreeBSD: releng/11.1/sys/amd64/include/cpu.h 267526 2014-06-16 08:43:03Z royger $
+ * $FreeBSD: releng/11.4/sys/amd64/include/cpu.h 340270 2018-11-08 22:42:55Z jhb $
  */
 
 #ifndef _MACHINE_CPU_H_
@@ -73,6 +73,7 @@ extern char	etext[];
 extern	void (*vmm_resume_p)(void);
 
 void	cpu_halt(void);
+void	cpu_lock_delay(void);
 void	cpu_reset(void);
 void	fork_trampoline(void);
 void	swi_vm(void *);

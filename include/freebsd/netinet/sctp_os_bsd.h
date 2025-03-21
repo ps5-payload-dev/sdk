@@ -31,7 +31,7 @@
  */
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: releng/11.1/sys/netinet/sctp_os_bsd.h 315514 2017-03-18 22:04:20Z ae $");
+__FBSDID("$FreeBSD: releng/11.4/sys/netinet/sctp_os_bsd.h 332189 2018-04-07 17:59:08Z tuexen $");
 
 #ifndef _NETINET_SCTP_OS_BSD_H_
 #define _NETINET_SCTP_OS_BSD_H_
@@ -403,11 +403,6 @@ typedef struct rtentry sctp_rtentry_t;
 
 #define SCTP_RTALLOC(ro, vrf_id, fibnum) \
 	rtalloc_ign_fib((struct route *)ro, 0UL, fibnum)
-
-/* Future zero copy wakeup/send  function */
-#define SCTP_ZERO_COPY_EVENT(inp, so)
-/* This is re-pulse ourselves for sendbuf */
-#define SCTP_ZERO_COPY_SENDQ_EVENT(inp, so)
 
 /*
  * SCTP protocol specific mbuf flags.

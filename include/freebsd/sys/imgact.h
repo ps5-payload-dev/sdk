@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/imgact.h 300792 2016-05-26 23:18:54Z bdrewery $
+ * $FreeBSD: releng/11.4/sys/sys/imgact.h 337046 2018-08-01 17:40:17Z jhb $
  */
 
 #ifndef _SYS_IMGACT_H_
@@ -42,6 +42,7 @@ struct ucred;
 
 struct image_args {
 	char *buf;		/* pointer to string buffer */
+	void *bufkva;		/* cookie for string buffer KVA */
 	char *begin_argv;	/* beginning of argv in buf */
 	char *begin_envv;	/* beginning of envv in buf */
 	char *endp;		/* current `end' pointer of arg & env strings */
@@ -72,7 +73,6 @@ struct image_params {
 	void *auxargs;		/* ELF Auxinfo structure pointer */
 	struct sf_buf *firstpage;	/* first page that we mapped */
 	unsigned long ps_strings; /* PS_STRINGS for BSD/OS binaries */
-	size_t auxarg_size;
 	struct image_args *args;	/* system call arguments */
 	struct sysentvec *sysent;	/* system entry vector */
 	char *execpath;

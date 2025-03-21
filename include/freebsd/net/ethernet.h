@@ -1,12 +1,12 @@
 /*
  * Fundamental constants relating to ethernet.
  *
- * $FreeBSD: releng/11.1/sys/net/ethernet.h 318604 2017-05-22 02:09:27Z sephe $
+ * $FreeBSD: releng/11.4/sys/net/ethernet.h 358259 2020-02-23 15:18:28Z pfg $
  *
  */
 
 #ifndef _NET_ETHERNET_H_
-#define _NET_ETHERNET_H_
+#define	_NET_ETHERNET_H_
 
 /*
  * Some basic Ethernet constants.
@@ -71,6 +71,9 @@ struct ether_addr {
 } __packed;
 
 #define	ETHER_IS_MULTICAST(addr) (*(addr) & 0x01) /* is address mcast/bcast? */
+#define	ETHER_IS_BROADCAST(addr) \
+	(((addr)[0] & (addr)[1] & (addr)[2] & \
+	  (addr)[3] & (addr)[4] & (addr)[5]) == 0xff)
 
 /*
  * 802.1q Virtual LAN header.
@@ -92,6 +95,11 @@ struct ether_vlan_header {
 	((((((pri) & 7) << 1) | ((cfi) & 1)) << 12) | ((vlid) & EVL_VLID_MASK))
 
 /*
+ * Ethernet protocol types.
+ *
+ * A public list is available from the IEEE Registration Authority:
+ *	https://standards.ieee.org/products-services/regauth/
+ *
  *  NOTE: 0x0000-0x05DC (0..1500) are generally IEEE 802.3 length fields.
  *  However, there are some conflicts.
  */
@@ -260,7 +268,7 @@ struct ether_vlan_header {
 #define	ETHERTYPE_AARP		0x80F3	/* AppleTalk AARP */
 		    /* 0x80F4 - 0x80F5	   Kinetics */
 #define	ETHERTYPE_APOLLO	0x80F7	/* Apollo Computer */
-#define ETHERTYPE_VLAN		0x8100	/* IEEE 802.1Q VLAN tagging (XXX conflicts) */
+#define	ETHERTYPE_VLAN		0x8100	/* IEEE 802.1Q VLAN tagging (XXX conflicts) */
 		    /* 0x80FF - 0x8101	   Wellfleet Communications (XXX conflicts) */
 #define	ETHERTYPE_BOFL		0x8102	/* Wellfleet; BOFL (Breath OF Life) pkts [every 5-10 secs.] */
 #define	ETHERTYPE_WELLFLEET	0x8103	/* Wellfleet Communications */
@@ -333,14 +341,24 @@ struct ether_vlan_header {
 #define	ETHERTYPE_SLOW		0x8809	/* 802.3ad link aggregation (LACP) */
 #define	ETHERTYPE_PPP		0x880B	/* PPP (obsolete by PPPoE) */
 #define	ETHERTYPE_HITACHI	0x8820	/* Hitachi Cable (Optoelectronic Systems Laboratory) */
-#define ETHERTYPE_TEST		0x8822  /* Network Conformance Testing */
+#define	ETHERTYPE_TEST		0x8822	/* Network Conformance Testing */
 #define	ETHERTYPE_MPLS		0x8847	/* MPLS Unicast */
 #define	ETHERTYPE_MPLS_MCAST	0x8848	/* MPLS Multicast */
 #define	ETHERTYPE_AXIS		0x8856	/* Axis Communications AB proprietary bootstrap/config */
 #define	ETHERTYPE_PPPOEDISC	0x8863	/* PPP Over Ethernet Discovery Stage */
 #define	ETHERTYPE_PPPOE		0x8864	/* PPP Over Ethernet Session Stage */
 #define	ETHERTYPE_LANPROBE	0x8888	/* HP LanProbe test? */
-#define	ETHERTYPE_PAE		0x888e	/* EAPOL PAE/802.1x */
+#define	ETHERTYPE_PAE		0x888E	/* EAPOL PAE/802.1x */
+#define	ETHERTYPE_PROFINET	0x8892	/* PROFINET RT Protocol */
+#define	ETHERTYPE_AOE		0x88A2	/* ATA Protocol */
+#define	ETHERTYPE_ETHERCAT	0x88A4	/* EtherCat Protocol */
+#define	ETHERTYPE_QINQ		0x88A8	/* 802.1ad VLAN stacking */
+#define	ETHERTYPE_POWERLINK	0x88AB	/* Ethernet Powerlink (EPL) */
+#define	ETHERTYPE_LLDP		0x88CC	/* Link Layer Discovery Protocol */
+#define	ETHERTYPE_SERCOS	0x88CD	/* SERCOS III Protocol */
+#define	ETHERTYPE_MACSEC	0x88E5	/* 802.1AE MAC Security */
+#define	ETHERTYPE_PBB		0x88E7	/* 802.1Q Provider Backbone Bridges */
+#define	ETHERTYPE_FCOE		0x8906	/* Fibre Channel over Ethernet */
 #define	ETHERTYPE_LOOPBACK	0x9000	/* Loopback: used to test interfaces */
 #define	ETHERTYPE_LBACK		ETHERTYPE_LOOPBACK	/* DEC MOP loopback */
 #define	ETHERTYPE_XNSSM		0x9001	/* 3Com (Formerly Bridge Communications), XNS Systems Management */
@@ -371,7 +389,7 @@ struct ether_vlan_header {
  * ether_vlan_mtap.  This function will re-insert VLAN tags for the duration
  * of the tap, so they show up properly for network analyzers.
  */
-#define ETHER_BPF_MTAP(_ifp, _m) do {					\
+#define	ETHER_BPF_MTAP(_ifp, _m) do {					\
 	if (bpf_peers_present((_ifp)->if_bpf)) {			\
 		M_ASSERTVALID(_m);					\
 		if (((_m)->m_flags & M_VLANTAG) != 0)			\
@@ -380,6 +398,20 @@ struct ether_vlan_header {
 			bpf_mtap((_ifp)->if_bpf, (_m));			\
 	}								\
 } while (0)
+
+/*
+ * Names for 802.1q priorities ("802.1p").  Notice that in this scheme,
+ * (0 < 1), allowing default 0-tagged traffic to take priority over background
+ * tagged traffic.
+ */
+#define	IEEE8021Q_PCP_BK	1	/* Background (lowest) */
+#define	IEEE8021Q_PCP_BE	0	/* Best effort (default) */
+#define	IEEE8021Q_PCP_EE	2	/* Excellent effort */
+#define	IEEE8021Q_PCP_CA	3	/* Critical applications */
+#define	IEEE8021Q_PCP_VI	4	/* Video, < 100ms latency */
+#define	IEEE8021Q_PCP_VO	5	/* Video, < 10ms latency */
+#define	IEEE8021Q_PCP_IC	6	/* Internetwork control */
+#define	IEEE8021Q_PCP_NC	7	/* Network control (highest) */
 
 #ifdef _KERNEL
 
@@ -402,6 +434,15 @@ extern	char *ether_sprintf(const u_int8_t *);
 void	ether_vlan_mtap(struct bpf_if *, struct mbuf *,
 	    void *, u_int);
 struct mbuf  *ether_vlanencap(struct mbuf *, uint16_t);
+bool	ether_8021q_frame(struct mbuf **mp, struct ifnet *ife, struct ifnet *p,
+	    uint16_t vid, uint8_t pcp);
+void	ether_gen_addr(struct ifnet *ifp, struct ether_addr *hwaddr);
+
+#ifdef _SYS_EVENTHANDLER_H_
+/* new ethernet interface attached event */
+typedef void (*ether_ifattach_event_handler_t)(void *, struct ifnet *);
+EVENTHANDLER_DECLARE(ether_ifattach_event, ether_ifattach_event_handler_t);
+#endif
 
 #else /* _KERNEL */
 

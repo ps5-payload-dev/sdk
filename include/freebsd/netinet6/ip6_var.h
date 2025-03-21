@@ -58,7 +58,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ip_var.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: releng/11.1/sys/netinet6/ip6_var.h 301114 2016-06-01 10:14:04Z bz $
+ * $FreeBSD: releng/11.4/sys/netinet6/ip6_var.h 337799 2018-08-14 18:10:25Z jtl $
  */
 
 #ifndef _NETINET6_IP6_VAR_H_
@@ -296,8 +296,10 @@ VNET_DECLARE(struct socket *, ip6_mrouter);	/* multicast routing daemon */
 VNET_DECLARE(int, ip6_sendredirects);	/* send IP redirects when forwarding? */
 VNET_DECLARE(int, ip6_maxfragpackets);	/* Maximum packets in reassembly
 					 * queue */
-VNET_DECLARE(int, ip6_maxfrags);	/* Maximum fragments in reassembly
+extern int ip6_maxfrags;		/* Maximum fragments in reassembly
 					 * queue */
+VNET_DECLARE(int, ip6_maxfragbucketsize); /* Maximum reassembly queues per bucket */
+VNET_DECLARE(int, ip6_maxfragsperpacket); /* Maximum fragments per packet */
 VNET_DECLARE(int, ip6_accept_rtadv);	/* Acts as a host not a router */
 VNET_DECLARE(int, ip6_no_radr);		/* No defroute from RA */
 VNET_DECLARE(int, ip6_norbit_raif);	/* Disable R-bit in NA on RA
@@ -312,7 +314,8 @@ VNET_DECLARE(int, ip6_dad_count);	/* DupAddrDetectionTransmits */
 #define	V_ip6_mrouter			VNET(ip6_mrouter)
 #define	V_ip6_sendredirects		VNET(ip6_sendredirects)
 #define	V_ip6_maxfragpackets		VNET(ip6_maxfragpackets)
-#define	V_ip6_maxfrags			VNET(ip6_maxfrags)
+#define	V_ip6_maxfragbucketsize		VNET(ip6_maxfragbucketsize)
+#define	V_ip6_maxfragsperpacket		VNET(ip6_maxfragsperpacket)
 #define	V_ip6_accept_rtadv		VNET(ip6_accept_rtadv)
 #define	V_ip6_no_radr			VNET(ip6_no_radr)
 #define	V_ip6_norbit_raif		VNET(ip6_norbit_raif)
@@ -362,7 +365,7 @@ void	ip6_direct_input(struct mbuf *);
 void	ip6_freepcbopts(struct ip6_pktopts *);
 
 int	ip6_unknown_opt(u_int8_t *, struct mbuf *, int);
-char *	ip6_get_prevhdr(const struct mbuf *, int);
+int	ip6_get_prevhdr(const struct mbuf *, int);
 int	ip6_nexthdr(const struct mbuf *, int, int, int *);
 int	ip6_lasthdr(const struct mbuf *, int, int, int *);
 
@@ -399,6 +402,7 @@ int	ip6_fragment(struct ifnet *, struct mbuf *, int, u_char, int,
 
 int	route6_input(struct mbuf **, int *, int);
 
+void	frag6_set_bucketsize(void);
 void	frag6_init(void);
 int	frag6_input(struct mbuf **, int *, int);
 void	frag6_slowtimo(void);

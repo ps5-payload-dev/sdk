@@ -24,10 +24,11 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/vm/uma_int.h 316834 2017-04-14 14:11:49Z avg $
+ * $FreeBSD: releng/11.4/sys/vm/uma_int.h 344363 2019-02-20 14:12:25Z pfg $
  *
  */
 
+#include <sys/_bitset.h>
 #include <sys/_task.h>
 
 /* 
@@ -143,8 +144,8 @@ SLIST_HEAD(slabhead, uma_slab);
 
 struct uma_hash {
 	struct slabhead	*uh_slab_hash;	/* Hash table for slabs */
-	int		uh_hashsize;	/* Current size of the hash table */
-	int		uh_hashmask;	/* Mask used during hashing */
+	u_int		uh_hashsize;	/* Current size of the hash table */
+	u_int		uh_hashmask;	/* Mask used during hashing */
 };
 
 /*
@@ -210,7 +211,7 @@ struct uma_keg {
 	vm_offset_t	uk_kva;		/* Zone base KVA */
 	uma_zone_t	uk_slabzone;	/* Slab zone backing us, if OFFPAGE */
 
-	uint16_t	uk_pgoff;	/* Offset to uma_slab struct */
+	uint32_t	uk_pgoff;	/* Offset to uma_slab struct */
 	uint16_t	uk_ppera;	/* pages per allocation from backend */
 	uint16_t	uk_ipers;	/* Items per slab */
 	uint32_t	uk_flags;	/* Internal flags */
@@ -385,7 +386,7 @@ static __inline uma_slab_t
 hash_sfind(struct uma_hash *hash, uint8_t *data)
 {
         uma_slab_t slab;
-        int hval;
+        u_int hval;
 
         hval = UMA_HASH(hash, data);
 

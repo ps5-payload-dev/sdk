@@ -29,7 +29,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/an/if_anreg.h 299544 2016-05-12 17:47:30Z scottl $
+ * $FreeBSD: releng/11.4/sys/dev/an/if_anreg.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #define AN_TIMEOUT	65536

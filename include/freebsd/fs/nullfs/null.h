@@ -31,7 +31,7 @@
  *
  *	@(#)null.h	8.3 (Berkeley) 8/20/94
  *
- * $FreeBSD: releng/11.1/sys/fs/nullfs/null.h 250505 2013-05-11 11:17:44Z kib $
+ * $FreeBSD: releng/11.4/sys/fs/nullfs/null.h 357508 2020-02-04 17:17:40Z kib $
  */
 
 #ifndef	FS_NULL_H
@@ -41,7 +41,7 @@
 
 struct null_mount {
 	struct mount	*nullm_vfs;
-	struct vnode	*nullm_rootvp;	/* Reference to root null_node */
+	struct vnode	*nullm_lowerrootvp;	/* Ref to lower root vnode */
 	uint64_t	nullm_flags;
 };
 

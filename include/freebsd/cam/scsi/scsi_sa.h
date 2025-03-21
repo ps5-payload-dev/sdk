@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/cam/scsi/scsi_sa.h 317850 2017-05-05 20:21:13Z ken $
+ * $FreeBSD: releng/11.4/sys/cam/scsi/scsi_sa.h 317850 2017-05-05 20:21:13Z ken $
  */
 
 #ifndef	_SCSI_SCSI_SA_H

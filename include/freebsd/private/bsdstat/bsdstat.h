@@ -26,7 +26,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  *
- * $FreeBSD: releng/11.1/lib/libbsdstat/bsdstat.h 262821 2014-03-06 04:06:36Z adrian $
+ * $FreeBSD: releng/11.4/lib/libbsdstat/bsdstat.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef	_BSDSTAT_H_

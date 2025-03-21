@@ -18,7 +18,7 @@
  * 5. Modifications may be freely made to this file if the above conditions
  *    are met.
  *
- * $FreeBSD: releng/11.1/sys/sys/pipe.h 265206 2014-05-02 00:52:13Z mjg $
+ * $FreeBSD: releng/11.4/sys/sys/pipe.h 265206 2014-05-02 00:52:13Z mjg $
  */
 
 #ifndef _SYS_PIPE_H_

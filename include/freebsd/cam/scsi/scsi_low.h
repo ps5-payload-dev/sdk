@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.1/sys/cam/scsi/scsi_low.h 298810 2016-04-29 21:05:48Z pfg $	*/
+/*	$FreeBSD: releng/11.4/sys/cam/scsi/scsi_low.h 298810 2016-04-29 21:05:48Z pfg $	*/
 /*	$NecBSD: scsi_low.h,v 1.24.10.5 2001/06/26 07:31:46 honda Exp $	*/
 /*	$NetBSD$	*/
 

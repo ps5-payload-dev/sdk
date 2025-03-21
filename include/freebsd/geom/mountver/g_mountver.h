@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/geom/mountver/g_mountver.h 202437 2010-01-16 09:52:49Z trasz $
+ * $FreeBSD: releng/11.4/sys/geom/mountver/g_mountver.h 325819 2017-11-14 17:56:32Z trasz $
  */
 
 #ifndef	_G_MOUNTVER_H_
@@ -62,6 +62,7 @@ struct g_mountver_softc {
 	char				*sc_provider_name;
 	char				sc_ident[DISK_IDENT_SIZE];
 	int				sc_orphaned;
+	int				sc_shutting_down;
 	int				sc_access_r;
 	int				sc_access_w;
 	int				sc_access_e;

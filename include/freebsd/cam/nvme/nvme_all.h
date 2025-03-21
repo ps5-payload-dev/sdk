@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/cam/nvme/nvme_all.h 301771 2016-06-09 22:39:02Z imp $
+ * $FreeBSD: releng/11.4/sys/cam/nvme/nvme_all.h 335166 2018-06-14 18:18:55Z mav $
  */
 
 #ifndef CAM_NVME_NVME_ALL_H
@@ -32,8 +32,6 @@
 #include <dev/nvme/nvme.h>
 
 struct ccb_nvmeio;
-
-#define NVME_REV_1	1	/* Supports NVMe 1.2 or earlier */
 
 void	nvme_ns_cmd(struct ccb_nvmeio *nvmeio, uint8_t cmd, uint32_t nsid,
     uint32_t cdw10, uint32_t cdw11, uint32_t cdw12, uint32_t cdw13,
@@ -44,5 +42,7 @@ int	nvme_identify_match(caddr_t identbuffer, caddr_t table_entry);
 void	nvme_print_ident(const struct nvme_controller_data *, const struct nvme_namespace_data *);
 const char *nvme_op_string(const struct nvme_command *);
 const char *nvme_cmd_string(const struct nvme_command *, char *, size_t);
+const void *nvme_get_identify_cntrl(struct cam_periph *);
+const void *nvme_get_identify_ns(struct cam_periph *);
 
 #endif /* CAM_NVME_NVME_ALL_H */

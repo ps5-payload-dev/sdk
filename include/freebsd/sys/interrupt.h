@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/interrupt.h 271712 2014-09-17 17:33:22Z adrian $
+ * $FreeBSD: releng/11.4/sys/sys/interrupt.h 340016 2018-11-01 18:34:26Z jhb $
  */
 
 #ifndef _SYS_INTERRUPT_H_
@@ -149,8 +149,13 @@ extern struct	intr_event *clk_intr_event;
 extern void	*vm_ih;
 
 /* Counts and names for statistics (defined in MD code). */
+#if defined(__amd64__) || defined(__i386__)
+extern u_long 	*intrcnt;	/* counts for for each device and stray */
+extern char 	*intrnames;	/* string table containing device names */
+#else
 extern u_long 	intrcnt[];	/* counts for for each device and stray */
 extern char 	intrnames[];	/* string table containing device names */
+#endif
 extern size_t	sintrcnt;	/* size of intrcnt table */
 extern size_t	sintrnames;	/* size of intrnames table */
 
@@ -162,6 +167,8 @@ int	intr_event_add_handler(struct intr_event *ie, const char *name,
 	    driver_filter_t filter, driver_intr_t handler, void *arg, 
 	    u_char pri, enum intr_type flags, void **cookiep);	    
 int	intr_event_bind(struct intr_event *ie, int cpu);
+int	intr_event_bind_irqonly(struct intr_event *ie, int cpu);
+int	intr_event_bind_ithread(struct intr_event *ie, int cpu);
 int	intr_event_create(struct intr_event **event, void *source,
 	    int flags, int irq, void (*pre_ithread)(void *),
 	    void (*post_ithread)(void *), void (*post_filter)(void *),
@@ -173,9 +180,9 @@ int	intr_event_destroy(struct intr_event *ie);
 void	intr_event_execute_handlers(struct proc *p, struct intr_event *ie);
 int	intr_event_handle(struct intr_event *ie, struct trapframe *frame);
 int	intr_event_remove_handler(void *cookie);
-int	intr_getaffinity(int irq, void *mask);
+int	intr_getaffinity(int irq, int mode, void *mask);
 void	*intr_handler_source(void *cookie);
-int	intr_setaffinity(int irq, void *mask);
+int	intr_setaffinity(int irq, int mode, void *mask);
 void	_intr_drain(int irq);  /* Linux compat only. */
 int	swi_add(struct intr_event **eventp, const char *name,
 	    driver_intr_t handler, void *arg, int pri, enum intr_type flags,

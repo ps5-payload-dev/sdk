@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	$FreeBSD: releng/11.1/sys/sys/spigenio.h 300817 2016-05-27 01:40:33Z adrian $
+ *	$FreeBSD: releng/11.4/sys/sys/spigenio.h 332942 2018-04-24 17:00:08Z ian $
  */
 
 #ifndef _SYS_SPIGENIO_H_
@@ -48,5 +48,7 @@ struct spigen_transfer_mmapped {
 	    struct spigen_transfer_mmapped)
 #define SPIGENIOC_GET_CLOCK_SPEED  _IOR(SPIGENIOC_BASE, 2, uint32_t)
 #define SPIGENIOC_SET_CLOCK_SPEED  _IOW(SPIGENIOC_BASE, 3, uint32_t)
+#define SPIGENIOC_GET_SPI_MODE     _IOR(SPIGENIOC_BASE, 4, uint32_t)
+#define SPIGENIOC_SET_SPI_MODE     _IOW(SPIGENIOC_BASE, 5, uint32_t)
 
 #endif /* !_SYS_SPIGENIO_H_ */

@@ -49,7 +49,7 @@
  * or the SD Card Association to disclose or distribute any technical
  * information, know-how or other confidential information to any third party.
  *
- * $FreeBSD: releng/11.1/sys/dev/mmc/mmc_private.h 318197 2017-05-11 20:55:11Z marius $
+ * $FreeBSD: releng/11.4/sys/dev/mmc/mmc_private.h 322119 2017-08-06 16:07:25Z marius $
  */
 
 #ifndef DEV_MMC_PRIVATE_H
@@ -60,9 +60,14 @@ struct mmc_softc {
 	struct mtx sc_mtx;
 	struct intr_config_hook config_intrhook;
 	device_t owner;
-	uint32_t last_rca;
-	int	 squelched; /* suppress reporting of (expected) errors */
-	int	 log_count;
+	device_t *child_list;
+	int child_count;
+	uint16_t last_rca;
+	uint16_t retune_paused;
+	uint8_t retune_needed;
+	uint8_t retune_ongoing;
+	uint16_t squelched;	/* suppress reporting of (expected) errors */
+	int log_count;
 	struct timeval log_time;
 };
 

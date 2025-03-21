@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/kthread.h 284911 2015-06-28 12:52:28Z markm $
+ * $FreeBSD: releng/11.4/sys/sys/kthread.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_KTHREAD_H_

@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/net/mp_ring.h 300113 2016-05-18 04:35:58Z scottl $
+ * $FreeBSD: releng/11.4/sys/net/mp_ring.h 344093 2019-02-13 14:25:05Z marius $
  *
  */
 
@@ -40,6 +40,10 @@ typedef u_int (*mp_ring_drain_t)(struct ifmp_ring *, u_int, u_int);
 typedef u_int (*mp_ring_can_drain_t)(struct ifmp_ring *);
 typedef void (*mp_ring_serial_t)(struct ifmp_ring *);
 
+#if defined(__powerpc__) || defined(__mips__) || defined(__i386__)
+#define MP_RING_NO_64BIT_ATOMICS
+#endif
+
 struct ifmp_ring {
 	volatile uint64_t	state __aligned(CACHE_LINE_SIZE);
 
@@ -54,7 +58,7 @@ struct ifmp_ring {
 	counter_u64_t		stalls;
 	counter_u64_t		restarts;	/* recovered after stalling */
 	counter_u64_t		abdications;
-#ifdef NO_64BIT_ATOMICS
+#ifdef MP_RING_NO_64BIT_ATOMICS
 	struct mtx		lock;
 #endif
 	void * volatile		items[] __aligned(CACHE_LINE_SIZE);

@@ -33,7 +33,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)union.h	8.9 (Berkeley) 12/10/94
- * $FreeBSD: releng/11.1/sys/fs/unionfs/union.h 185283 2008-11-25 03:18:35Z daichi $
+ * $FreeBSD: releng/11.4/sys/fs/unionfs/union.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifdef _KERNEL

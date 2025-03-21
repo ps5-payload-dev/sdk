@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/lib/libvmmapi/vmmapi.h 320934 2017-07-13 07:55:00Z grehan $
+ * $FreeBSD: releng/11.4/lib/libvmmapi/vmmapi.h 348201 2019-05-23 21:23:18Z rgrimes $
  */
 
 #ifndef _VMMAPI_H_
@@ -208,6 +208,12 @@ int	vcpu_reset(struct vmctx *ctx, int vcpu);
 int	vm_active_cpus(struct vmctx *ctx, cpuset_t *cpus);
 int	vm_suspended_cpus(struct vmctx *ctx, cpuset_t *cpus);
 int	vm_activate_cpu(struct vmctx *ctx, int vcpu);
+
+/* CPU topology */
+int	vm_set_topology(struct vmctx *ctx, uint16_t sockets, uint16_t cores,
+	    uint16_t threads, uint16_t maxcpus);
+int	vm_get_topology(struct vmctx *ctx, uint16_t *sockets, uint16_t *cores,
+	    uint16_t *threads, uint16_t *maxcpus);
 
 /*
  * FreeBSD specific APIs

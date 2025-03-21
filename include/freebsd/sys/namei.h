@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)namei.h	8.5 (Berkeley) 1/9/95
- * $FreeBSD: releng/11.1/sys/sys/namei.h 308732 2016-11-16 16:14:01Z kib $
+ * $FreeBSD: releng/11.4/sys/sys/namei.h 357706 2020-02-09 22:15:35Z kevans $
  */
 
 #ifndef _SYS_NAMEI_H_
@@ -153,7 +153,8 @@ struct nameidata {
 #define	AUDITVNODE2	0x08000000 /* audit the looked up vnode information */
 #define	TRAILINGSLASH	0x10000000 /* path ended in a slash */
 #define	NOCAPCHECK	0x20000000 /* do not perform capability checks */
-#define	PARAMASK	0x3ffffe00 /* mask of parameter descriptors */
+#define	NOEXECCHECK	0x40000000 /* do not perform exec check on dir */
+#define	PARAMASK	0x7ffffe00 /* mask of parameter descriptors */
 
 /*
  * Flags in ni_lcf, valid for the duration of the namei call.

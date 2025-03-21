@@ -51,7 +51,7 @@
 /*
  *      @(#)netdb.h	8.1 (Berkeley) 6/2/93
  *      From: Id: netdb.h,v 8.9 1996/11/19 08:39:29 vixie Exp $
- * $FreeBSD: releng/11.1/include/netdb.h 301711 2016-06-09 01:28:44Z markj $
+ * $FreeBSD: releng/11.4/include/netdb.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _NETDB_H_

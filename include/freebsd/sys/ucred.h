@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ucred.h	8.4 (Berkeley) 1/9/95
- * $FreeBSD: releng/11.1/sys/sys/ucred.h 293909 2016-01-14 10:16:25Z glebius $
+ * $FreeBSD: releng/11.4/sys/sys/ucred.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS_UCRED_H_

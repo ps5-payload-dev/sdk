@@ -31,7 +31,7 @@
  * SUCH DAMAGE.
  *
  *	from: @(#)pcb.h	5.10 (Berkeley) 5/12/91
- * $FreeBSD: releng/11.1/sys/amd64/include/pcb.h 306314 2016-09-25 17:24:10Z kib $
+ * $FreeBSD: releng/11.4/sys/amd64/include/pcb.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _AMD64_PCB_H_
@@ -90,7 +90,7 @@ struct pcb {
 	/* copyin/out fault recovery */
 	caddr_t		pcb_onfault;
 
-	uint64_t	pcb_pad0;
+	uint64_t	pcb_saved_ucr3;
 
 	/* local tss, with i/o bitmap; NULL for common */
 	struct amd64tss *pcb_tssp;
@@ -119,40 +119,15 @@ struct susppcb {
 #ifdef _KERNEL
 struct trapframe;
 
-/*
- * The pcb_flags is only modified by current thread, or by other threads
- * when current thread is stopped.  However, current thread may change it
- * from the interrupt context in cpu_switch(), or in the trap handler.
- * When we read-modify-write pcb_flags from C sources, compiler may generate
- * code that is not atomic regarding the interrupt handler.  If a trap or
- * interrupt happens and any flag is modified from the handler, it can be
- * clobbered with the cached value later.  Therefore, we implement setting
- * and clearing flags with single-instruction functions, which do not race
- * with possible modification of the flags from the trap or interrupt context,
- * because traps and interrupts are executed only on instruction boundary.
- */
-static __inline void
-set_pcb_flags(struct pcb *pcb, const u_int flags)
-{
-
-	__asm __volatile("orl %1,%0"
-	    : "=m" (pcb->pcb_flags) : "ir" (flags), "m" (pcb->pcb_flags)
-	    : "cc");
-}
-
-static __inline void
-clear_pcb_flags(struct pcb *pcb, const u_int flags)
-{
-
-	__asm __volatile("andl %1,%0"
-	    : "=m" (pcb->pcb_flags) : "ir" (~flags), "m" (pcb->pcb_flags)
-	    : "cc");
-}
-
+void	clear_pcb_flags(struct pcb *pcb, const u_int flags);
 void	makectx(struct trapframe *, struct pcb *);
+void	set_pcb_flags(struct pcb *pcb, const u_int flags);
+void	set_pcb_flags_raw(struct pcb *pcb, const u_int flags);
 int	savectx(struct pcb *) __returns_twice;
 void	resumectx(struct pcb *);
 
+/* Ensure that pcb_gsbase and pcb_fsbase are up to date */
+#define	update_pcb_bases(pcb)	set_pcb_flags((pcb), PCB_FULL_IRET)
 #endif
 
 #endif /* _AMD64_PCB_H_ */

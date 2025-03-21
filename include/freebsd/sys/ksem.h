@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/ksem.h 271976 2014-09-22 16:20:47Z jhb $
+ * $FreeBSD: releng/11.4/sys/sys/ksem.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _POSIX4_KSEM_H_

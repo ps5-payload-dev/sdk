@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)uio.h	8.5 (Berkeley) 2/22/94
- * $FreeBSD: releng/11.1/sys/sys/_iovec.h 139825 2005-01-07 02:29:27Z imp $
+ * $FreeBSD: releng/11.4/sys/sys/_iovec.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _SYS__IOVEC_H_

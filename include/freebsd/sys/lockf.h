@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)lockf.h	8.1 (Berkeley) 6/11/93
- * $FreeBSD: releng/11.1/sys/sys/lockf.h 192685 2009-05-24 12:39:38Z kib $
+ * $FreeBSD: releng/11.4/sys/sys/lockf.h 353465 2019-10-13 06:59:37Z kib $
  */
 
 #ifndef _SYS_LOCKF_H_
@@ -79,7 +79,7 @@ struct lockf_entry {
 	struct	task *lf_async_task;/* (c) Async lock callback */
 	LIST_ENTRY(lockf_entry) lf_link;  /* (s) Linkage for lock lists */
 	struct lockf_edge_list lf_outedges; /* (s) list of out-edges */
-	struct lockf_edge_list lf_inedges; /* (s) list of out-edges */
+	struct lockf_edge_list lf_inedges; /* (s) list of in-edges */
 	int	lf_refs;	    /* (s) ref count */
 };
 LIST_HEAD(lockf_entry_list, lockf_entry);

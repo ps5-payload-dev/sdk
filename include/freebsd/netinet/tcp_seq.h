@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)tcp_seq.h	8.3 (Berkeley) 6/21/95
- * $FreeBSD: releng/11.1/sys/netinet/tcp_seq.h 231767 2012-02-15 16:09:56Z bz $
+ * $FreeBSD: releng/11.4/sys/netinet/tcp_seq.h 332818 2018-04-20 14:01:08Z jtl $
  */
 
 #ifndef _NETINET_TCP_SEQ_H_
@@ -44,6 +44,14 @@
 
 #define	SEQ_MIN(a, b)	((SEQ_LT(a, b)) ? (a) : (b))
 #define	SEQ_MAX(a, b)	((SEQ_GT(a, b)) ? (a) : (b))
+
+#define	WIN_LT(a,b)	(ntohs(a) < ntohs(b))
+#define	WIN_LEQ(a,b)	(ntohs(a) <= ntohs(b))
+#define	WIN_GT(a,b)	(ntohs(a) > ntohs(b))
+#define	WIN_GEQ(a,b)	(ntohs(a) >= ntohs(b))
+
+#define	WIN_MIN(a, b)	((WIN_LT(a, b)) ? (a) : (b))
+#define	WIN_MAX(a, b)	((WIN_GT(a, b)) ? (a) : (b))
 
 /* for modulo comparisons of timestamps */
 #define TSTMP_LT(a,b)	((int)((a)-(b)) < 0)

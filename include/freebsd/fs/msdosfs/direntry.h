@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.1/sys/fs/msdosfs/direntry.h 298664 2016-04-26 20:36:32Z kp $ */
+/* $FreeBSD: releng/11.4/sys/fs/msdosfs/direntry.h 298664 2016-04-26 20:36:32Z kp $ */
 /*	$NetBSD: direntry.h,v 1.14 1997/11/17 15:36:32 ws Exp $	*/
 
 /*-

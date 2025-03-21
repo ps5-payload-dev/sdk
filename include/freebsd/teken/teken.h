@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/teken/teken.h 259667 2013-12-20 21:31:50Z ed $
+ * $FreeBSD: releng/11.4/sys/teken/teken.h 330916 2018-03-14 07:47:26Z eadler $
  */
 
 #ifndef _TEKEN_H_
@@ -56,6 +56,7 @@ typedef unsigned char teken_color_t;
 #define	TC_CYAN		6
 #define	TC_WHITE	7
 #define	TC_NCOLORS	8
+#define	TC_LIGHT	8	/* ORed with the others. */
 
 typedef struct {
 	teken_unit_t	tp_row;
@@ -203,6 +204,7 @@ void	teken_set_8bit(teken_t *);
 void	teken_set_cons25(teken_t *);
 
 /* Color conversion. */
+teken_color_t teken_256to16(teken_color_t);
 teken_color_t teken_256to8(teken_color_t);
 
 #endif /* !_TEKEN_H_ */

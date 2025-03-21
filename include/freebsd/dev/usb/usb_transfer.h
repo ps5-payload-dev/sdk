@@ -1,4 +1,4 @@
-/* $FreeBSD: releng/11.1/sys/dev/usb/usb_transfer.h 228056 2011-11-28 09:54:41Z hselasky $ */
+/* $FreeBSD: releng/11.4/sys/dev/usb/usb_transfer.h 331722 2018-03-29 02:50:57Z eadler $ */
 /*-
  * Copyright (c) 2008 Hans Petter Selasky. All rights reserved.
  *

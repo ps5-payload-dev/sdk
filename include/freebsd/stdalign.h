@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/include/stdalign.h 228879 2011-12-25 20:51:40Z ed $
+ * $FreeBSD: releng/11.4/include/stdalign.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef __alignas_is_defined

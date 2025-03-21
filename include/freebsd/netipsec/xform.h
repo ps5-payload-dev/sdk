@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.1/sys/netipsec/xform.h 315514 2017-03-18 22:04:20Z ae $	*/
+/*	$FreeBSD: releng/11.4/sys/netipsec/xform.h 331693 2018-03-28 17:49:31Z jhb $	*/
 /*	$OpenBSD: ip_ipsp.h,v 1.119 2002/03/14 01:27:11 millert Exp $	*/
 /*-
  * The authors of this code are John Ioannidis (ji@tla.org),
@@ -76,6 +76,7 @@ struct xform_data {
 	int			protoff;	/* current protocol offset */
 	int			skip;		/* data offset */
 	uint8_t			nxt;		/* next protocol, e.g. IPV4 */
+	struct vnet		*vnet;
 };
 
 #define	XF_IP4		1	/* unused */

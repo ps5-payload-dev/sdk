@@ -58,7 +58,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)in_var.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: releng/11.1/sys/netinet6/in6_var.h 311681 2017-01-08 13:31:24Z ae $
+ * $FreeBSD: releng/11.4/sys/netinet6/in6_var.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _NETINET6_IN6_VAR_H_

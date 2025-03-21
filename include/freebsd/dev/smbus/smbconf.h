@@ -23,10 +23,10 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/smbus/smbconf.h 310520 2016-12-24 14:44:25Z avg $
+ * $FreeBSD: releng/11.4/sys/dev/smbus/smbconf.h 331722 2018-03-29 02:50:57Z eadler $
  */
-#ifndef __SMBONF_H
-#define __SMBONF_H
+#ifndef __DEV_SMBUS_SMBCONF_H
+#define	__DEV_SMBUS_SMBCONF_H
 
 #include <sys/queue.h>
 
@@ -124,4 +124,4 @@ extern devclass_t smbus_devclass;
 #define SMBUS_MAXVER	1
 #define SMBUS_PREFVER	SMBUS_MODVER
 
-#endif
+#endif	/* __DEV_SMBUS_SMBCONF_H */

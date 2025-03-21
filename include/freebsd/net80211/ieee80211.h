@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/net80211/ieee80211.h 297404 2016-03-30 00:42:18Z adrian $
+ * $FreeBSD: releng/11.4/sys/net80211/ieee80211.h 330470 2018-03-05 08:37:08Z eadler $
  */
 #ifndef _NET80211_IEEE80211_H_
 #define _NET80211_IEEE80211_H_
@@ -367,7 +367,7 @@ struct ieee80211_action {
 #define	IEEE80211_ACTION_CAT_MESH	13	/* Mesh */
 #define	IEEE80211_ACTION_CAT_SELF_PROT	15	/* Self-protected */
 /* 16 - 125 reserved */
-#define	IEEE80211_ACTION_VHT		21
+#define	IEEE80211_ACTION_CAT_VHT	21
 #define	IEEE80211_ACTION_CAT_VENDOR	127	/* Vendor Specific */
 
 #define	IEEE80211_ACTION_HT_TXCHWIDTH	0	/* recommended xmit chan width*/

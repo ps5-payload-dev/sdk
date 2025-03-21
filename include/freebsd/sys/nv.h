@@ -27,7 +27,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/nv.h 293361 2016-01-07 20:52:35Z bdrewery $
+ * $FreeBSD: releng/11.4/sys/sys/nv.h 336346 2018-07-16 15:02:21Z kevans $
  */
 
 #ifndef	_NV_H_
@@ -158,6 +158,14 @@ void nvlist_add_nvlist_array(nvlist_t *nvl, const char *name, const nvlist_t * c
 #ifndef _KERNEL
 void nvlist_add_descriptor(nvlist_t *nvl, const char *name, int value);
 void nvlist_add_descriptor_array(nvlist_t *nvl, const char *name, const int *value, size_t nitems);
+#endif
+
+void nvlist_append_bool_array(nvlist_t *nvl, const char *name, const bool value);
+void nvlist_append_number_array(nvlist_t *nvl, const char *name, const uint64_t value);
+void nvlist_append_string_array(nvlist_t *nvl, const char *name, const char * const value);
+void nvlist_append_nvlist_array(nvlist_t *nvl, const char *name, const nvlist_t * const value);
+#ifndef _KERNEL
+void nvlist_append_descriptor_array(nvlist_t *nvl, const char *name, int value);
 #endif
 
 /*

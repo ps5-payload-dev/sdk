@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ip_var.h	8.2 (Berkeley) 1/9/95
- * $FreeBSD: releng/11.1/sys/netinet/ip_var.h 301114 2016-06-01 10:14:04Z bz $
+ * $FreeBSD: releng/11.4/sys/netinet/ip_var.h 341260 2018-11-29 20:38:23Z markj $
  */
 
 #ifndef _NETINET_IP_VAR_H_
@@ -58,6 +58,7 @@ struct ipq {
 	u_char	ipq_ttl;		/* time for reass q to live */
 	u_char	ipq_p;			/* protocol of this fragment */
 	u_short	ipq_id;			/* sequence id for reassembly */
+	int	ipq_maxoff;		/* total length of packet */
 	struct mbuf *ipq_frags;		/* to ip headers of fragments */
 	struct	in_addr ipq_src,ipq_dst;
 	u_char	ipq_nfrags;		/* # frags in this packet */

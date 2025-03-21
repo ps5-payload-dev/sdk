@@ -28,7 +28,7 @@
  *
  *	@(#)stddef.h	8.1 (Berkeley) 6/2/93
  *
- * $FreeBSD: releng/11.1/include/stddef.h 317342 2017-04-23 20:32:46Z kib $
+ * $FreeBSD: releng/11.4/include/stddef.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef _STDDEF_H_
@@ -62,7 +62,7 @@ typedef	___wchar_t	wchar_t;
 #endif
 #endif
 
-#if __STDC_VERSION__ >= 201112L || __cplusplus >= 201103L
+#if __ISO_C_VISIBLE >= 2011 || __cplusplus >= 201103L
 #ifndef __CLANG_MAX_ALIGN_T_DEFINED
 typedef	__max_align_t	max_align_t;
 #define __CLANG_MAX_ALIGN_T_DEFINED
@@ -70,7 +70,7 @@ typedef	__max_align_t	max_align_t;
 #endif
 #endif
 
-#define	offsetof(type, member)	__offsetof(type, member)
+#define	offsetof(type, field)	__offsetof(type, field)
 
 #if __EXT1_VISIBLE
 /* ISO/IEC 9899:2011 K.3.3.2 */

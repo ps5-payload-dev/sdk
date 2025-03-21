@@ -1,4 +1,4 @@
-/*	$FreeBSD: releng/11.1/sys/opencrypto/cryptodev.h 286292 2015-08-04 17:47:11Z jmg $	*/
+/*	$FreeBSD: releng/11.4/sys/opencrypto/cryptodev.h 345031 2019-03-11 21:56:35Z jhb $	*/
 /*	$OpenBSD: cryptodev.h,v 1.31 2002/06/11 11:14:29 beck Exp $	*/
 
 /*-
@@ -211,9 +211,9 @@ struct session_op {
 	u_int32_t	mac;		/* ie. CRYPTO_MD5_HMAC */
 
 	u_int32_t	keylen;		/* cipher key */
-	caddr_t		key;
+	c_caddr_t	key;
 	int		mackeylen;	/* mac key */
-	caddr_t		mackey;
+	c_caddr_t	mackey;
 
   	u_int32_t	ses;		/* returns: session # */ 
 };
@@ -223,9 +223,9 @@ struct session2_op {
 	u_int32_t	mac;		/* ie. CRYPTO_MD5_HMAC */
 
 	u_int32_t	keylen;		/* cipher key */
-	caddr_t		key;
+	c_caddr_t	key;
 	int		mackeylen;	/* mac key */
-	caddr_t		mackey;
+	c_caddr_t	mackey;
 
   	u_int32_t	ses;		/* returns: session # */ 
 	int		crid;		/* driver id + flags (rw) */
@@ -238,11 +238,13 @@ struct crypt_op {
 #define COP_ENCRYPT	1
 #define COP_DECRYPT	2
 	u_int16_t	flags;
-#define	COP_F_BATCH	0x0008		/* Batch op if possible */
+#define	COP_F_CIPHER_FIRST	0x0001	/* Cipher before MAC. */
+#define	COP_F_BATCH		0x0008	/* Batch op if possible */
 	u_int		len;
-	caddr_t		src, dst;	/* become iov[] inside kernel */
+	c_caddr_t	src;		/* become iov[] inside kernel */
+	caddr_t		dst;
 	caddr_t		mac;		/* must be big enough for chosen MAC */
-	caddr_t		iv;
+	c_caddr_t	iv;
 };
 
 /* op and flags the same as crypt_op */
@@ -253,10 +255,11 @@ struct crypt_aead {
 	u_int		len;
 	u_int		aadlen;
 	u_int		ivlen;
-	caddr_t		src, dst;	/* become iov[] inside kernel */
-	caddr_t		aad;		/* additional authenticated data */
+	c_caddr_t	src;		/* become iov[] inside kernel */
+	caddr_t		dst;
+	c_caddr_t	aad;		/* additional authenticated data */
 	caddr_t		tag;		/* must fit for chosen TAG length */
-	caddr_t		iv;
+	c_caddr_t	iv;
 };
 
 /*
@@ -418,8 +421,12 @@ struct cryptop {
 #define	CRYPTO_F_DONE		0x0020	/* Operation completed */
 #define	CRYPTO_F_CBIFSYNC	0x0040	/* Do CBIMM if op is synchronous */
 
-	caddr_t		crp_buf;	/* Data to be processed */
-	caddr_t		crp_opaque;	/* Opaque pointer, passed along */
+	union {
+		caddr_t		crp_buf;	/* Data to be processed */
+		struct mbuf	*crp_mbuf;
+		struct uio	*crp_uio;
+	};
+	void *		crp_opaque;	/* Opaque pointer, passed along */
 	struct cryptodesc *crp_desc;	/* Linked list of processing descriptors */
 
 	int (*crp_callback)(struct cryptop *); /* Callback function */
@@ -503,7 +510,7 @@ extern	int crypto_devallowsoft;	/* only use hardware crypto */
  */
 struct uio;
 extern	void cuio_copydata(struct uio* uio, int off, int len, caddr_t cp);
-extern	void cuio_copyback(struct uio* uio, int off, int len, caddr_t cp);
+extern	void cuio_copyback(struct uio* uio, int off, int len, c_caddr_t cp);
 extern	int cuio_getptr(struct uio *uio, int loc, int *off);
 extern	int cuio_apply(struct uio *uio, int off, int len,
 	    int (*f)(void *, void *, u_int), void *arg);
@@ -514,10 +521,11 @@ extern	int crypto_mbuftoiov(struct mbuf *mbuf, struct iovec **iovptr,
 	    int *cnt, int *allocated);
 
 extern	void crypto_copyback(int flags, caddr_t buf, int off, int size,
-	    caddr_t in);
+	    c_caddr_t in);
 extern	void crypto_copydata(int flags, caddr_t buf, int off, int size,
 	    caddr_t out);
 extern	int crypto_apply(int flags, caddr_t buf, int off, int len,
 	    int (*f)(void *, void *, u_int), void *arg);
+
 #endif /* _KERNEL */
 #endif /* _CRYPTO_CRYPTO_H_ */

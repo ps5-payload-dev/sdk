@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	From: @(#)if.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: releng/11.1/sys/net/if_var.h 318504 2017-05-18 23:41:18Z rpokala $
+ * $FreeBSD: releng/11.4/sys/net/if_var.h 359024 2020-03-16 23:15:20Z brooks $
  */
 
 #ifndef	_NET_IF_VAR_H_
@@ -313,7 +313,12 @@ struct ifnet {
 	 */
 	void	*if_pspare[3];		/* packet pacing / general use */
 	void	*if_hw_addr;		/* hardware link-level address */
-	int	if_ispare[4];		/* packet pacing / general use */
+
+	/* Ethernet PCP */
+	uint8_t if_pcp;
+
+	uint8_t if_bspare[3];
+	int	if_ispare[3];		/* packet pacing / general use */
 };
 
 /* for compatibility with other BSDs */
@@ -363,6 +368,8 @@ EVENTHANDLER_DECLARE(ifnet_link_event, ifnet_link_event_handler_t);
 /* Interface up/down event */
 #define IFNET_EVENT_UP		0
 #define IFNET_EVENT_DOWN	1
+#define IFNET_EVENT_PCP		2	/* priority code point, PCP */
+
 typedef void (*ifnet_event_fn)(void *, struct ifnet *ifp, int event);
 EVENTHANDLER_DECLARE(ifnet_event, ifnet_event_fn);
 #endif /* _SYS_EVENTHANDLER_H_ */
@@ -657,6 +664,13 @@ int drbr_enqueue_drv(if_t ifp, struct buf_ring *br, struct mbuf *m);
 /* TSO */
 void if_hw_tsomax_common(if_t ifp, struct ifnet_hw_tsomax *);
 int if_hw_tsomax_update(if_t ifp, struct ifnet_hw_tsomax *);
+
+/* accessors for struct ifreq */
+void *ifr_data_get_ptr(void *ifrp);
+void *ifr_buffer_get_buffer(void *data);
+size_t ifr_buffer_get_length(void *data);
+
+int ifhwioctl(u_long, struct ifnet *, caddr_t, struct thread *);
 
 #ifdef DEVICE_POLLING
 enum poll_cmd { POLL_ONLY, POLL_AND_CHECK_STATUS };

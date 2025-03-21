@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/hwpmc/hwpmc_piv.h 258780 2013-11-30 22:17:27Z eadler $
+ * $FreeBSD: releng/11.4/sys/dev/hwpmc/hwpmc_piv.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 /* Machine dependent interfaces */

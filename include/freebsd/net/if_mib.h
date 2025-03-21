@@ -26,7 +26,7 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/net/if_mib.h 154023 2006-01-04 12:57:09Z harti $
+ * $FreeBSD: releng/11.4/sys/net/if_mib.h 154023 2006-01-04 12:57:09Z harti $
  */
 
 #ifndef _NET_IF_MIB_H

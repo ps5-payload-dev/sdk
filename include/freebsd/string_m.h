@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/lib/libfigpar/string_m.h 274116 2014-11-04 23:46:01Z dteske $
+ * $FreeBSD: releng/11.4/lib/libfigpar/string_m.h 274116 2014-11-04 23:46:01Z dteske $
  */
 
 #ifndef _STRING_M_H_

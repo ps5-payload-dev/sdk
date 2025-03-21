@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/dev/iicbus/ds1307reg.h 297573 2016-04-05 03:27:33Z jhibbits $
+ * $FreeBSD: releng/11.4/sys/dev/iicbus/ds1307reg.h 331496 2018-03-24 20:40:16Z ian $
  */
 
 /*
@@ -36,15 +36,21 @@
 #define	DS1307_SECS		0x00
 #define	DS1307_SECS_MASK		0x7f
 #define	DS1307_SECS_CH			0x80
+#define	MCP7941X_SECS_ST		0x80
 #define	DS1307_MINS		0x01
 #define	DS1307_MINS_MASK		0x7f
 #define	DS1307_HOUR		0x02
-#define	DS1307_HOUR_MASK		0x3f
+#define	DS1307_HOUR_MASK_12HR		0x1f
+#define	DS1307_HOUR_MASK_24HR		0x3f
+#define	DS1307_HOUR_IS_PM		0x20
+#define	DS1307_HOUR_USE_AMPM		0x40
 #define	DS1307_WEEKDAY		0x03
+#define	MCP7941X_WEEKDAY_VBATEN		0x08
 #define	DS1307_WEEKDAY_MASK		0x07
 #define	DS1307_DATE		0x04
 #define	DS1307_DATE_MASK		0x3f
 #define	DS1307_MONTH		0x05
+#define	MCP7941X_MONTH_LPYR		0x20
 #define	DS1307_MONTH_MASK		0x1f
 #define	DS1307_YEAR		0x06
 #define	DS1307_YEAR_MASK		0xff

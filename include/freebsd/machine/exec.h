@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)exec.h	8.1 (Berkeley) 6/11/93
- * $FreeBSD: releng/11.1/sys/amd64/include/exec.h 142107 2005-02-19 21:16:48Z ru $
+ * $FreeBSD: releng/11.4/sys/amd64/include/exec.h 331722 2018-03-29 02:50:57Z eadler $
  */
 
 #ifndef	_MACHINE_EXEC_H_

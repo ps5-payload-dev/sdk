@@ -22,7 +22,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: releng/11.1/sys/sys/syscallsubr.h 318244 2017-05-12 17:40:34Z brooks $
+ * $FreeBSD: releng/11.4/sys/sys/syscallsubr.h 356634 2020-01-11 15:06:06Z kevans $
  */
 
 #ifndef _SYS_SYSCALLSUBR_H_
@@ -59,6 +59,8 @@ struct stat;
 struct thr_param;
 struct sched_param;
 struct __wrusage;
+
+typedef int (*mmap_check_fp_fn)(struct file *, int, int, int);
 
 int	kern___getcwd(struct thread *td, char *buf, enum uio_seg bufseg,
 	    u_int buflen, u_int path_max);
@@ -110,6 +112,7 @@ int	kern_fcntl(struct thread *td, int fd, int cmd, intptr_t arg);
 int	kern_fcntl_freebsd(struct thread *td, int fd, int cmd, long arg);
 int	kern_fhstat(struct thread *td, fhandle_t fh, struct stat *buf);
 int	kern_fhstatfs(struct thread *td, fhandle_t fh, struct statfs *buf);
+int	kern_fpathconf(struct thread *td, int fd, int name);
 int	kern_fstat(struct thread *td, int fd, struct stat *sbp);
 int	kern_fstatfs(struct thread *td, int fd, struct statfs *buf);
 int	kern_fsync(struct thread *td, int fd, bool fullsync);
@@ -164,6 +167,9 @@ int	kern_mlock(struct proc *proc, struct ucred *cred, uintptr_t addr,
 	    size_t len);
 int	kern_mmap(struct thread *td, uintptr_t addr, size_t size, int prot,
 	    int flags, int fd, off_t pos);
+int	kern_mmap_fpcheck(struct thread *td, uintptr_t addr, size_t len,
+	    int prot, int flags, int fd, off_t pos,
+	    mmap_check_fp_fn check_fp_fn);
 int	kern_mprotect(struct thread *td, uintptr_t addr, size_t size, int prot);
 int	kern_msgctl(struct thread *, int, int, struct msqid_ds *);
 int	kern_msgrcv(struct thread *, int, void *, size_t, long, int, long *);
