@@ -82,6 +82,16 @@ static int rw_pair[2] = {-1, -1};
 #define MASTER_SOCK rw_pair[0]
 #define VICTIM_SOCK rw_pair[1]
 
+/**
+ * performance tuning: cache up to 100 return values from kernel_get_proc()
+ **/
+static int proc_cache_counter = -1;
+#define PROC_CACHE_SIZE 100
+static struct {
+  int pid;
+  unsigned long addr;
+} proc_cache[PROC_CACHE_SIZE] = {0};
+
 
 /**
  * we need strcmp() before we can resolve symbols.
@@ -511,12 +521,18 @@ kernel_get_proc(int pid) {
   unsigned long addr = 0;
   unsigned long next = 0;
 
-  if(kernel_copyout(KERNEL_ADDRESS_ALLPROC, &addr, sizeof(addr))) {
-    return 0;
-  }
-
   if(pid <= 0) {
     pid = __syscall(SYS_getpid);
+  }
+
+  for(int i=0; i<PROC_CACHE_SIZE; i++) {
+    if(proc_cache[i].pid == pid) {
+      return proc_cache[i].addr;
+    }
+  }
+
+  if(kernel_copyout(KERNEL_ADDRESS_ALLPROC, &addr, sizeof(addr))) {
+    return 0;
   }
 
   while(addr) {
@@ -535,6 +551,14 @@ kernel_get_proc(int pid) {
 
     addr = next;
   }
+
+  proc_cache_counter++;
+  if(proc_cache_counter >= PROC_CACHE_SIZE) {
+    proc_cache_counter = 0;
+  }
+
+  proc_cache[proc_cache_counter].pid = pid;
+  proc_cache[proc_cache_counter].addr = addr;
 
   return addr;
 }
