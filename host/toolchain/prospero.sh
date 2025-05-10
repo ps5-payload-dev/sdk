@@ -42,7 +42,7 @@ export RANLIB=${PS5_PAYLOAD_SDK}/bin/prospero-ranlib
 export STRIP=${PS5_PAYLOAD_SDK}/bin/prospero-strip
 export STRINGS=strings
 
-export MAKE=gmake
+export MAKE=make
 export CMAKE=${PS5_PAYLOAD_SDK}/bin/prospero-cmake
 export MESON=${PS5_PAYLOAD_SDK}/bin/prospero-meson
 export PKG_CONFIG=${PS5_PAYLOAD_SDK}/bin/prospero-pkg-config
