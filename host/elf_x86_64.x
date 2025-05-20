@@ -79,11 +79,14 @@ SECTIONS {
 
 	.data : ALIGN(CONSTANT(MAXPAGESIZE)) {
 	    *(.data .data.*)
+	} : ph_data
+
+	.bss : {
 	    PROVIDE_HIDDEN (__bss_start = .);
 	    *(.bss .bss.*);
 	    *(COMMON)
 	    PROVIDE_HIDDEN (__bss_end = .);
-	} : ph_data
+	}
 
 	PROVIDE_HIDDEN (__image_end = .);
 }
