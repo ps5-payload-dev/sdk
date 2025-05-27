@@ -21,7 +21,6 @@ along with this program; see the file COPYING. If not, see
 #include "rtld.h"
 #include "rtld_dlfcn.h"
 #include "rtld_payload.h"
-#include "stacktrace.h"
 #include "syscall.h"
 
 
@@ -69,10 +68,6 @@ payload_init(payload_args_t *args) {
   }
   *__isthreaded = 1;
 
-  if((error=__stacktrace_init())) {
-    klog_puts("Unable to initialize stacktrace");
-    return error;
-  }
   if((error=__patch_init())) {
     klog_puts("Unable to initialize patches");
     return error;
@@ -158,9 +153,6 @@ payload_run(void) {
 static int
 payload_terminate(void) {
   void (*exit)(int) = 0;
-
-  // resore default signal handlers
-  __stacktrace_fini();
 
   // we are running inside a hijacked process, just return
   if(kernel_dynlib_dlsym(-1, 0x2001, "sceKernelDlsym")) {
