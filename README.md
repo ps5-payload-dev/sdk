@@ -64,7 +64,7 @@ please file an issue before you start to work on you changes. This will allow us
 to discuss the solution properly before you commit time and effort.
 
 ## License
-Files in the include_bsd directory are licenced under BSD licences.
+Files in the folder include/freebsd are licenced under BSD licences.
 Unless otherwhise explicitly stated inside a file, the rest are licensed under
 the GPLv3+.
 
