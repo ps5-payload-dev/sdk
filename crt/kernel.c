@@ -356,10 +356,10 @@ __kernel_init(payload_args_t* args) {
     KERNEL_OFFSET_VMSPACE_P_ROOT    = 0x1d0;
     break;
 
-  case: 0x9000000:
-  case: 0x9200000:
-  case: 0x9400000:
-  case: 0x9600000:
+  case 0x9000000:
+  case 0x9200000:
+  case 0x9400000:
+  case 0x9600000:
     KERNEL_ADDRESS_TEXT_BASE        = 0; // TODO
     KERNEL_ADDRESS_ALLPROC          = KERNEL_ADDRESS_DATA_BASE + 0x2765D50;
     KERNEL_ADDRESS_SECURITY_FLAGS   = 0; // TODO
