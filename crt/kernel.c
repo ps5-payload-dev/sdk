@@ -331,7 +331,7 @@ __kernel_init(payload_args_t* args) {
     KERNEL_ADDRESS_ROOTVNODE        = KERNEL_ADDRESS_DATA_BASE + 0x2FEB510;
     KERNEL_ADDRESS_BUS_DATA_DEVICES = KERNEL_ADDRESS_DATA_BASE + 0x1F75718;
     KERNEL_OFFSET_VMSPACE_P_ROOT    = 0; // TODO
-    return -ENOSYS;
+    break;
 
   case 0x10000000:
   case 0x10010000:
@@ -345,7 +345,7 @@ __kernel_init(payload_args_t* args) {
     KERNEL_ADDRESS_ROOTVNODE        = KERNEL_ADDRESS_DATA_BASE + 0x2FB3510;
     KERNEL_ADDRESS_BUS_DATA_DEVICES = KERNEL_ADDRESS_DATA_BASE + 0x1F75718;
     KERNEL_OFFSET_VMSPACE_P_ROOT    = 0; // TODO
-    return -ENOSYS;
+    break;
 
   default:
     return -ENOSYS;
@@ -1091,6 +1091,10 @@ kernel_mprotect(int pid, unsigned long addr, unsigned long len, int prot) {
   unsigned char vm_prot;
   unsigned long start;
   unsigned long end;
+
+  if(!KERNEL_OFFSET_PROC_P_VMSPACE) {
+    return -1;
+  }
 
   if(!(proc_addr=kernel_get_proc(pid))) {
     return -1;
