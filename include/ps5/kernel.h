@@ -48,7 +48,7 @@ extern const off_t KERNEL_OFFSET_UCRED_CR_SCEAUTHID;
 extern const off_t KERNEL_OFFSET_UCRED_CR_SCECAPS;
 extern const off_t KERNEL_OFFSET_UCRED_CR_SCEATTRS;
 
-//Filedesc field offsets
+// Filedesc field offsets
 extern const off_t KERNEL_OFFSET_FILEDESC_FD_RDIR;
 extern const off_t KERNEL_OFFSET_FILEDESC_FD_JDIR;
 
