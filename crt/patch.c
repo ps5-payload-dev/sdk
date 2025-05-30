@@ -16,60 +16,8 @@ along with this program; see the file COPYING. If not, see
 
 #include "kernel.h"
 #include "klog.h"
-#include "mdbg.h"
 #include "payload.h"
 #include "syscall.h"
-
-
-/**
- * Patch retail distributions of sceKernelSpawn() that ignore the dbg parameter.
- *
- * At offset 52, replace 0x00000000a845c748l with 0x90909090a8758948l, i.e.,
- *
- *            mov    QWORD PTR [rbp-0x58],0x0
- * becomes
- *            mov    QWORD PTR [rbp-0x58],rsi
- *            nop
- *            nop
- *            nop
- *            nop
- **/
-static int
-patch_sceKernelSpawn(void) {
-  unsigned long loc;
-  unsigned long val;
-
-  if(!(loc=kernel_dynlib_dlsym(-1, 0x1, "sceKernelSpawn"))) {
-    if(!(loc=kernel_dynlib_dlsym(-1, 0x2001, "sceKernelSpawn"))) {
-      // nothing to patch
-      klog_puts("patch_sceKernelSpawn: unable to resolve sceKernelSpawn");
-      return 0;
-    }
-  }
-
-  loc += 52;
-  if(mdbg_copyout(-1, loc, &val, sizeof(val))) {
-    klog_perror("mdbg_copyout");
-    return -1;
-  }
-
-  // sanity checks
-  if(val == 0x90909090a8758948l) {
-    return 0;
-
-  } else if(val != 0x00000000a845c748l) {
-    klog_puts("patch_sceKernelSpawn: wrong offset");
-    return -1;
-  }
-
-  val = 0x90909090a8758948l;
-  if(mdbg_copyin(-1, &val, loc, sizeof(val))) {
-    klog_perror("mdbg_copyin");
-    return -1;
-  }
-
-  return 0;
-}
 
 
 /**
@@ -146,9 +94,6 @@ int
 __patch_init(void) {
   int error;
 
-  if((error=patch_sceKernelSpawn())) {
-    return error;
-  }
   if((error=patch_kernel_ucred())) {
     return error;
   }

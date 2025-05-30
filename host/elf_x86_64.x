@@ -18,8 +18,8 @@ OUTPUT_FORMAT("elf64-x86-64")
 OUTPUT_ARCH(i386:x86-64)
 
 PHDRS {
-	ph_text   PT_LOAD FLAGS (0x5);
-	ph_rodata PT_LOAD FLAGS (0x4);
+	ph_text   PT_LOAD FLAGS (0x7);
+	ph_rodata PT_LOAD FLAGS (0x6);
 	ph_data   PT_LOAD FLAGS (0x6);
 	ph_dyn    PT_DYNAMIC;
 }

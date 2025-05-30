@@ -17,7 +17,6 @@ along with this program; see the file COPYING. If not, see
 #include "elf.h"
 #include "kernel.h"
 #include "klog.h"
-#include "mdbg.h"
 #include "syscall.h"
 #include "rtld_payload.h"
 
@@ -42,6 +41,7 @@ static int (*strcmp)(const char*, const char*) = 0;
 static int (*strcpy)(char*, const char*) = 0;
 
 static void* (*calloc)(unsigned long, unsigned long) = 0;
+static void* (*memcpy)(void*, const void*, unsigned long) = 0;
 static void (*free)(void*) = 0;
 
 
@@ -87,15 +87,16 @@ dt_needed(rtld_payload_lib_t* ctx, const char* soname) {
  **/
 static int
 r_glob_dat(rtld_payload_lib_t* ctx, Elf64_Rela* rela) {
-  unsigned long loc = (unsigned long)(ctx->mapbase + rela->r_offset);
   Elf64_Sym* sym = ctx->symtab + ELF64_R_SYM(rela->r_info);
   const char* name = ctx->strtab + sym->st_name;
+  void* loc = ctx->mapbase + rela->r_offset;
   rtld_lib_t* lib = (rtld_lib_t*)ctx;
   void* val = 0;
 
   if((lib=__rtld_lib_sym2lib(lib, name))) {
     if((val=__rtld_lib_sym2addr(lib, name))) {
-      return mdbg_copyin(-1, &val, loc, sizeof(val));
+      memcpy(loc, &val, sizeof(val));
+      return 0;
     }
   }
 
@@ -124,16 +125,17 @@ r_jmp_slot(rtld_payload_lib_t* ctx, Elf64_Rela* rela) {
  **/
 static int
 r_direct_64(rtld_payload_lib_t* ctx, Elf64_Rela* rela) {
-  unsigned long loc = (unsigned long)(ctx->mapbase + rela->r_offset);
   Elf64_Sym* sym = ctx->symtab + ELF64_R_SYM(rela->r_info);
   const char* name = ctx->strtab + sym->st_name;
+  void* loc = ctx->mapbase + rela->r_offset;
   rtld_lib_t* lib = (rtld_lib_t*)ctx;
   void* val = 0;
 
   if((lib=__rtld_lib_sym2lib(lib, name))) {
     if((val=__rtld_lib_sym2addr(lib, name))) {
       val += rela->r_addend;
-      return mdbg_copyin(-1, &val, loc, sizeof(val));
+      memcpy(loc, &val, sizeof(val));
+      return 0;
     }
   }
 
@@ -153,18 +155,10 @@ r_direct_64(rtld_payload_lib_t* ctx, Elf64_Rela* rela) {
  **/
 static int
 r_relative(rtld_payload_lib_t* ctx, Elf64_Rela* rela) {
-  unsigned long loc = (unsigned long)(ctx->mapbase + rela->r_offset);
+  unsigned long* loc = (unsigned long*)(ctx->mapbase + rela->r_offset);
   unsigned long val = (unsigned long)(ctx->mapbase + rela->r_addend);
 
-  // ELF loader allready applied relocation
-  if(*((unsigned long*)loc) == val) {
-      return 0;
-  }
-
-  if(mdbg_copyin(-1, &val, loc, sizeof(val))) {
-    klog_perror("mdbg_copyin");
-    return -1;
-  }
+  memcpy(loc, &val, sizeof(val));
 
   return 0;
 }
@@ -429,6 +423,9 @@ __rtld_payload_new(const char *soname) {
 int
 __rtld_payload_init(void) {
   if(!KERNEL_DLSYM(0x2, calloc)) {
+    return -1;
+  }
+  if(!KERNEL_DLSYM(0x2, memcpy)) {
     return -1;
   }
   if(!KERNEL_DLSYM(0x2, free)) {
