@@ -26,7 +26,7 @@ jobs:
     - name: Setup
       run: |
         sudo apt update
-        sudo apt install bash clang-15 lld-15 pkg-config cmake meson socat mingw-w64
+        sudo apt install bash clang-18 lld-18 pkg-config cmake meson socat mingw-w64
 
     - name: Build
       run: |
