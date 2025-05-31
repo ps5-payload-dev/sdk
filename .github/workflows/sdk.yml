@@ -28,14 +28,24 @@ jobs:
         sudo apt update
         sudo apt install bash clang-18 lld-18 pkg-config cmake meson socat mingw-w64
 
-    - name: Build
+    - name: Build SDK
       run: |
         make WIN=1 DESTDIR=${{ runner.tool_cache }}/ps5-payload-sdk install
         PS5_PAYLOAD_SDK=${{ runner.tool_cache }}/ps5-payload-sdk ./libcxx.sh
         cd ${{ runner.tool_cache }}
         zip -r $GITHUB_WORKSPACE/ps5-payload-sdk.zip ps5-payload-sdk
+        cd -
 
-    - name: Upload
+    - name: Build Tests
+      run: |
+        export PS5_PAYLOAD_SDK=${{ runner.tool_cache }}/ps5-payload-sdk
+        make -C samples/test_privileges
+        mkdir ${{ runner.tool_cache }}/tests
+        mv samples/test_privileges/*.elf ${{ runner.tool_cache }}/tests/
+        cd ${{ runner.tool_cache }}
+        zip -r $GITHUB_WORKSPACE/tests.zip tests
+
+    - name: Upload SDK
       uses: actions/upload-artifact@v4
       with:
         name: SDK
@@ -43,3 +53,10 @@ jobs:
         path: ./ps5-payload-sdk.zip
         if-no-files-found: error
 
+    - name: Upload Tests
+      uses: actions/upload-artifact@v4
+      with:
+        name: Tests
+        include-hidden-files: true
+        path: ./tests.zip
+        if-no-files-found: error
