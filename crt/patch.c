@@ -146,10 +146,10 @@ int
 __patch_init(void) {
   int error;
 
-  if((error=patch_sceKernelSpawn())) {
+  if((error=patch_kernel_ucred())) {
     return error;
   }
-  if((error=patch_kernel_ucred())) {
+  if((error=patch_sceKernelSpawn())) {
     return error;
   }
   if((error=patch_syscall_permissions())) {
