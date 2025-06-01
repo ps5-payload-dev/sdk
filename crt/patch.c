@@ -58,7 +58,7 @@ patch_sceKernelSpawn(void) {
     return 0;
 
   } else if(val != 0x00000000a845c748l) {
-    klog_puts("patch_sceKernelSpawn: wrong offset");
+    klog_printf("patch_sceKernelSpawn: wrong offset (0x%lx != 0xa845c748)\n", val);
     return -1;
   }
 
