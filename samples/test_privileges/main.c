@@ -137,6 +137,9 @@ print_info(pid_t pid) {
   PRINTF("SCE authid:     0x%016lx\n", kernel_get_ucred_authid(pid));
   PRINTF("SCE attrs:      0x%016lx\n", kernel_get_ucred_attrs(pid));
   PRINTF("SCE caps:       %s\n", bin2hex(caps, buf, sizeof(caps)));
+  PRINTF("uid:            %d\n", getuid());
+  PRINTF("euid:           %d\n", geteuid());
+  PRINTF("jail vnode:     0x%lx\n", kernel_get_proc_jaildir(pid));
   PUTS("");
 }
 
@@ -157,7 +160,7 @@ test_mdbg(void) {
     return -1;
   }
 
-  if(mdbg_copyout(-1, (intptr_t)&test_mdbg, &val, sizeof(val))) {
+  if(mdbg_copyout(pid, addr, &val, sizeof(val))) {
     PERROR("mdbg");
     return -1;
   }
@@ -201,7 +204,6 @@ int
 main(void) {
   int ret = 0;
 
-  kernel_set_ucred_authid(-1, 0x4800000000010003l);
   print_info(getpid());
 
   PUTS("Test results");
