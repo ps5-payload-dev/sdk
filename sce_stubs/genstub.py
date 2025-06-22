@@ -22,8 +22,6 @@ import os
 import string
 import sys
 
-import xml.etree.ElementTree as ET
-
 from pathlib import Path
 from elftools.elf.elffile import ELFFile
 
