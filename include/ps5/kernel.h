@@ -85,6 +85,9 @@ intptr_t kernel_dynlib_entry_addr(pid_t pid, uint32_t handle);
 intptr_t kernel_dynlib_init_addr(pid_t pid, uint32_t handle);
 intptr_t kernel_dynlib_fini_addr(pid_t pid, uint32_t handle);
 
+intptr_t kernel_get_ucred_prison(pid_t pid);
+int32_t  kernel_set_ucred_prison(pid_t pid, intptr_t prison);
+
 uint64_t kernel_get_ucred_authid(pid_t pid);
 int32_t  kernel_set_ucred_authid(pid_t pid, uint64_t authid);
 

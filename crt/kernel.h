@@ -135,6 +135,9 @@ unsigned long kernel_get_proc(int pid);
 unsigned long kernel_get_ucred_authid(int pid);
 int           kernel_set_ucred_authid(int pid, unsigned long authid);
 
+unsigned long kernel_get_ucred_prison(int pid);
+int           kernel_set_ucred_prison(int pid, unsigned long prison);
+
 unsigned long kernel_get_ucred_attrs(int pid);
 int           kernel_set_ucred_attrs(int pid, unsigned long attrs);
 
