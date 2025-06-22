@@ -60,3 +60,24 @@ jobs:
         include-hidden-files: true
         path: ./tests.zip
         if-no-files-found: error
+
+  release:
+    needs: build
+    permissions:
+      contents: write
+
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: SDK
+          path: .
+
+      - name: Create GitHub Release (pre-release)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          prerelease: true
+          files: ps5-payload-sdk.zip
