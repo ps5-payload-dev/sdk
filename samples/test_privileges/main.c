@@ -19,9 +19,11 @@ along with this program; see the file COPYING. If not, see
 #include <stdlib.h>
 #include <string.h>
 
+#include <sys/mman.h>
 #include <sys/ptrace.h>
 #include <sys/syscall.h>
 #include <sys/sysctl.h>
+#include <sys/wait.h>
 
 #include <ps5/kernel.h>
 #include <ps5/klog.h>
@@ -53,6 +55,42 @@ typedef struct app_info {
 
 
 int sceKernelGetAppInfo(pid_t pid, app_info_t *info);
+
+
+static int
+sys_ptrace(int request, pid_t pid, caddr_t addr, int data) {
+  uint8_t privcaps[16] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
+                          0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
+  pid_t mypid = getpid();
+  uint8_t caps[16];
+  uint64_t authid;
+  int ret;
+
+  if(!(authid=kernel_get_ucred_authid(mypid))) {
+    return -1;
+  }
+  if(kernel_get_ucred_caps(mypid, caps)) {
+    return -1;
+  }
+
+  if(kernel_set_ucred_authid(mypid, 0x4800000000010003l)) {
+    return -1;
+  }
+  if(kernel_set_ucred_caps(mypid, privcaps)) {
+    return -1;
+  }
+
+  ret = (int)__syscall(SYS_ptrace, request, pid, addr, data);
+
+  if(kernel_set_ucred_authid(mypid, authid)) {
+    return -1;
+  }
+  if(kernel_set_ucred_caps(mypid, caps)) {
+    return -1;
+  }
+
+  return ret;
+}
 
 
 static pid_t
@@ -146,26 +184,40 @@ print_info(pid_t pid) {
 
 static int
 test_mdbg(void) {
+  intptr_t val = -1;
   intptr_t addr;
-  intptr_t val;
   pid_t pid;
+  int prot;
 
-  if((pid=find_pid("SceRedisServer") < 0)) {
-    PUTS("mdbg: fail");
+  if((pid=find_pid("SceRedisServer")) < 0) {
+    PUTS("mdbg: find_pid failed");
     return -1;
   }
 
   if(!(addr=kernel_dynlib_entry_addr(pid, 0))) {
-    PERROR("mdbg");
+    PERROR("mdbg kernel_dynlib_entry_add");
     return -1;
   }
 
   if(mdbg_copyout(pid, addr, &val, sizeof(val))) {
-    PERROR("mdbg");
+    PERROR("mdbg_copyout");
     return -1;
+  } else {
+    PUTS("mdbg_copyout: success");
   }
-  
-  PUTS("mdbg: success");
+
+  prot = kernel_get_vmem_protection(pid, addr, sizeof(val));
+  kernel_set_vmem_protection(pid, addr, sizeof(val), prot | PROT_READ | PROT_WRITE);
+
+  if(mdbg_copyin(pid, &val, addr, sizeof(val))) {
+    PERROR("mdbg_copyin");
+    kernel_set_vmem_protection(pid, addr, sizeof(val), prot);
+    return -1;
+  } else {
+    PUTS("mdbg_copyin: success");
+  }
+
+  kernel_set_vmem_protection(pid, addr, sizeof(val), prot);
 
   return 0;
 }
@@ -173,6 +225,11 @@ test_mdbg(void) {
 
 static int
 test_ptrace(void) {
+  struct ptrace_io_desc iod = {0};
+  intptr_t val = -1;
+  intptr_t addr;
+  int err = 0;
+  int prot;
   pid_t pid;
 
   if((pid=find_pid("SceRedisServer")) < 0) {
@@ -180,19 +237,58 @@ test_ptrace(void) {
     return -1;
   }
 
-  if(__syscall(SYS_ptrace, PT_ATTACH, pid, 0, 0) == -1) {
-    PERROR("ptrace");
+  if(sys_ptrace(PT_ATTACH, pid, 0, 0)) {
+    PERROR("ptrace attach");
+    return -1;
+  } else {
+    PUTS("ptrace attach: success");
+  }
+
+  if(waitpid(pid, 0, 0) == -1) {
+    perror("ptrace waitpid");
     return -1;
   }
 
-  if(__syscall(SYS_ptrace, PT_DETACH, pid, 0, 0) == -1) {
-    PERROR("ptrace");
-    return -1;
+  if(!(addr=kernel_dynlib_entry_addr(pid, 0))) {
+    perror("ptrace kernel_dynlib_entry_addr");
+    err = -1;
   }
 
-  PUTS("ptrace: success");
-      
-  return 0;
+  prot = kernel_get_vmem_protection(pid, addr, sizeof(val));
+  kernel_set_vmem_protection(pid, addr, sizeof(val), prot | PROT_READ | PROT_WRITE);
+
+  iod.piod_op = PIOD_READ_D;
+  iod.piod_offs = (void*)addr;
+  iod.piod_addr = &val;
+  iod.piod_len = sizeof(val);
+  if(sys_ptrace(PT_IO, pid, (caddr_t)&iod, 0)) {
+    PERROR("ptrace io read");
+    err = -1;
+  } else {
+    PUTS("ptrace io read: success");
+  }
+
+  iod.piod_op = PIOD_WRITE_D;
+  iod.piod_offs = (void*)addr;
+  iod.piod_addr = &val;
+  iod.piod_len = sizeof(val);
+  if(sys_ptrace(PT_IO, pid, (caddr_t)&iod, 0)) {
+    PERROR("ptrace io write");
+    err = -1;
+  } else {
+    PUTS("ptrace io write: success");
+  }
+
+  kernel_set_vmem_protection(pid, addr, sizeof(val), prot);
+
+  if(sys_ptrace(PT_DETACH, pid, 0, 0)) {
+    PERROR("ptrace detach");
+    err = -1;
+  } else {
+    PUTS("ptrace detach: success");
+  }
+
+  return err;
 }
 
 
