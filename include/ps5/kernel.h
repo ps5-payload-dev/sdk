@@ -73,6 +73,8 @@ intptr_t kernel_get_proc_ucred(pid_t pid);
 intptr_t kernel_get_proc_filedesc(pid_t pid);
 intptr_t kernel_get_proc_file(pid_t pid, int fd);
 
+int kernel_get_vmem_protection(pid_t pid, intptr_t addr, size_t len);
+int kernel_set_vmem_protection(pid_t pid, intptr_t addr, size_t len, int prot);
 int kernel_mprotect(pid_t pid, intptr_t addr, size_t size, int prot);
 
 int kernel_overlap_sockets(pid_t pid, int master_sock, int victim_sock);

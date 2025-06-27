@@ -1093,77 +1093,135 @@ kernel_get_proc_filedesc(int pid) {
 }
 
 
-int
-kernel_mprotect(int pid, unsigned long addr, unsigned long len, int prot) {
+unsigned long
+kernel_get_vmem_entry(int pid, unsigned long addr) {
   unsigned long vm_map_entry_addr;
   unsigned long vmspace_addr;
   unsigned long proc_addr;
-  unsigned char vm_prot;
   unsigned long start;
   unsigned long end;
 
   if(!KERNEL_OFFSET_PROC_P_VMSPACE) {
-    return -1;
+    return 0;
   }
 
   if(!(proc_addr=kernel_get_proc(pid))) {
-    return -1;
+    return 0;
   }
 
   if(kernel_copyout(proc_addr + KERNEL_OFFSET_PROC_P_VMSPACE,
                     &vmspace_addr, sizeof(vmspace_addr))) {
-    return -1;
+    return 0;
   }
 
   if(kernel_copyout(vmspace_addr + KERNEL_OFFSET_VMSPACE_P_ROOT,
 		    &vm_map_entry_addr, sizeof(vm_map_entry_addr))) {
-    return -1;
+    return 0;
   }
 
   while(vm_map_entry_addr) {
     if(kernel_copyout(vm_map_entry_addr + 0x20, &start, sizeof(start))) {
-      return -1;
+      return 0;
     }
     if(kernel_copyout(vm_map_entry_addr + 0x28, &end, sizeof(end))) {
-      return -1;
+      return 0;
     } 
 
     if(addr < start) {
       // left
       if(kernel_copyout(vm_map_entry_addr + 0x10, &vm_map_entry_addr,
                         sizeof(vm_map_entry_addr))) {
-        return -1;
+        return 0;
       }
     } else if(addr >= end) {
       // right
       if(kernel_copyout(vm_map_entry_addr + 0x18, &vm_map_entry_addr,
                         sizeof(vm_map_entry_addr))) {
-        return -1;
+        return 0;
       }
     } else {
-      // protection
-      if(kernel_copyout(vm_map_entry_addr + 0x64, &vm_prot, sizeof(vm_prot))) {
-        return -1;
-      }
-      vm_prot |= prot;
-      if(kernel_copyin(&vm_prot, vm_map_entry_addr + 0x64, sizeof(vm_prot))) {
-        return -1;
-      }
-
-      // max_protection
-      if(kernel_copyout(vm_map_entry_addr + 0x65, &vm_prot, sizeof(vm_prot))) {
-        return -1;
-      }
-      vm_prot |= prot;
-      if(kernel_copyin(&vm_prot, vm_map_entry_addr + 0x65, sizeof(vm_prot))) {
-        return -1;
-      }
-
-      return 0;
+      return vm_map_entry_addr;
     }
   }
 
-  return -1;
+  return 0;
+}
+
+
+int
+kernel_get_vmem_protection(int pid, unsigned long addr, unsigned long len) {
+  unsigned long vm_entry;
+  unsigned char vm_prot;
+  unsigned long start;
+  int prot = -1;
+
+  if(!(vm_entry=kernel_get_vmem_entry(pid, addr))) {
+    return -1;
+  }
+
+  while(vm_entry) {
+    if(kernel_copyout(vm_entry + 0x20, &start, sizeof(start))) {
+      return -1;
+    }
+    if(start >= addr+len) {
+      break;
+    }
+
+    if(kernel_copyout(vm_entry + 0x64, &vm_prot, sizeof(vm_prot))) {
+      return -1;
+    }
+    if(prot < 0) {
+      prot = vm_prot;
+    } else if((prot & vm_prot) != prot) {
+      return -1;
+    }
+
+    if(kernel_copyout(vm_entry + 0x08, &vm_entry, sizeof(vm_entry))) {
+      return -1;
+    }
+  }
+
+  return prot;
+}
+
+
+int
+kernel_set_vmem_protection(int pid, unsigned long addr, unsigned long len, int prot) {
+  unsigned char vm_prot = prot;
+  unsigned long vm_entry;
+  unsigned long start;
+
+  if(prot < 0) {
+    return -1;
+  }
+  if(!(vm_entry=kernel_get_vmem_entry(pid, addr))) {
+    return -1;
+  }
+
+  while(vm_entry) {
+    if(kernel_copyout(vm_entry + 0x20, &start, sizeof(start))) {
+      return -1;
+    }
+    if(start >= addr+len) {
+      break;
+    }
+
+    if(kernel_copyin(&vm_prot, vm_entry + 0x64, sizeof(vm_prot))) {
+      return -1;
+    }
+
+    if(kernel_copyout(vm_entry + 0x08, &vm_entry, sizeof(vm_entry))) {
+      return -1;
+    }
+  }
+
+  return 0;
+}
+
+
+int
+kernel_mprotect(int pid, unsigned long addr, unsigned long len, int prot) {
+  return kernel_set_vmem_protection(pid, addr, len, prot);
 }
 
 
