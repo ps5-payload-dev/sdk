@@ -34,4 +34,4 @@ fi
 
 PS5_PAYLOAD=$1
 
-socat -t 99999999 - TCP:$PS5_HOST:$PS5_PORT < "$PS5_PAYLOAD"
+{ cat $PS5_PAYLOAD && cat /dev/stdin; } | socat - TCP:$PS5_HOST:$PS5_PORT

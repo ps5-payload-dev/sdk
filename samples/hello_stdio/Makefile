@@ -36,7 +36,7 @@ clean:
 	rm -f $(ELF)
 
 test: $(ELF)
-	$(PS5_DEPLOY) -h $(PS5_HOST) -p $(PS5_PORT) $^
+	echo "world" | $(PS5_DEPLOY) -h $(PS5_HOST) -p $(PS5_PORT) $^
 
 debug: $(ELF)
 	gdb \
