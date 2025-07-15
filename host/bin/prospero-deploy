@@ -15,23 +15,57 @@
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>
 
-PS5_HOST=""
-PS5_PORT=""
-PS5_PAYLOAD=""
+HOST=$PS5_HOST
+PORT=$PS5_PORT
 
-while getopts "h:p:" opt; do
+PAYLOAD=""
+INTERACTIVE=""
+
+
+show_help() {
+    cat <<EOF
+Usage: $(basename "$0") -h HOST -p PORT [-i] PAYLOAD_PATH
+
+Options:
+  -h HOST        Set the host address
+  -p PORT        Set the port number
+  -i             Enable interactive mode (append /dev/stdin to payload)
+  -H, --help     Show this help message and exit
+
+Arguments:
+  PAYLOAD_PATH   Path to the payload
+EOF
+}
+
+
+for arg in "$@"; do
+    case "$arg" in
+        --help)
+            show_help
+            exit 0
+            ;;
+    esac
+done
+
+
+while getopts "h:p:i" opt; do
     case ${opt} in
-	h) PS5_HOST=$OPTARG;;
-	p) PS5_PORT=$OPTARG;;
+	h) HOST=$OPTARG;;
+	p) PORT=$OPTARG;;
+	i) INTERACTIVE="1";;
     esac
 done
 shift $((OPTIND -1))
 
-if [[ -z $PS5_HOST || -z $PS5_PORT || -z $1 ]]; then
+
+if [[ -z $HOST || -z $PORT || -z $1 ]]; then
     echo "Usage: $(basename $0) -h HOST -p PORT PAYLOAD_PATH" >&2
     exit 1
 fi
 
-PS5_PAYLOAD=$1
 
-{ cat $PS5_PAYLOAD && cat /dev/stdin; } | socat - TCP:$PS5_HOST:$PS5_PORT
+if [[ -z $INTERACTIVE ]]; then
+    socat -t 9999999 - TCP:$HOST:$PORT < $1
+else
+    { cat $1 && cat /dev/stdin; } | socat - TCP:$HOST:$PORT
+fi
