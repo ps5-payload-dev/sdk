@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        {
+            "name": "ps5-payload-sdk",
+            "compilerPath": "${env:PS5_PAYLOAD_SDK}/bin/prospero-clang++",
+            "intelliSenseMode": "clang-x64",
+            "cStandard": "c17",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "ps5-payload-sdk",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${command:cmake.launchTargetPath}",
+            "cwd": "${workspaceFolder}",
+            "targetArchitecture": "x64",
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb-multiarch",
+            "miDebuggerServerAddress": "${env:PS5_HOST}:2159",
+            "useExtendedRemote": true,
+            "postRemoteConnectCommands": [
+                {
+                    "description": "Trasfer the executable to the remote gdb server",
+                    "text": "remote put ${command:cmake.launchTargetPath} /user/temp/${command:cmake.launchTargetName}"
+                }
+                {
+                    "description": "Set path to the executable on the remote gdb server",
+                    "text": "set remote exec-file /user/temp/${command:cmake.launchTargetName}"
+                }
+            ]
+        }
+    ]
+}
