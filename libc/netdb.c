@@ -80,11 +80,25 @@ static struct protoent g_protent[] = {
 
 const char*
 gai_strerror(int err) {
+  static char buf[50];
+
   if(0 <= err && err < EAI_MAX) {
     return g_errlist[err];
   }
 
-  return "Unknown network error";
+  sprintf(buf, "Unknown network error code 0x%08x", err);
+
+  return buf;
+}
+
+
+const char*
+hstrerror(int herr) {
+  static char buf[50];
+
+  sprintf(buf, "Unknown network error code 0x%08x", herr);
+
+  return buf;
 }
 
 
