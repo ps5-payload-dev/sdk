@@ -155,7 +155,7 @@ print_info(pid_t pid) {
   uint8_t qaflags[16] = {0};
   uint8_t caps[16] = {0};
   char buf[16*3];
-  
+
   kernel_get_qaflags(qaflags);
   kernel_get_ucred_caps(pid, caps);
   sceKernelGetAppInfo(pid, &app_info);
@@ -168,7 +168,7 @@ print_info(pid_t pid) {
   PRINTF("UTOKEN_FLAGS:   0x%02x\n", kernel_getchar(KERNEL_ADDRESS_UTOKEN_FLAGS));
   PRINTF("QA_FLAGS:       %s\n", bin2hex(qaflags, buf, sizeof(qaflags)));
   PUTS("");
-  
+
   PUTS("Privileges");
   PUTS("----------");
   PRINTF("SCE titleid:    %s\n", app_info.title_id);
@@ -206,8 +206,15 @@ test_mdbg(void) {
     PUTS("mdbg_copyout: success");
   }
 
-  prot = kernel_get_vmem_protection(pid, addr, sizeof(val));
-  kernel_set_vmem_protection(pid, addr, sizeof(val), prot | PROT_READ | PROT_WRITE);
+  if((prot=kernel_get_vmem_protection(pid, addr, sizeof(val))) < 0) {
+    PUTS("mdbg: kernel_get_vmem_protection failed");
+    return -1;
+  }
+
+  if(kernel_set_vmem_protection(pid, addr, sizeof(val), prot | PROT_READ | PROT_WRITE)) {
+    PUTS("mdbg: kernel_set_vmem_protection failed");
+    return -1;
+  }
 
   if(mdbg_copyin(pid, &val, addr, sizeof(val))) {
     PERROR("mdbg_copyin");
@@ -217,7 +224,10 @@ test_mdbg(void) {
     PUTS("mdbg_copyin: success");
   }
 
-  kernel_set_vmem_protection(pid, addr, sizeof(val), prot);
+  if(kernel_set_vmem_protection(pid, addr, sizeof(val), prot)) {
+    PUTS("mdbg: kernel_set_vmem_protection failed");
+    return -1;
+  }
 
   return 0;
 }
