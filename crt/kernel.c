@@ -1153,6 +1153,7 @@ kernel_get_vmem_protection(int pid, unsigned long addr, unsigned long len) {
   unsigned long vm_entry;
   unsigned char vm_prot;
   unsigned long start;
+  int first = 1;
   int prot = -1;
 
   if(!(vm_entry=kernel_get_vmem_entry(pid, addr))) {
@@ -1163,9 +1164,11 @@ kernel_get_vmem_protection(int pid, unsigned long addr, unsigned long len) {
     if(kernel_copyout(vm_entry + 0x20, &start, sizeof(start))) {
       return -1;
     }
-    if(start >= addr+len) {
+
+    if(start >= addr+len || (start < addr && !first) ) {
       break;
     }
+    first = 0;
 
     if(kernel_copyout(vm_entry + 0x64, &vm_prot, sizeof(vm_prot))) {
       return -1;
@@ -1190,6 +1193,7 @@ kernel_set_vmem_protection(int pid, unsigned long addr, unsigned long len, int p
   unsigned char vm_prot = prot;
   unsigned long vm_entry;
   unsigned long start;
+  int first = 1;
 
   if(prot < 0) {
     return -1;
@@ -1202,9 +1206,11 @@ kernel_set_vmem_protection(int pid, unsigned long addr, unsigned long len, int p
     if(kernel_copyout(vm_entry + 0x20, &start, sizeof(start))) {
       return -1;
     }
-    if(start >= addr+len) {
+
+    if(start >= addr+len || (start < addr && !first) ) {
       break;
     }
+    first = 0;
 
     if(kernel_copyin(&vm_prot, vm_entry + 0x64, sizeof(vm_prot))) {
       return -1;
