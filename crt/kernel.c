@@ -83,6 +83,7 @@ static int rw_pair[2] = {-1, -1};
 #define MASTER_SOCK rw_pair[0]
 #define VICTIM_SOCK rw_pair[1]
 
+
 /**
  * performance tuning: cache up to 100 return values from kernel_get_proc()
  **/
@@ -469,20 +470,24 @@ kernel_setlong(unsigned long addr, unsigned long val) {
   return kernel_copyin(&val, addr, sizeof(val));
 }
 
+
 int
 kernel_setint(unsigned long addr, unsigned int val) {
   return kernel_copyin(&val, addr, sizeof(val));
 }
+
 
 int
 kernel_setshort(unsigned long addr, unsigned short val) {
   return kernel_copyin(&val, addr, sizeof(val));
 }
 
+
 int
 kernel_setchar(unsigned long addr, unsigned char val) {
   return kernel_copyin(&val, addr, sizeof(val));
 }
+
 
 unsigned long
 kernel_getlong(unsigned long addr) {
@@ -493,6 +498,7 @@ kernel_getlong(unsigned long addr) {
   return val;
 }
 
+
 unsigned int
 kernel_getint(unsigned long addr) {
   unsigned int val = 0;
@@ -501,6 +507,7 @@ kernel_getint(unsigned long addr) {
 
   return val;
 }
+
 
 unsigned short
 kernel_getshort(unsigned long addr) {
@@ -511,6 +518,7 @@ kernel_getshort(unsigned long addr) {
   return val;
 }
 
+
 unsigned char
 kernel_getchar(unsigned long addr) {
   unsigned char val = 0;
@@ -519,6 +527,7 @@ kernel_getchar(unsigned long addr) {
 
   return val;
 }
+
 
 int
 kernel_get_qaflags(unsigned char qaflags[16]) {
