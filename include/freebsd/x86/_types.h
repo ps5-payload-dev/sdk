@@ -146,10 +146,17 @@ typedef	__uint32_t	__vm_paddr_t;
 #endif
 typedef	__uint32_t	__vm_size_t;
 #endif
+#ifdef __SCE__
+typedef	unsigned short	___wchar_t;
+
+#define	__WCHAR_MIN	0		/* min value for a wchar_t */
+#define	__WCHAR_MAX	0xffff		/* max value for a wchar_t */
+#else
 typedef	int		___wchar_t;
 
 #define	__WCHAR_MIN	__INT_MIN	/* min value for a wchar_t */
 #define	__WCHAR_MAX	__INT_MAX	/* max value for a wchar_t */
+#endif
 
 /*
  * Unusual type definitions.
