@@ -19,7 +19,11 @@ SCRIPT_PATH="${BASH_SOURCE[0]}"
 SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
 SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
-TOOLCHAIN="${SCRIPT_NAME::-6}"
+if [[ "$(uname)" == "Darwin" ]]; then
+    TOOLCHAIN=$(echo "$SCRIPT_NAME" | rev | cut -c 7- | rev)
+else
+    TOOLCHAIN="${SCRIPT_NAME::-6}"
+fi
 
 export CMAKE_TOOLCHAIN_FILE="${SCRIPT_DIR}/../toolchain/${TOOLCHAIN}.cmake"
 
