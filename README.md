@@ -24,6 +24,15 @@ john@localhost:ps5-payload-dev/sdk$ sudo dnf install bash llvm-devel clang lld #
 john@localhost:ps5-payload-dev/sdk$ sudo dnf install socat cmake meson pkg-config # optional
 ```
 
+If you are using Apple Silicon Macs, you must install the following dependencies using [Homebrew](https://brew.sh) (tested on macOS Sequoia):
+
+```console
+user@localhost:ps5-payload-dev/sdk$ brew install llvm@20 lld@20 socat wget cmake
+user@localhost:ps5-payload-dev/sdk$ echo 'export PATH="/opt/homebrew/opt/llvm@20/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc
+user@localhost:ps5-payload-dev/sdk$ ln -s /opt/homebrew/opt/lld@20/bin/ld.lld /opt/homebrew/opt/llvm@20/bin/ld.lld
+user@localhost:ps5-payload-dev/sdk$ ln -s /opt/homebrew/opt/llvm@20/bin/llvm-config /opt/homebrew/opt/llvm@20/bin/llvm-config-20
+```
+
 ## Quick-start
 To download and install a binary distribution for GNU/Linux:
 ```console
@@ -36,7 +45,7 @@ john@localhost:tmp$ sudo unzip -d /opt ps5-payload-sdk.zip
 john@localhost:ps5-payload-dev/sdk$ make
 john@localhost:ps5-payload-dev/sdk$ make DESTDIR=/opt/ps5-payload-sdk install
 john@localhost:ps5-payload-dev/sdk$ export PS5_PAYLOAD_SDK=/opt/ps5-payload-sdk
-john@localhost:ps5-payload-dev/sdk$ ./libcxx.sh # fetch, build, and install libcxx
+john@localhost:ps5-payload-dev/sdk$ ./libcxx.sh # fetch, build, and install libcxx, currently ARM Apple devices are not supported
 ```
 
 ## Usage
