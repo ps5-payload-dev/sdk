@@ -92,26 +92,6 @@ chown() {
 
 
 void
-mount() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 21\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
-
-void
-unmount() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 22\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
-
-void
 ptrace() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 26\n"
@@ -1181,15 +1161,6 @@ afs3_syscall() {
     );
 }
 
-void
-nmount() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 378\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
 
 void
 __mac_get_proc() {
