@@ -19,7 +19,7 @@ SCRIPT_PATH="${BASH_SOURCE[0]}"
 SCRIPT_NAME="$(basename "${SCRIPT_PATH}")"
 SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 
-TOOLCHAIN="${SCRIPT_NAME::-6}"
+TOOLCHAIN=$(echo "$SCRIPT_NAME" | sed 's/......$//')
 
 if [[ "$1" = "setup" ]]; then
     ARGS="setup --cross-file=${SCRIPT_DIR}/../toolchain/${TOOLCHAIN}.ini ${@:2}"
