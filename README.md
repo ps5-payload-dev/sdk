@@ -26,10 +26,9 @@ john@localhost:ps5-payload-dev/sdk$ sudo dnf install socat cmake meson pkg-confi
 
 If you are using macOS, you can install them using the [Homebrew Package Manager][macos-brew] (tested with macOS Sequoia):
 ```console
-user@localhost:ps5-payload-dev/sdk$ brew install llvm@20 lld@20 socat wget cmake
-user@localhost:ps5-payload-dev/sdk$ echo 'export PATH="/opt/homebrew/opt/llvm@20/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc
-user@localhost:ps5-payload-dev/sdk$ ln -s /opt/homebrew/opt/lld@20/bin/ld.lld /opt/homebrew/opt/llvm@20/bin/ld.lld
-user@localhost:ps5-payload-dev/sdk$ ln -s /opt/homebrew/opt/llvm@20/bin/llvm-config /opt/homebrew/opt/llvm@20/bin/llvm-config-20
+john@localhost:ps5-payload-dev/sdk$ brew install llvm@18 # required
+john@localhost:ps5-payload-dev/sdk$ export LLVM_CONFIG=/opt/homebrew/opt/llvm@18/bin/llvm-config # required
+john@localhost:ps5-payload-dev/sdk$ brew install socat cmake meson # optional
 ```
 
 ## Quick-start using a binary distribution
