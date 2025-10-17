@@ -32,19 +32,12 @@ user@localhost:ps5-payload-dev/sdk$ ln -s /opt/homebrew/opt/lld@20/bin/ld.lld /o
 user@localhost:ps5-payload-dev/sdk$ ln -s /opt/homebrew/opt/llvm@20/bin/llvm-config /opt/homebrew/opt/llvm@20/bin/llvm-config-20
 ```
 
-## Quick-start
-To download and install a binary distribution for GNU/Linux:
+## Quick-start using a binary distribution
+First, download the approriate binary distribution from [the latest release page][latest-rel],
+then extract it to an approriate path, e.g,
 ```console
 john@localhost:tmp$ wget https://github.com/ps5-payload-dev/sdk/releases/latest/download/ps5-payload-sdk.zip
 john@localhost:tmp$ sudo unzip -d /opt ps5-payload-sdk.zip
-```
-
-## Building
-```console
-john@localhost:ps5-payload-dev/sdk$ make
-john@localhost:ps5-payload-dev/sdk$ make DESTDIR=/opt/ps5-payload-sdk install
-john@localhost:ps5-payload-dev/sdk$ export PS5_PAYLOAD_SDK=/opt/ps5-payload-sdk
-john@localhost:ps5-payload-dev/sdk$ ./libcxx.sh # fetch, build, and install libcxx
 ```
 
 ## Usage
@@ -53,6 +46,13 @@ john@localhost:ps5-payload-dev/sdk$ export PS5_PAYLOAD_SDK=/opt/ps5-payload-sdk
 john@localhost:ps5-payload-dev/sdk$ make -C samples/hello_world
 john@localhost:ps5-payload-dev/sdk$ export PS5_HOST=ps5; export PS5_PORT=9021
 john@localhost:ps5-payload-dev/sdk$ make -C samples/hello_world test
+```
+
+## Building the SDK
+```console
+john@localhost:ps5-payload-dev/sdk$ make DESTDIR=/opt/ps5-payload-sdk install
+john@localhost:ps5-payload-dev/sdk$ export PS5_PAYLOAD_SDK=/opt/ps5-payload-sdk
+john@localhost:ps5-payload-dev/sdk$ ./libcxx.sh # fetch, build, and install libcxx
 ```
 
 ## Adding new SCE Libs
@@ -77,6 +77,7 @@ Unless otherwhise explicitly stated inside a file, the rest are licensed under
 the GPLv3+.
 
 [issues]: https://github.com/ps5-payload-dev/sdk/issues/new
+[latest-rel]: https://github.com/ps5-payload-dev/sdk/releases/latest
 [elfldr]: https://github.com/ps5-payload-dev/elfldr
 [websrv]: https://github.com/ps5-payload-dev/websrv
 [bdj-ipv6-hen]: https://github.com/ps5-payload-dev/bdj-ipv6-hen
