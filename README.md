@@ -24,8 +24,7 @@ john@localhost:ps5-payload-dev/sdk$ sudo dnf install bash llvm-devel clang lld #
 john@localhost:ps5-payload-dev/sdk$ sudo dnf install socat cmake meson pkg-config # optional
 ```
 
-If you are using Apple Silicon Macs, you must install the following dependencies using [Homebrew](https://brew.sh) (tested on macOS Sequoia):
-
+If you are using macOS, you can install them using the [Homebrew Package Manager][macos-brew] (tested with macOS Sequoia):
 ```console
 user@localhost:ps5-payload-dev/sdk$ brew install llvm@20 lld@20 socat wget cmake
 user@localhost:ps5-payload-dev/sdk$ echo 'export PATH="/opt/homebrew/opt/llvm@20/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc
@@ -85,3 +84,4 @@ the GPLv3+.
 [elfloader]: https://github.com/cryonumb/elfloader
 [ps5-jar-loader]: https://github.com/hammer-83/ps5-jar-loader
 [PS5SDK]: https://github.com/PS5Dev/PS5SDK
+[macos-brew]: https://brew.sh
