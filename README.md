@@ -31,13 +31,15 @@ john@localhost:ps5-payload-dev/sdk$ export LLVM_CONFIG=/opt/homebrew/opt/llvm@18
 john@localhost:ps5-payload-dev/sdk$ brew install socat cmake meson # optional
 ```
 
-## Quick-start using a binary distribution
-First, download the approriate binary distribution from [the latest release page][latest-rel],
-then extract it to your local storage, e.g,
+## Quick-start
+You can download a binary distribution of the SDK from [the latest release page][latest-rel],
+then install it to your local storage, e.g,
 ```console
 john@localhost:tmp$ wget https://github.com/ps5-payload-dev/sdk/releases/latest/download/ps5-payload-sdk.zip
 john@localhost:tmp$ sudo unzip -d /opt ps5-payload-sdk.zip
 ```
+Assuming you have all the prerequisites and you are on a POSIX system,
+the binary distribution should work regardless of CPU architecture, e.g., x86_64, aarch64.
 
 ## Usage
 ```console
