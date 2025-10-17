@@ -4,7 +4,7 @@ known to work include:
 - [ps5-payload-elfldr][elfldr]
 - [ps5-payload-websrv][websrv]
 - [bdj-ipv6-hen][bdj-ipv6-hen]
-- [elfloader][elfloader] for BD-J [ps5-jar-loader]
+- [elfloader][elfloader] via [ps5-jar-loader]
 - [remote_lua_loader][remote_lua_loader]
 
 Several artifacts in this repository originate from the [PS5SDK][PS5SDK] project.
@@ -33,7 +33,7 @@ john@localhost:ps5-payload-dev/sdk$ brew install socat cmake meson # optional
 
 ## Quick-start using a binary distribution
 First, download the approriate binary distribution from [the latest release page][latest-rel],
-then extract it to an approriate path, e.g,
+then extract it to your local storage, e.g,
 ```console
 john@localhost:tmp$ wget https://github.com/ps5-payload-dev/sdk/releases/latest/download/ps5-payload-sdk.zip
 john@localhost:tmp$ sudo unzip -d /opt ps5-payload-sdk.zip
