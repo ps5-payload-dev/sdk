@@ -10,7 +10,7 @@ known to work include:
 Several artifacts in this repository originate from the [PS5SDK][PS5SDK] project.
 
 ## Prerequisites
-On Debian-flavored operating systems, you can invoke the following command to
+On Debian-flavored operating systems, you can invoke the following commands to
 install dependencies used by the SDK.
 ```console
 john@localhost:ps5-payload-dev/sdk$ sudo apt-get update && sudo apt-get upgrade # optional
