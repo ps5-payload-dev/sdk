@@ -16,7 +16,7 @@
 # <http://www.gnu.org/licenses/>.
 
 if [ -x "$(command -v "${LLVM_CONFIG}")" ]; then
-    exec "${LLVM_CONFIG}"
+    exec "${LLVM_CONFIG}" "$@"
 fi
 
 CANDIDATES=("llvm-config-20"
