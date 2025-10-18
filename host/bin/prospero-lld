@@ -21,8 +21,7 @@ SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 PS5_PAYLOAD_SDK="$(realpath "${SCRIPT_DIR}/..")"
 PS5_PAYLOAD_HBROOT="${PS5_PAYLOAD_SDK}/target/user/homebrew"
 
-LLVM_CONFIG="${SCRIPT_DIR}/llvm-config"
-LLVM_BINDIR=$("${LLVM_CONFIG}" --bindir)
+LLVM_BINDIR=$("${SCRIPT_DIR}/llvm-config" --bindir)
 
 PIE="-pie"
 for ARG in "$@"; do

@@ -15,8 +15,14 @@
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
 
+SCRIPT_PATH="${BASH_SOURCE[0]}"
+SCRIPT_PATH="$(readlink -f "$SCRIPT_PATH")"
+
 if [ -x "$(command -v "${LLVM_CONFIG}")" ]; then
-    exec "${LLVM_CONFIG}" "$@"
+    LLVM_CONFIG="$(readlink -f "$LLVM_CONFIG")"
+    if [ "$LLVM_CONFIG" != "$SCRIPT_PATH" ]; then
+	exec "${LLVM_CONFIG}" "$@"
+    fi
 fi
 
 CANDIDATES=("llvm-config-20"
@@ -26,9 +32,9 @@ CANDIDATES=("llvm-config-20"
             "llvm-config-16"
             "llvm-config-15")
 
-for LLVM_CONFIG in "${CANDIDATES[@]}"; do
-    if [ -x "$(command -v "${LLVM_CONFIG}")" ]; then
-	exec "${LLVM_CONFIG}" "$@"
+for CMD in "${CANDIDATES[@]}"; do
+    if [ -x "$(command -v "${CMD}")" ]; then
+	exec "${CMD}" "$@"
     fi
 done
 
