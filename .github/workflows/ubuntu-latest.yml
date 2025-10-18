@@ -31,10 +31,10 @@ jobs:
         cd ${{ runner.tool_cache }}
         zip -r $GITHUB_WORKSPACE/ps5-payload-sdk.zip ps5-payload-sdk
         cd -
-        env:
-          DESTDIR: ${{ runner.tool_cache }}/ps5-payload-sdk
-          PS5_PAYLOAD_SDK: ${{ runner.tool_cache }}/ps5-payload-sdk
-          WIN: 1
+      env:
+        DESTDIR: ${{ runner.tool_cache }}/ps5-payload-sdk
+        PS5_PAYLOAD_SDK: ${{ runner.tool_cache }}/ps5-payload-sdk
+        WIN: 1
 
     - name: Bundle SDK
       run: |
@@ -42,28 +42,28 @@ jobs:
         zip -r $GITHUB_WORKSPACE/ps5-payload-sdk.zip ps5-payload-sdk
         cd -
 
-      - name: Build samples
-        run: |
-          source $PS5_PAYLOAD_SDK/toolchain/prospero.sh
-          $MAKE -C samples/arbitrary_syscall
-          $MAKE -C samples/browser
-          $MAKE -C samples/hello_cxx
-          $MAKE -C samples/hello_cxx23
-          $MAKE -C samples/hello_dlfcn
-          $MAKE -C samples/hello_kenv
-          $MAKE -C samples/hello_sprx
-          $MAKE -C samples/hello_stdio
-          $MAKE -C samples/hello_world
-          $MAKE -C samples/hwinfo
-          $MAKE -C samples/list_files
-          $MAKE -C samples/mntinfo
-          $MAKE -C samples/notify
-          $MAKE -C samples/ps
-          $CMAKE -S samples/hello_cmake -B samples/hello_cmake/build
-          $CMAKE --build samples/hello_cmake/build
-          $MESON setup samples/hello_meson samples/hello_meson/build
-          $MESON compile -C samples/hello_meson/build
-        env:
+    - name: Build samples
+      run: |
+        source $PS5_PAYLOAD_SDK/toolchain/prospero.sh
+        $MAKE -C samples/arbitrary_syscall
+        $MAKE -C samples/browser
+        $MAKE -C samples/hello_cxx
+        $MAKE -C samples/hello_cxx23
+        $MAKE -C samples/hello_dlfcn
+        $MAKE -C samples/hello_kenv
+        $MAKE -C samples/hello_sprx
+        $MAKE -C samples/hello_stdio
+        $MAKE -C samples/hello_world
+        $MAKE -C samples/hwinfo
+        $MAKE -C samples/list_files
+        $MAKE -C samples/mntinfo
+        $MAKE -C samples/notify
+        $MAKE -C samples/ps
+        $CMAKE -S samples/hello_cmake -B samples/hello_cmake/build
+        $CMAKE --build samples/hello_cmake/build
+        $MESON setup samples/hello_meson samples/hello_meson/build
+        $MESON compile -C samples/hello_meson/build
+      env:
           PS5_PAYLOAD_SDK: ${{ runner.tool_cache }}/ps5-payload-sdk
 
     - name: Upload SDK
