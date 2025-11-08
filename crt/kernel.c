@@ -606,6 +606,24 @@ kernel_get_proc(int pid) {
 }
 
 
+unsigned long
+kernel_get_proc_thread(int pid, int tid) {
+  unsigned long proc = kernel_get_proc(pid);
+
+  if(tid < 0) {
+    __syscall(0x1b0, &tid);
+  }
+
+  for(long thr=kernel_getlong(proc+0x10); thr; thr=kernel_getlong(thr+0x10)) {
+    if((int)kernel_getlong(thr+0x9c) == (int)tid) {
+      return thr;
+    }
+  }
+
+  return 0;
+}
+
+
 int
 kernel_dynlib_obj(int pid, unsigned int handle, dynlib_obj_t* obj) {
   unsigned long kproc;

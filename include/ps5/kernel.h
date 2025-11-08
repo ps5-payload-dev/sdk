@@ -69,6 +69,7 @@ uint16_t kernel_getshort(intptr_t addr);
 uint8_t  kernel_getchar(intptr_t addr);
 
 intptr_t kernel_get_proc(pid_t pid);
+intptr_t kernel_get_proc_thread(pid_t pid, pid_t tid);
 intptr_t kernel_get_proc_ucred(pid_t pid);
 intptr_t kernel_get_proc_filedesc(pid_t pid);
 intptr_t kernel_get_proc_file(pid_t pid, int fd);
