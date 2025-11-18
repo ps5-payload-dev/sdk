@@ -29,6 +29,8 @@ tmpfile(void) {
     return 0;
   }
 
+  unlink(s);
+
   if(!(f=fdopen(fd, "rw+b"))) {
     close(fd);
   }
