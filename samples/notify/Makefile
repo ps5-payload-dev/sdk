@@ -25,7 +25,7 @@ endif
 
 ELF := notify.elf
 
-CFLAGS := -Wall -Werror -g
+CFLAGS := -Wall -Werror -g -lSceNotification
 
 all: $(ELF)
 

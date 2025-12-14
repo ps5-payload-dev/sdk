@@ -16,28 +16,66 @@ along with this program; see the file COPYING. If not, see
 
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
-
-typedef struct notify_request {
-  char useless1[45];
-  char message[3075];
-} notify_request_t;
-
-
-int sceKernelSendNotificationRequest(int, notify_request_t*, size_t, int);
-
+#define SCE_NOTIFICATION_LOCAL_USER_ID_SYSTEM 0xFE
+int sceNotificationSend(int userId, bool isLogged, const char* payload);
 
 int
 main(int argc, char *argv[]) {
-  notify_request_t req;
+   const char json_payload[] =
+     "{\n"
+     "  \"rawData\": {\n"
+     "    \"viewTemplateType\": \"InteractiveToastTemplateB\",\n"
+     "    \"channelType\": \"Downloads\",\n"
+     "    \"useCaseId\": \"IDC\",\n"
+     "    \"toastOverwriteType\": \"No\",\n"
+     "    \"isImmediate\": true,\n"
+     "    \"priority\": 100,\n"
+     "    \"viewData\": {\n"
+     "      \"icon\": {\n"
+     "        \"type\": \"Url\",\n"
+     "        \"parameters\": {\n"
+     "          \"url\": \"/path/to/icon.png\"\n"
+     "        }\n"
+     "      },\n"
+     "      \"message\": {\n"
+     "        \"body\": \"Hello World!\"\n"
+     "      },\n"
+     "      \"subMessage\": {\n"
+     "        \"body\": \"notify sample\"\n"
+     "      },\n"
+     "      \"actions\": [\n"
+     "        {\n"
+     "          \"actionName\": \"Go to debug settings\",\n"
+     "          \"actionType\": \"DeepLink\",\n"
+     "          \"defaultFocus\": true,\n"
+     "          \"parameters\": {\n"
+     "            \"actionUrl\": \"pssettings:play?function=debug_settings\"\n"
+     "          }\n"
+     "        }\n"
+     "      ]\n"
+     "    },\n"
+     "    \"platformViews\": {\n"
+     "      \"previewDisabled\": {\n"
+     "        \"viewData\": {\n"
+     "          \"icon\": {\n"
+     "            \"type\": \"Predefined\",\n"
+     "            \"parameters\": {\n"
+     "              \"icon\": \"download\"\n"
+     "            }\n"
+     "          },\n"
+     "          \"message\": {\n"
+     "            \"body\": \"notify sample is running\"\n"
+     "          }\n"
+     "        }\n"
+     "      }\n"
+     "    }\n"
+     "  },\n"
+     "  \"createdDateTime\": \"2025-12-14T03:14:51.473Z\",\n"
+     "  \"localNotificationId\": \"588193127\"\n"
+     "}";
+	return sceNotificationSend(SCE_NOTIFICATION_LOCAL_USER_ID_SYSTEM, true, &json_payload[0]);
 
-  bzero(&req, sizeof req);
-  if(argc == 1) {
-    snprintf(req.message, sizeof req.message, "%s", argv[0]);
-  } else if(argc >= 2) {
-    snprintf(req.message, sizeof req.message, "%s: %s", argv[0], argv[1]);
-  }
-
-  return sceKernelSendNotificationRequest(0, &req, sizeof req, 0);
 }
 
