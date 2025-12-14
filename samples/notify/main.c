@@ -21,8 +21,6 @@ along with this program; see the file COPYING. If not, see
 #define SCE_NOTIFICATION_LOCAL_USER_ID_SYSTEM 0xFE
 int sceNotificationSend(int userId, bool isLogged, const char* payload);
 
-int
-main(int argc, char *argv[]) {
    static const char json_payload[] =
      "{\n"
      "  \"rawData\": {\n"
@@ -75,6 +73,9 @@ main(int argc, char *argv[]) {
      "  \"createdDateTime\": \"2025-12-14T03:14:51.473Z\",\n"
      "  \"localNotificationId\": \"588193127\"\n"
      "}";
+
+int
+main(int argc, char *argv[]) {
 	return sceNotificationSend(SCE_NOTIFICATION_LOCAL_USER_ID_SYSTEM, true, json_payload);
 
 }
