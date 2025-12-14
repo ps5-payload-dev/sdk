@@ -23,7 +23,7 @@ int sceNotificationSend(int userId, bool isLogged, const char* payload);
 
 int
 main(int argc, char *argv[]) {
-   const char json_payload[] =
+   static const char json_payload[] =
      "{\n"
      "  \"rawData\": {\n"
      "    \"viewTemplateType\": \"InteractiveToastTemplateB\",\n"
@@ -75,7 +75,7 @@ main(int argc, char *argv[]) {
      "  \"createdDateTime\": \"2025-12-14T03:14:51.473Z\",\n"
      "  \"localNotificationId\": \"588193127\"\n"
      "}";
-	return sceNotificationSend(SCE_NOTIFICATION_LOCAL_USER_ID_SYSTEM, true, &json_payload[0]);
+	return sceNotificationSend(SCE_NOTIFICATION_LOCAL_USER_ID_SYSTEM, true, json_payload);
 
 }
 
