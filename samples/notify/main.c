@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 John Törnblom
+/* Copyright (C) 2025 LightningMods
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -18,66 +18,70 @@ along with this program; see the file COPYING. If not, see
 #include <string.h>
 #include <stdbool.h>
 
+
 #define SCE_NOTIFICATION_LOCAL_USER_ID_SYSTEM 0xFE
+
+
 int sceNotificationSend(int userId, bool isLogged, const char* payload);
 
-static const char json_payload[] =
-"{\n"
-"  \"rawData\": {\n"
-"    \"viewTemplateType\": \"InteractiveToastTemplateB\",\n"
-"    \"channelType\": \"Downloads\",\n"
-"    \"useCaseId\": \"IDC\",\n"
-"    \"toastOverwriteType\": \"No\",\n"
-"    \"isImmediate\": true,\n"
-"    \"priority\": 100,\n"
-"    \"viewData\": {\n"
-"      \"icon\": {\n"
-"        \"type\": \"Url\",\n"
-"        \"parameters\": {\n"
-"          \"url\": \"/path/to/icon.png\"\n"
-"        }\n"
-"      },\n"
-"      \"message\": {\n"
-"        \"body\": \"Hello World!\"\n"
-"      },\n"
-"      \"subMessage\": {\n"
-"        \"body\": \"notify sample\"\n"
-"      },\n"
-"      \"actions\": [\n"
-"        {\n"
-"          \"actionName\": \"Go to debug settings\",\n"
-"          \"actionType\": \"DeepLink\",\n"
-"          \"defaultFocus\": true,\n"
-"          \"parameters\": {\n"
-"            \"actionUrl\": \"pssettings:play?function=debug_settings\"\n"
-"          }\n"
-"        }\n"
-"      ]\n"
-"    },\n"
-"    \"platformViews\": {\n"
-"      \"previewDisabled\": {\n"
-"        \"viewData\": {\n"
-"          \"icon\": {\n"
-"            \"type\": \"Predefined\",\n"
-"            \"parameters\": {\n"
-"              \"icon\": \"download\"\n"
-"            }\n"
-"          },\n"
-"          \"message\": {\n"
-"            \"body\": \"notify sample is running\"\n"
-"          }\n"
-"        }\n"
-"      }\n"
-"    }\n"
-"  },\n"
-"  \"createdDateTime\": \"2025-12-14T03:14:51.473Z\",\n"
-"  \"localNotificationId\": \"588193127\"\n"
-"}";
+
+static const char toast_tmpl[] =
+  "{\n"
+  "  \"rawData\": {\n"
+  "    \"viewTemplateType\": \"InteractiveToastTemplateB\",\n"
+  "    \"channelType\": \"Downloads\",\n"
+  "    \"useCaseId\": \"IDC\",\n"
+  "    \"toastOverwriteType\": \"No\",\n"
+  "    \"isImmediate\": true,\n"
+  "    \"priority\": 100,\n"
+  "    \"viewData\": {\n"
+  "      \"icon\": {\n"
+  "        \"type\": \"Url\",\n"
+  "        \"parameters\": {\n"
+  "          \"url\": \"/path/to/icon.png\"\n"
+  "        }\n"
+  "      },\n"
+  "      \"message\": {\n"
+  "        \"body\": \"Hello World!\"\n"
+  "      },\n"
+  "      \"subMessage\": {\n"
+  "        \"body\": \"notify sample\"\n"
+  "      },\n"
+  "      \"actions\": [\n"
+  "        {\n"
+  "          \"actionName\": \"Go to debug settings\",\n"
+  "          \"actionType\": \"DeepLink\",\n"
+  "          \"defaultFocus\": true,\n"
+  "          \"parameters\": {\n"
+  "            \"actionUrl\": \"pssettings:play?function=debug_settings\"\n"
+  "          }\n"
+  "        }\n"
+  "      ]\n"
+  "    },\n"
+  "    \"platformViews\": {\n"
+  "      \"previewDisabled\": {\n"
+  "        \"viewData\": {\n"
+  "          \"icon\": {\n"
+  "            \"type\": \"Predefined\",\n"
+  "            \"parameters\": {\n"
+  "              \"icon\": \"download\"\n"
+  "            }\n"
+  "          },\n"
+  "          \"message\": {\n"
+  "            \"body\": \"notify sample is running\"\n"
+  "          }\n"
+  "        }\n"
+  "      }\n"
+  "    }\n"
+  "  },\n"
+  "  \"createdDateTime\": \"2025-12-14T03:14:51.473Z\",\n"
+  "  \"localNotificationId\": \"588193127\"\n"
+  "}";
 
 
 int
-main(int argc, char *argv[]) {
-	return sceNotificationSend(SCE_NOTIFICATION_LOCAL_USER_ID_SYSTEM, true, json_payload);
-
+main(void) {
+  return sceNotificationSend(SCE_NOTIFICATION_LOCAL_USER_ID_SYSTEM,
+			     true, toast_tmpl);
 }
 
