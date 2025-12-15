@@ -1053,6 +1053,24 @@ kernel_set_ucred_uid(int pid, unsigned int uid) {
 
 
 int
+kernel_get_ucred_ruid(int pid) {
+  unsigned long ucred = 0;
+  int ruid = -1;
+
+  if(!(ucred=kernel_get_proc_ucred(pid))) {
+    return -1;
+  }
+
+  if(kernel_copyout(ucred + KERNEL_OFFSET_UCRED_CR_RUID, &ruid,
+		    sizeof(ruid))) {
+    return -1;
+  }
+
+  return ruid;
+}
+
+
+int
 kernel_set_ucred_ruid(int pid, unsigned int ruid) {
   unsigned long ucred = 0;
 
