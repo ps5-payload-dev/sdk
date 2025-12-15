@@ -1158,6 +1158,24 @@ kernel_set_ucred_rgid(int pid, unsigned int rgid) {
 
 
 int
+kernel_get_ucred_svgid(int pid) {
+  unsigned long ucred = 0;
+  int svgid = -1;
+
+  if(!(ucred=kernel_get_proc_ucred(pid))) {
+    return -1;
+  }
+
+  if(kernel_copyout(ucred + KERNEL_OFFSET_UCRED_CR_SVGID, &svgid,
+		    sizeof(svgid))) {
+    return -1;
+  }
+
+  return svgid;
+}
+
+
+int
 kernel_set_ucred_svgid(int pid, unsigned int svgid) {
   unsigned long ucred = 0;
 

@@ -119,6 +119,8 @@ int32_t kernel_set_ucred_svuid(pid_t pid, uid_t svuid);
 
 gid_t   kernel_get_ucred_rgid(pid_t pid);
 int32_t kernel_set_ucred_rgid(pid_t pid, gid_t rgid);
+
+gid_t   kernel_get_ucred_svgid(pid_t pid);
 int32_t kernel_set_ucred_svgid(pid_t pid, gid_t svgid);
 
 __END_DECLS
