@@ -224,9 +224,9 @@ __rtld_find_file(const char *name, char* path) {
 
   strcpy(path, "/user/homebrew/lib/");
   strcat(path, name);
-    if(!__syscall(SYS_stat, path, buf)) {
-      return 0;
-    }
+  if(!__syscall(SYS_stat, path, buf)) {
+    return 0;
+  }
 
   path[0] = 0;
   return -1;
