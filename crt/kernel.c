@@ -1123,6 +1123,24 @@ kernel_set_ucred_svuid(int pid, unsigned int svuid) {
 
 
 int
+kernel_get_ucred_rgid(int pid) {
+  unsigned long ucred = 0;
+  int rgid = -1;
+
+  if(!(ucred=kernel_get_proc_ucred(pid))) {
+    return -1;
+  }
+
+  if(kernel_copyout(ucred + KERNEL_OFFSET_UCRED_CR_RGID, &rgid,
+		    sizeof(rgid))) {
+    return -1;
+  }
+
+  return rgid;
+}
+
+
+int
 kernel_set_ucred_rgid(int pid, unsigned int rgid) {
   unsigned long ucred = 0;
 
