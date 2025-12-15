@@ -58,6 +58,7 @@ jobs:
         $MAKE -C samples/list_files
         $MAKE -C samples/mntinfo
         $MAKE -C samples/notify
+        $MAKE -C samples/notify_debug
         $MAKE -C samples/ps
         $CMAKE -S samples/hello_cmake -B samples/hello_cmake/build
         $CMAKE --build samples/hello_cmake/build
