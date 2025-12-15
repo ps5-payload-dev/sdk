@@ -108,6 +108,7 @@ int32_t  kernel_set_proc_rootdir(pid_t pid, intptr_t vnode);
 intptr_t kernel_get_proc_jaildir(pid_t pid);
 int32_t  kernel_set_proc_jaildir(pid_t pid, intptr_t vnode);
 
+uid_t   kernel_get_ucred_uid(pid_t pid);
 int32_t kernel_set_ucred_uid(pid_t pid, uid_t uid);
 int32_t kernel_set_ucred_ruid(pid_t pid, uid_t ruid);
 int32_t kernel_set_ucred_svuid(pid_t pid, uid_t svuid);
