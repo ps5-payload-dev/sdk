@@ -28,6 +28,9 @@ for ARG in "$@"; do
     if [[ "$ARG" == "--shared" ]]; then
 	PIE=""
     fi
+    if [[ "$ARG" == "--static" ]]; then
+	PIE=""
+    fi
 done
 
 BIN_PATH="${LLVM_BINDIR}/ld.lld"
