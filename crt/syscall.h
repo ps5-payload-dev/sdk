@@ -45,10 +45,10 @@ along with this program; see the file COPYING. If not, see
 /**
  * Make a syscall.
  **/
-long __syscall(long sysno, ...);
+long __crt_syscall(long sysno, ...);
 
 
 /**
  * Initialize the syscall function.
  **/
-int __syscall_init(payload_args_t* args);
+int __crt_syscall_init(payload_args_t* args);

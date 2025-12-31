@@ -95,7 +95,7 @@ typedef struct rtld_so_lib {
 static void*
 mmap(void* addr, unsigned long len, int prot, int flags, int fd,
      unsigned long offset) {
-  return (void*)__syscall(SYS_mmap, addr, len, prot, flags, fd, offset);
+  return (void*)__crt_syscall(SYS_mmap, addr, len, prot, flags, fd, offset);
 }
 
 
@@ -107,7 +107,7 @@ mprotect(void* addr, unsigned long size, int prot) {
   if((prot & PROT_EXEC)) {
     return kernel_mprotect(-1, (unsigned long)addr, size, prot);
   } else {
-    return (int)__syscall(SYS_mprotect, addr, size, prot);
+    return (int)__crt_syscall(SYS_mprotect, addr, size, prot);
   }
 }
 
@@ -117,7 +117,7 @@ mprotect(void* addr, unsigned long size, int prot) {
  **/
 static int
 munmap(void* addr, unsigned long len) {
-  return (int)__syscall(SYS_munmap, addr, len);
+  return (int)__crt_syscall(SYS_munmap, addr, len);
 }
 
 
@@ -130,37 +130,37 @@ readfile(const char* path) {
   long len;
   int fd;
 
-  if((fd=(int)__syscall(SYS_open, path, 0)) < 0) {
+  if((fd=(int)__crt_syscall(SYS_open, path, 0)) < 0) {
     klog_perror("open");
     return 0;
   }
 
-  if((len=__syscall(SYS_lseek, fd, 0, SEEK_END)) < 0) {
+  if((len=__crt_syscall(SYS_lseek, fd, 0, SEEK_END)) < 0) {
     klog_perror("lseek");
-    __syscall(SYS_close, fd);
+    __crt_syscall(SYS_close, fd);
     return 0;
   }
 
-  if(__syscall(SYS_lseek, fd, 0, SEEK_SET) < 0) {
+  if(__crt_syscall(SYS_lseek, fd, 0, SEEK_SET) < 0) {
     klog_perror("lseek");
-    __syscall(SYS_close, fd);
+    __crt_syscall(SYS_close, fd);
     return 0;
   }
 
   if(!(buf=malloc(len))) {
     klog_perror("malloc");
-    __syscall(SYS_close, fd);
+    __crt_syscall(SYS_close, fd);
     return 0;
   }
 
-  if(__syscall(SYS_read, fd, buf, len) != len) {
+  if(__crt_syscall(SYS_read, fd, buf, len) != len) {
     klog_perror("read");
     free(buf);
-    __syscall(SYS_close, fd);
+    __crt_syscall(SYS_close, fd);
     return 0;
   }
 
-  if(__syscall(SYS_close, fd) < 0) {
+  if(__crt_syscall(SYS_close, fd) < 0) {
     klog_perror("close");
     free(buf);
     return 0;

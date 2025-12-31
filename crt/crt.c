@@ -52,7 +52,7 @@ payload_init(payload_args_t *args) {
   int *__isthreaded = 0;
   int error = 0;
 
-  if((error=__syscall_init(args))) {
+  if((error=__crt_syscall_init(args))) {
     return error;
   }
   if((error=__kernel_init(args))) {

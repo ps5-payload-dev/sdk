@@ -400,7 +400,7 @@ payload_destroy(rtld_lib_t* ctx) {
 rtld_lib_t*
 __rtld_payload_new(const char *soname) {
   rtld_payload_lib_t* lib = calloc(1, sizeof(rtld_payload_lib_t));
-  int pid = __syscall(SYS_getpid);
+  int pid = __crt_syscall(SYS_getpid);
 
   lib->open     = payload_open;
   lib->init     = payload_init;
@@ -414,7 +414,7 @@ __rtld_payload_new(const char *soname) {
   lib->mapsize  = __image_end - __image_start;
 
   strcpy(lib->soname, soname);
-  __syscall(0x268, pid, lib->soname, 1024);
+  __crt_syscall(0x268, pid, lib->soname, 1024);
 
   return (rtld_lib_t*)lib;
 }

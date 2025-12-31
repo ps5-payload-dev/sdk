@@ -19,7 +19,8 @@ along with this program; see the file COPYING. If not, see
 
 static __attribute__ ((used)) long ptr_syscall = 0;
 
-void __syscall() {
+void
+__crt_syscall() {
   asm(".intel_syntax noprefix\n"
       "  mov rax, rdi\n"
       "  mov rdi, rsi\n"
@@ -34,7 +35,7 @@ void __syscall() {
 
 
 int
-__syscall_init(payload_args_t *args) {
+__crt_syscall_init(payload_args_t *args) {
   int (*sceKernelDlsym)(int, const char*, void*) = 0;
 
   if(args->sys_dynlib_dlsym(0x1, "sceKernelDlsym", &sceKernelDlsym)) {

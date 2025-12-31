@@ -170,29 +170,29 @@ __rtld_find_file(const char *name, char* path) {
 
   path[0] = 0;
   if(name[0] == '/') {
-    if(!(err=__syscall(SYS_stat, name, buf))) {
+    if(!(err=__crt_syscall(SYS_stat, name, buf))) {
       strcpy(path, name);
     }
     return err;
   }
 
   sprintf(path, "/system/priv/lib/%s", name);
-  if(!__syscall(SYS_stat, path, buf)) {
+  if(!__crt_syscall(SYS_stat, path, buf)) {
     return 0;
   }
 
   sprintf(path, "/system/common/lib/%s", name);
-  if(!__syscall(SYS_stat, path, buf)) {
+  if(!__crt_syscall(SYS_stat, path, buf)) {
     return 0;
   }
 
   sprintf(path, "/system_ex/priv_ex/lib/%s", name);
-  if(!__syscall(SYS_stat, path, buf)) {
+  if(!__crt_syscall(SYS_stat, path, buf)) {
     return 0;
   }
 
   sprintf(path, "/system_ex/common_ex/lib/%s", name);
-  if(!__syscall(SYS_stat, path, buf)) {
+  if(!__crt_syscall(SYS_stat, path, buf)) {
     return 0;
   }
 
@@ -204,7 +204,7 @@ __rtld_find_file(const char *name, char* path) {
 	path[off+1] = 0;
 	strcat(path, name);
 	off = 0;
-	if(!__syscall(SYS_stat, path, buf)) {
+	if(!__crt_syscall(SYS_stat, path, buf)) {
 	  return 0;
 	}
       }
@@ -213,17 +213,17 @@ __rtld_find_file(const char *name, char* path) {
 
   strcpy(path, "/user/homebrew/lib/");
   strcat(path, name);
-  if(!__syscall(SYS_stat, path, buf)) {
+  if(!__crt_syscall(SYS_stat, path, buf)) {
     return 0;
   }
 
   cwd[0] = 0;
-  __syscall(SYS___getcwd, cwd, sizeof(cwd));
+  __crt_syscall(SYS___getcwd, cwd, sizeof(cwd));
   if(cwd[0]) {
     strcpy(path, cwd);
     strcat(path, "/");
     strcat(path, name);
-    if(!__syscall(SYS_stat, path, buf)) {
+    if(!__crt_syscall(SYS_stat, path, buf)) {
       return 0;
     }
   }

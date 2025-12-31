@@ -31,6 +31,21 @@ syscall() {
 }
 
 void
+__syscall() {
+  asm(".intel_syntax noprefix\n"
+    "  mov rax, rdi\n"
+    "  mov rdi, rsi\n"
+    "  mov rsi, rdx\n"
+    "  mov rdx, rcx\n"
+    "  mov r10, r8\n"
+    "  mov r8,  r9\n"
+    "  mov r9,  qword ptr [rsp + 8]\n"
+    "  syscall\n"
+    "  ret\n"
+    );
+}
+
+void
 fork() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 2\n"

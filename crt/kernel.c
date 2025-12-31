@@ -139,7 +139,7 @@ kernel_get_fw_version(void) {
   unsigned long size = sizeof(mib);
   unsigned int version = 0;
 
-  if(__syscall(SYS_sysctl, mib, 2, &version, &size, 0, 0)) {
+  if(__crt_syscall(SYS_sysctl, mib, 2, &version, &size, 0, 0)) {
     return 0;
   }
 
@@ -386,13 +386,13 @@ kernel_write(unsigned long addr, unsigned long *data) {
   victim_buf[1] = 0;
   victim_buf[2] = 0;
 
-  if(__syscall(SYS_setsockopt, MASTER_SOCK, IPPROTO_IPV6, IPV6_PKTINFO,
-	       victim_buf, 0x14)) {
+  if(__crt_syscall(SYS_setsockopt, MASTER_SOCK, IPPROTO_IPV6, IPV6_PKTINFO,
+		   victim_buf, 0x14)) {
     return -1;
   }
 
-  if(__syscall(SYS_setsockopt, VICTIM_SOCK, IPPROTO_IPV6, IPV6_PKTINFO,
-	       data, 0x14)) {
+  if(__crt_syscall(SYS_setsockopt, VICTIM_SOCK, IPPROTO_IPV6, IPV6_PKTINFO,
+		   data, 0x14)) {
     return -1;
   }
 
@@ -425,7 +425,7 @@ kernel_copyin(const void *uaddr, unsigned long kaddr, unsigned long len) {
   }
 
   // Perform write across pipe
-  if(__syscall(SYS_write, rw_pipe[1], uaddr, len) < 0) {
+  if(__crt_syscall(SYS_write, rw_pipe[1], uaddr, len) < 0) {
     return -1;
   }
 
@@ -458,7 +458,7 @@ kernel_copyout(unsigned long kaddr, void *uaddr, unsigned long len) {
   }
 
   // Perform read across pipe
-  if(__syscall(SYS_read, rw_pipe[0], uaddr, len) < 0) {
+  if(__crt_syscall(SYS_read, rw_pipe[0], uaddr, len) < 0) {
     return -1;
   }
 
@@ -564,7 +564,7 @@ kernel_get_proc(int pid) {
   unsigned long next = 0;
 
   if(pid <= 0) {
-    pid = __syscall(SYS_getpid);
+    pid = __crt_syscall(SYS_getpid);
   }
 
   for(int i=0; i<PROC_CACHE_SIZE; i++) {
@@ -611,7 +611,7 @@ kernel_get_proc_thread(int pid, int tid) {
   unsigned long proc = kernel_get_proc(pid);
 
   if(tid < 0) {
-    __syscall(0x1b0, &tid);
+    __crt_syscall(0x1b0, &tid);
   }
 
   for(long thr=kernel_getlong(proc+0x10); thr; thr=kernel_getlong(thr+0x10)) {
@@ -851,10 +851,10 @@ kernel_dynlib_resolve(int pid, int handle, const char *nid) {
   }
 
   buf_size = dynsec.symtabsize + dynsec.strtabsize;
-  if((buf_start=(char*)__syscall(SYS_mmap, 0l, buf_size,
-                                 PROT_READ | PROT_WRITE,
-                                 MAP_ANONYMOUS | MAP_PRIVATE,
-                                 -1, 0l)) == MAP_FAILED) {
+  if((buf_start=(char*)__crt_syscall(SYS_mmap, 0l, buf_size,
+				     PROT_READ | PROT_WRITE,
+				     MAP_ANONYMOUS | MAP_PRIVATE,
+				     -1, 0l)) == MAP_FAILED) {
     return 0;
   }
 
@@ -862,11 +862,11 @@ kernel_dynlib_resolve(int pid, int handle, const char *nid) {
   strtab = buf_start + dynsec.symtabsize;
 
   if(kernel_copyout(dynsec.symtab, symtab, dynsec.symtabsize) < 0) {
-    __syscall(SYS_munmap, buf_start, buf_size);
+    __crt_syscall(SYS_munmap, buf_start, buf_size);
     return 0;
   }
   if(kernel_copyout(dynsec.strtab, strtab, dynsec.strtabsize) < 0) {
-    __syscall(SYS_munmap, buf_start, buf_size);
+    __crt_syscall(SYS_munmap, buf_start, buf_size);
     return 0;
   }
 
@@ -881,7 +881,7 @@ kernel_dynlib_resolve(int pid, int handle, const char *nid) {
     }
   }
 
-  __syscall(SYS_munmap, buf_start, buf_size);
+  __crt_syscall(SYS_munmap, buf_start, buf_size);
 
   return vaddr;
 }

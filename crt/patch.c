@@ -25,7 +25,7 @@ along with this program; see the file COPYING. If not, see
  **/
 static int
 patch_syscall_permissions(void) {
-  int pid = __syscall(SYS_getpid);
+  int pid = __crt_syscall(SYS_getpid);
   unsigned long kproc;
   unsigned long kaddr;
   unsigned long uaddr;
@@ -59,7 +59,7 @@ patch_syscall_permissions(void) {
  **/
 static int
 patch_kernel_ucred(void) {
-  int pid = __syscall(SYS_getpid);
+  int pid = __crt_syscall(SYS_getpid);
   unsigned char caps[16];
   unsigned long attrs;
 
