@@ -158,6 +158,8 @@ __rtld_lib_soname2lib(rtld_lib_t* ctx, const char *soname) {
 
 int
 __rtld_find_file(const char *name, char* path) {
+  unsigned long random_word_len = 0xff;
+  char random_word[0xff];
   unsigned long off = 0;
   const char *ldpaths;
   char buf[0x100];
@@ -194,6 +196,28 @@ __rtld_find_file(const char *name, char* path) {
   sprintf(path, "/system_ex/common_ex/lib/%s", name);
   if(!__crt_syscall(SYS_stat, path, buf)) {
     return 0;
+  }
+
+  if(!__crt_syscall(SYS_randomized_path, 0, &random_word, &random_word_len)) {
+    sprintf(path, "/%s/priv/lib/%s", random_word, name);
+    if(!__crt_syscall(SYS_stat, path, buf)) {
+      return 0;
+    }
+
+    sprintf(path, "/%s/common/lib/%s", random_word, name);
+    if(!__crt_syscall(SYS_stat, path, buf)) {
+      return 0;
+    }
+
+    sprintf(path, "/%s/priv_ex/lib/%s", random_word, name);
+    if(!__crt_syscall(SYS_stat, path, buf)) {
+      return 0;
+    }
+
+    sprintf(path, "/%s/common_ex/lib/%s", random_word, name);
+    if(!__crt_syscall(SYS_stat, path, buf)) {
+      return 0;
+    }
   }
 
   if((ldpaths=getenv("LD_LIBRARY_PATH"))) {

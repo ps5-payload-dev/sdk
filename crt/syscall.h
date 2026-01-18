@@ -22,24 +22,25 @@ along with this program; see the file COPYING. If not, see
 /**
  * syscall number definitions.
  **/
-#define SYS_read        3
-#define SYS_write       4
-#define SYS_open        5
-#define SYS_close       6
-#define SYS_getpid      20
-#define SYS_access      33
-#define SYS_munmap      73
-#define SYS_mprotect    74
-#define SYS_setsockopt  105
-#define SYS_stat        188
-#define SYS_sysctl      202
-#define SYS___getcwd    326
-#define SYS_mmap        477
-#define SYS_lseek       478
-#define SYS_mdbg_call   573
-#define SYS_sprx_dlsym  591
-#define SYS_sprx_load   594
-#define SYS_sprx_unload 595
+#define SYS_read             3
+#define SYS_write            4
+#define SYS_open             5
+#define SYS_close            6
+#define SYS_getpid           20
+#define SYS_access           33
+#define SYS_munmap           73
+#define SYS_mprotect         74
+#define SYS_setsockopt       105
+#define SYS_stat             188
+#define SYS_sysctl           202
+#define SYS___getcwd         326
+#define SYS_mmap             477
+#define SYS_lseek            478
+#define SYS_mdbg_call        573
+#define SYS_sprx_dlsym       591
+#define SYS_sprx_load        594
+#define SYS_sprx_unload      595
+#define SYS_randomized_path  602
 
 
 /**
