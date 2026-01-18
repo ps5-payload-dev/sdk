@@ -211,18 +211,13 @@ __rtld_find_file(const char *name, char* path) {
     }
   }
 
-  strcpy(path, "/user/homebrew/lib/");
-  strcat(path, name);
+  sprintf(path, "/user/homebrew/lib/%s", name);
   if(!__crt_syscall(SYS_stat, path, buf)) {
     return 0;
   }
 
-  cwd[0] = 0;
-  __crt_syscall(SYS___getcwd, cwd, sizeof(cwd));
-  if(cwd[0]) {
-    strcpy(path, cwd);
-    strcat(path, "/");
-    strcat(path, name);
+  if(! __crt_syscall(SYS___getcwd, cwd, sizeof(cwd))) {
+    sprintf(path, "%s/%s", cwd, name);
     if(!__crt_syscall(SYS_stat, path, buf)) {
       return 0;
     }
