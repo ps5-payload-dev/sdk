@@ -1253,10 +1253,6 @@ kernel_get_vmem_entry(int pid, unsigned long addr) {
   unsigned long start;
   unsigned long end;
 
-  if(!KERNEL_OFFSET_PROC_P_VMSPACE) {
-    return 0;
-  }
-
   if(!(proc_addr=kernel_get_proc(pid))) {
     return 0;
   }
