@@ -26,8 +26,10 @@ along with this program; see the file COPYING. If not, see
 #define IPPROTO_IPV6 41
 #define IPV6_PKTINFO 46
 
+#define ESRCH  3
 #define EBADF  9
 #define EFAULT 14
+#define EINVAL 22
 #define ENOSYS 78
 
 #define MAP_ANONYMOUS 0x1000
@@ -82,6 +84,14 @@ static int rw_pair[2] = {-1, -1};
 
 #define MASTER_SOCK rw_pair[0]
 #define VICTIM_SOCK rw_pair[1]
+
+
+/**
+ * function in libkernel that returns a pointer to errno.
+ **/
+static int* (*__error)(void) = 0;
+
+#define SET_ERRNO(val) if(__error) {*__error() = val;}
 
 
 /**
@@ -366,6 +376,12 @@ __kernel_init(payload_args_t* args) {
   KERNEL_ADDRESS_QA_FLAGS     = KERNEL_ADDRESS_SECURITY_FLAGS + 0x24;
   KERNEL_ADDRESS_UTOKEN_FLAGS = KERNEL_ADDRESS_SECURITY_FLAGS + 0x8C;
 
+  if(!KERNEL_DLSYM(0x1, __error)) {
+    if(!KERNEL_DLSYM(0x2001, __error)) {
+      return -1;
+    }
+  }
+
   return 0;
 }
 
@@ -379,6 +395,7 @@ kernel_write(unsigned long addr, unsigned long *data) {
 
   // sanity check for invalid kernel pointers
   if(!(addr & 0xffff000000000000)) {
+    SET_ERRNO(EFAULT);
     return -1;
   }
 
@@ -405,6 +422,7 @@ kernel_copyin(const void *uaddr, unsigned long kaddr, unsigned long len) {
   unsigned long write_buf[3];
 
   if(!kaddr || !uaddr || !len) {
+    SET_ERRNO(EINVAL);
     return -1;
   }
 
@@ -438,6 +456,7 @@ kernel_copyout(unsigned long kaddr, void *uaddr, unsigned long len) {
   unsigned long write_buf[3];
 
   if(!kaddr || !uaddr || !len) {
+    SET_ERRNO(EINVAL);
     return -1;
   }
 
@@ -540,7 +559,9 @@ kernel_set_qaflags(const unsigned char qaflags[16]) {
   if(kernel_get_fw_version() < 0x7000000) {
     return kernel_copyin(qaflags, KERNEL_ADDRESS_QA_FLAGS, 16);
   } else {
-    return -ENOSYS; // currently not supported
+    // currently not supported
+    SET_ERRNO(ENOSYS);
+    return -1;
   }
 }
 
@@ -594,6 +615,11 @@ kernel_get_proc(int pid) {
     addr = next;
   }
 
+  if(!addr) {
+    SET_ERRNO(ESRCH);
+    return 0;
+  }
+
   proc_cache_counter++;
   if(proc_cache_counter >= PROC_CACHE_SIZE) {
     proc_cache_counter = 0;
@@ -610,6 +636,10 @@ unsigned long
 kernel_get_proc_thread(int pid, int tid) {
   unsigned long proc = kernel_get_proc(pid);
 
+  if(!proc) {
+    return 0;
+  }
+
   if(tid < 0) {
     __crt_syscall(0x1b0, &tid);
   }
@@ -619,6 +649,8 @@ kernel_get_proc_thread(int pid, int tid) {
       return thr;
     }
   }
+
+  SET_ERRNO(EINVAL);
 
   return 0;
 }
@@ -642,6 +674,7 @@ kernel_dynlib_obj(int pid, unsigned int handle, dynlib_obj_t* obj) {
       return -1;
     }
     if(!kaddr) {
+      SET_ERRNO(EINVAL);
       return -1;
     }
 
@@ -680,6 +713,7 @@ kernel_dynlib_find_handle(int pid, unsigned long addr, unsigned int* handle) {
       return -1;
     }
     if(!kaddr) {
+      SET_ERRNO(EINVAL);
       return -1;
     }
 
@@ -731,6 +765,7 @@ kernel_dynlib_handle(int pid, const char* basename, unsigned int *handle) {
       return -1;
     }
     if(!kaddr) {
+      SET_ERRNO(EINVAL);
       return -1;
     }
     if(kernel_copyout(kaddr + __builtin_offsetof(dynlib_obj_t, path),
@@ -1261,6 +1296,7 @@ kernel_get_vmem_entry(int pid, unsigned long addr) {
     }
   }
 
+  SET_ERRNO(EFAULT);
   return 0;
 }
 
@@ -1293,12 +1329,17 @@ kernel_get_vmem_protection(int pid, unsigned long addr, unsigned long len) {
     if(prot < 0) {
       prot = vm_prot;
     } else if((prot & vm_prot) != prot) {
+      SET_ERRNO(EINVAL);
       return -1;
     }
 
     if(kernel_copyout(vm_entry + 0x08, &vm_entry, sizeof(vm_entry))) {
       return -1;
     }
+  }
+
+  if(prot < 0) {
+    SET_ERRNO(EFAULT);
   }
 
   return prot;
@@ -1313,6 +1354,7 @@ kernel_set_vmem_protection(int pid, unsigned long addr, unsigned long len, int p
   int first = 1;
 
   if(prot < 0) {
+    SET_ERRNO(EINVAL);
     return -1;
   }
   if(!(vm_entry=kernel_get_vmem_entry(pid, addr))) {
