@@ -55,8 +55,8 @@ extern const off_t KERNEL_OFFSET_FILEDESC_FD_JDIR;
 
 uint32_t kernel_get_fw_version(void);
 
-int32_t  kernel_copyin(const void *udaddr, intptr_t kaddr, size_t len);
-int32_t  kernel_copyout(intptr_t kaddr, void *udaddr, size_t  len);
+int32_t kernel_copyin(const void *udaddr, intptr_t kaddr, size_t len);
+int32_t kernel_copyout(intptr_t kaddr, void *udaddr, size_t  len);
 
 int32_t kernel_setlong(intptr_t addr, uint64_t val);
 int32_t kernel_setint(intptr_t addr, uint32_t val);
@@ -80,7 +80,7 @@ int kernel_mprotect(pid_t pid, intptr_t addr, size_t size, int prot);
 
 int kernel_overlap_sockets(pid_t pid, int master_sock, int victim_sock);
 
-int kernel_dynlib_handle(pid_t pid, const char* basename, uint32_t *handle);
+int      kernel_dynlib_handle(pid_t pid, const char* basename, uint32_t *handle);
 intptr_t kernel_dynlib_dlsym(pid_t pid, uint32_t handle, const char *sym);
 intptr_t kernel_dynlib_resolve(pid_t pid, uint32_t handle, const char *nid);
 intptr_t kernel_dynlib_mapbase_addr(pid_t pid, uint32_t handle);
