@@ -25,7 +25,8 @@ if [ -x "$(command -v "${LLVM_CONFIG}")" ]; then
     fi
 fi
 
-CANDIDATES=("llvm-config-20"
+CANDIDATES=("llvm-config-21"
+	    "llvm-config-20"
 	    "llvm-config-19"
 	    "llvm-config-18"
             "llvm-config-17"

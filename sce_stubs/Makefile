@@ -17,7 +17,8 @@
 PYTHON  ?= python3
 DESTDIR ?= /opt/ps5-payload-sdk
 
-LLVM_CONFIG_CANDIDATES := llvm-config-20 llvm-config-19 llvm-config-18 \
+LLVM_CONFIG_CANDIDATES := llvm-config-21 \
+                          llvm-config-20 llvm-config-19 llvm-config-18 \
                           llvm-config-17 llvm-config-16 llvm-config-15 \
                           llvm-config
 LLVM_CONFIG_CANDIDATES := $(foreach LCC,$(LLVM_CONFIG_CANDIDATES), \
