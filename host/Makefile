@@ -21,10 +21,10 @@ TOOLCHAINS := toolchain/prospero.sh \
               toolchain/prospero.cmake \
               toolchain/prospero.ini
 
-TOOLS := bin/cmake-bin-wrapper \
-         bin/llvm-bin-wrapper \
-         bin/meson-bin-wrapper \
-         bin/llvm-config \
+TOOLS := bin/prospero-cmake \
+         bin/prospero-llvm \
+         bin/prospero-meson \
+         bin/prospero-llvm-config \
          bin/prospero-clang \
          bin/prospero-clang++ \
          bin/prospero-deploy \
@@ -64,17 +64,15 @@ install-tools: $(TOOLS)
 	install $^ $(DESTDIR)/bin
 
 install-symlinks:
-	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/llvm-ar
-	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/llvm-nm
-	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/llvm-objcopy
-	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/llvm-ranlib
-	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/llvm-strip
-	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/clang
-	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/clang++
-	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/clang-cpp
-	ln -sf llvm-bin-wrapper $(DESTDIR)/bin/ld.lld
-	ln -sf cmake-bin-wrapper $(DESTDIR)/bin/prospero-cmake
-	ln -sf meson-bin-wrapper $(DESTDIR)/bin/prospero-meson
+	ln -sf prospero-llvm $(DESTDIR)/bin/llvm-ar
+	ln -sf prospero-llvm $(DESTDIR)/bin/llvm-nm
+	ln -sf prospero-llvm $(DESTDIR)/bin/llvm-objcopy
+	ln -sf prospero-llvm $(DESTDIR)/bin/llvm-ranlib
+	ln -sf prospero-llvm $(DESTDIR)/bin/llvm-strip
+	ln -sf prospero-llvm $(DESTDIR)/bin/clang
+	ln -sf prospero-llvm $(DESTDIR)/bin/clang++
+	ln -sf prospero-llvm $(DESTDIR)/bin/clang-cpp
+	ln -sf prospero-llvm $(DESTDIR)/bin/ld.lld
 	ln -sf llvm-ar $(DESTDIR)/bin/prospero-ar
 	ln -sf llvm-nm $(DESTDIR)/bin/prospero-nm
 	ln -sf llvm-objcopy $(DESTDIR)/bin/prospero-objcopy

@@ -63,7 +63,7 @@ if [[ "${TU}" == "" ]]; then
 fi
 
 # clang++-20 started appending crt objects when linking
-if [[ $($SCRIPT_DIR/llvm-config --version | cut -d. -f1) -ge 20 ]]; then
+if [[ $($SCRIPT_DIR/prospero-llvm-config --version | cut -d. -f1) -ge 20 ]]; then
     export SCE_PROSPERO_SDK_DIR="${PS5_PAYLOAD_SDK}/"
     LIBS_CRT=""
 fi

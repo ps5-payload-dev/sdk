@@ -21,8 +21,6 @@ SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 PS5_PAYLOAD_SDK="$(realpath "${SCRIPT_DIR}/..")"
 PS5_PAYLOAD_HBROOT="${PS5_PAYLOAD_SDK}/target/user/homebrew"
 
-LLVM_BINDIR=$("${SCRIPT_DIR}/llvm-config" --bindir)
-
 PIE="-pie"
 LDSCRIPT="-T${PS5_PAYLOAD_SDK}/ldscripts/elf_x86_64.x"
 
@@ -38,6 +36,7 @@ for ARG in "$@"; do
     fi
 done
 
+LLVM_BINDIR=$("${SCRIPT_DIR}/prospero-llvm-config" --bindir)
 BIN_PATH="${LLVM_BINDIR}/ld.lld"
 exec "${BIN_PATH}" \
      -m elf_x86_64 $PIE $LDSCRIPT --eh-frame-hdr \
