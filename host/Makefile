@@ -38,9 +38,12 @@ LDSCRIPTS := elf_x86_64.x
 
 .PHONY: all clean install
 
+all:
+
 install: install-tools install-symlinks install-ldscripts install-toolchains
 
 install-ldscripts: $(LDSCRIPTS)
+	install -d $(DESTDIR)
 	install -d $(DESTDIR)/ldscripts
 	install $^ $(DESTDIR)/ldscripts
 	install -d $(DESTDIR)/target/lib
@@ -48,14 +51,18 @@ install-ldscripts: $(LDSCRIPTS)
 	ln -sf ../../ldscripts/elf_x86_64.x $(DESTDIR)/target/lib/prx.script
 
 install-toolchains: $(TOOLCHAINS)
+	install -d $(DESTDIR)
 	install -d $(DESTDIR)/toolchain
 	install $^ $(DESTDIR)/toolchain
 
 install-tools: $(TOOLS)
+	install -d $(DESTDIR)
 	install -d $(DESTDIR)/bin
 	install $^ $(DESTDIR)/bin
 
 install-symlinks:
+	install -d $(DESTDIR)
+	install -d $(DESTDIR)/bin
 	ln -sf prospero-llvm $(DESTDIR)/bin/llvm-ar
 	ln -sf prospero-llvm $(DESTDIR)/bin/llvm-nm
 	ln -sf prospero-llvm $(DESTDIR)/bin/llvm-objcopy
