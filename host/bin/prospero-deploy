@@ -24,7 +24,7 @@ INTERACTIVE=""
 
 show_help() {
     cat <<EOF
-Usage: $(basename "$0") -h HOST [-p PORT] [-i] PAYLOAD_PATH
+Usage: $(basename "$0") -h HOST [-p PORT] [-i] PAYLOAD_PATH_OR_URI
 
 Options:
   -h HOST        Set the host address (defaults to \$PS5_HOST)
@@ -33,7 +33,7 @@ Options:
   -H, --help     Show this help message and exit
 
 Arguments:
-  PAYLOAD_PATH   Path to the payload
+  PAYLOAD_PATH   Path or URI to the payload
 EOF
 }
 
@@ -68,7 +68,15 @@ fi
 
 
 if [[ -z $INTERACTIVE ]]; then
-    socat -t 9999999 - TCP:$HOST:$PORT < $1
+    if [ -e "$1" ]; then
+	socat -t 9999999 - TCP:$HOST:$PORT < $1
+    else
+	echo "$1" | socat -t 9999999 - TCP:$HOST:$PORT
+    fi
 else
-    { cat $1 && cat /dev/stdin; } | socat - TCP:$HOST:$PORT
+    if [ -e "$1" ]; then
+	{ cat "$1" && cat /dev/stdin; } | socat - TCP:$HOST:$PORT
+    else
+	{ echo "$1" && cat /dev/stdin; } | socat - TCP:$HOST:$PORT
+    fi
 fi
