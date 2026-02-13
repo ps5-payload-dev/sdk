@@ -27,6 +27,7 @@ $SCRIPTDIR/libcxx.sh || exit 1
 
 MAKE_SAMPLES=("arbitrary_syscall"
 	      "browser"
+	      "hello_argv"
 	      "hello_cxx"
 	      "hello_cxx23"
 	      "hello_dlfcn"

@@ -47,6 +47,7 @@ jobs:
         source $PS5_PAYLOAD_SDK/toolchain/prospero.sh
         $MAKE -C samples/arbitrary_syscall
         $MAKE -C samples/browser
+        $MAKE -C samples/hello_argv
         $MAKE -C samples/hello_cxx
         $MAKE -C samples/hello_cxx23
         $MAKE -C samples/hello_dlfcn
