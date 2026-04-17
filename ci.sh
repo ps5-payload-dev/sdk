@@ -41,7 +41,8 @@ MAKE_SAMPLES=("arbitrary_syscall"
 	      "mntinfo"
 	      "notify"
 	      "notify_debug"
-	      "ps")
+	      "ps"
+	      "relocatable_linking")
 
 CMAKE_SAMPLES=("hello_cmake"
 	      )
