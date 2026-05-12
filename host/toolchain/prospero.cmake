@@ -77,4 +77,6 @@ else()
 
     set(PKG_CONFIG_EXECUTABLE ${PS5_PAYLOAD_SDK}/bin/prospero-pkg-config CACHE PATH "")
     set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
+    set(PS5_DEPLOY ${PS5_PAYLOAD_SDK}/bin/prospero-deploy CACHE PATH "")
+    set(PAYLOAD_DEPLOY ${PS5_DEPLOY})
 endif()
