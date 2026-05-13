@@ -67,6 +67,8 @@ const unsigned long KERNEL_OFFSET_UCRED_CR_SVUID = 0x0C;
 const unsigned long KERNEL_OFFSET_UCRED_CR_RGID  = 0x14;
 const unsigned long KERNEL_OFFSET_UCRED_CR_SVGID = 0x18;
 
+const unsigned long KERNEL_OFFSET_UCRED_CR_PRISON = 0x30;
+
 const unsigned long KERNEL_OFFSET_UCRED_CR_SCEAUTHID = 0x58;
 const unsigned long KERNEL_OFFSET_UCRED_CR_SCECAPS   = 0x60;
 const unsigned long KERNEL_OFFSET_UCRED_CR_SCEATTRS  = 0x83;
@@ -1022,6 +1024,41 @@ kernel_get_ucred_authid(int pid) {
   }
 
   return authid;
+}
+
+
+unsigned long
+kernel_get_ucred_prison(int pid) {
+  unsigned long prison = 0;
+  unsigned long ucred = 0;
+
+  if(!(ucred=kernel_get_proc_ucred(pid))) {
+    return 0;
+  }
+
+  if(kernel_copyout(ucred + KERNEL_OFFSET_UCRED_CR_PRISON, &prison,
+		    sizeof(prison))) {
+    return 0;
+  }
+
+  return prison;
+}
+
+
+int
+kernel_set_ucred_prison(int pid, unsigned long prison) {
+  unsigned long ucred = 0;
+
+  if(!(ucred=kernel_get_proc_ucred(pid))) {
+    return -1;
+  }
+
+  if(kernel_copyin(&prison, ucred + KERNEL_OFFSET_UCRED_CR_PRISON,
+		   sizeof(prison))) {
+    return -1;
+  }
+
+  return 0;
 }
 
 

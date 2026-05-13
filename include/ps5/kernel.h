@@ -123,5 +123,8 @@ int32_t kernel_set_ucred_rgid(pid_t pid, gid_t rgid);
 gid_t   kernel_get_ucred_svgid(pid_t pid);
 int32_t kernel_set_ucred_svgid(pid_t pid, gid_t svgid);
 
+intptr_t kernel_get_ucred_prison(pid_t pid);
+int      kernel_set_ucred_prison(pid_t pid, intptr_t prison);
+
 __END_DECLS
 

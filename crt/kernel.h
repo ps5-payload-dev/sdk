@@ -138,6 +138,9 @@ int           kernel_set_ucred_authid(int pid, unsigned long authid);
 unsigned long kernel_get_ucred_attrs(int pid);
 int           kernel_set_ucred_attrs(int pid, unsigned long attrs);
 
+unsigned long kernel_get_ucred_prison(int pid);
+int           kernel_set_ucred_prison(int pid, unsigned long prison);
+
 int kernel_get_ucred_caps(int pid, unsigned char caps[16]);
 int kernel_set_ucred_caps(int pid, const unsigned char caps[16]);
 
