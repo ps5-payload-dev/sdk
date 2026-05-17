@@ -33,6 +33,8 @@ typedef struct payload_args {
   intptr_t kdata_base_addr;
 
   int* payloadout;
+  
+  uint32_t flag;
 } payload_args_t;
 
 
