@@ -184,7 +184,7 @@ __kernel_init(payload_args_t* args) {
     return -EFAULT;
   }
 
-  int is_text = (strncmp((const char *)&args->flag, "TEXT", 4) == 0);
+  int is_text = (args->flag == 0x54455854); // 'T','E','X','T'
 
   switch(kernel_get_fw_version() & 0xffff0000) {
   case 0x01000000:
