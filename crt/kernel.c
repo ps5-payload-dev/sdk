@@ -46,9 +46,9 @@ along with this program; see the file COPYING. If not, see
 unsigned long KERNEL_ADDRESS_TEXT_BASE        = 0; // optional
 unsigned long KERNEL_ADDRESS_DATA_BASE        = 0; // provided by payload args
 unsigned long KERNEL_ADDRESS_ALLPROC          = 0; // needed by crt
-unsigned long KERNEL_ADDRESS_PRISON0          = 0; // needed by crt
 unsigned long KERNEL_ADDRESS_ROOTVNODE        = 0; // needed by crt
 unsigned long KERNEL_ADDRESS_SECURITY_FLAGS   = 0; // needed by crt
+unsigned long KERNEL_ADDRESS_PRISON0          = 0; // derived by crt
 unsigned long KERNEL_ADDRESS_UTOKEN_FLAGS     = 0; // derived by crt
 unsigned long KERNEL_ADDRESS_QA_FLAGS         = 0; // derived by crt
 unsigned long KERNEL_ADDRESS_TARGETID         = 0; // derived by crt
@@ -402,7 +402,6 @@ __kernel_init(payload_args_t* args) {
     KERNEL_ADDRESS_TEXT_BASE        = KERNEL_ADDRESS_DATA_BASE - 0x0CB0000;
     KERNEL_ADDRESS_ALLPROC          = KERNEL_ADDRESS_DATA_BASE + 0x28C5E00;
     KERNEL_ADDRESS_SECURITY_FLAGS   = KERNEL_ADDRESS_DATA_BASE + 0x0D99064;
-    KERNEL_ADDRESS_PRISON0          = KERNEL_ADDRESS_DATA_BASE + 0x1F36240;
     KERNEL_ADDRESS_ROOTVNODE        = KERNEL_ADDRESS_DATA_BASE + 0x3133510;
     KERNEL_ADDRESS_BUS_DATA_DEVICES = KERNEL_ADDRESS_DATA_BASE + 0x20981E8;
     KERNEL_OFFSET_VMSPACE_P_ROOT    = 0x1d0;
