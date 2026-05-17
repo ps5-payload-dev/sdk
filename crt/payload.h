@@ -16,6 +16,7 @@ along with this program; see the file COPYING. If not, see
 
 #pragma once
 
+#include <stdint.h>
 
 typedef struct payload_args {
   int (*sys_dynlib_dlsym)(int, const char*, void*);
