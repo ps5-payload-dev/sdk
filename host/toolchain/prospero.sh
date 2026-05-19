@@ -33,6 +33,8 @@ export PS5_CROSS_FIX_ROOT=${PS5_PAYLOAD_SDK}/bin/prospero-cross-fix-root
 export AS=${PS5_PAYLOAD_SDK}/bin/prospero-as
 export CC=${PS5_PAYLOAD_SDK}/bin/prospero-clang
 export CXX=${PS5_PAYLOAD_SDK}/bin/prospero-clang++
+export OBJC=${PS5_PAYLOAD_SDK}/bin/prospero-clang
+export OBJCXX=${PS5_PAYLOAD_SDK}/bin/prospero-clang++
 export LD=${PS5_PAYLOAD_SDK}/bin/prospero-lld
 
 export AR=${PS5_PAYLOAD_SDK}/bin/prospero-ar
