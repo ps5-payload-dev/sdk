@@ -23,7 +23,6 @@ typedef struct payload_args {
   long  kpipe_addr;
   long  kdata_base_addr;
   int  *payloadout;
-  unsigned int flag;
 } payload_args_t;
 
 

@@ -48,15 +48,21 @@ static void* jmpbuf[32];
  * Initialize payload runtime.
  **/
 static int
-payload_init(payload_args_t *args) {
+payload_init(payload_args_t *args, unsigned int flag) {
   int *__isthreaded = 0;
   int error = 0;
 
   if((error=__crt_syscall_init(args))) {
     return error;
   }
-  if((error=__kernel_init(args))) {
-    return error;
+  if(flag == 0x54455854) { // TEXT
+    if((error=__kernel_init_v1(args))) {
+      return error;
+    }
+  } else {
+    if((error=__kernel_init_v0(args))) {
+      return error;
+    }
   }
   if((error=__klog_init())) {
     return error;
@@ -194,7 +200,7 @@ payload_get_args(void) {
  * Entry-point invoked by the ELF loader.
  **/
 int
-_start(payload_args_t *args) {
+_start(payload_args_t *args, unsigned int flag) {
   int err;
 
   // clear .bss section
@@ -205,7 +211,7 @@ _start(payload_args_t *args) {
   payload_args = args;
 
   // init payload runtime
-  if((*args->payloadout=payload_init(args))) {
+  if((*args->payloadout=payload_init(args, flag))) {
     return payload_terminate();
   }
 
