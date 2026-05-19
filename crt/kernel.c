@@ -160,7 +160,7 @@ kernel_get_fw_version(void) {
 
 
 int
-__kernel_init(payload_args_t* args) {
+__kernel_init0(payload_args0_t* args) {
   if((rw_pair[0]=args->rwpair[0]) < 0) {
     return -EBADF;
   }
@@ -424,6 +424,27 @@ __kernel_init(payload_args_t* args) {
 
   return 0;
 }
+
+
+int
+__kernel_init1(payload_args1_t* args) {
+  // TODO
+  return -1;
+}
+
+
+int
+__kernel_init(payload_args0_t* args0, payload_args1_t* args1) {
+  if(args0) {
+    return __kernel_init0(args0);
+  }
+  if(args1) {
+    return __kernel_init1(args1);
+  }
+
+  return -1;
+}
+
 
 
 /**

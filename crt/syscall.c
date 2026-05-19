@@ -34,8 +34,8 @@ __crt_syscall() {
 }
 
 
-int
-__crt_syscall_init(payload_args_t *args) {
+static int
+__crt_syscall_init0(payload_args0_t *args) {
   int (*sceKernelDlsym)(int, const char*, void*) = 0;
 
   if(args->sys_dynlib_dlsym(0x1, "sceKernelDlsym", &sceKernelDlsym)) {
@@ -56,4 +56,28 @@ __crt_syscall_init(payload_args_t *args) {
   ptr_syscall += 0xa; // jump directly to the syscall instruction
 
   return 0;
+}
+
+
+static int
+__crt_syscall_init1(payload_args1_t *args) {
+  if(!args->pa_getpid) {
+    return -1;
+  }
+
+  ptr_syscall = args->pa_getpid + 0xa; // jump directly to the syscall instruction
+
+  return 0;
+}
+
+
+int
+__crt_syscall_init(payload_args0_t *args0, payload_args1_t *args1) {
+  if(args0) {
+    return __crt_syscall_init0(args0);
+  }
+  if(args1) {
+    return __crt_syscall_init1(args1);
+  }
+  return -1;
 }

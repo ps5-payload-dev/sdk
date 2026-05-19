@@ -40,7 +40,8 @@ extern int main(int argc, char* argv[], char *envp[]);
 /**
  * Remember the args passed to _start and the cpu state.
  **/
-static payload_args_t* payload_args = 0;
+static payload_args0_t* payload_args0 = 0;
+static payload_args1_t* payload_args1 = 0;
 static void* jmpbuf[32];
 
 
@@ -48,14 +49,14 @@ static void* jmpbuf[32];
  * Initialize payload runtime.
  **/
 static int
-payload_init(payload_args_t *args) {
+payload_init(payload_args0_t *args0, payload_args1_t *args1) {
   int *__isthreaded = 0;
   int error = 0;
 
-  if((error=__crt_syscall_init(args))) {
+  if((error=__crt_syscall_init(args0, args1))) {
     return error;
   }
-  if((error=__kernel_init(args))) {
+  if((error=__kernel_init(args0, args1))) {
     return error;
   }
   if((error=__klog_init())) {
@@ -94,6 +95,7 @@ payload_run(void) {
   char** argv = 0;
   int argc = 0;
   int err = 0;
+  int ret = 0;
 
   if((KERNEL_DLSYM(0x1, getargc) || KERNEL_DLSYM(0x2001, getargc)) &&
      (KERNEL_DLSYM(0x1, getargv) || KERNEL_DLSYM(0x2001, getargv))) {
@@ -131,7 +133,7 @@ payload_run(void) {
   }
 
   // run the actual payload
-  *payload_args->payloadout = main(argc, argv, environ);
+  ret = main(argc, argv, environ);
 
   // run .fini destructors
   if((err=__rtld_lib_fini(lib))) {
@@ -140,10 +142,12 @@ payload_run(void) {
     return err;
   }
 
-  err = __rtld_lib_close(lib);
-  __rtld_lib_destroy(lib);
+  if((err = __rtld_lib_close(lib))) {
+    __rtld_lib_destroy(lib);
+    return err;
+  }
 
-  return err;
+  return ret;
 }
 
 
@@ -151,17 +155,20 @@ payload_run(void) {
  * Terminate the payload.
  **/
 static int
-payload_terminate(void) {
+payload_terminate(int exit_code) {
   void (*exit)(int) = 0;
 
   // we are running inside a hijacked process, just return
   if(kernel_dynlib_dlsym(-1, 0x2001, "sceKernelDlsym")) {
-    return 0;
+    if(payload_args0) {
+      *payload_args0->payloadout = exit_code;
+    }
+    return exit_code;
   }
 
   // resolve and run exit
   if(KERNEL_DLSYM(0x2, exit)) {
-    exit(*payload_args->payloadout);
+    exit(exit_code);
   }
 
   // should not happend
@@ -176,7 +183,9 @@ payload_terminate(void) {
  **/
 void
 payload_exit(int exit_code) {
-  *payload_args->payloadout = exit_code;
+  if(payload_args0) {
+    *payload_args0->payloadout = exit_code;
+  }
   __builtin_longjmp(jmpbuf, 1);
 }
 
@@ -184,9 +193,9 @@ payload_exit(int exit_code) {
 /**
  * Provide a convenience function for accessing the payload args.
  **/
-payload_args_t*
+payload_args0_t*
 payload_get_args(void) {
-  return payload_args;
+  return payload_args0;
 }
 
 
@@ -194,28 +203,27 @@ payload_get_args(void) {
  * Entry-point invoked by the ELF loader.
  **/
 int
-_start(payload_args_t *args) {
-  int err;
+_start(payload_args0_t *args0, payload_args1_t *args1) {
+  int ret = -1;
 
   // clear .bss section
   for(unsigned char* bss=__bss_start; bss<__bss_end; bss++) {
     *bss = 0;
   }
 
-  payload_args = args;
+  payload_args0 = args0;
+  payload_args1 = args1;
 
   // init payload runtime
-  if((*args->payloadout=payload_init(args))) {
-    return payload_terminate();
+  if((ret=payload_init(args0, args1))) {
+    return payload_terminate(ret);
   }
 
   // run payload
   if(!__builtin_setjmp(jmpbuf)) {
-    if((err=payload_run())) {
-      *payload_args->payloadout = err;
-    }
+    ret = payload_run();
   }
 
   // terminate payload
-  return payload_terminate();
+  return payload_terminate(ret);
 }

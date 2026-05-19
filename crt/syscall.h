@@ -52,4 +52,4 @@ long __crt_syscall(long sysno, ...);
 /**
  * Initialize the syscall function.
  **/
-int __crt_syscall_init(payload_args_t* args);
+int __crt_syscall_init(payload_args0_t* args0, payload_args1_t* args1);

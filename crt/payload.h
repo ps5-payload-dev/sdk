@@ -17,18 +17,27 @@ along with this program; see the file COPYING. If not, see
 #pragma once
 
 
-typedef struct payload_args {
+typedef struct payload_args0 {
   int (*sys_dynlib_dlsym)(int, const char*, void*);
   int  *rwpipe;
   int  *rwpair;
   long  kpipe_addr;
   long  kdata_base_addr;
   int  *payloadout;
-} payload_args_t;
+} payload_args0_t;
+
+
+typedef struct payload_args1 {
+  unsigned long pa_structsize;
+  int           pa_master_pipe[2];
+  int           pa_victim_pipe[2];
+  unsigned long pa_getpid;
+  unsigned long pa_allproc;
+} payload_args1_t;
 
 
 /**
  * Implemented in crt.c
  **/
-payload_args_t* payload_get_args(void);
+payload_args0_t* payload_get_args(void);
 void payload_exit(int exit_code);
