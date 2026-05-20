@@ -1400,8 +1400,7 @@ kernel_get_vmem_protection(int pid, unsigned long addr, unsigned long len) {
     if(prot < 0) {
       prot = vm_prot;
     } else if((prot & vm_prot) != prot) {
-      SET_ERRNO(EINVAL);
-      return -1;
+      break;
     }
 
     if(kernel_copyout(vm_entry + 0x08, &vm_entry, sizeof(vm_entry))) {
