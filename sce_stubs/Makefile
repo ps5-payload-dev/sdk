@@ -61,12 +61,6 @@ $(NID_DB):
 %.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $^
 
-libdl.so: libdl.o
-	$(LD) -m elf_x86_64 -shared -soname libkernel_web.sprx -o $@ $<
-
-libpthread.so: libpthread.o
-	$(LD) -m elf_x86_64 -shared -soname libkernel_web.sprx -o $@ $<
-
 # TODO: fix DT_NEEDED deps
 libSceAppInstUtil.so: libSceIpmi.so
 

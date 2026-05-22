@@ -42,18 +42,24 @@ ASFLAGS := $(CFLAGS)
 SRCS := $(wildcard *.c)
 OBJS := $(SRCS:.c=.o) _setjmp.o
 
-ARCHIVE := libc.a
-
 .PHONY: all clean install
 
-all: $(ARCHIVE)
+all: libc.a libdl.a libpthread.a
 
-$(ARCHIVE): $(OBJS)
+libc.a: $(OBJS)
 	$(AR) -rsc $@ $^
+
+libdl.a:
+	$(AR) -rsc $@
+
+libpthread.a:
+	$(AR) -rsc $@
 
 clean:
 	rm -f *.a *.o
 
 install: $(ARCHIVE)
 	install -d $(DESTDIR)/target/lib
-	install $^ $(DESTDIR)/target/lib
+	install libc.a $(DESTDIR)/target/lib
+	install libdl.a $(DESTDIR)/target/lib
+	install libpthread.a $(DESTDIR)/target/lib
