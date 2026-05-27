@@ -145,17 +145,20 @@ strlen(const char *str) {
 }
 
 
+// https://github.com/sleirsgoevy/ps4-hamachi/blob/d41f328fb587cc17e567845ed314f89a2255976c/app/app/getfw.c#L6
 unsigned int
 kernel_get_fw_version(void) {
-  int mib[2] = {1, 46};
-  unsigned long size = sizeof(mib);
-  unsigned int version = 0;
+  unsigned int* sce_proc_param = 0;
+  const unsigned int libkernel_handle = 0x1;
 
-  if(__crt_syscall(SYS_sysctl, mib, 2, &version, &size, 0, 0)) {
+  if(__crt_syscall(SYS_dynlib_get_obj_member, libkernel_handle, 8, &sce_proc_param)) {
+    return 0;
+  }
+  if (!sce_proc_param) {
     return 0;
   }
 
-  return version;
+  return sce_proc_param[5];
 }
 
 
