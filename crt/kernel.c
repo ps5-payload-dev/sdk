@@ -147,7 +147,7 @@ strlen(const char *str) {
 
 /**
  * Read the firmware version from libSceLibcInternal.sprx since some payloads
- * modify the version reported by kernel.
+ * modify the version reported by the kernel.
  **/
 unsigned int
 kernel_get_fw_version(void) {
@@ -158,7 +158,7 @@ kernel_get_fw_version(void) {
     unsigned int sdk_ps4_ver;
     unsigned int sdk_ps5_ver;
   } *sce_proc_param = 0;
-  const unsigned int handle = 0x2;
+  unsigned int handle = 0x2;
 
   if(__crt_syscall(SYS_dynlib_get_obj_member, handle, 8, &sce_proc_param)) {
     return 0;
