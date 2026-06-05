@@ -145,11 +145,14 @@ strlen(const char *str) {
 }
 
 
-// https://github.com/sleirsgoevy/ps4-hamachi/blob/d41f328fb587cc17e567845ed314f89a2255976c/app/app/getfw.c#L6
+/**
+ * Read the firmware version from libSceLibcInternal.sprx since some payloads
+ * modify the version reported by kernel.
+ **/
 unsigned int
 kernel_get_fw_version(void) {
   struct Sce_Proc_Param {
-    unsigned long size;
+    unsigned long structsize;
     unsigned int magic;
     unsigned int ent_count;
     unsigned int sdk_ps4_ver;
@@ -157,7 +160,10 @@ kernel_get_fw_version(void) {
   } *sce_proc_param = 0;
   const unsigned int handle = 0x2;
 
-  if (__crt_syscall(SYS_dynlib_get_obj_member, handle, 8, &sce_proc_param) || !sce_proc_param) {
+  if(__crt_syscall(SYS_dynlib_get_obj_member, handle, 8, &sce_proc_param)) {
+    return 0;
+  }
+  if(!sce_proc_param) {
     return 0;
   }
 
