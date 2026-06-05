@@ -41,6 +41,7 @@ along with this program; see the file COPYING. If not, see
 #define SYS_sprx_load        594
 #define SYS_sprx_unload      595
 #define SYS_randomized_path  602
+#define SYS_dynlib_get_obj_member 649
 
 
 /**
