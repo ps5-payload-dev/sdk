@@ -61,6 +61,7 @@ jobs:
         $MAKE -C samples/notify
         $MAKE -C samples/notify_debug
         $MAKE -C samples/ps
+        $MAKE -C samples/sdk_ver
         $CMAKE -S samples/hello_cmake -B samples/hello_cmake/build
         $CMAKE --build samples/hello_cmake/build
         $MESON setup samples/hello_meson samples/hello_meson/build
