@@ -77,6 +77,13 @@ jobs:
         path: ./ps5-payload-sdk.zip
         if-no-files-found: error
 
+    - name: Upload Samples
+      uses: actions/upload-artifact@v4
+      with:
+        name: Samples
+        include-hidden-files: true
+        path: ./samples
+
   release:
     needs: build
     permissions:
