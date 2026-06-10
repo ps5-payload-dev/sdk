@@ -183,6 +183,10 @@ asm(".global sceFsCreatePfsTrophyDataImage\n"
     ".type sceFsCreatePfsTrophyDataImage @function\n"
     "sceFsCreatePfsTrophyDataImage:\n");
 
+asm(".global sceFsCreatePprPfsSaveDataImage\n"
+    ".type sceFsCreatePprPfsSaveDataImage @function\n"
+    "sceFsCreatePprPfsSaveDataImage:\n");
+
 asm(".global sceFsCreatePprPfsTrophyDataImage\n"
     ".type sceFsCreatePprPfsTrophyDataImage @function\n"
     "sceFsCreatePprPfsTrophyDataImage:\n");
