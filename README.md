@@ -51,9 +51,9 @@ john@localhost:ps5-payload-dev/sdk$ make -C samples/hello_world test
 
 ## Building the SDK
 ```console
-john@localhost:ps5-payload-dev/sdk$ make DESTDIR=/opt/ps5-payload-sdk install
+john@localhost:ps5-payload-dev/sdk$ sudo make DESTDIR=/opt/ps5-payload-sdk install
 john@localhost:ps5-payload-dev/sdk$ export PS5_PAYLOAD_SDK=/opt/ps5-payload-sdk
-john@localhost:ps5-payload-dev/sdk$ ./libcxx.sh # fetch, build, and install libcxx
+john@localhost:ps5-payload-dev/sdk$ sudo -E ./libcxx.sh # fetch, build, and install libcxx
 ```
 
 ## Adding new SCE Libs
@@ -63,7 +63,7 @@ build stubs for them as follows:
 john@localhost:ps5-payload-dev/sdk$ sudo apt-get install wget python3 python3-pyelftools
 john@localhost:ps5-payload-dev/sdk$ ln -s /path/to/sprx/libSceXYZ.sprx sce_stubs/libSceXYZ.sprx
 john@localhost:ps5-payload-dev/sdk$ make -C sce_stubs stubs
-john@localhost:ps5-payload-dev/sdk$ make DESTDIR=/opt/ps5-payload-sdk install
+john@localhost:ps5-payload-dev/sdk$ sudo make DESTDIR=/opt/ps5-payload-sdk install
 ```
 
 ## Reporting Bugs
