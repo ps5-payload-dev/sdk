@@ -26,21 +26,35 @@ LDSCRIPT="-T${PS5_PAYLOAD_SDK}/ldscripts/elf_x86_64.x"
 
 for ARG in "$@"; do
     if [[ "$ARG" == "--shared" ]]; then
-	PIE=""
+    PIE=""
     fi
     if [[ "$ARG" == "-r" ]]; then
-	PIE=""
+    PIE=""
     fi
     if [[ "$ARG" == "--static" ]]; then
-	PIE=""
+    PIE=""
     fi
     if [[ "$ARG" == "--script" || "$ARG" == "-T" ]]; then
-	LDSCRIPT=""
+    LDSCRIPT=""
     fi
 done
 
 LLVM_BINDIR=$("${SCRIPT_DIR}/prospero-llvm-config" --bindir)
 BIN_PATH="${LLVM_BINDIR}/ld.lld"
+
+# ld is moved out of llvm on macOS
+if ! command -v "${BIN_PATH}" >/dev/null 2>&1; then
+    if [ "$(uname -s)" = "Darwin" ]; then
+        BREW="$(command -v brew 2>/dev/null)"
+        if [ -n "${BREW}" ]; then
+            BIN_PATH="$("${BREW}" --prefix lld 2>/dev/null)/bin/ld.lld"
+        else
+            echo "Unable to find Homebrew" >&2
+            exit 1
+        fi
+    fi
+fi
+
 exec "${BIN_PATH}" \
      -m elf_x86_64 $PIE $LDSCRIPT --eh-frame-hdr \
      -z max-page-size=0x4000 -mllvm -emulated-tls \
