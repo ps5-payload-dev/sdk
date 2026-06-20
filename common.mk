@@ -19,3 +19,16 @@ LLVM_BINDIR := $(shell $(LLVM_CONFIG) --bindir)
 CC := $(LLVM_BINDIR)/clang
 AR := $(LLVM_BINDIR)/llvm-ar
 LD := $(LLVM_BINDIR)/ld.lld
+
+# ld is moved out of llvm on MacOS
+ifeq ($(shell command -v $(LD) 2>/dev/null),)
+OS := $(shell uname -s)
+ifeq ($(OS),Darwin)
+BREW := $(shell command -v brew 2>/dev/null)
+ifneq ($(BREW),)
+LD := $(shell $(BREW) --prefix lld 2>/dev/null)/bin/ld.lld
+else
+    $(error Unable to find Homebrew)
+endif
+endif
+endif
