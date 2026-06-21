@@ -43,7 +43,8 @@ done
 LLVM_BINDIR=$("${SCRIPT_DIR}/prospero-llvm-config" --bindir)
 BIN_PATH="${LLVM_BINDIR}/ld.lld"
 
-# ld is moved out of llvm on macOS
+# When using macos with brew, lld-19 and above are not installed in the standard
+# llvm bindir directory, compensate for that here.
 if ! command -v "${BIN_PATH}" >/dev/null 2>&1; then
     if [ "$(uname -s)" = "Darwin" ]; then
         BREW="$(command -v brew 2>/dev/null)"
