@@ -14,7 +14,7 @@
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
 
-include ../common.mk
+include ../Makefile.inc
 
 CFLAGS += -ffreestanding -fno-builtin -nostdlib -fPIC
 CFLAGS += -target x86_64-sie-ps5 -fno-plt -fno-stack-protector

@@ -14,7 +14,7 @@
 # along with this program; see the file COPYING. If not see
 # <http://www.gnu.org/licenses/>.
 
-include common.mk
+include Makefile.inc
 
 TOPTARGETS := all clean install
 SUBDIRS    := crt sce_stubs libc libufs include host
