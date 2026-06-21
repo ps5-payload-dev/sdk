@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 #   Copyright (C) 2024 John Törnblom
+#   Copyright (C) 2026 Aleksei Kulaev
 #
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -26,16 +27,16 @@ LDSCRIPT="-T${PS5_PAYLOAD_SDK}/ldscripts/elf_x86_64.x"
 
 for ARG in "$@"; do
     if [[ "$ARG" == "--shared" ]]; then
-    PIE=""
+        PIE=""
     fi
     if [[ "$ARG" == "-r" ]]; then
-    PIE=""
+        PIE=""
     fi
     if [[ "$ARG" == "--static" ]]; then
-    PIE=""
+        PIE=""
     fi
     if [[ "$ARG" == "--script" || "$ARG" == "-T" ]]; then
-    LDSCRIPT=""
+        LDSCRIPT=""
     fi
 done
 
@@ -49,7 +50,7 @@ if ! command -v "${BIN_PATH}" >/dev/null 2>&1; then
         if [ -n "${BREW}" ]; then
             BIN_PATH="$("${BREW}" --prefix lld 2>/dev/null)/bin/ld.lld"
         else
-            echo "Unable to find Homebrew" >&2
+            echo "Unable to find brew" >&2
             exit 1
         fi
     fi
