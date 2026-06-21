@@ -1,3 +1,20 @@
+#   Copyright (C) 2026 John Törnblom
+#   Copyright (C) 2026 Aleksei Kulaev
+#
+# This file is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; see the file COPYING. If not see
+# <http://www.gnu.org/licenses/>.
+
 MAKE    ?= make
 PYTHON  ?= python3
 
@@ -20,15 +37,16 @@ CC := $(LLVM_BINDIR)/clang
 AR := $(LLVM_BINDIR)/llvm-ar
 LD := $(LLVM_BINDIR)/ld.lld
 
-# ld is moved out of llvm on MacOS
+# When using macos with brew, lld-19 and above are not installed in the standard
+# llvm bindir directory, compensate for that here.
 ifeq ($(shell command -v $(LD) 2>/dev/null),)
-OS := $(shell uname -s)
-ifeq ($(OS),Darwin)
-BREW := $(shell command -v brew 2>/dev/null)
-ifneq ($(BREW),)
-LD := $(shell $(BREW) --prefix lld 2>/dev/null)/bin/ld.lld
-else
-    $(error Unable to find Homebrew)
-endif
-endif
+    OS := $(shell uname -s)
+    ifeq ($(OS),Darwin)
+        BREW := $(shell command -v brew 2>/dev/null)
+        ifneq ($(BREW),)
+            LD := $(shell $(BREW) --prefix lld 2>/dev/null)/bin/ld.lld
+        else
+            $(error Unable to find brew)
+        endif
+    endif
 endif
