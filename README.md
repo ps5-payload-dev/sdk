@@ -14,21 +14,21 @@ On Debian-flavored operating systems, you can invoke the following commands to
 install dependencies used by the SDK.
 ```console
 john@localhost:ps5-payload-dev/sdk$ sudo apt-get update && sudo apt-get upgrade # optional
-john@localhost:ps5-payload-dev/sdk$ sudo apt-get install bash clang-18 lld-18 # required
-john@localhost:ps5-payload-dev/sdk$ sudo apt-get install socat cmake meson pkg-config # optional
+john@localhost:ps5-payload-dev/sdk$ sudo apt-get install bash clang-18 lld-18 wget # required
+john@localhost:ps5-payload-dev/sdk$ sudo apt-get install socat cmake meson pkg-config python3 python3-pyelftools # optional
 ```
 
 If you are using Fedora, you can install dependencies as follows (tested with version 41):
 ```console
-john@localhost:ps5-payload-dev/sdk$ sudo dnf install bash llvm-devel clang lld # required
-john@localhost:ps5-payload-dev/sdk$ sudo dnf install socat cmake meson pkg-config # optional
+john@localhost:ps5-payload-dev/sdk$ sudo dnf install bash llvm-devel clang lld wget # required
+john@localhost:ps5-payload-dev/sdk$ sudo dnf install socat cmake meson pkg-config python3 python3-pyelftools # optional
 ```
 
 If you are using macOS, you can install them using the [Homebrew Package Manager][macos-brew] (tested with macOS Sequoia):
 ```console
-john@localhost:ps5-payload-dev/sdk$ brew install llvm@18 # required
+john@localhost:ps5-payload-dev/sdk$ brew install llvm@18 wget # required
 john@localhost:ps5-payload-dev/sdk$ export LLVM_CONFIG=/opt/homebrew/opt/llvm@18/bin/llvm-config # required
-john@localhost:ps5-payload-dev/sdk$ brew install socat cmake meson # optional
+john@localhost:ps5-payload-dev/sdk$ brew install socat cmake meson python && pip3 install pyelftools # optional
 ```
 
 ## Quick-start
@@ -58,9 +58,8 @@ john@localhost:ps5-payload-dev/sdk$ sudo -E ./libcxx.sh # fetch, build, and inst
 
 ## Adding new SCE Libs
 If you have decrypted sprx files that you would like to interact with, you can
-build stubs for them as follows:
+build stubs for them as follows (Make sure you have already installed the optional dependencies for your OS):
 ```console
-john@localhost:ps5-payload-dev/sdk$ sudo apt-get install wget python3 python3-pyelftools
 john@localhost:ps5-payload-dev/sdk$ ln -s /path/to/sprx/libSceXYZ.sprx sce_stubs/libSceXYZ.sprx
 john@localhost:ps5-payload-dev/sdk$ make -C sce_stubs stubs
 john@localhost:ps5-payload-dev/sdk$ sudo make DESTDIR=/opt/ps5-payload-sdk install
