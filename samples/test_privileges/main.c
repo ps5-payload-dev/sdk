@@ -153,11 +153,13 @@ static void
 print_info(pid_t pid) {
   app_info_t app_info = {0};
   uint8_t qaflags[16] = {0};
+  uint8_t attrs[32] = {0};
   uint8_t caps[16] = {0};
-  char buf[16*3];
+  char buf[32*3];
 
   kernel_get_qaflags(qaflags);
   kernel_get_ucred_caps(pid, caps);
+  kernel_get_ucred_attrs(pid, attrs);
   sceKernelGetAppInfo(pid, &app_info);
 
   PUTS("Console info");
@@ -173,7 +175,7 @@ print_info(pid_t pid) {
   PUTS("----------");
   PRINTF("SCE titleid:    %s\n", app_info.title_id);
   PRINTF("SCE authid:     0x%016lx\n", kernel_get_ucred_authid(pid));
-  PRINTF("SCE attrs:      0x%016lx\n", kernel_get_ucred_attrs(pid));
+  PRINTF("SCE attrs:      %s\n", bin2hex(attrs, buf, sizeof(attrs)));
   PRINTF("SCE caps:       %s\n", bin2hex(caps, buf, sizeof(caps)));
   PRINTF("uid:            %d\n", getuid());
   PRINTF("euid:           %d\n", geteuid());

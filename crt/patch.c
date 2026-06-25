@@ -60,14 +60,14 @@ patch_syscall_permissions(void) {
 static int
 patch_kernel_ucred(void) {
   int pid = __crt_syscall(SYS_getpid);
+  unsigned char attrs[32];
   unsigned char caps[16];
-  unsigned long attrs;
 
   if(kernel_get_ucred_caps(pid, caps)) {
     klog_puts("kernel_get_ucred_caps failed");
     return -1;
   }
-  if(!(attrs=kernel_get_ucred_attrs(pid))) {
+  if(kernel_get_ucred_attrs(pid, attrs)) {
     klog_puts("kernel_get_ucred_attrs failed");
     return -1;
   }
@@ -75,7 +75,7 @@ patch_kernel_ucred(void) {
   caps[5]  = 0x1c; // ??
   caps[7]  = 0x40; // jail related?
   caps[15] |= 0x40; // jitshm
-  attrs    |= 0x80; // ptrace
+  attrs[3] |= 0x80; // ptrace
 
   if(kernel_set_ucred_caps(pid, caps)) {
     klog_puts("kernel_set_ucred_caps failed");

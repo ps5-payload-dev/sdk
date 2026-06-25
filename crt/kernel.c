@@ -71,7 +71,7 @@ const unsigned long KERNEL_OFFSET_UCRED_CR_PRISON = 0x30;
 
 const unsigned long KERNEL_OFFSET_UCRED_CR_SCEAUTHID = 0x58;
 const unsigned long KERNEL_OFFSET_UCRED_CR_SCECAPS   = 0x60;
-const unsigned long KERNEL_OFFSET_UCRED_CR_SCEATTRS  = 0x83;
+const unsigned long KERNEL_OFFSET_UCRED_CR_SCEATTRS  = 0x80;
 
 const unsigned long KERNEL_OFFSET_FILEDESC_FD_RDIR = 0x10;
 const unsigned long KERNEL_OFFSET_FILEDESC_FD_JDIR = 0x18;
@@ -1113,34 +1113,31 @@ kernel_set_ucred_caps(int pid, const unsigned char caps[16]) {
 }
 
 
-unsigned long
-kernel_get_ucred_attrs(int pid) {
-  unsigned long ucred = 0;
-  unsigned long attrs = 0;
-
-  if(!(ucred=kernel_get_proc_ucred(pid))) {
-    return 0;
-  }
-
-  if(kernel_copyout(ucred + KERNEL_OFFSET_UCRED_CR_SCEATTRS, &attrs,
-		    sizeof(attrs))) {
-    return 0;
-  }
-
-  return attrs;
-}
-
-
 int
-kernel_set_ucred_attrs(int pid, unsigned long attrs) {
+kernel_get_ucred_attrs(int pid, unsigned char attrs[32]) {
   unsigned long ucred = 0;
 
   if(!(ucred=kernel_get_proc_ucred(pid))) {
     return -1;
   }
 
-  if(kernel_copyin(&attrs, ucred + KERNEL_OFFSET_UCRED_CR_SCEATTRS,
-		   sizeof(attrs))) {
+  if(kernel_copyout(ucred + KERNEL_OFFSET_UCRED_CR_SCEATTRS, attrs, 32)) {
+    return -1;
+  }
+
+  return 0;
+}
+
+
+int
+kernel_set_ucred_attrs(int pid, const unsigned char attrs[32]) {
+  unsigned long ucred = 0;
+
+  if(!(ucred=kernel_get_proc_ucred(pid))) {
+    return -1;
+  }
+
+  if(kernel_copyin(attrs, ucred + KERNEL_OFFSET_UCRED_CR_SCEATTRS, 32)) {
     return -1;
   }
 

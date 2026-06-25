@@ -94,8 +94,8 @@ int32_t  kernel_set_ucred_authid(pid_t pid, uint64_t authid);
 int32_t kernel_get_ucred_caps(pid_t pid, uint8_t caps[16]);
 int32_t kernel_set_ucred_caps(pid_t pid, const uint8_t caps[16]);
 
-uint64_t kernel_get_ucred_attrs(pid_t pid);
-int32_t  kernel_set_ucred_attrs(pid_t pid, uint64_t attr);
+int32_t kernel_get_ucred_attrs(pid_t pid, uint8_t attrs[32]);
+int32_t kernel_set_ucred_attrs(pid_t pid, const uint8_t attrs[32]);
 
 int32_t kernel_get_qaflags(uint8_t qaflags[16]);
 int32_t kernel_set_qaflags(uint8_t const qaflags[16]);
