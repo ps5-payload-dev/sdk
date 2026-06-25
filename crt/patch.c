@@ -64,11 +64,9 @@ patch_kernel_ucred(void) {
   unsigned char caps[16];
 
   if(kernel_get_ucred_caps(pid, caps)) {
-    klog_puts("kernel_get_ucred_caps failed");
     return -1;
   }
   if(kernel_get_ucred_attrs(pid, attrs)) {
-    klog_puts("kernel_get_ucred_attrs failed");
     return -1;
   }
 
@@ -78,11 +76,9 @@ patch_kernel_ucred(void) {
   attrs[3] |= 0x80; // ptrace
 
   if(kernel_set_ucred_caps(pid, caps)) {
-    klog_puts("kernel_set_ucred_caps failed");
     return -1;
   }
   if(kernel_set_ucred_attrs(pid, attrs)) {
-    klog_puts("kernel_set_ucred_attrs failed");
     return -1;
   }
 
