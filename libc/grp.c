@@ -15,6 +15,7 @@ along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
 #include <sys/types.h>
+#include <errno.h>
 #include <grp.h>
 
 
@@ -31,3 +32,20 @@ getgrgid(gid_t gid) {
   return 0;
 }
 
+
+int
+getgrnam_r(const char *name, struct group *grp, char* buf, size_t buflen,
+	   struct group **result) {
+#warning "getgrnam_r() not implemented"
+  *result = 0;
+  return ENOSYS;
+}
+
+
+int
+getgrgid_r(gid_t gid, struct group *grp, char *buf, size_t buflen,
+	   struct group **result) {
+#warning "getgrgid_r() not implemented"
+  *result = 0;
+  return ENOSYS;
+}
