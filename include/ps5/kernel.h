@@ -21,7 +21,7 @@ along with this program; see the file COPYING. If not, see
 
 __BEGIN_DECLS
 
-// Absolute kernel pointers
+// absolute kernel pointers
 extern const intptr_t KERNEL_ADDRESS_TEXT_BASE;
 extern const intptr_t KERNEL_ADDRESS_DATA_BASE;
 extern const intptr_t KERNEL_ADDRESS_ALLPROC;
@@ -33,13 +33,13 @@ extern const intptr_t KERNEL_ADDRESS_QA_FLAGS;
 extern const intptr_t KERNEL_ADDRESS_TARGETID;
 extern const intptr_t KERNEL_ADDRESS_BUS_DATA_DEVICES;
 
-// Proc field offsets
+// struct proc field offsets
 extern const off_t KERNEL_OFFSET_PROC_P_UCRED;
 extern const off_t KERNEL_OFFSET_PROC_P_FD;
 extern const off_t KERNEL_OFFSET_PROC_P_PID;
 extern const off_t KERNEL_OFFSET_PROC_P_VMSPACE;
 
-// Ucred field offsets
+// struct ucred field offsets
 extern const off_t KERNEL_OFFSET_UCRED_CR_UID;
 extern const off_t KERNEL_OFFSET_UCRED_CR_RUID;
 extern const off_t KERNEL_OFFSET_UCRED_CR_SVUID;
@@ -48,11 +48,11 @@ extern const off_t KERNEL_OFFSET_UCRED_CR_SCEAUTHID;
 extern const off_t KERNEL_OFFSET_UCRED_CR_SCECAPS;
 extern const off_t KERNEL_OFFSET_UCRED_CR_SCEATTRS;
 
-// Filedesc field offsets
+// struct filedesc field offsets
 extern const off_t KERNEL_OFFSET_FILEDESC_FD_RDIR;
 extern const off_t KERNEL_OFFSET_FILEDESC_FD_JDIR;
 
-// Vmspace field offsets
+// struct vmspace field offsets
 extern const off_t KERNEL_OFFSET_VMSPACE_VM_PMAP;
 
 
