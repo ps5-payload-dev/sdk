@@ -52,6 +52,9 @@ extern const off_t KERNEL_OFFSET_UCRED_CR_SCEATTRS;
 extern const off_t KERNEL_OFFSET_FILEDESC_FD_RDIR;
 extern const off_t KERNEL_OFFSET_FILEDESC_FD_JDIR;
 
+// Vmspace field offsets
+extern const off_t KERNEL_OFFSET_VMSPACE_VM_PMAP;
+
 
 uint32_t kernel_get_fw_version(void);
 
