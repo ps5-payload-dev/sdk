@@ -128,6 +128,10 @@ typedef struct dynlib_obj {
 } dynlib_obj_t;
 
 
+extern unsigned long KERNEL_OFFSET_PROC_P_VMSPACE;
+extern unsigned long KERNEL_OFFSET_VMSPACE_VM_PMAP;
+
+
 int kernel_copyout(unsigned long kaddr, void *uaddr, unsigned long len);
 int kernel_copyin(const void *uaddr, unsigned long kaddr, unsigned long len);
 

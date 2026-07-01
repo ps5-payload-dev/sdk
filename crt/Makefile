@@ -23,7 +23,7 @@ CFLAGS += -fms-extensions -Wno-microsoft-anon-tag
 CFLAGS += -O1
 
 OBJ := crt.o syscall.o klog.o nid.o kernel.o rtld.o rtld_so.o rtld_sprx.o \
-       rtld_payload.o rtld_dlfcn.o mdbg.o patch.o
+       rtld_payload.o rtld_dlfcn.o mdbg.o patch.o kernel_procio.o
 
 .PHONY: all clean install
 

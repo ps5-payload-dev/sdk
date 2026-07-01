@@ -77,6 +77,19 @@ intptr_t kernel_get_proc_ucred(pid_t pid);
 intptr_t kernel_get_proc_filedesc(pid_t pid);
 intptr_t kernel_get_proc_file(pid_t pid, int fd);
 
+int kernel_proc_copyin(pid_t pid, const void *buf, intptr_t addr, size_t len);
+int kernel_proc_copyout(pid_t pid, intptr_t addr, void *buf, size_t len);
+
+uint64_t kernel_proc_getlong(pid_t pid, intptr_t addr);
+uint32_t kernel_proc_getint(pid_t pid, intptr_t addr);
+uint16_t kernel_proc_getshort(pid_t pid, intptr_t addr);
+uint8_t  kernel_proc_getchar(pid_t pid, intptr_t addr);
+
+int kernel_proc_setchar(pid_t pid, intptr_t addr, char val);
+int kernel_proc_setshort(pid_t pid, intptr_t addr, short val);
+int kernel_proc_setint(pid_t pid, intptr_t addr, int val);
+int kernel_proc_setlong(pid_t pid, intptr_t addr, long val);
+
 int kernel_get_vmem_protection(pid_t pid, intptr_t addr, size_t len);
 int kernel_set_vmem_protection(pid_t pid, intptr_t addr, size_t len, int prot);
 int kernel_mprotect(pid_t pid, intptr_t addr, size_t size, int prot);
