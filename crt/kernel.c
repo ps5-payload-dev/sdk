@@ -16,6 +16,7 @@ along with this program; see the file COPYING. If not, see
 
 #include "elf.h"
 #include "kernel.h"
+#include "kernel_iommu.h"
 #include "nid.h"
 #include "syscall.h"
 
@@ -673,9 +674,7 @@ kernel_set_qaflags(const unsigned char qaflags[16]) {
   if(kernel_get_fw_version() < 0x7000000) {
     return kernel_copyin(qaflags, KERNEL_ADDRESS_QA_FLAGS, 16);
   } else {
-    // currently not supported
-    SET_ERRNO(ENOSYS);
-    return -1;
+    return kernel_iommu_copyin(qaflags, KERNEL_ADDRESS_QA_FLAGS, 16);
   }
 }
 
