@@ -74,6 +74,7 @@ typedef union kernel_pipebuf {
 unsigned long KERNEL_ADDRESS_TEXT_BASE        = 0; // optional
 unsigned long KERNEL_ADDRESS_DATA_BASE        = 0; // provided by payload args
 unsigned long KERNEL_ADDRESS_DMAP_BASE        = 0; // derived by crt
+unsigned long KERNEL_ADDRESS_IOMMU_SOFTC      = 0; // derived by crt
 unsigned long KERNEL_ADDRESS_ALLPROC          = 0; // needed by crt
 unsigned long KERNEL_ADDRESS_ROOTVNODE        = 0; // needed by crt
 unsigned long KERNEL_ADDRESS_SECURITY_FLAGS   = 0; // needed by crt
@@ -175,6 +176,26 @@ strlen(const char *str) {
 }
 
 
+static int
+kernel_is_heap_addr(unsigned long kaddr) {
+  unsigned int hi;
+
+  if(!kaddr || (kaddr & 7)) {
+    return 0;
+  }
+  if((kaddr >> 48) != 0xffff) {
+    return 0;
+  }
+
+  hi = (unsigned int)((kaddr >> 32) & 0xffff);
+  if(hi == 0 || hi == 0xffff) {
+    return 0;
+  }
+
+  return 1;
+}
+
+
 static unsigned long
 kernel_find_dmap_base(void) {
   unsigned long vmspace;
@@ -200,6 +221,31 @@ kernel_find_dmap_base(void) {
   }
 
   return pml4u - cr3;
+}
+
+
+static unsigned long
+kernel_find_iommu_softc(void) {
+  unsigned long softc;
+  unsigned long kaddr;
+  unsigned long paddr;
+
+  for(kaddr=KERNEL_ADDRESS_ALLPROC; kaddr>=KERNEL_ADDRESS_DATA_BASE+8; kaddr-=8) {
+    if(kernel_copyout(kaddr, &softc, sizeof(softc))) {
+      return 0;
+    }
+    if(!kernel_is_heap_addr(softc)) {
+      continue;
+    }
+    if(kernel_copyout(softc+0x48, &paddr, sizeof(paddr))) {
+      continue;
+    }
+    if(paddr == 0xfdd80000UL) {
+      return softc;
+    }
+  }
+
+  return 0;
 }
 
 
@@ -528,6 +574,9 @@ __kernel_init(payload_args_t* args) {
   KERNEL_ADDRESS_PRISON0      = kernel_get_ucred_prison(0);
 
   if(!(KERNEL_ADDRESS_DMAP_BASE=kernel_find_dmap_base())) {
+    return -ENOSYS;
+  }
+  if(!(KERNEL_ADDRESS_IOMMU_SOFTC=kernel_find_iommu_softc())) {
     return -ENOSYS;
   }
 
