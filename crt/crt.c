@@ -131,7 +131,10 @@ payload_run(void) {
   }
 
   // run the actual payload
-  *payload_args->payloadout = main(argc, argv, environ);
+  err = main(argc, argv, environ);
+  if(payload_args->payloadout) {
+    *payload_args->payloadout = err;
+  }
 
   // run .fini destructors
   if((err=__rtld_lib_fini(lib))) {
@@ -153,15 +156,20 @@ payload_run(void) {
 static int
 payload_terminate(void) {
   void (*exit)(int) = 0;
+  int exit_code = 0;
 
   // we are running inside a hijacked process, just return
   if(kernel_dynlib_dlsym(-1, 0x2001, "sceKernelDlsym")) {
-    return 0;
+    return exit_code;
+  }
+
+  if(payload_args->payloadout) {
+    exit_code = *payload_args->payloadout;
   }
 
   // resolve and run exit
   if(KERNEL_DLSYM(0x2, exit)) {
-    exit(*payload_args->payloadout);
+    exit(exit_code);
   }
 
   // should not happend
@@ -176,7 +184,9 @@ payload_terminate(void) {
  **/
 void
 payload_exit(int exit_code) {
-  *payload_args->payloadout = exit_code;
+  if(payload_args->payloadout) {
+    *payload_args->payloadout = exit_code;
+  }
   __builtin_longjmp(jmpbuf, 1);
 }
 
@@ -205,14 +215,19 @@ __crt_start(payload_args_t *args) {
   payload_args = args;
 
   // init payload runtime
-  if((*args->payloadout=payload_init(args))) {
+  if((err=payload_init(args))) {
+    if(args->payloadout) {
+      *args->payloadout = err;
+    }
     return payload_terminate();
   }
 
   // run payload
   if(!__builtin_setjmp(jmpbuf)) {
     if((err=payload_run())) {
-      *payload_args->payloadout = err;
+      if(args->payloadout) {
+	*args->payloadout = err;
+      }
     }
   }
 
