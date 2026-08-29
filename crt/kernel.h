@@ -131,11 +131,14 @@ typedef struct dynlib_obj {
 extern const unsigned long KERNEL_OFFSET_PROC_P_VMSPACE;
 extern unsigned long KERNEL_OFFSET_VMSPACE_VM_PMAP;
 
+extern unsigned long KERNEL_ADDRESS_DMAP_BASE;
+
 
 int kernel_copyout(unsigned long kaddr, void *uaddr, unsigned long len);
 int kernel_copyin(const void *uaddr, unsigned long kaddr, unsigned long len);
 
 unsigned long kernel_get_proc(int pid);
+
 unsigned long kernel_get_ucred_authid(int pid);
 int           kernel_set_ucred_authid(int pid, unsigned long authid);
 

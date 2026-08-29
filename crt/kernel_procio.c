@@ -17,6 +17,7 @@ along with this program; see the file COPYING. If not, see
 #include "kernel.h"
 #include "mdbg.h"
 
+
 #define X86_PG_V  0x01
 #define X86_PG_PS 0x80
 
@@ -25,22 +26,46 @@ along with this program; see the file COPYING. If not, see
 
 /**
  * Walk the page table hierarchy (9 bit indices in 4 levels) to find the
- * entry of the physical address mapped to the given vaddr.
+ * entry of the physical address mapped to the vaddr of the given process.
  **/
-static int
-kernel_virt2phys(unsigned long pml4u, unsigned long cr3, unsigned long vaddr,
-		 unsigned long* paddr, unsigned long* plen) {
-  unsigned long dmap_base = pml4u - cr3;
+int
+kernel_proc_getpaddr(int pid, unsigned long vaddr, unsigned long* paddr,
+		     unsigned long* plen) {
   unsigned long table_offset;
   unsigned long table_index;
-  unsigned long pte = cr3;
+  unsigned long vmspace;
+  unsigned long pml4u;
+  unsigned long proc;
+  unsigned long cr3;
+  unsigned long pte;
 
+  if(!KERNEL_OFFSET_VMSPACE_VM_PMAP) {
+    return -1;
+  }
+  if(!(proc=kernel_get_proc(pid))) {
+    return -1;
+  }
+
+  if(kernel_copyout(proc + KERNEL_OFFSET_PROC_P_VMSPACE,
+		    &vmspace, sizeof(vmspace))) {
+    return -1;
+  }
+  if(kernel_copyout(vmspace + KERNEL_OFFSET_VMSPACE_VM_PMAP + 0x20,
+		    &pml4u, sizeof(pml4u))) {
+    return -1;
+  }
+  if(kernel_copyout(vmspace + KERNEL_OFFSET_VMSPACE_VM_PMAP + 0x28,
+		    &cr3, sizeof(cr3))) {
+    return -1;
+  }
+
+  pte = cr3;
   for(long bitpos=39; bitpos>=12; bitpos-=9) {
     table_index = (vaddr >> bitpos) & ((1ull << 9) - 1);
     table_offset = table_index * 8;
     pte &= PG_FRAME;
 
-    if(kernel_copyout(dmap_base + table_offset + pte, &pte, sizeof(pte))) {
+    if(kernel_copyout(pml4u-cr3 + table_offset + pte, &pte, sizeof(pte))) {
       return -1;
     }
 
@@ -66,40 +91,16 @@ kernel_virt2phys(unsigned long pml4u, unsigned long cr3, unsigned long vaddr,
 int
 kernel_proc_copyin(int pid, const void *buf, unsigned long addr,
 		   unsigned long len) {
-  unsigned long proc;
-  unsigned long vmspace;
   unsigned long paddr;
   unsigned long plen;
-  unsigned long pml4u;
-  unsigned long cr3;
 
   // lets see if we can just use mdbg
   if(!mdbg_copyin(pid, buf, addr, len)) {
     return 0;
   }
 
-  if(!(proc=kernel_get_proc(pid))) {
-    return -1;
-  }
-  if(kernel_copyout(proc + KERNEL_OFFSET_PROC_P_VMSPACE,
-		    &vmspace, sizeof(vmspace))) {
-    return -1;
-  }
-
-  if(!KERNEL_OFFSET_VMSPACE_VM_PMAP) {
-    return -1;
-  }
-  if(kernel_copyout(vmspace + KERNEL_OFFSET_VMSPACE_VM_PMAP + 0x20,
-		    &pml4u, sizeof(pml4u))) {
-    return -1;
-  }
-  if(kernel_copyout(vmspace + KERNEL_OFFSET_VMSPACE_VM_PMAP + 0x28,
-		    &cr3, sizeof(cr3))) {
-    return -1;
-  }
-
   for(unsigned long i=0; i<len; i+=plen) {
-    if(kernel_virt2phys(pml4u, cr3, addr+i, &paddr, &plen)) {
+    if(kernel_proc_getpaddr(pid, addr + i, &paddr, &plen)) {
       return -1;
     }
 
@@ -107,7 +108,8 @@ kernel_proc_copyin(int pid, const void *buf, unsigned long addr,
       plen = len;
     }
 
-    if(kernel_copyin(((unsigned char*)buf)+i, pml4u-cr3+paddr, plen)) {
+    if(kernel_copyin(((unsigned char*)buf) + i,
+		     KERNEL_ADDRESS_DMAP_BASE + paddr, plen)) {
       return -1;
     }
   }
@@ -119,40 +121,16 @@ kernel_proc_copyin(int pid, const void *buf, unsigned long addr,
 int
 kernel_proc_copyout(int pid, unsigned long addr, void *buf,
 		    unsigned long len) {
-  unsigned long proc;
-  unsigned long vmspace;
   unsigned long paddr;
   unsigned long plen;
-  unsigned long pml4u;
-  unsigned long cr3;
 
   // lets see if we can just use mdbg
   if(!mdbg_copyout(pid, addr, buf, len)) {
     return 0;
   }
 
-  if(!(proc=kernel_get_proc(pid))) {
-    return -1;
-  }
-  if(kernel_copyout(proc + KERNEL_OFFSET_PROC_P_VMSPACE,
-		    &vmspace, sizeof(vmspace))) {
-    return -1;
-  }
-
-  if(!KERNEL_OFFSET_VMSPACE_VM_PMAP) {
-    return -1;
-  }
-  if(kernel_copyout(vmspace + KERNEL_OFFSET_VMSPACE_VM_PMAP + 0x20,
-		    &pml4u, sizeof(pml4u))) {
-    return -1;
-  }
-  if(kernel_copyout(vmspace + KERNEL_OFFSET_VMSPACE_VM_PMAP + 0x28,
-		    &cr3, sizeof(cr3))) {
-    return -1;
-  }
-
   for(unsigned long i=0; i<len; i+=plen) {
-    if(kernel_virt2phys(pml4u, cr3, addr+i, &paddr, &plen)) {
+    if(kernel_proc_getpaddr(pid, addr + i, &paddr, &plen)) {
       return -1;
     }
 
@@ -160,7 +138,8 @@ kernel_proc_copyout(int pid, unsigned long addr, void *buf,
       plen = len;
     }
 
-    if(kernel_copyout(pml4u-cr3+paddr, ((unsigned char*)buf)+i, plen)) {
+    if(kernel_copyout(KERNEL_ADDRESS_DMAP_BASE + paddr,
+		      ((unsigned char*)buf) + i, plen)) {
       return -1;
     }
   }

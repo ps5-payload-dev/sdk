@@ -73,6 +73,7 @@ typedef union kernel_pipebuf {
  **/
 unsigned long KERNEL_ADDRESS_TEXT_BASE        = 0; // optional
 unsigned long KERNEL_ADDRESS_DATA_BASE        = 0; // provided by payload args
+unsigned long KERNEL_ADDRESS_DMAP_BASE        = 0; // derived by crt
 unsigned long KERNEL_ADDRESS_ALLPROC          = 0; // needed by crt
 unsigned long KERNEL_ADDRESS_ROOTVNODE        = 0; // needed by crt
 unsigned long KERNEL_ADDRESS_SECURITY_FLAGS   = 0; // needed by crt
@@ -88,7 +89,7 @@ const unsigned long KERNEL_OFFSET_PROC_P_PID     = 0xBC;
 const unsigned long KERNEL_OFFSET_PROC_P_VMSPACE = 0x200;
 
 unsigned long KERNEL_OFFSET_VMSPACE_P_ROOT  = 0; // needed by crt
-unsigned long KERNEL_OFFSET_VMSPACE_VM_PMAP = 0;
+unsigned long KERNEL_OFFSET_VMSPACE_VM_PMAP = 0; // needed by crt
 
 const unsigned long KERNEL_OFFSET_UCRED_CR_UID   = 0x04;
 const unsigned long KERNEL_OFFSET_UCRED_CR_RUID  = 0x08;
@@ -171,6 +172,34 @@ strlen(const char *str) {
   }
 
   return str - start;
+}
+
+
+static unsigned long
+kernel_find_dmap_base(void) {
+  unsigned long vmspace;
+  unsigned long pml4u;
+  unsigned long proc;
+  unsigned long cr3;
+
+  if(!(proc=kernel_get_proc(0))) {
+    return 0;
+  }
+  if(kernel_copyout(proc + KERNEL_OFFSET_PROC_P_VMSPACE,
+		    &vmspace, sizeof(vmspace))) {
+    return 0;
+  }
+
+  if(kernel_copyout(vmspace + KERNEL_OFFSET_VMSPACE_VM_PMAP + 0x20,
+		    &pml4u, sizeof(pml4u))) {
+    return 0;
+  }
+  if(kernel_copyout(vmspace + KERNEL_OFFSET_VMSPACE_VM_PMAP + 0x28,
+		    &cr3, sizeof(cr3))) {
+    return 0;
+  }
+
+  return pml4u - cr3;
 }
 
 
@@ -497,6 +526,10 @@ __kernel_init(payload_args_t* args) {
   KERNEL_ADDRESS_QA_FLAGS     = KERNEL_ADDRESS_SECURITY_FLAGS + 0x24;
   KERNEL_ADDRESS_UTOKEN_FLAGS = KERNEL_ADDRESS_SECURITY_FLAGS + 0x8C;
   KERNEL_ADDRESS_PRISON0      = kernel_get_ucred_prison(0);
+
+  if(!(KERNEL_ADDRESS_DMAP_BASE=kernel_find_dmap_base())) {
+    return -ENOSYS;
+  }
 
   if(!KERNEL_DLSYM(0x1, __error)) {
     if(!KERNEL_DLSYM(0x2001, __error)) {
