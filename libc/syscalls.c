@@ -1947,15 +1947,6 @@ unlinkat() {
     );
 }
 
-void
-posix_openpt() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 504\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
 
 void
 gssd_syscall() {

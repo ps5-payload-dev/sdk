@@ -47,6 +47,10 @@ __FBSDID("$FreeBSD$");
 #include <unistd.h>
 #include "un-namespace.h"
 
+#include "upty.h"
+
+#define _ioctl(fd, req, arg) __upty_ioctl((fd), (req), (void*)(arg))
+
 //#include "libc_private.h"
 __attribute__((weak)) long __syscall(long n, ...);
 

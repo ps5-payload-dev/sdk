@@ -15,10 +15,25 @@ along with this program; see the file COPYING. If not, see
 <http://www.gnu.org/licenses/>.  */
 
 #include <errno.h>
+#include <termios.h>
+#include <unistd.h>
 
-int isatty(void) {
-  errno = ENOTTY;
+#include <sys/ioctl.h>
+
+#include "upty.h"
+
+
+int
+isatty(int fd) {
+  struct termios tio;
+
+  if(!__upty_ioctl(fd, TIOCGETA, &tio)) {
+    return 1;
+  }
+
+  if(errno != EBADF) {
+    errno = ENOTTY;
+  }
+
   return 0;
 }
-
-  
