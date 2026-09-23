@@ -26,4 +26,7 @@ export PKG_CONFIG_SYSROOT_DIR=${PS5_PAYLOAD_SDK}/target
 export PKG_CONFIG_LIBDIR=${PKG_CONFIG_SYSROOT_DIR}/user/homebrew/lib/pkgconfig
 export PKG_CONFIG_PATH=${PKG_CONFIG_SYSROOT_DIR}/user/homebrew/libdata/pkgconfig
 
+# Needed by pkgconf-3, see https://man.archlinux.org/man/pkgconf.1.en#DESTDIR
+unset DESTDIR
+
 exec -a "${SCRIPT_NAME}" pkg-config --static "$@"
