@@ -10,7 +10,7 @@ def int_with_base_type(val):
 def try_parse_int(x, base=0):
     try:
         return int(x, base) if isinstance(x, str) else int(x)
-    except:
+    except Exception:
         return None
 
 def align_up(x, alignment):
@@ -25,7 +25,7 @@ def check_file_magic(f, expected_magic):
     old_offset = f.tell()
     try:
         magic = f.read(len(expected_magic))
-    except:
+    except Exception:
         return False
     finally:
         f.seek(old_offset)
