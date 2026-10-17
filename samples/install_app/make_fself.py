@@ -408,7 +408,7 @@ class SignedElfEntry(object):
     @property
     def block_size(self):
         if self.has_blocks:
-            return 1 << (12 + (self.props >> SignedElfEntry.PROPS_BLOCK_SIZE_SHIFT) & SignedElfEntry.PROPS_BLOCK_SIZE_MASK)
+            return 1 << (12 + ((self.props >> SignedElfEntry.PROPS_BLOCK_SIZE_SHIFT) & SignedElfEntry.PROPS_BLOCK_SIZE_MASK))
         else:
             return DEFAULT_BLOCK_SIZE
 
