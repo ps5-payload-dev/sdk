@@ -770,7 +770,7 @@ if __name__ == '__main__':
         if ptype is None:
             ptype = try_parse_int(args.ptype)
         if ptype is None:
-            parser.error('invalid program type: 0x{0:016X}'.format(ptype))
+            parser.error('invalid program type: {0}'.format(args.ptype))
     if not (0 <= ptype <= 0xFFFFFFFFFFFFFFFF):
         parser.error('invalid program type: 0x{0:016X}'.format(ptype))
 
