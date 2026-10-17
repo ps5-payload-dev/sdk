@@ -638,7 +638,7 @@ class SignedElfFile(object):
     def save(self, f):
         start_offset = f.tell()
 
-        # calculate neccessary fields
+        # calculate necessary fields
         self._prepare()
 
         # write common header
