@@ -34,7 +34,7 @@ def check_file_magic(f, expected_magic):
 def sha256(data):
     return hashlib.sha256(data).digest()
 
-class ElfError(Exception):
+class ElfException(Exception):
     def __init__(self, msg):
         self.msg = msg
 
@@ -80,18 +80,18 @@ class ElfEHdr(object):
 
     def load(self, f):
         if not check_file_magic(f, ElfEHdr.MAGIC):
-            raise ElfError('Invalid magic.')
+            raise ElfException('Invalid magic.')
 
         self.magic, self.machine_class, self.data_encoding, self.version, self.os_abi, self.abi_version, self.nident_size = struct.unpack(ElfEHdr.FMT, f.read(struct.calcsize(ElfEHdr.FMT)))
         if self.machine_class != ElfEHdr.CLASS64 or self.data_encoding != ElfEHdr.DATA2LSB:
-            raise ElfError('Unsupported class or data encoding.')
+            raise ElfException('Unsupported class or data encoding.')
         self.type, self.machine, self.version, self.entry, self.phoff, self.shoff, self.flags, self.ehsize, self.phentsize, self.phnum, self.shentsize, self.shnum, self.shstridx = struct.unpack(ElfEHdr.EX_FMT, f.read(struct.calcsize(ElfEHdr.EX_FMT)))
         if self.machine != ElfEHdr.EM_X86_64 or self.version != ElfEHdr.EV_CURRENT:
-            raise ElfError('Unsupported machine type or version.')
+            raise ElfException('Unsupported machine type or version.')
         if self.phentsize != struct.calcsize(ElfPHdr.FMT) or (self.shentsize > 0 and self.shentsize != struct.calcsize(ElfSHdr.FMT)):
-            raise ElfError('Unsupported header entry size.')
+            raise ElfException('Unsupported header entry size.')
         if self.type not in [ElfEHdr.ET_EXEC, ElfEHdr.ET_SCE_EXEC, ElfEHdr.ET_SCE_EXEC_ASLR, ElfEHdr.ET_SCE_DYNAMIC]:
-            raise ElfError('Unsupported type.')
+            raise ElfException('Unsupported type.')
 
     def save(self, f):
         f.write(struct.pack(ElfEHdr.FMT, self.magic, self.machine_class, self.data_encoding, self.version, self.os_abi, self.abi_version, self.nident_size))
