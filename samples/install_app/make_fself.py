@@ -36,6 +36,7 @@ def sha256(data):
 
 class ElfException(Exception):
     def __init__(self, msg):
+        super().__init__(msg)
         self.msg = msg
 
     def __str__(self):
