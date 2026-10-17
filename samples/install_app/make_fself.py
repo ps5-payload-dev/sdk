@@ -16,16 +16,10 @@ def try_parse_int(x, base=0):
 def align_up(x, alignment):
     return (x + (alignment - 1)) & ~(alignment - 1)
 
-def align_down(x, alignment):
-    return x & ~(alignment - 1)
-
 def ilog2(x):
     if x <= 0:
         raise ValueError('math domain error')
     return len(bin(x)) - 3
-
-def is_intervals_overlap(p1, p2):
-    return p1[0] <= p2[1] and p1[1] <= p2[0]
 
 def check_file_magic(f, expected_magic):
     old_offset = f.tell()
@@ -37,17 +31,8 @@ def check_file_magic(f, expected_magic):
         f.seek(old_offset)
     return magic == expected_magic
 
-def parse_version(version):
-    major, minor, patch = (version >> 8) & 0xFF, version & 0xFF, 0 # FIXME
-    major = 10 * (major >> 4) + (major & 0xF)
-    minor = 10 * (minor >> 4) + (minor & 0xF)
-    return '{0:d}.{1:02d}.{2:03d}'.format(major, minor, patch)
-
 def sha256(data):
     return hashlib.sha256(data).digest()
-
-def hmac_sha256(key, data):
-    return hmac.new(key=key, msg=data, digestmod=hashlib.sha256).digest()
 
 class ElfError(Exception):
     def __init__(self, msg):
