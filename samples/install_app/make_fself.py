@@ -173,6 +173,8 @@ class ElfPHdr(object):
 class ElfSHdr(object):
     FMT = '<2I4Q2I2Q'
 
+    SHT_NOBITS = 0x8
+
     def __init__(self, idx):
         self.idx = idx
         self.name = None
@@ -239,9 +241,9 @@ class ElfFile(object):
                 shdr = ElfSHdr(i)
                 shdr.load(f)
                 self.shdrs.append(shdr)
-                if phdr.filesz > 0:
+                if shdr.size > 0 and shdr.type != ElfSHdr.SHT_NOBITS:
                     f.seek(start_offset + shdr.offset)
-                    data = f.read(phdr.filesz)
+                    data = f.read(shdr.size)
                 else:
                     data = b''
                 self.sections.append(data)
