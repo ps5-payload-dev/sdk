@@ -702,6 +702,8 @@ def ensure_hex_string(val, **kwargs):
             return None
         val = bytes.fromhex(val)
         val_size = len(val)
+    else:
+        val = b''
 
     if not exact_size is None and val_size != exact_size:
         return None
