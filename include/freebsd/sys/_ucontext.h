@@ -41,6 +41,8 @@ typedef struct __ucontext {
 	 * note: the union is not defined, though.
 	 */
 	__sigset_t	uc_sigmask;
+	/* PS5 signal frames place uc_mcontext at offset 64 (observed on 12.09). */
+	int		__ps5_reserved[12];
 	mcontext_t	uc_mcontext;
 
 	struct __ucontext *uc_link;
