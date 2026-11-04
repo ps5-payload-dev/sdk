@@ -56,6 +56,27 @@ john@localhost:ps5-payload-dev/sdk$ export PS5_PAYLOAD_SDK=/opt/ps5-payload-sdk
 john@localhost:ps5-payload-dev/sdk$ sudo -E ./libcxx.sh # fetch, build, and install libcxx
 ```
 
+## Headers
+The SDK installs its headers under `$PS5_PAYLOAD_SDK/target/include` from three
+sources in `include/`:
+
+- `ps5/` - the SDK's own PS5-specific headers: `kernel.h`, `klog.h`, `mdbg.h`,
+  `iommu.h`, `nid.h` and `payload.h`. These are the core SDK API.
+- `freebsd/` - a full copy of FreeBSD's userland include tree (BSD-licensed).
+  It provides the standard C library headers (`stdio.h`, `stdlib.h`, `string.h`,
+  `sys/*`, `net/*`, `arpa/*`, ...) that the SDK's libc implements.
+- `khronos/` - EGL and OpenGL ES 2.0 headers for graphics payloads.
+
+Because the `freebsd/` tree is carried wholesale, it also contains
+kernel-internal headers that are not part of the userland API, e.g. the
+ipfilter family (`netinet/ip_*.h`) and `dev/`, `fs/`, `vm/`, `geom/`,
+`net80211/`, `rdma/`, `infiniband/`. Those are there only to keep the copy
+complete; they are neither used by the SDK nor needed for payload development.
+Stick to the standard C library headers plus `ps5/`.
+
+C++ is supported. Build libc++ for the target with `./libcxx.sh`, then see
+`samples/hello_cxx` and `samples/hello_cxx23` for examples.
+
 ## Adding new SCE Libs
 If you have decrypted sprx files that you would like to interact with, you can
 build stubs for them as follows (Make sure you have already installed the optional dependencies for your OS):
