@@ -17,6 +17,7 @@ along with this program; see the file COPYING. If not, see
 #pragma once
 
 #include <sys/cdefs.h>
+#include <stddef.h>
 #include <stdint.h>
 
 
