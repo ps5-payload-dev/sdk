@@ -22,9 +22,9 @@ SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
 TOOLCHAIN=$(echo "$SCRIPT_NAME" | sed 's/......$//')
 
 if [[ "$1" = "setup" ]]; then
-    ARGS="setup --cross-file=${SCRIPT_DIR}/../toolchain/${TOOLCHAIN}.ini ${@:2}"
+    ARGS=("setup" "--cross-file=${SCRIPT_DIR}/../toolchain/${TOOLCHAIN}.ini" "${@:2}")
 else
-    ARGS="${@}"
+    ARGS=("$@")
 fi
 
-exec -a "${SCRIPT_NAME}" meson ${ARGS}
+exec -a "${SCRIPT_NAME}" meson "${ARGS[@]}"
