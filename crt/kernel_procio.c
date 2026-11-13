@@ -104,8 +104,8 @@ kernel_proc_copyin(int pid, const void *buf, unsigned long addr,
       return -1;
     }
 
-    if(plen > len) {
-      plen = len;
+    if(plen > len - i) {
+      plen = len - i;
     }
 
     if(kernel_copyin(((unsigned char*)buf) + i,
@@ -134,8 +134,8 @@ kernel_proc_copyout(int pid, unsigned long addr, void *buf,
       return -1;
     }
 
-    if(plen > len) {
-      plen = len;
+    if(plen > len - i) {
+      plen = len - i;
     }
 
     if(kernel_copyout(KERNEL_ADDRESS_DMAP_BASE + paddr,
