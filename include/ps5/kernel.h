@@ -116,6 +116,15 @@ int32_t kernel_set_ucred_attrs(pid_t pid, const uint8_t attrs[32]);
 int32_t kernel_get_qaflags(uint8_t qaflags[16]);
 int32_t kernel_set_qaflags(uint8_t const qaflags[16]);
 
+int32_t kernel_get_targetid(uint8_t* target_id);
+int32_t kernel_set_targetid(uint8_t target_id);
+
+int32_t kernel_get_utokflags(uint8_t* utokflags);
+int32_t kernel_set_utokflags(uint8_t utokflags);
+
+int32_t kernel_get_secflags(uint32_t* secflags);
+int32_t kernel_set_secflags(uint32_t secflags);
+
 intptr_t kernel_get_root_vnode(void);
 
 intptr_t kernel_get_proc_rootdir(pid_t pid);

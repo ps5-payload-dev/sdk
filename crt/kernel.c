@@ -774,6 +774,54 @@ kernel_set_qaflags(const unsigned char qaflags[16]) {
 }
 
 
+int
+kernel_get_secflags(unsigned int* secflags) {
+  return kernel_copyout(KERNEL_ADDRESS_SECURITY_FLAGS, secflags, 4);
+}
+
+
+int
+kernel_set_secflags(unsigned int secflags) {
+  if(kernel_get_fw_version() < 0x7000000) {
+    return kernel_copyin(&secflags, KERNEL_ADDRESS_SECURITY_FLAGS, 4);
+  } else {
+    return kernel_iommu_copyin(&secflags, KERNEL_ADDRESS_SECURITY_FLAGS, 4);
+  }
+}
+
+
+int
+kernel_get_targetid(unsigned char* targetid) {
+  return kernel_copyout(KERNEL_ADDRESS_TARGETID, targetid, 1);
+}
+
+
+int
+kernel_set_targetid(unsigned char targetid) {
+  if(kernel_get_fw_version() < 0x7000000) {
+    return kernel_copyin(&targetid, KERNEL_ADDRESS_TARGETID, 1);
+  } else {
+    return kernel_iommu_copyin(&targetid, KERNEL_ADDRESS_TARGETID, 1);
+  }
+}
+
+
+int
+kernel_get_utokflags(unsigned char* utokflags) {
+  return kernel_copyout(KERNEL_ADDRESS_UTOKEN_FLAGS, utokflags, 1);
+}
+
+
+int
+kernel_set_utokflags(unsigned char utokflags) {
+  if(kernel_get_fw_version() < 0x7000000) {
+    return kernel_copyin(&utokflags, KERNEL_ADDRESS_UTOKEN_FLAGS, 1);
+  } else {
+    return kernel_iommu_copyin(&utokflags, KERNEL_ADDRESS_UTOKEN_FLAGS, 1);
+  }
+}
+
+
 unsigned long
 kernel_get_root_vnode(void) {
   unsigned long vnode = 0;
