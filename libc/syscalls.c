@@ -66,16 +66,6 @@ wait4() {
 }
 
 void
-link() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 9\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
-
-void
 fchdir() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 13\n"
@@ -110,16 +100,6 @@ void
 ptrace() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 26\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
-
-void
-dup() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 41\n"
     "  mov r10, rcx\n"
     "  syscall\n"
     "  ret\n"
@@ -1268,36 +1248,6 @@ mac_syscall() {
 }
 
 void
-getfsstat() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 395\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
-
-void
-statfs() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 396\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
-
-void
-fstatfs() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 397\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
-
-void
 fhstatfs() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 398\n"
@@ -1838,39 +1788,9 @@ fexecve() {
 }
 
 void
-fstatat() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 493\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
-
-void
 futimesat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 494\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
-
-void
-linkat() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 495\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
-
-void
-mkdirat() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 496\n"
     "  mov r10, rcx\n"
     "  syscall\n"
     "  ret\n"
@@ -1891,56 +1811,6 @@ void
 mknodat() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 498\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
-
-void
-openat() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 499\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
-
-void
-readlinkat() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 500\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
-
-void
-renameat() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 501\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
-
-void
-symlinkat() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 502\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
-
-void
-unlinkat() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 503\n"
     "  mov r10, rcx\n"
     "  syscall\n"
     "  ret\n"
@@ -2311,16 +2181,6 @@ void
 ppoll() {
   asm(".intel_syntax noprefix\n"
     "  mov rax, 545\n"
-    "  mov r10, rcx\n"
-    "  syscall\n"
-    "  ret\n"
-    );
-}
-
-void
-futimens() {
-  asm(".intel_syntax noprefix\n"
-    "  mov rax, 546\n"
     "  mov r10, rcx\n"
     "  syscall\n"
     "  ret\n"
