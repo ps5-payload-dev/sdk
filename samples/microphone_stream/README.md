@@ -23,5 +23,8 @@ unavailable to a homebrew title. Package this code in a title and launch it
 through the console's homebrew title loader to test live audio.
 
 The silence bitmask is firmware-dependent diagnostic data rather than a public
-Sony API contract. Record the console model, firmware, selected input device,
-controller connection mode, and mute transitions when reporting results.
+Sony API contract. The implementation treats a nonzero `(silent_state & 5)` as
+muted or absent input, based on target observations; verify samples and state
+on the target firmware. Record the console model, firmware, selected input
+device, controller connection mode, and mute transitions when reporting
+results.

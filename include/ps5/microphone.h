@@ -15,7 +15,7 @@ extern "C" {
 typedef struct ps5_microphone ps5_microphone_t;
 
 typedef struct ps5_microphone_options {
-  int user_id;                 /* UserService id; caller selects the user. */
+  int user_id;                 /* UserService id; system routes that user's input. */
   unsigned sample_rate;        /* 48000 or 16000; 0 tries both in that order. */
   unsigned frames_per_read;    /* 0 selects 256. */
   unsigned queue_frames;       /* 0 selects 4096; must hold >= one read. */
@@ -27,12 +27,13 @@ typedef struct ps5_microphone_stats {
   uint64_t dropped_frames;
   unsigned sample_rate;
   unsigned frames_per_read;
-  int silent_state;
+  int silent_state;            /* Raw, firmware-dependent AudioIn state bitmask. */
   int last_error;
 } ps5_microphone_stats_t;
 
-/* Opens the system-routed input as signed 16-bit mono PCM. Returns 0 or a
- * negative system/API error. Link libps5microphone.a and libSceAudioIn.so. */
+/* Opens the user's system-routed input as signed 16-bit mono PCM and starts a
+ * capture worker. Link libps5microphone.a and libSceAudioIn.so. Returns 0 or a
+ * negative system/API error. A full queue drops the oldest frames. */
 int ps5_microphone_open(ps5_microphone_t **out,
                         const ps5_microphone_options_t *options);
 
@@ -44,6 +45,8 @@ int ps5_microphone_read(ps5_microphone_t *mic, int16_t *samples,
 
 void ps5_microphone_get_stats(ps5_microphone_t *mic,
                               ps5_microphone_stats_t *stats);
+/* Stops capture and waits for an in-flight AudioIn read before releasing the
+ * handle. Do not call concurrently with read() or get_stats(). */
 void ps5_microphone_close(ps5_microphone_t *mic);
 
 #ifdef __cplusplus
