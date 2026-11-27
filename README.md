@@ -49,6 +49,14 @@ john@localhost:ps5-payload-dev/sdk$ export PS5_HOST=ps5; export PS5_PORT=9021
 john@localhost:ps5-payload-dev/sdk$ make -C samples/hello_world test
 ```
 
+## Microphone capture
+The SDK includes an AudioIn-backed C API for reading signed 16-bit mono PCM
+from the system-selected microphone. See
+[`samples/microphone_stream`](samples/microphone_stream/README.md) for the
+sample and link flags. Capture requires an application title context; sending
+the sample ELF directly to `ps5-payload-elfldr` may fail because the payload
+does not carry an application identity.
+
 ## Building the SDK
 ```console
 john@localhost:ps5-payload-dev/sdk$ sudo make DESTDIR=/opt/ps5-payload-sdk install
